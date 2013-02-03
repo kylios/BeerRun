@@ -1,0 +1,7 @@
+name:  BeerRun
+description:  A sample application
+
+dependencies:
+  js: any
+  browser: any
+#  unittest: any

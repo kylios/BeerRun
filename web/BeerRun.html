@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>BeerRun</title>
+    <style type="text/css">
+
+      body {
+        background-color: #F8F8F8;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.2em;
+        margin: 15px;
+      }
+
+      p {
+        color: #333;
+      }
+
+      #text {
+        font-size: 24pt;
+        text-align: center;
+        margin-top: 140px;
+      }
+
+      div#container {
+        padding: 12px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+      }
+
+      canvas#game_canvas {
+        border: 1px solid black;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h1>BeerRun</h1>
+
+    <p>by Kyle Racette</p>
+
+    <p>
+      <h3>WHAT DO??</h3>
+      You've been invited to the party of the century!
+      There's music, games, dancing, booze... but oh wait...
+      someone's gotta bring that last one.  Too bad, looks like you drew the
+      short straw here buddy... we need you to go out and get us some BEER if
+      you wanna come to the party.  Oh yea, and we recommend you maintain a
+      healthy buzz.  Good luck!
+    </p>
+
+    <p>
+      <h3>CONTROLS:</h3>
+      <ul>
+        <li>Movement - arrows or WASD</li>
+        <li>Drink a beer - space bar</li>
+      </ul>
+    </p>
+
+    <div id="container">
+      <canvas id="game_canvas"></canvas>
+    </div>
+
+    <script type="application/dart" src="beer_run.dart"></script>
+    <script src="packages/browser/dart.js"></script>
+  </body>
+</html>
