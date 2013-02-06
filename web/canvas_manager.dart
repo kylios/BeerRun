@@ -2,6 +2,8 @@ library canvas_manager;
 
 import 'dart:html';
 
+import 'keyboard_listener.dart';
+
 class CanvasManager {
 
   CanvasElement _canvas;
@@ -29,5 +31,12 @@ class CanvasManager {
     this._canvas.attributes['width'] = this._width.toString();
     this._canvas.attributes['height'] = this._height.toString();
 
+  }
+
+  void addKeyboardListener(KeyboardListener l) {
+
+    document.onKeyDown.listen(l.onKeyDown);
+    document.onKeyUp.listen(l.onKeyUp);
+    document.onKeyPress.listen(l.onKeyPressed);
   }
 }

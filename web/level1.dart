@@ -57,6 +57,31 @@ class Level1 extends Level {
     this.setSpriteAt(swSprites["swHorzMidTopLeftConnector"], 3, 10);
     this.setSpriteAt(swSprites["swHorzMidTopRightConnector"], 3, 11);
 
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 0);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 1);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 2);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 3);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 4);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 5);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 6);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 7);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 8);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 9);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 10);
+    this.setSpriteAt(swSprites["swHorzTop"], 7, 11);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 0);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 1);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 2);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 3);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 4);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 5);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 6);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 7);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 8);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 9);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 10);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 11);
+
     this.setSpriteAt(roadSprites["roadOuterTop"], 4, 0);
     this.setSpriteAt(roadSprites["roadOuterTop"], 4, 1);
     this.setSpriteAt(roadSprites["roadOuterTop"], 4, 2);
@@ -150,9 +175,22 @@ class Level1 extends Level {
     "swHorzMidTopLeftConnector": [0, 192],
     "swHorzMidTopRightConnector": [32, 192],
 
+    "swHorzTop": [32, 128],
+
     "swVertMid": [0, 96],
     "swVertRight": [32, 96],
     "swVertLeft": [64, 96],
+
+    "swBrkDownRight": [0, 0],
+    "swBrkHorzBot": [32, 0],
+    "swBrkDownLeft": [64, 0],
+    "swBrkVertRight": [0, 32],
+    "swBrk": [32, 32],
+    "swBrkVertLeft": [64, 32],
+    "swBrkTopRight": [0, 64],
+    "swBrkHorzTop": [32, 64],
+    "swBrkTopLeft": [64, 64],
+
   };
 
   static final Map _aptSpriteSheetData = {

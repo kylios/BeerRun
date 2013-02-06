@@ -64,7 +64,7 @@ class CanvasDrawer {
   void drawSprite(Sprite s, int x, int y) {
 
     // If the sprite won't show up on screen, then just don't draw it!
-    if (s == null ||
+    if (s == null || x == null || y == null ||
         x + s.width < this._offsetX ||
         x > this._offsetX + this._canvasManager.width ||
         y + s.height < this._offsetY ||
@@ -77,6 +77,8 @@ class CanvasDrawer {
     y = y - this._offsetY;
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+
+    window.console.log("drawing sprite ${s} at ${x},${y}");
     c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, s.width, s.height);
   }
 }
