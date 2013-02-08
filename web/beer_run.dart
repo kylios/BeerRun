@@ -7,6 +7,7 @@ import 'sprite_sheet.dart';
 
 import 'component.dart';
 import 'input_component.dart';
+import 'simple_input_component.dart';
 import 'drawing_component.dart';
 import 'game_object.dart';
 import 'game_event.dart';
@@ -23,7 +24,7 @@ CanvasDrawer canvasDrawer;
 
 Level level;
 
-InputComponent keyboard;
+SimpleInputComponent keyboard;
 DrawingComponent drawer;
 
 Player player;
@@ -44,6 +45,8 @@ void _loop(var _) {
   if(++tickindex==MAXSAMPLES)    /* inc buffer index */
     tickindex=0;
   fpsDisplay.innerHtml = (ticksum.toDouble() / MAXSAMPLES.toDouble()).toString();
+
+  canvasDrawer.clear();
 
   starttime = new Date.now().millisecondsSinceEpoch;
   level.draw(canvasDrawer);
@@ -69,9 +72,9 @@ void main() {
   canvasDrawer.setOffset(0, 0);
   canvasDrawer.backgroundColor = 'black';
 
-  drawer = new DrawingComponent(canvasDrawer);
+  drawer = new DrawingComponent(canvasManager, canvasDrawer);
 
-  keyboard = new InputComponent();
+  keyboard = new SimpleInputComponent(drawer);
   canvasManager.addKeyboardListener(keyboard);
 
   player = new Player();

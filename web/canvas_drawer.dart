@@ -78,7 +78,6 @@ class CanvasDrawer {
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
 
-    window.console.log("drawing sprite ${s} at ${x},${y}");
     c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, s.width, s.height);
   }
 }

@@ -24,15 +24,17 @@ class Player extends Drawable {
   // TODO: add stuff for drunkenness :-P
 
   SpriteSheet _sprites;
-  int _walkStep = 0;
 
   DrawingComponent _drawer;
 
   Player() : super() {
 
+    this.dir = DIR_DOWN;
+    this.step = 0;
+
     this._sprites = new SpriteSheet(
         "img/Character1Walk.png",
-        64, 64);
+        this.tileWidth, this.tileHeight);
   }
 
   void update() {
@@ -63,14 +65,17 @@ class Player extends Drawable {
     return row;
   }
 
+  int get tileWidth => 64;
+  int get tileHeight => 64;
+
   Sprite getStandSprite(Direction d) {
 
     int row = this._getSpriteSheetRowFromDir(d);
-    return this._sprites.spriteAt(0, row * 64);
+    return this._sprites.spriteAt(0, row * this.tileWidth);
   }
   Sprite getWalkSprite(Direction d, int step) {
 
     int row = this._getSpriteSheetRowFromDir(d);
-    return this._sprites.spriteAt(step * 64, row * 64);
+    return this._sprites.spriteAt(step * this.tileHeight, row * this.tileWidth);
   }
 }
