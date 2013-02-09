@@ -31,7 +31,7 @@ class DrawingComponent extends Component
       obj.y + obj.tileHeight - (this._manager.height ~/ 2)
     );
 
-    Sprite s = obj.getWalkSprite(obj.dir, obj.step);
+    Sprite s = obj.getWalkAnimation(obj.dir).getCur();
     this._drawer.drawSprite(s, obj.x, obj.y);
 
 

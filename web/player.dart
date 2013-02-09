@@ -9,6 +9,7 @@ import 'drawing_component.dart';
 import 'drawable.dart';
 import 'sprite.dart';
 import 'sprite_sheet.dart';
+import 'sprite_animation.dart';
 import 'direction.dart';
 
 class Player extends Drawable {
@@ -18,26 +19,48 @@ class Player extends Drawable {
   int _beers;
   int _buzz;
 
+  int oldX;
+  int oldY;
+
   // Movement parameters
 
   int _balance = 1;
   // TODO: add stuff for drunkenness :-P
 
-  SpriteSheet _sprites;
+  List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
   DrawingComponent _drawer;
 
   Player() : super() {
 
-    this.dir = DIR_DOWN;
-    this.step = 0;
-
-    this._sprites = new SpriteSheet(
+    SpriteSheet sprites = new SpriteSheet(
         "img/Character1Walk.png",
         this.tileWidth, this.tileHeight);
+
+    List<Sprite> walkUp = new List<Sprite>();
+    List<Sprite> walkDown = new List<Sprite>();
+    List<Sprite> walkLeft = new List<Sprite>();
+    List<Sprite> walkRight = new List<Sprite>();
+    for (int i = 0; i < 9; i++) {
+      walkUp.add(sprites.spriteAt(i * this.tileHeight, 0 * this.tileWidth));
+      walkLeft.add(sprites.spriteAt(i * this.tileHeight, 1 * this.tileWidth));
+      walkDown.add(sprites.spriteAt(i * this.tileHeight, 2 * this.tileWidth));
+      walkRight.add(sprites.spriteAt(i * this.tileHeight, 3 * this.tileWidth));
+    }
+    this._walkSprites[DIR_UP.direction] = new SpriteAnimation(walkUp);
+    this._walkSprites[DIR_DOWN.direction] = new SpriteAnimation(walkDown);
+    this._walkSprites[DIR_LEFT.direction] = new SpriteAnimation(walkLeft);
+    this._walkSprites[DIR_RIGHT.direction] = new SpriteAnimation(walkRight);
   }
 
   void update() {
+    if (this.oldX != this.x || this.oldY != this.y) {
+      this.getWalkAnimation(this.dir).getNext();
+    } else {
+      this.getWalkAnimation(this.dir).reset();
+    }
+    this.oldX = this.x;
+    this.oldY = this.y;
     super.update();
     this._drawer.update(this);
   }
@@ -55,27 +78,10 @@ class Player extends Drawable {
     this._buzz += BUZZ_PER_BEER;
   }
 
-  int _getSpriteSheetRowFromDir(Direction d)
-  {
-    int row = 0;
-    if (d == DIR_UP)  row = 0;
-    else if (d == DIR_LEFT) row = 1;
-    else if (d == DIR_DOWN) row = 2;
-    else if (d == DIR_RIGHT) row = 3;
-    return row;
-  }
-
   int get tileWidth => 64;
   int get tileHeight => 64;
 
-  Sprite getStandSprite(Direction d) {
-
-    int row = this._getSpriteSheetRowFromDir(d);
-    return this._sprites.spriteAt(0, row * this.tileWidth);
-  }
-  Sprite getWalkSprite(Direction d, int step) {
-
-    int row = this._getSpriteSheetRowFromDir(d);
-    return this._sprites.spriteAt(step * this.tileHeight, row * this.tileWidth);
+  SpriteAnimation getWalkAnimation(Direction d) {
+    return this._walkSprites[d.direction];
   }
 }

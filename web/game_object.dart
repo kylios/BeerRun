@@ -12,7 +12,6 @@ class GameObject {
   int _x = 0;
   int _y = 0;
   Direction dir = DIR_DOWN;
-  int step = 0;
 
   Component _control;
 
@@ -29,50 +28,18 @@ class GameObject {
   }
 
   void moveUp() {
-    if (this.dir != DIR_UP) {
-      this.step = 0;
-    } else {
-      this.step++;
-    }
-    if (this.step >= this.numSteps) {
-      this.step = 0;
-    }
     this.dir = DIR_UP;
     this._y -= this._speed;
   }
   void moveDown() {
-    if (this.dir != DIR_DOWN) {
-      this.step = 0;
-    } else {
-      this.step++;
-    }
-    if (this.step >= this.numSteps) {
-      this.step = 0;
-    }
     this.dir = DIR_DOWN;
     this._y += this._speed;
   }
   void moveLeft() {
-    if (this.dir != DIR_LEFT) {
-      this.step = 0;
-    } else {
-      this.step++;
-    }
-    if (this.step >= this.numSteps) {
-      this.step = 0;
-    }
     this.dir = DIR_LEFT;
     this._x -= this._speed;
   }
   void moveRight() {
-    if (this.dir != DIR_RIGHT) {
-      this.step = 0;
-    } else {
-      this.step++;
-    }
-    if (this.step >= this.numSteps) {
-      this.step = 0;
-    }
     this.dir = DIR_RIGHT;
     this._x += this._speed;
   }
