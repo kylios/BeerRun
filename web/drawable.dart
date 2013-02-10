@@ -11,11 +11,19 @@ import 'game_object.dart';
 
 abstract class Drawable extends GameObject {
 
+  DrawingComponent _drawer;
+
   int get tileWidth;
   int get tileHeight;
+  DrawingComponent get drawer => this._drawer;
 
-  SpriteAnimation getWalkAnimation(Direction d);
+  Sprite getStaticSprite();
+  Sprite getMoveSprite();
 
-  void setDrawingComponent(DrawingComponent d);
+  Drawable(Direction d, int x, int y) : super(d, x, y);
+
+  void setDrawingComponent(DrawingComponent d) {
+    this._drawer = d;
+  }
 }
 

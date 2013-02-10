@@ -11,6 +11,9 @@ import 'sprite.dart';
 import 'sprite_sheet.dart';
 import 'sprite_animation.dart';
 import 'direction.dart';
+import 'level.dart';
+import 'bullet.dart';
+import 'bullet_input_component.dart';
 
 class Player extends Drawable {
 
@@ -18,9 +21,6 @@ class Player extends Drawable {
 
   int _beers;
   int _buzz;
-
-  int oldX;
-  int oldY;
 
   // Movement parameters
 
@@ -31,7 +31,9 @@ class Player extends Drawable {
 
   DrawingComponent _drawer;
 
-  Player() : super() {
+  Player(Level l, Direction d, int x, int y) : super(d, x, y) {
+
+    this.setLevel(l);
 
     SpriteSheet sprites = new SpriteSheet(
         "img/Character1Walk.png",
@@ -54,13 +56,6 @@ class Player extends Drawable {
   }
 
   void update() {
-    if (this.oldX != this.x || this.oldY != this.y) {
-      this.getWalkAnimation(this.dir).getNext();
-    } else {
-      this.getWalkAnimation(this.dir).reset();
-    }
-    this.oldX = this.x;
-    this.oldY = this.y;
     super.update();
     this._drawer.update(this);
   }
@@ -78,10 +73,38 @@ class Player extends Drawable {
     this._buzz += BUZZ_PER_BEER;
   }
 
+  void spawnBullet() {
+
+    int x = this.x;
+    int y = this.y;
+
+    if (this.dir == DIR_RIGHT) {
+      x += this.tileWidth ~/ 2;
+      y += this.tileHeight ~/ 4;
+    } else if (this.dir == DIR_LEFT) {
+      y += this.tileHeight ~/ 4;
+    } else if (this.dir == DIR_UP) {
+      x += tileWidth ~/ 4;
+    } else if (this.dir == DIR_DOWN) {
+      x += this.tileWidth ~/ 4;
+      y += this.tileHeight ~/ 2;
+    }
+
+    this.broadcast(new CreateBulletEvent(
+        this.dir,
+        x,
+        y),
+        [ this.level ]);
+  }
+
   int get tileWidth => 64;
   int get tileHeight => 64;
 
-  SpriteAnimation getWalkAnimation(Direction d) {
-    return this._walkSprites[d.direction];
+  Sprite getMoveSprite() {
+    return this._walkSprites[this.dir.direction].getNext();
+  }
+  Sprite getStaticSprite() {
+    this._walkSprites[this.dir.direction].reset();
+    return this._walkSprites[this.dir.direction].getCur();
   }
 }

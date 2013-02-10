@@ -22,16 +22,25 @@ class DrawingComponent extends Component
   CanvasDrawer _drawer;
   CanvasManager _manager;
 
-  DrawingComponent(this._manager, this._drawer);
+  bool _scrollBackground = false;
+
+  DrawingComponent(this._manager, this._drawer, this._scrollBackground);
 
   void update(Drawable obj) {
 
-    this._drawer.setOffset(
-      obj.x + obj.tileWidth - (this._manager.width ~/ 2),
-      obj.y + obj.tileHeight - (this._manager.height ~/ 2)
-    );
+    if (this._scrollBackground) {
+      this._drawer.setOffset(
+        obj.x + obj.tileWidth - (this._manager.width ~/ 2),
+        obj.y + obj.tileHeight - (this._manager.height ~/ 2)
+      );
+    }
 
-    Sprite s = obj.getWalkAnimation(obj.dir).getCur();
+    Sprite s;
+    if (obj.x == obj.oldX && obj.y == obj.oldY) {
+      s = obj.getStaticSprite();
+    } else {
+      s = obj.getMoveSprite();
+    }
     this._drawer.drawSprite(s, obj.x, obj.y);
 
 

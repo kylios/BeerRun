@@ -7,10 +7,13 @@ import 'level.dart';
 import 'sprite.dart';
 import 'sprite_sheet.dart';
 import 'canvas_drawer.dart';
+import 'canvas_manager.dart';
 
 class Level1 extends Level {
 
-  Level1() : super(15, 20, 32, 32) {
+  Level1(CanvasManager manager, CanvasDrawer drawer) :
+    super(drawer, manager, 15, 20, 32, 32)
+  {
 
     SpriteSheet road = new SpriteSheet("img/Street.png", this.tileWidth, this.tileHeight);
     Map<String, Sprite> roadSprites =

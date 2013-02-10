@@ -11,6 +11,7 @@ import 'simple_input_component.dart';
 import 'drawing_component.dart';
 import 'game_object.dart';
 import 'game_event.dart';
+import 'direction.dart';
 
 import 'level.dart';
 import 'level1.dart';
@@ -49,9 +50,8 @@ void _loop(var _) {
   canvasDrawer.clear();
 
   starttime = new Date.now().millisecondsSinceEpoch;
-  level.draw(canvasDrawer);
 
-  player.update();
+  level.update();
 
   endtime = new Date.now().millisecondsSinceEpoch;
 
@@ -62,8 +62,6 @@ void main() {
 
   fpsDisplay = query('div#fps');
 
-  level = new Level1();
-
   canvasManager = new CanvasManager(query('canvas#game_canvas'));
   canvasManager.resize(CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -72,14 +70,18 @@ void main() {
   canvasDrawer.setOffset(0, 0);
   canvasDrawer.backgroundColor = 'black';
 
-  drawer = new DrawingComponent(canvasManager, canvasDrawer);
+  drawer = new DrawingComponent(canvasManager, canvasDrawer, true);
 
   keyboard = new SimpleInputComponent(drawer);
   canvasManager.addKeyboardListener(keyboard);
 
-  player = new Player();
+  level = new Level1(canvasManager, canvasDrawer);
+
+  player = new Player(level, DIR_DOWN, CANVAS_WIDTH ~/ 2, CANVAS_HEIGHT ~/ 2);
   player.setControlComponent(keyboard);
   player.setDrawingComponent(drawer);
+
+  level.addPlayerObject(player);
 
   _loop(0);
 }
