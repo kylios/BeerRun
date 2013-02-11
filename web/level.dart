@@ -4,6 +4,7 @@ import 'dart:html';
 
 import 'sprite.dart';
 import 'sprite_sheet.dart';
+import 'sprite_animation.dart';
 import 'canvas_drawer.dart';
 import 'canvas_manager.dart';
 import 'game_object.dart';
@@ -26,6 +27,23 @@ class CreateBulletEvent extends GameEvent {
   }
 }
 
+class LevelAnimation extends SpriteAnimation {
+
+  int _x, _y;
+  int _tileWidth;
+  int _tileHeight;
+
+  LevelAnimation(List<Sprite> sprites, this._x, this._y,
+      this._tileWidth, this._tileHeight,
+      bool loop) :
+    super(sprites, loop);
+
+  int get x => this._x;
+  int get y => this._y;
+  int get tileWidth => this._tileWidth;
+  int get tileHeight => this._tileHeight;
+}
+
 class Level extends GameObject implements ComponentListener {
 
   static final int CREATE_BULLET_EVENT = 1;
@@ -46,12 +64,15 @@ class Level extends GameObject implements ComponentListener {
   List<GameObject> _objects;
   Player _player;
 
+  List<LevelAnimation> _animations;
+
   Level(this._drawer, this._manager,
       this._rows, this._cols, this._tileWidth, this._tileHeight) :
         super(DIR_DOWN, 0, 0)
   {
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
+    this._animations = new List<LevelAnimation>();
   }
 
   int get tileWidth => this._tileWidth;
@@ -95,6 +116,11 @@ class Level extends GameObject implements ComponentListener {
 
   void addPlayerObject(Player p) {
     this._player = p;
+  }
+
+  void addAnimation(LevelAnimation a) {
+    window.console.log("Adding animation $a");
+    this._animations.add(a);
   }
 
   void addObject(GameObject obj) {
@@ -152,6 +178,14 @@ class Level extends GameObject implements ComponentListener {
       //return true;
       return ! o.isRemoved;
     }));
+
+    this._animations = new List<LevelAnimation>.from(
+        this._animations.where((LevelAnimation a) {
+          this._drawer.drawSprite(a.getNext(), a.x, a.y,
+              a.tileWidth, a.tileHeight);
+          return ! a.isDone();
+        })
+    );
   }
 
   void draw(CanvasDrawer d) {

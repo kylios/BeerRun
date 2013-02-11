@@ -11,6 +11,7 @@ import 'sprite_animation.dart';
 import 'sprite_sheet.dart';
 import 'direction.dart';
 import 'level.dart';
+import 'player.dart';
 
 class Bullet extends GameObject {
 
@@ -39,7 +40,6 @@ class Bullet extends GameObject {
   }
 
   void update() {
-    window.console.log("bullet updating");
     super.update();
 
     if (this.level.isOffscreen(this)) {
@@ -51,13 +51,13 @@ class Bullet extends GameObject {
       if (objs != null) {
         GameObject o = objs.removeLast();
         while (objs.length > 0 && o == this._creator) {
+          assert(o != this);
           o = objs.removeLast();
         }
-        if (o == this) {
-          window.console.log("they are the same");
-        }
         if (o != this._creator) {
-          window.console.log("$o != ${this._creator}");
+          if (o is Player) {
+            o.takeHit();
+          }
           this.remove();
         }
       } else {

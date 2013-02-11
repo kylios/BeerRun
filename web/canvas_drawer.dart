@@ -61,7 +61,10 @@ class CanvasDrawer {
     c.fillStyle = this.backgroundColor;
     c.fillRect(0, 0, this._canvasManager.width, this._canvasManager.height);
   }
-  void drawSprite(Sprite s, int x, int y) {
+  void drawSprite(Sprite s, int x, int y, [int drawWidth, int drawHeight]) {
+
+    int width = (?drawWidth ? drawWidth : s.width);
+    int height = (?drawHeight ? drawHeight : s.height);
 
     // If the sprite won't show up on screen, then just don't draw it!
     if (s == null || x == null || y == null ||
@@ -78,6 +81,6 @@ class CanvasDrawer {
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
 
-    c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, s.width, s.height);
+    c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
   }
 }
