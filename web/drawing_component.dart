@@ -8,7 +8,6 @@ import 'component.dart';
 import 'component_listener.dart';
 import 'game_object.dart';
 import 'game_event.dart';
-import 'drawable.dart';
 import 'sprite.dart';
 import 'direction.dart';
 
@@ -26,7 +25,7 @@ class DrawingComponent extends Component
 
   DrawingComponent(this._manager, this._drawer, this._scrollBackground);
 
-  void update(Drawable obj) {
+  void update(GameObject obj) {
 
     if (this._scrollBackground) {
       this._drawer.setOffset(

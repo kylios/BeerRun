@@ -3,12 +3,14 @@ library game_object;
 import 'dart:html';
 
 import 'component.dart';
+import 'drawing_component.dart';
 import 'direction.dart';
 import 'level.dart';
 import 'game_event.dart';
 import 'component_listener.dart';
+import 'sprite.dart';
 
-class GameObject {
+abstract class GameObject {
 
   int _speed = 5;
 
@@ -23,17 +25,37 @@ class GameObject {
   Component _control;
 
   Level _level;
+  bool _remove = false;
+
+  DrawingComponent _drawer;
+
+  int get tileWidth;
+  int get tileHeight;
+  DrawingComponent get drawer => this._drawer;
+
+  Sprite getStaticSprite();
+  Sprite getMoveSprite();
 
   int get x => this._x;
   int get y => this._y;
   Direction get dir => this._dir;
   int get numSteps => 9;
   Level get level => this._level;
+  bool get isRemoved => this._remove;
+
+  void remove() {
+    window.console.log("removed");
+    this._remove = true;
+  }
 
   GameObject(this._dir, this._x, this._y);
 
   void setControlComponent(Component c) {
     this._control = c;
+  }
+
+  void setDrawingComponent(DrawingComponent d) {
+    this._drawer = d;
   }
 
   void setLevel(Level l) {

@@ -5,21 +5,24 @@ import 'dart:html';
 import 'game_object.dart';
 import 'game_event.dart';
 import 'component.dart';
-import 'drawable.dart';
 import 'drawing_component.dart';
 import 'sprite.dart';
 import 'sprite_animation.dart';
 import 'sprite_sheet.dart';
 import 'direction.dart';
+import 'level.dart';
 
-class Bullet extends Drawable {
+class Bullet extends GameObject {
 
   List<Sprite> _moveSprites = new List<Sprite>(4);
 
-  Bullet(Direction d, int x, int y, Component c, DrawingComponent drw) :
+  GameObject _creator = null;
+
+  Bullet(Level l, this._creator, Direction d, int x, int y,
+      Component c, DrawingComponent drw) :
     super(d, x, y)
   {
-
+    this.setLevel(l);
     this.setControlComponent(c);
     this.setDrawingComponent(drw);
 
@@ -36,8 +39,32 @@ class Bullet extends Drawable {
   }
 
   void update() {
+    window.console.log("bullet updating");
     super.update();
-    this.drawer.update(this);
+
+    if (this.level.isOffscreen(this)) {
+      this.remove();
+    } else {
+
+      // Check collisions.  Remove bullet from map and deal some damage
+      List<GameObject> objs = this.level.checkCollision(this);
+      if (objs != null) {
+        GameObject o = objs.removeLast();
+        while (objs.length > 0 && o == this._creator) {
+          o = objs.removeLast();
+        }
+        if (o == this) {
+          window.console.log("they are the same");
+        }
+        if (o != this._creator) {
+          window.console.log("$o != ${this._creator}");
+          this.remove();
+        }
+      } else {
+
+        this.drawer.update(this);
+      }
+    }
   }
 
   int get tileWidth => 32;

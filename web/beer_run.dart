@@ -8,6 +8,7 @@ import 'sprite_sheet.dart';
 import 'component.dart';
 import 'input_component.dart';
 import 'simple_input_component.dart';
+import 'npc_input_component.dart';
 import 'drawing_component.dart';
 import 'game_object.dart';
 import 'game_event.dart';
@@ -82,6 +83,18 @@ void main() {
   player.setDrawingComponent(drawer);
 
   level.addPlayerObject(player);
+
+  Player npc1 = new Player(level, DIR_RIGHT, 0, 0);
+  Player npc2 = new Player(level, DIR_DOWN, 20, 48);
+  npc1.setSpeed(2);
+  npc2.setSpeed(2);
+  npc1.setControlComponent(new NPCInputComponent());
+  npc2.setControlComponent(new NPCInputComponent());
+  npc1.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
+  npc2.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
+
+  level.addObject(npc1);
+  level.addObject(npc2);
 
   _loop(0);
 }

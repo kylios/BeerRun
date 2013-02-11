@@ -14,10 +14,13 @@ import 'player.dart';
 class SimpleInputComponent extends Component
   implements KeyboardListener {
 
+  static final int BULLET_COOLDOWN = 10;
+
   Map<int, bool> _pressed;
   DrawingComponent _drawer;
 
   bool _spawnBullet = false;
+  int _bulletCooldown = 0;
 
   SimpleInputComponent(this._drawer) {
     this._pressed = new Map<int, bool>();
@@ -36,8 +39,15 @@ class SimpleInputComponent extends Component
       obj.moveRight();
     }
 
+    if (this._bulletCooldown > 0) {
+      this._bulletCooldown--;
+    }
+
     if (this._spawnBullet) {
-      obj.spawnBullet();
+      if (this._bulletCooldown == 0) {
+        obj.spawnBullet();
+        this._bulletCooldown = SimpleInputComponent.BULLET_COOLDOWN;
+      }
       this._spawnBullet = false;
     }
   }

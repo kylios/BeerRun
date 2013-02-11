@@ -6,7 +6,6 @@ import 'game_object.dart';
 import 'game_event.dart';
 import 'component.dart';
 import 'drawing_component.dart';
-import 'drawable.dart';
 import 'sprite.dart';
 import 'sprite_sheet.dart';
 import 'sprite_animation.dart';
@@ -15,7 +14,7 @@ import 'level.dart';
 import 'bullet.dart';
 import 'bullet_input_component.dart';
 
-class Player extends Drawable {
+class Player extends GameObject {
 
   static final int BUZZ_PER_BEER = 1;
 
@@ -91,9 +90,7 @@ class Player extends Drawable {
     }
 
     this.broadcast(new CreateBulletEvent(
-        this.dir,
-        x,
-        y),
+        this.dir, this, x, y),
         [ this.level ]);
   }
 

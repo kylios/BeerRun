@@ -17,7 +17,8 @@ import 'component_listener.dart';
 
 class CreateBulletEvent extends GameEvent {
 
-  CreateBulletEvent(Direction d, int x, int y) : super() {
+  CreateBulletEvent(Direction d, GameObject creator, int x, int y) : super() {
+    this.creator = creator;
     this.type = Level.CREATE_BULLET_EVENT;
     this.data["direction"] = d;
     this.data["x"] = x;
@@ -100,13 +101,40 @@ class Level extends GameObject implements ComponentListener {
     this._objects.add(obj);
   }
 
+  void removeObject(GameObject obj) {
+    this._objects.remove(obj);
+  }
+
+  bool isOffscreen(GameObject obj) {
+    return (obj.x < 0 || obj.x > this._cols * this._tileWidth ||
+        obj.y < 0 || obj.y > this._rows * this._tileHeight);
+  }
+
+  List<GameObject> checkCollision(GameObject obj) {
+    List<GameObject> targets = null;
+    for (GameObject o in this._objects) {
+      if (o != obj && (
+          (o.x <= obj.x && o.x + o.tileWidth >= obj.x || o.x + o.tileWidth <= obj.x && o.x + o.tileWidth >= obj.x + obj.tileWidth) &&
+          (o.y <= obj.y && o.y + o.tileHeight >= obj.y) || o.y + o.tileHeight <= obj.y && o.y + o.tileHeight >= obj.y + obj.tileHeight)
+        )
+      {
+        if (targets == null) {
+          targets = new List<GameObject>();
+        }
+        targets.add(o);
+      }
+    }
+    return targets;
+  }
+
   void listen(GameEvent e) {
     if (e.type == Level.CREATE_BULLET_EVENT) {
       Direction d = e.data["direction"];
+      GameObject creator = e.creator;
       int x = e.data["x"];
       int y = e.data["y"];
 
-      Bullet b = new Bullet(d, x, y,
+      Bullet b = new Bullet(this, creator, d, x, y,
           new BulletInputComponent(),
           new DrawingComponent(this._manager, this._drawer, false));
       this.addObject(b);
@@ -116,9 +144,14 @@ class Level extends GameObject implements ComponentListener {
   void update() {
     this.draw(this._drawer);
     this._player.update();
-    for (GameObject o in this._objects) {
+
+    this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
+    {
+      //window.console.log(o);
       o.update();
-    }
+      //return true;
+      return ! o.isRemoved;
+    }));
   }
 
   void draw(CanvasDrawer d) {
@@ -154,4 +187,7 @@ class Level extends GameObject implements ComponentListener {
 
     return sprites;
   }
+
+  Sprite getStaticSprite() {}
+  Sprite getMoveSprite() {}
 }
