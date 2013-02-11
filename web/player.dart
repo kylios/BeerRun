@@ -13,6 +13,7 @@ import 'direction.dart';
 import 'level.dart';
 import 'bullet.dart';
 import 'bullet_input_component.dart';
+import 'explosion.dart';
 
 class Player extends GameObject {
 
@@ -20,6 +21,8 @@ class Player extends GameObject {
 
   int _beers;
   int _buzz;
+
+  int _health = 3;
 
   // Movement parameters
 
@@ -55,12 +58,25 @@ class Player extends GameObject {
   }
 
   void update() {
-    super.update();
-    this._drawer.update(this);
+    if ( ! this.isRemoved) {
+      super.update();
+      this._drawer.update(this);
+    }
   }
 
   void setDrawingComponent(DrawingComponent d) {
     this._drawer = d;
+  }
+
+  void takeHit() {
+    this._health--;
+    if (this._health <= 0) {
+
+      this.level.addAnimation(
+          new Explosion.createAt(this.x, this.y,
+                                 this.tileWidth, this.tileHeight));
+      this.remove();
+    }
   }
 
 

@@ -35,7 +35,7 @@ DivElement fpsDisplay;
 final int MAXSAMPLES = 100;
 int tickindex=0;
 int ticksum=0;
-List<int> ticklist = new List<int>.filled(MAXSAMPLES, 0);
+List<int> ticklist = new List<int>.fixedLength(MAXSAMPLES, fill: 0);
 int starttime = 0;
 int endtime = 0;
 
