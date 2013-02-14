@@ -1,11 +1,4 @@
-library npc_input_compontent;
-
-import 'dart:html';
-import 'dart:math';
-
-import 'component.dart';
-import 'game_object.dart';
-import 'direction.dart';
+part of input;
 
 class NPCInputComponent extends Component {
 

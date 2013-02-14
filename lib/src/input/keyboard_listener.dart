@@ -1,6 +1,4 @@
-library keyboard_listener;
-
-import 'dart:html';
+part of input;
 
 abstract class KeyboardListener {
 

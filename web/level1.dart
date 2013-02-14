@@ -3,11 +3,9 @@ library level1;
 import 'dart:html';
 import 'dart:math';
 
-import 'level.dart';
-import 'sprite.dart';
-import 'sprite_sheet.dart';
-import 'canvas_drawer.dart';
-import 'canvas_manager.dart';
+import 'package:BeerRun/level.dart';
+import 'package:BeerRun/drawing.dart';
+import 'package:BeerRun/canvas_manager.dart';
 
 class Level1 extends Level {
 

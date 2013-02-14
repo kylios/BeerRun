@@ -1,15 +1,4 @@
-library simple_input_component;
-
-import 'dart:html';
-
-import 'component.dart';
-import 'component_listener.dart';
-import 'drawing_component.dart';
-import 'keyboard_listener.dart';
-import 'game_event.dart';
-import 'game_object.dart';
-import 'direction.dart';
-import 'player.dart';
+part of player;
 
 class SimpleInputComponent extends Component
   implements KeyboardListener {

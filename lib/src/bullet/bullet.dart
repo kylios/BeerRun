@@ -1,17 +1,4 @@
-library bullet;
-
-import 'dart:html';
-
-import 'game_object.dart';
-import 'game_event.dart';
-import 'component.dart';
-import 'drawing_component.dart';
-import 'sprite.dart';
-import 'sprite_animation.dart';
-import 'sprite_sheet.dart';
-import 'direction.dart';
-import 'level.dart';
-import 'player.dart';
+part of bullet;
 
 class Bullet extends GameObject {
 

@@ -2,9 +2,8 @@ library explosion;
 
 import 'dart:html';
 
-import 'level.dart';
-import 'sprite_sheet.dart';
-import 'sprite.dart';
+import 'package:BeerRun/level.dart';
+import 'package:BeerRun/drawing.dart';
 
 class Explosion extends LevelAnimation {
 

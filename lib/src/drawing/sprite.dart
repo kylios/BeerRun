@@ -1,6 +1,4 @@
-library sprite;
-
-import 'dart:html';
+part of drawing;
 
 class Sprite {
 

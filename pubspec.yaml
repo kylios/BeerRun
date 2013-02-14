@@ -1,7 +1,9 @@
 name:  BeerRun
 description:  A sample application
+author: Kyle Racette <kracette@gmail.com>
+version: 0.0.0
 
 dependencies:
-  js: any
+#  js: any
   browser: any
 #  unittest: any

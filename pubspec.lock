@@ -1,1 +1,1 @@
-{"packages":{"js":{"version":"0.0.15","source":"hosted","description":"js"},"browser":{"version":"0.3.4","source":"hosted","description":"browser"},"unittest":{"version":"0.3.4","source":"hosted","description":"unittest"},"meta":{"version":"0.3.4","source":"hosted","description":"meta"}}}
+{"packages":{"browser":{"version":"0.3.5+1","source":"hosted","description":"browser"}}}

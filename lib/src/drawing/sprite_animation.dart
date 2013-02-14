@@ -1,9 +1,4 @@
-library sprite_animation;
-
-import 'dart:html';
-
-import 'sprite.dart';
-import 'sprite_sheet.dart';
+part of drawing;
 
 class SpriteAnimation {
 

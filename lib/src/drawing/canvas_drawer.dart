@@ -1,9 +1,4 @@
-library canvas_drawer;
-
-import 'dart:html';
-
-import 'canvas_manager.dart';
-import 'sprite.dart';
+part of drawing;
 
 /**
  * This class handles drawing stuff to the canvas.  It provides basic

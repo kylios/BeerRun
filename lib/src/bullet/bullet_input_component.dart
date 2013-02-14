@@ -1,10 +1,4 @@
-library bullet_input_compontent;
-
-import 'dart:html';
-
-import 'component.dart';
-import 'game_object.dart';
-import 'direction.dart';
+part of bullet;
 
 class BulletInputComponent extends Component {
 

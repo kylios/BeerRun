@@ -1,12 +1,4 @@
-library input_component;
-
-import 'dart:html';
-
-import 'component.dart';
-import 'game_object.dart';
-import 'game_event.dart';
-import 'keyboard_listener.dart';
-
+part of input;
 
 /*
  * Thanks to this article for inspiration and code snippets:

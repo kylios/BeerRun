@@ -1,6 +1,4 @@
-library component_listener;
-
-import 'game_event.dart';
+part of component;
 
 abstract class ComponentListener {
 

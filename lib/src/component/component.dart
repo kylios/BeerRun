@@ -1,10 +1,4 @@
-library component;
-
-import 'dart:html';
-
-import 'game_object.dart';
-import 'game_event.dart';
-import 'component_listener.dart';
+part of component;
 
 abstract class Component {
 
@@ -18,4 +12,5 @@ abstract class Component {
     }
   }
 }
+
 

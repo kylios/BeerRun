@@ -1,15 +1,4 @@
-library drawing_component;
-
-import 'dart:html';
-
-import 'canvas_drawer.dart';
-import 'canvas_manager.dart';
-import 'component.dart';
-import 'component_listener.dart';
-import 'game_object.dart';
-import 'game_event.dart';
-import 'sprite.dart';
-import 'direction.dart';
+part of drawing;
 
 class DrawingComponent extends Component
   implements ComponentListener

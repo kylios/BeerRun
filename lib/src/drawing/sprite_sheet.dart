@@ -1,8 +1,4 @@
-library sprite_sheet;
-
-import 'dart:html';
-
-import 'sprite.dart';
+part of drawing;
 
 class SpriteSheet {
 

@@ -2,7 +2,7 @@ library canvas_manager;
 
 import 'dart:html';
 
-import 'keyboard_listener.dart';
+import 'package:BeerRun/input.dart';
 
 class CanvasManager {
 

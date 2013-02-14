@@ -1,22 +1,13 @@
 import 'dart:html';
 
-import 'canvas_manager.dart';
-import 'canvas_drawer.dart';
-import 'sprite.dart';
-import 'sprite_sheet.dart';
-
-import 'component.dart';
-import 'input_component.dart';
-import 'simple_input_component.dart';
-import 'npc_input_component.dart';
-import 'drawing_component.dart';
-import 'game_object.dart';
-import 'game_event.dart';
-import 'direction.dart';
-
-import 'level.dart';
+import 'package:BeerRun/canvas_manager.dart';
+import 'package:BeerRun/drawing.dart';
+import 'package:BeerRun/component.dart';
+import 'package:BeerRun/input.dart';
+import 'package:BeerRun/game.dart';
+import 'package:BeerRun/level.dart';
 import 'level1.dart';
-import 'player.dart';
+import 'package:BeerRun/player.dart';
 
 final int CANVAS_WIDTH = 640;
 final int CANVAS_HEIGHT = 480;

@@ -1,48 +1,5 @@
-library level;
 
-import 'dart:html';
-
-import 'sprite.dart';
-import 'sprite_sheet.dart';
-import 'sprite_animation.dart';
-import 'canvas_drawer.dart';
-import 'canvas_manager.dart';
-import 'game_object.dart';
-import 'game_event.dart';
-import 'player.dart';
-import 'direction.dart';
-import 'bullet.dart';
-import 'bullet_input_component.dart';
-import 'drawing_component.dart';
-import 'component_listener.dart';
-
-class CreateBulletEvent extends GameEvent {
-
-  CreateBulletEvent(Direction d, GameObject creator, int x, int y) : super() {
-    this.creator = creator;
-    this.type = Level.CREATE_BULLET_EVENT;
-    this.data["direction"] = d;
-    this.data["x"] = x;
-    this.data["y"] = y;
-  }
-}
-
-class LevelAnimation extends SpriteAnimation {
-
-  int _x, _y;
-  int _tileWidth;
-  int _tileHeight;
-
-  LevelAnimation(List<Sprite> sprites, this._x, this._y,
-      this._tileWidth, this._tileHeight,
-      bool loop) :
-    super(sprites, loop);
-
-  int get x => this._x;
-  int get y => this._y;
-  int get tileWidth => this._tileWidth;
-  int get tileHeight => this._tileHeight;
-}
+part of level;
 
 class Level extends GameObject implements ComponentListener {
 

@@ -1,14 +1,4 @@
-library game_object;
-
-import 'dart:html';
-
-import 'component.dart';
-import 'drawing_component.dart';
-import 'direction.dart';
-import 'level.dart';
-import 'game_event.dart';
-import 'component_listener.dart';
-import 'sprite.dart';
+part of game;
 
 abstract class GameObject {
 

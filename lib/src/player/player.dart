@@ -1,19 +1,4 @@
-library player;
-
-import 'dart:html';
-
-import 'game_object.dart';
-import 'game_event.dart';
-import 'component.dart';
-import 'drawing_component.dart';
-import 'sprite.dart';
-import 'sprite_sheet.dart';
-import 'sprite_animation.dart';
-import 'direction.dart';
-import 'level.dart';
-import 'bullet.dart';
-import 'bullet_input_component.dart';
-import 'explosion.dart';
+part of player;
 
 class Player extends GameObject {
 
@@ -121,3 +106,5 @@ class Player extends GameObject {
     return this._walkSprites[this.dir.direction].getCur();
   }
 }
+
+

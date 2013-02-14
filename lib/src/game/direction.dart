@@ -1,4 +1,4 @@
-library direction;
+part of game;
 
 class Direction {
   int direction;

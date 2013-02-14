@@ -1,8 +1,4 @@
-library game_event;
-
-import 'dart:html';
-
-import 'game_object.dart';
+part of game;
 
 class GameEvent {
 
