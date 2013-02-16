@@ -120,7 +120,33 @@ class Level1 extends Level {
     this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 10);
     this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 11);
 
+    this.setSpriteAt(roadSprites["lineCurveDownLeft"], 5, 12);
+    this.setSpriteAt(roadSprites["lineCurveDownLeft"], 6, 13);
 
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 7, 12);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 8, 12);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 9, 12);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 10, 12);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 11, 12);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 12, 12);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 13, 12);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 14, 12);
+    this.setSpriteAt(roadSprites["lineVertical"], 7, 13);
+    this.setSpriteAt(roadSprites["lineVertical"], 8, 13);
+    this.setSpriteAt(roadSprites["lineVertical"], 9, 13);
+    this.setSpriteAt(roadSprites["lineVertical"], 10, 13);
+    this.setSpriteAt(roadSprites["lineVertical"], 11, 13);
+    this.setSpriteAt(roadSprites["lineVertical"], 12, 13);
+    this.setSpriteAt(roadSprites["lineVertical"], 13, 13);
+    this.setSpriteAt(roadSprites["lineVertical"], 14, 13);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 7, 14);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 8, 14);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 9, 14);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 10, 14);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 11, 14);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 12, 14);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 13, 14);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 14, 14);
 
 
     // Apartment layer
@@ -267,7 +293,11 @@ class Level1 extends Level {
     "lineHorizontalTop": [0, 128],
     "lineHorizontalBottom": [32, 128],
     "lineVerticalRight": [64, 128],
-    "lineVerticalLeft": [96, 128]
+    "lineVerticalLeft": [96, 128],
+    "lineCurveDownRight": [262, 132],
+    "lineCurveUpRight": [262, 348],
+    "lineCurveDownLeft": [474, 132],
+    "lineCurveUpLeft": [474, 348]
 
   };
 }

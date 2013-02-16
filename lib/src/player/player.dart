@@ -16,8 +16,6 @@ class Player extends GameObject {
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
-  DrawingComponent _drawer;
-
   Player(Level l, Direction d, int x, int y) : super(d, x, y) {
 
     this.setLevel(l);
@@ -45,12 +43,7 @@ class Player extends GameObject {
   void update() {
     if ( ! this.isRemoved) {
       super.update();
-      this._drawer.update(this);
     }
-  }
-
-  void setDrawingComponent(DrawingComponent d) {
-    this._drawer = d;
   }
 
   void takeHit() {

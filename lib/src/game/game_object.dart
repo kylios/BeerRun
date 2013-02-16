@@ -61,6 +61,9 @@ abstract class GameObject {
     this.oldX = this.x;
     this.oldY = this.y;
     this._control.update(this);
+    if (this._drawer != null) {
+      this._drawer.update(this);
+    }
   }
 
   void moveUp() {
