@@ -1,4 +1,4 @@
-part of input;
+part of npc;
 
 class NPCInputComponent extends Component {
 

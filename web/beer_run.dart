@@ -8,6 +8,7 @@ import 'package:BeerRun/game.dart';
 import 'package:BeerRun/level.dart';
 import 'level1.dart';
 import 'package:BeerRun/player.dart';
+import 'package:BeerRun/npc.dart';
 
 final int CANVAS_WIDTH = 640;
 final int CANVAS_HEIGHT = 480;
@@ -75,8 +76,8 @@ void main() {
 
   level.addPlayerObject(player);
 
-  Player npc1 = new Player(level, DIR_RIGHT, 0, 0);
-  Player npc2 = new Player(level, DIR_DOWN, 20, 48);
+  NPC npc1 = new NPC(level, DIR_RIGHT, 0, 0);
+  NPC npc2 = new NPC(level, DIR_DOWN, 20, 48);
   npc1.setSpeed(2);
   npc2.setSpeed(2);
   npc1.setControlComponent(new NPCInputComponent());

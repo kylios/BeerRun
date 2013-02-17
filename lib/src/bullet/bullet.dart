@@ -46,9 +46,7 @@ class Bullet extends GameObject {
           o = objs.removeLast();
         }
         if (o != this._creator) {
-          if (o is Player) {
-            o.takeHit();
-          }
+          o.takeHit();
           this.remove();
         }
       } else {
