@@ -14,8 +14,10 @@ class Car extends GameObject {
     super.update();
 
     List<GameObject> objs = this.level.checkCollision(this);
-    for (GameObject o in objs) {
-      o.takeHit();
+    if (objs != null) {
+      for (GameObject o in objs) {
+        o.takeHit();
+      }
     }
   }
 
