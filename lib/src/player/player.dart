@@ -9,6 +9,10 @@ class Player extends GameObject {
 
   int _health = 3;
 
+  bool _damaged = false;
+  int _damageInterval = 0;
+  int _damagedUntil = 0;
+
   // Movement parameters
 
   int _balance = 1;
@@ -43,11 +47,24 @@ class Player extends GameObject {
   void update() {
     if ( ! this.isRemoved) {
       super.update();
+
+      if (this._damaged) {
+        this._damageInterval++;
+
+        if (this._damagedUntil <= new Date.now().millisecondsSinceEpoch) {
+          this._damaged = false;
+          this._damageInterval = 0;
+        }
+      }
     }
   }
 
   void takeHit() {
-    this._health--;
+    if ( ! this._damaged) {
+      this._health--;
+      this._damaged = true;
+      this._damagedUntil = new Date.now().millisecondsSinceEpoch + 2000;
+    }
     if (this._health <= 0) {
 
       this.level.addAnimation(
@@ -92,10 +109,16 @@ class Player extends GameObject {
   int get tileHeight => 64;
 
   Sprite getMoveSprite() {
+    if (this._damaged && this._damageInterval % 3 == 0) {
+      return null;
+    }
     return this._walkSprites[this.dir.direction].getNext();
   }
   Sprite getStaticSprite() {
     this._walkSprites[this.dir.direction].reset();
+    if (this._damaged && this._damageInterval % 3 == 0) {
+      return null;
+    }
     return this._walkSprites[this.dir.direction].getCur();
   }
 }

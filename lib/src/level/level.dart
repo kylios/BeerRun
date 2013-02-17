@@ -100,10 +100,19 @@ class Level extends GameObject implements ComponentListener {
   List<GameObject> checkCollision(GameObject obj) {
     List<GameObject> targets = null;
     for (GameObject o in this._objects) {
-      if (o != obj && (
-          (o.x <= obj.x && o.x + o.tileWidth >= obj.x || o.x + o.tileWidth <= obj.x && o.x + o.tileWidth >= obj.x + obj.tileWidth) &&
-          (o.y <= obj.y && o.y + o.tileHeight >= obj.y) || o.y + o.tileHeight <= obj.y && o.y + o.tileHeight >= obj.y + obj.tileHeight)
-        )
+      if (o != obj &&
+          (
+              (
+                  o.x + o.tileWidth >= obj.x &&
+                  o.x <= obj.x + obj.tileWidth
+              )
+              &&
+              (
+                  o.y + o.tileHeight >= obj.y &&
+                  o.y <= obj.y + obj.tileHeight
+              )
+          )
+      )
       {
         if (targets == null) {
           targets = new List<GameObject>();
@@ -112,6 +121,29 @@ class Level extends GameObject implements ComponentListener {
       }
     }
     return targets;
+  }
+
+  GameObject collidesWithPlayer(GameObject obj) {
+
+    GameObject o = this._player;
+    if (o != obj &&
+      (
+          (
+            o.x + o.tileWidth >= obj.x &&
+            o.x <= obj.x + obj.tileWidth
+          )
+          &&
+          (
+            o.y + o.tileHeight >= obj.y &&
+            o.y <= obj.y + obj.tileHeight
+          )
+        )
+      )
+    {
+      return o;
+    } else {
+      return null;
+    }
   }
 
   void listen(GameEvent e) {

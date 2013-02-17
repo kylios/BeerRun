@@ -13,11 +13,9 @@ class Car extends GameObject {
   void update() {
     super.update();
 
-    List<GameObject> objs = this.level.checkCollision(this);
-    if (objs != null) {
-      for (GameObject o in objs) {
-        o.takeHit();
-      }
+    GameObject obj = this.level.collidesWithPlayer(this);
+    if (obj != null) {
+      obj.takeHit();
     }
   }
 
@@ -25,8 +23,21 @@ class Car extends GameObject {
 
   Point get point => new Point(this.x, this.y);
 
-  int get tileWidth => 64;
-  int get tileHeight => 64;
+  int get tileWidth {
+    if (this.dir == DIR_UP || this.dir == DIR_DOWN) {
+      return 96;
+    } else {
+      return 160;
+    }
+  }
+
+  int get tileHeight {
+    if (this.dir == DIR_UP || this.dir == DIR_DOWN) {
+      return 160;
+    } else {
+      return 96;
+    }
+  }
 
   Sprite getMoveSprite() {
     return this._sprites[this.dir.direction];

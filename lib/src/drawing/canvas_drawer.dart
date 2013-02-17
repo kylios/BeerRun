@@ -58,6 +58,10 @@ class CanvasDrawer {
   }
   void drawSprite(Sprite s, int x, int y, [int drawWidth, int drawHeight]) {
 
+    if (null == s) {
+      return;
+    }
+
     int width = (?drawWidth ? drawWidth : s.width);
     int height = (?drawHeight ? drawHeight : s.height);
 
