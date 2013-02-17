@@ -17,14 +17,18 @@ class SimpleInputComponent extends Component
 
   void update(Player obj) {
 
-    if (this._pressed[KeyboardListener.KEY_UP] == true) {
+    if (this._pressed[KeyboardListener.KEY_UP] == true ||
+        this._pressed[KeyboardListener.KEY_W] == true) {
       obj.moveUp();
-    } else if (this._pressed[KeyboardListener.KEY_DOWN] == true) {
+    } else if (this._pressed[KeyboardListener.KEY_DOWN] == true ||
+        this._pressed[KeyboardListener.KEY_S] == true) {
       obj.moveDown();
     }
-    if (this._pressed[KeyboardListener.KEY_LEFT] == true) {
+    if (this._pressed[KeyboardListener.KEY_LEFT] == true ||
+        this._pressed[KeyboardListener.KEY_A] == true) {
       obj.moveLeft();
-    } else if (this._pressed[KeyboardListener.KEY_RIGHT] == true) {
+    } else if (this._pressed[KeyboardListener.KEY_RIGHT] == true ||
+        this._pressed[KeyboardListener.KEY_D] == true) {
       obj.moveRight();
     }
 
