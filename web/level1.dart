@@ -204,8 +204,7 @@ class Level1 extends Level {
 
     this.roadPath = new Path([
                               new Point(32 * 13, 480),
-                              new Point(32 * 13, 7 * 32 - 78),
-                              new Point(32 * 11, 5 * 32 - 78),
+                              new Point(32 * 13, 5 * 32 - 78),
                               new Point(-160, 5 * 32 - 78)
                               ]);
 
