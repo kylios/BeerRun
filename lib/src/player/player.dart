@@ -26,17 +26,17 @@ class Player extends GameObject {
 
     SpriteSheet sprites = new SpriteSheet(
         "img/Character1Walk.png",
-        this.tileWidth, this.tileHeight);
+        64, 64);
 
     List<Sprite> walkUp = new List<Sprite>();
     List<Sprite> walkDown = new List<Sprite>();
     List<Sprite> walkLeft = new List<Sprite>();
     List<Sprite> walkRight = new List<Sprite>();
     for (int i = 0; i < 9; i++) {
-      walkUp.add(sprites.spriteAt(i * this.tileHeight, 0 * this.tileWidth));
-      walkLeft.add(sprites.spriteAt(i * this.tileHeight, 1 * this.tileWidth));
-      walkDown.add(sprites.spriteAt(i * this.tileHeight, 2 * this.tileWidth));
-      walkRight.add(sprites.spriteAt(i * this.tileHeight, 3 * this.tileWidth));
+      walkUp.add(sprites.spriteAt(i * 64, 0 * 64));
+      walkLeft.add(sprites.spriteAt(i * 64, 1 * 64));
+      walkDown.add(sprites.spriteAt(i * 64, 2 * 64));
+      walkRight.add(sprites.spriteAt(i * 64, 3 * 64));
     }
     this._walkSprites[DIR_UP.direction] = new SpriteAnimation(walkUp);
     this._walkSprites[DIR_DOWN.direction] = new SpriteAnimation(walkDown);

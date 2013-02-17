@@ -34,9 +34,9 @@ class CanvasDrawer {
 
     // Stop "scrolling" when we get too close to the edge
     if (x < 0)  x = 0;
-    else if (x > this._boundX)  x = this._boundX;
+    else if (x /*+ this._canvasManager.width*/ > this._boundX)  x = this._boundX;
     if (y < 0)  y = 0;
-    else if (y > this._boundY)  y = this._boundY;
+    else if (y /*+ this._canvasManager.height*/ > this._boundY)  y = this._boundY;
 
     this._offsetX = x;
     this._offsetY = y;

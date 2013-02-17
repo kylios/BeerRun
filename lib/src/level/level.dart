@@ -189,7 +189,8 @@ class Level extends GameObject implements ComponentListener {
       int col = 0;
       for (Sprite s in layer) {
         if (s != null) {
-          d.drawSprite(s, col * this._tileWidth, row * this._tileHeight);
+          d.drawSprite(s, col * this._tileWidth, row * this._tileHeight/*,
+              this._tileWidth, this._tileHeight*/);
         }
         col++;
         if (col >= this._cols) {

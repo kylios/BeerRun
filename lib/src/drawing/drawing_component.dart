@@ -29,7 +29,7 @@ class DrawingComponent extends Component
     } else {
       s = obj.getMoveSprite();
     }
-    this._drawer.drawSprite(s, obj.x, obj.y);
+    this._drawer.drawSprite(s, obj.x, obj.y, obj.tileWidth, obj.tileHeight);
 
 
   }

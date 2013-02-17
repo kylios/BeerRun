@@ -25,17 +25,17 @@ class Car extends GameObject {
 
   int get tileWidth {
     if (this.dir == DIR_UP || this.dir == DIR_DOWN) {
-      return 96;
+      return 64;
     } else {
-      return 160;
+      return 106;
     }
   }
 
   int get tileHeight {
     if (this.dir == DIR_UP || this.dir == DIR_DOWN) {
-      return 160;
+      return 106;
     } else {
-      return 96;
+      return 64;
     }
   }
 

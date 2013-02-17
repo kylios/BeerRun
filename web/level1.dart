@@ -12,33 +12,36 @@ import 'package:BeerRun/car.dart';
 
 class Level1 extends Level {
 
-  Path roadPath;
+  Random rng = new Random();
 
-  final int _spawnCarAt = 300;
-  int _spawnCarCnt = 300;
+  Path roadPath1;
+
+  final int _spawnCarAt = 200;
+  int _spawnCarCnt = 200;
 
   List<Sprite> _car1Sprites;
   List<Sprite> _car2Sprites;
 
   Level1(CanvasManager manager, CanvasDrawer drawer) :
-    super(drawer, manager, 15, 20, 32, 32)
+    super(drawer, manager, 30, 40, 32, 32)
   {
 
-    SpriteSheet road = new SpriteSheet("img/Street.png", this.tileWidth, this.tileHeight);
+    SpriteSheet road = new SpriteSheet("img/Street.png", 32, 32);
     Map<String, Sprite> roadSprites =
         Level.parseSpriteSheet(road, Level1._roadSpriteSheetData);
 
-    SpriteSheet apt = new SpriteSheet("img/apartments.png", this.tileWidth, this.tileHeight);
+    SpriteSheet apt = new SpriteSheet("img/apartments.png", 32, 32);
     Map<String, Sprite> aptSprites =
         Level.parseSpriteSheet(apt, Level1._aptSpriteSheetData);
 
-    SpriteSheet grass = new SpriteSheet("img/LPC Base Assets/tiles/grass.png", this.tileWidth, this.tileHeight);
+    SpriteSheet grass = new SpriteSheet("img/LPC Base Assets/tiles/grass.png", 32, 32);
     Map<String, Sprite> grassSprites =
         Level.parseSpriteSheet(grass, Level1._grassSpriteSheetData);
 
-    SpriteSheet sw = new SpriteSheet("img/Sidewalk_dark.png", this.tileWidth, this.tileHeight);
+    SpriteSheet sw = new SpriteSheet("img/Sidewalk_dark.png", 32, 32);
     Map<String, Sprite> swSprites =
         Level.parseSpriteSheet(sw, Level1._swSpriteSheetData);
+
 
     // Grass layer
     this.newLayer();
@@ -79,7 +82,7 @@ class Level1 extends Level {
     this.setSpriteAt(swSprites["swHorzTop"], 7, 8);
     this.setSpriteAt(swSprites["swHorzTop"], 7, 9);
     this.setSpriteAt(swSprites["swHorzTop"], 7, 10);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 11);
+    //this.setSpriteAt(swSprites["swVertRight"], 7, 11);
     this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 0);
     this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 1);
     this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 2);
@@ -90,74 +93,87 @@ class Level1 extends Level {
     this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 7);
     this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 8);
     this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 9);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 10);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 11);
+    this.setSpriteAt(swSprites["swBrkDownLeft"], 8, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 8, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 9, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 9, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 10, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 10, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 11, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 11, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 12, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 12, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 13, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 13, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 14, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 14, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 15, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 15, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 16, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 16, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 17, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 17, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 18, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 18, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 19, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 19, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 20, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 20, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 21, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 21, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 22, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 22, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 23, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 23, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 24, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 24, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 25, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 25, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 26, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 26, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 27, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 27, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 28, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 28, 11);
+    this.setSpriteAt(swSprites["swBrkVertLeft"], 29, 10);
+    this.setSpriteAt(swSprites["swVertRight"], 29, 11);
 
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 0);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 1);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 2);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 3);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 4);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 5);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 6);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 7);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 8);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 9);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 10);
-    this.setSpriteAt(roadSprites["roadOuterTop"], 4, 11);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 0);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 1);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 2);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 3);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 4);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 5);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 6);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 7);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 8);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 9);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 10);
-    this.setSpriteAt(roadSprites["lineHorizontal"], 5, 11);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 0);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 1);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 2);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 3);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 4);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 5);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 6);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 7);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 8);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 9);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 10);
-    this.setSpriteAt(roadSprites["roadOuterBottom"], 6, 11);
+    for (int r = 9; r < 30; r++) {
+      for (int c = 0; c < 10; c++) {
+
+        int rand = this.rng.nextInt(22);
+        if (rand == 0) {
+          this.setSpriteAt(swSprites["brkTopLeft"], r, c);
+        } else if (rand == 1) {
+          this.setSpriteAt(swSprites["brkTopRight"], r, c);
+        } else if (rand == 2) {
+          this.setSpriteAt(swSprites["brkBottomLeft"], r, c);
+        } else if (rand == 3) {
+          this.setSpriteAt(swSprites["brkBottomRight"], r, c);
+        } else {
+          this.setSpriteAt(swSprites["brk"], r, c);
+        }
+      }
+    }
+
+    for (int c = 0; c < 12; c++) {
+      this.setSpriteAt(roadSprites["roadOuterTop"], 4, c);
+      this.setSpriteAt(roadSprites["lineHorizontal"], 5, c);
+      this.setSpriteAt(roadSprites["roadOuterBottom"], 6, c);
+    }
 
     this.setSpriteAt(roadSprites["lineCurveDownLeft"], 5, 12);
     this.setSpriteAt(roadSprites["lineCurveDownLeft"], 6, 13);
 
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 7, 12);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 8, 12);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 9, 12);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 10, 12);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 11, 12);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 12, 12);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 13, 12);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 14, 12);
-    this.setSpriteAt(roadSprites["lineVertical"], 7, 13);
-    this.setSpriteAt(roadSprites["lineVertical"], 8, 13);
-    this.setSpriteAt(roadSprites["lineVertical"], 9, 13);
-    this.setSpriteAt(roadSprites["lineVertical"], 10, 13);
-    this.setSpriteAt(roadSprites["lineVertical"], 11, 13);
-    this.setSpriteAt(roadSprites["lineVertical"], 12, 13);
-    this.setSpriteAt(roadSprites["lineVertical"], 13, 13);
-    this.setSpriteAt(roadSprites["lineVertical"], 14, 13);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 7, 14);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 8, 14);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 9, 14);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 10, 14);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 11, 14);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 12, 14);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 13, 14);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 14, 14);
+    for (int r = 7; r < 30; r++) {
+      this.setSpriteAt(roadSprites["roadOuterLeft"], r, 12);
+      this.setSpriteAt(roadSprites["lineVertical"], r, 13);
+      this.setSpriteAt(roadSprites["roadOuterRight"], r, 14);
+    }
 
+    for (int r = 4; r < 30; r++) {
+      this.setSpriteAt(swSprites["swVertMid"], r, 15);
+    }
 
     // Apartment layer
     this.newLayer();
@@ -199,13 +215,26 @@ class Level1 extends Level {
     this.setSpriteAt(aptSprites["apt6BotLeft"], 2, 10);
     this.setSpriteAt(aptSprites["apt6BotRight"], 2, 11);
 
+    this.setSpriteAt(aptSprites["treeTopLeft"], 0, 13);
+    this.setSpriteAt(aptSprites["treeTopMid"], 0, 14);
+    this.setSpriteAt(aptSprites["treeTopRight"], 0, 15);
+    this.setSpriteAt(aptSprites["treeMidLeft"], 1, 13);
+    this.setSpriteAt(aptSprites["treeMidMid"], 1, 14);
+    this.setSpriteAt(aptSprites["treeMidRight"], 1, 15);
+    this.setSpriteAt(aptSprites["treeBotLeft"], 2, 13);
+    this.setSpriteAt(aptSprites["treeBotMid"], 2, 14);
+    this.setSpriteAt(aptSprites["treeBotRight"], 2, 15);
+    this.setSpriteAt(aptSprites["treeShadowLeft"], 3, 13);
+    this.setSpriteAt(aptSprites["treeShadowMid"], 3, 14);
+    this.setSpriteAt(aptSprites["treeShadowRight"], 3, 15);
 
 
 
-    this.roadPath = new Path([
-                              new Point(32 * 13, 480),
-                              new Point(32 * 13, 5 * 32 - 78),
-                              new Point(-160, 5 * 32 - 78)
+
+    this.roadPath1 = new Path([
+                              new Point(32 * 13, this.rows * this.tileHeight),
+                              new Point(32 * 13, 5 * 32 - 48),
+                              new Point(-160, 5 * 32 - 48)
                               ]);
 
 
@@ -213,10 +242,15 @@ class Level1 extends Level {
     this._car1Sprites = [
                          carSheet.spriteAt(96, 96, 96, 160),
                          carSheet.spriteAt(0, 96, 96, 160),
-                         carSheet.spriteAt(0, 0, 160, 96),
-                         carSheet.spriteAt(160, 0, 160, 96)
+                         carSheet.spriteAt(0, 0, 192, 96),
+                         carSheet.spriteAt(160, 0, 192, 96)
                          ];
-    this._car2Sprites = new List<Sprite>(4);
+    this._car2Sprites = [
+                         carSheet.spriteAt(198, 96, 96, 160),
+                         carSheet.spriteAt(288, 96, 96, 160),
+                         carSheet.spriteAt(0, 256, 192, 96),
+                         carSheet.spriteAt(160, 256, 192, 96)
+                         ];
 
   }
 
@@ -225,11 +259,15 @@ class Level1 extends Level {
   void update() {
     this._spawnCarCnt++;
     if (this._spawnCarCnt >= this._spawnCarAt) {
-      Car c = new Car(this.roadPath, DIR_UP, this._car1Sprites);
+      int blah = this.rng.nextInt(2);
+      Car c = new Car(this.roadPath1, DIR_UP,
+          (blah == 0 ? this._car1Sprites : this._car2Sprites));
       c.setLevel(this);
-      c.setDrawingComponent(new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+      c.setDrawingComponent(
+          new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
       this.addObject(c);
-      this._spawnCarCnt = 0;
+      // Sorta randomize the interval that we spawn cars
+      this._spawnCarCnt = this.rng.nextInt(this._spawnCarAt ~/ 2);
     }
 
     super.update();
@@ -257,12 +295,16 @@ class Level1 extends Level {
     "swBrkHorzBot": [32, 0],
     "swBrkDownLeft": [64, 0],
     "swBrkVertRight": [0, 32],
-    "swBrk": [32, 32],
+    "brk": [32, 32],
     "swBrkVertLeft": [64, 32],
     "swBrkTopRight": [0, 64],
     "swBrkHorzTop": [32, 64],
     "swBrkTopLeft": [64, 64],
 
+    "brkTopLeft": [96, 0],
+    "brkTopRight": [96, 32],
+    "brkBottomRight": [96, 64],
+    "brkBottomLeft": [96, 96],
   };
 
   static final Map _aptSpriteSheetData = {
@@ -308,6 +350,19 @@ class Level1 extends Level {
     "apt6MidRight": [352, 32],
     "apt6BotLeft": [320, 64],
     "apt6BotRight": [352, 64],
+
+    "treeTopLeft": [384, 0],
+    "treeTopMid": [416, 0],
+    "treeTopRight": [448, 0],
+    "treeMidLeft": [384, 32],
+    "treeMidMid": [416, 32],
+    "treeMidRight": [448, 32],
+    "treeBotLeft": [384, 64],
+    "treeBotMid": [416, 64],
+    "treeBotRight": [448, 64],
+    "treeShadowLeft": [384, 96],
+    "treeShadowMid": [416, 96],
+    "treeShadowRight": [448, 96],
   };
 
   static final Map _roadSpriteSheetData = {
