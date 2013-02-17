@@ -2,34 +2,34 @@ part of car;
 
 class Car extends GameObject {
 
-  SpriteSheet _sheet;
-  List<List<int>> _spriteCoords;
+  List<Sprite> _sprites;
 
-  Car(Direction d, int x, int y, this._sheet, this._spriteCoords) :
-    super(d, x, y) {
-
+  Car(Path p, Direction d, this._sprites) :
+    super(d, p.start.x, p.start.y) {
     this.setSpeed(6);
-    this.setControlComponent(new CarInputComponent());
+    this.setControlComponent(new PathFollowerInputComponent(p));
   }
 
   void update() {
     super.update();
+
+    List<GameObject> objs = this.level.checkCollision(this);
+    for (GameObject o in objs) {
+      o.takeHit();
+    }
   }
 
+  void takeHit() {}
 
-
+  Point get point => new Point(this.x, this.y);
 
   int get tileWidth => 64;
   int get tileHeight => 64;
 
   Sprite getMoveSprite() {
-    int x = this._spriteCoords[this.dir.direction][0];
-    int y = this._spriteCoords[this.dir.direction][1];
-    return this._sheet.spriteAt(x, y, this.tileWidth, this.tileHeight);
+    return this._sprites[this.dir.direction];
   }
   Sprite getStaticSprite() {
-    int x = this._spriteCoords[this.dir.direction][0];
-    int y = this._spriteCoords[this.dir.direction][1];
-    return this._sheet.spriteAt(x, y, this.tileWidth, this.tileHeight);
+    return this._sprites[this.dir.direction];
   }
 }

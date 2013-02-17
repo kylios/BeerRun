@@ -7,8 +7,8 @@ abstract class GameObject {
   int _x = 0;
   int _y = 0;
 
-  int oldX;
-  int oldY;
+  int _oldX = 0;
+  int _oldY = 0;
 
   Direction _dir;
 
@@ -28,6 +28,8 @@ abstract class GameObject {
 
   int get x => this._x;
   int get y => this._y;
+  int get oldX => this._oldX;
+  int get oldY => this._oldY;
   Direction get dir => this._dir;
   int get numSteps => 9;
   Level get level => this._level;
@@ -56,10 +58,15 @@ abstract class GameObject {
     this._speed = s;
   }
 
+  /**
+   * This object got hit by something.
+   */
+  void takeHit();
+
   void update() {
 
-    this.oldX = this.x;
-    this.oldY = this.y;
+    this._oldX = this.x;
+    this._oldY = this.y;
     this._control.update(this);
     if (this._drawer != null) {
       this._drawer.update(this);

@@ -36,6 +36,8 @@ class Level extends GameObject implements ComponentListener {
   int get tileHeight => this._tileHeight;
   int get rows => this._rows;
   int get cols => this._cols;
+  CanvasManager get canvasManager => this._manager;
+  CanvasDrawer get canvasDrawer => this._drawer;
 
   int _posToIdx(int row, int col) {
     return this._cols * row + col;
@@ -92,6 +94,8 @@ class Level extends GameObject implements ComponentListener {
     return (obj.x < 0 || obj.x > this._cols * this._tileWidth ||
         obj.y < 0 || obj.y > this._rows * this._tileHeight);
   }
+
+  void takeHit() {}
 
   List<GameObject> checkCollision(GameObject obj) {
     List<GameObject> targets = null;

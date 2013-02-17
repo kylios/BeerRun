@@ -26,6 +26,10 @@ class Bullet extends GameObject {
     this._moveSprites[DIR_LEFT.direction] = sprites.spriteAt(96, 32, 32, 32);
   }
 
+  void takeHit() {
+    this.remove();
+  }
+
   void update() {
     super.update();
 

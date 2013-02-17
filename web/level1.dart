@@ -6,8 +6,19 @@ import 'dart:math';
 import 'package:BeerRun/level.dart';
 import 'package:BeerRun/drawing.dart';
 import 'package:BeerRun/canvas_manager.dart';
+import 'package:BeerRun/path.dart';
+import 'package:BeerRun/game.dart';
+import 'package:BeerRun/car.dart';
 
 class Level1 extends Level {
+
+  Path roadPath;
+
+  final int _spawnCarAt = 300;
+  int _spawnCarCnt = 300;
+
+  List<Sprite> _car1Sprites;
+  List<Sprite> _car2Sprites;
 
   Level1(CanvasManager manager, CanvasDrawer drawer) :
     super(drawer, manager, 15, 20, 32, 32)
@@ -28,7 +39,6 @@ class Level1 extends Level {
     SpriteSheet sw = new SpriteSheet("img/Sidewalk_dark.png", this.tileWidth, this.tileHeight);
     Map<String, Sprite> swSprites =
         Level.parseSpriteSheet(sw, Level1._swSpriteSheetData);
-
 
     // Grass layer
     this.newLayer();
@@ -188,6 +198,42 @@ class Level1 extends Level {
     this.setSpriteAt(aptSprites["apt5BotRight"], 2, 9);
     this.setSpriteAt(aptSprites["apt6BotLeft"], 2, 10);
     this.setSpriteAt(aptSprites["apt6BotRight"], 2, 11);
+
+
+
+
+    this.roadPath = new Path([
+                              new Point(32 * 13, 480),
+                              new Point(32 * 13, 7 * 32 - 78),
+                              new Point(32 * 11, 5 * 32 - 78),
+                              new Point(-160, 5 * 32 - 78)
+                              ]);
+
+
+    SpriteSheet carSheet = new SpriteSheet('img/Cars_final.png');
+    this._car1Sprites = [
+                         carSheet.spriteAt(96, 96, 96, 160),
+                         carSheet.spriteAt(0, 96, 96, 160),
+                         carSheet.spriteAt(0, 0, 160, 96),
+                         carSheet.spriteAt(160, 0, 160, 96)
+                         ];
+    this._car2Sprites = new List<Sprite>(4);
+
+  }
+
+
+
+  void update() {
+    this._spawnCarCnt++;
+    if (this._spawnCarCnt >= this._spawnCarAt) {
+      Car c = new Car(this.roadPath, DIR_UP, this._car1Sprites);
+      c.setLevel(this);
+      c.setDrawingComponent(new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+      this.addObject(c);
+      this._spawnCarCnt = 0;
+    }
+
+    super.update();
   }
 
   static final Map _grassSpriteSheetData = {
