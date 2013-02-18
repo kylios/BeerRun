@@ -15,9 +15,16 @@ class Level1 extends Level {
   Random rng = new Random();
 
   Path roadPath1;
+  Path roadPath2;
+  Path roadPath3;
 
-  final int _spawnCarAt = 200;
-  int _spawnCarCnt = 200;
+  final int _spawnCar1At = 200;
+  final int _spawnCar2At = 300;
+  final int _spawnCar3At = 350;
+  int _spawnCar1Cnt = 200;
+  int _spawnCar2Cnt = 0;
+  int _spawnCar3Cnt = 150;
+
 
   List<Sprite> _car1Sprites;
   List<Sprite> _car2Sprites;
@@ -45,6 +52,10 @@ class Level1 extends Level {
     SpriteSheet fence = new SpriteSheet("img/fence.png", 32, 32);
     Map<String, Sprite> fenceSprites =
         Level.parseSpriteSheet(fence, Level1._fenceSpriteSheetData);
+
+    SpriteSheet house = new SpriteSheet("img/house.png", 32, 32);
+    Map<String, Sprite> houseSprites =
+        Level.parseSpriteSheet(house, Level1._houseSpriteSheetData);
 
 
     // Grass layer
@@ -173,12 +184,21 @@ class Level1 extends Level {
       this.setSpriteAt(roadSprites["roadOuterRight"], r, 14);
     }
 
+    for (int r = 0; r < 30; r++) {
+      this.setSpriteAt(roadSprites["roadOuterLeft"], r, 22);
+      this.setSpriteAt(roadSprites["lineVertical"], r, 23);
+      this.setSpriteAt(roadSprites["roadOuterRight"], r, 24);
+      this.setSpriteAt(roadSprites["roadOuterLeft"], r, 26);
+      this.setSpriteAt(roadSprites["lineVertical"], r, 27);
+      this.setSpriteAt(roadSprites["roadOuterRight"], r, 28);
+    }
+
     for (int r = 4; r < 30; r++) {
       this.setSpriteAt(swSprites["swVertMid"], r, 15);
     }
 
     // Apartment/fence layer
-    this.newLayer();
+    //this.newLayer();
 
     for (int c = 0; c < 6; c++) {
       this.setSpriteAt(fenceSprites["wireHorizMid"], 7, c);
@@ -196,6 +216,16 @@ class Level1 extends Level {
 
     for (int r = 0; r < 30; r++) {
       this.setSpriteAt(fenceSprites["woodVertMid"], r, 16);
+    }
+
+    for (int r = 0; r < 30; r++) {
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 21);
+    }
+    for (int r = 0; r < 30; r++) {
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 25);
+    }
+    for (int r = 0; r < 30; r++) {
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 29);
     }
 
     this.setSpriteAt(aptSprites["apt1TopLeft"], 0, 0);
@@ -248,7 +278,83 @@ class Level1 extends Level {
     this.setSpriteAt(aptSprites["treeShadowMid"], 3, 14);
     this.setSpriteAt(aptSprites["treeShadowRight"], 3, 15);
 
+    // THE HOUSE
+    this.setSpriteAt(houseSprites["wallTopLeft"], 2, 30);
+    this.setSpriteAt(houseSprites["wallTopMid"], 2, 31);
+    this.setSpriteAt(houseSprites["wallTopMid"], 2, 32);
+    this.setSpriteAt(houseSprites["wallTopMid"], 2, 33);
+    this.setSpriteAt(houseSprites["wallTopMid"], 2, 34);
+    this.setSpriteAt(houseSprites["wallTopMid"], 2, 38);
+    this.setSpriteAt(houseSprites["wallTopRight"], 2, 39);
+    this.setSpriteAt(houseSprites["wallMidLeft"], 3, 30);
+    this.setSpriteAt(houseSprites["wallMidMid"], 3, 31);
+    this.setSpriteAt(houseSprites["wallMidMid"], 3, 32);
+    this.setSpriteAt(houseSprites["wallMidMid"], 3, 33);
+    this.setSpriteAt(houseSprites["wallMidMid"], 3, 34);
+    this.setSpriteAt(houseSprites["wallMidMid"], 3, 38);
+    this.setSpriteAt(houseSprites["wallMidRight"], 3, 39);
+    this.setSpriteAt(houseSprites["wallBotLeft"], 4, 30);
+    this.setSpriteAt(houseSprites["wallBotMid"], 4, 31);
+    this.setSpriteAt(houseSprites["wallBotMid"], 4, 32);
+    this.setSpriteAt(houseSprites["wallBotMid"], 4, 33);
+    this.setSpriteAt(houseSprites["wallBotMid"], 4, 34);
+    this.setSpriteAt(houseSprites["wallBotMid"], 4, 38);
+    this.setSpriteAt(houseSprites["wallBotRight"], 4, 39);
 
+    this.setSpriteAt(houseSprites["roofSideAngleLeft"], 0, 30);
+    this.setSpriteAt(houseSprites["roofFlatBotLeft"], 0, 31);
+    this.setSpriteAt(houseSprites["roofFlatBotMid"], 0, 32);
+    this.setSpriteAt(houseSprites["roofFlatBotMid"], 0, 33);
+    this.setSpriteAt(houseSprites["roofFlatBotMid"], 0, 34);
+    this.setSpriteAt(houseSprites["roofFlatBotMid"], 0, 35);
+    this.setSpriteAt(houseSprites["roofFlatMidMid"], 0, 36);
+    this.setSpriteAt(houseSprites["roofFlatBotMid"], 0, 37);
+    this.setSpriteAt(houseSprites["roofFlatBotRight"], 0, 38);
+    this.setSpriteAt(houseSprites["roofSideAngleRight"], 0, 39);
+    this.setSpriteAt(houseSprites["roofFrontAngleLeft"], 2, 35);
+    this.setSpriteAt(houseSprites["roofFrontAngleMid"], 2, 36);
+    this.setSpriteAt(houseSprites["roofFrontAngleRight"], 2, 37);
+    this.setSpriteAt(houseSprites["roofFrontAngleInvLeft"], 1, 35);
+    this.setSpriteAt(houseSprites["roofFlatOpenTop"], 1, 36);
+    this.setSpriteAt(houseSprites["roofFrontAngleInvRight"], 1, 37);
+    this.setSpriteAt(houseSprites["roofFrontAngleLeft"], 1, 30);
+    this.setSpriteAt(houseSprites["roofFrontAngleMid"], 1, 31);
+    this.setSpriteAt(houseSprites["roofFrontAngleMid"], 1, 32);
+    this.setSpriteAt(houseSprites["roofFrontAngleMid"], 1, 33);
+    this.setSpriteAt(houseSprites["roofFrontAngleMid"], 1, 34);
+    this.setSpriteAt(houseSprites["roofFrontAngleMid"], 1, 38);
+    this.setSpriteAt(houseSprites["roofFrontAngleRight"], 1, 39);
+
+    this.setSpriteAt(houseSprites["wallMidMid"], 3, 35);
+    this.setSpriteAt(houseSprites["wallMidMid"], 3, 37);
+    this.setSpriteAt(houseSprites["wallBotMid"], 4, 35);
+    this.setSpriteAt(houseSprites["wallBotMid"], 4, 37);
+
+    this.newLayer();
+    this.setSpriteAt(houseSprites["wallTopLeft"], 3, 35);
+    this.setSpriteAt(houseSprites["wallTopMid"], 3, 36);
+    this.setSpriteAt(houseSprites["wallTopRight"], 3, 37);
+    this.setSpriteAt(houseSprites["wallMidLeft"], 4, 35);
+    this.setSpriteAt(houseSprites["wallMidMid"], 4, 36);
+    this.setSpriteAt(houseSprites["wallMidRight"], 4, 37);
+    this.setSpriteAt(houseSprites["wallBotLeft"], 5, 35);
+    this.setSpriteAt(houseSprites["wallBotMid"], 5, 36);
+    this.setSpriteAt(houseSprites["wallBotRight"], 5, 37);
+
+
+
+    this.newLayer();
+    this.setSpriteAt(houseSprites["door2Top"], 4, 36);
+    this.setSpriteAt(houseSprites["door2Bot"], 5, 36);
+    this.setSpriteAt(houseSprites["window2Top"], 2, 34);
+    this.setSpriteAt(houseSprites["window2Bot"], 3, 34);
+    this.setSpriteAt(houseSprites["window2Top"], 2, 32);
+    this.setSpriteAt(houseSprites["window2Bot"], 3, 32);
+    this.setSpriteAt(houseSprites["window2Top"], 2, 38);
+    this.setSpriteAt(houseSprites["window2Bot"], 3, 38);
+    this.newLayer();
+    this.setSpriteAt(houseSprites["stairsTop"], 5, 36);
+    this.setSpriteAt(houseSprites["stairsBot"], 6, 36);
 
 
     this.roadPath1 = new Path([
@@ -256,7 +362,17 @@ class Level1 extends Level {
                               new Point(32 * 13, 5 * 32 - 48),
                               new Point(-160, 5 * 32 - 48)
                               ]);
+    this.roadPath2 = new Path([
+                                new Point(27 * this.tileWidth,
+                                   this.rows * this.tileHeight),
+                                new Point(27 * this.tileWidth, -160)
+                               ]);
+    this.roadPath3 = new Path([
 
+                               new Point(23 * this.tileWidth, -160),
+                               new Point(23 * this.tileWidth,
+                                   this.rows * this.tileHeight)
+                               ]);
 
     SpriteSheet carSheet = new SpriteSheet('img/Cars_final.png');
     this._car1Sprites = [
@@ -277,8 +393,10 @@ class Level1 extends Level {
 
 
   void update() {
-    this._spawnCarCnt++;
-    if (this._spawnCarCnt >= this._spawnCarAt) {
+    this._spawnCar1Cnt++;
+    this._spawnCar2Cnt++;
+    this._spawnCar3Cnt++;
+    if (this._spawnCar1Cnt >= this._spawnCar1At) {
       int blah = this.rng.nextInt(2);
       Car c = new Car(this.roadPath1, DIR_UP,
           (blah == 0 ? this._car1Sprites : this._car2Sprites));
@@ -287,11 +405,77 @@ class Level1 extends Level {
           new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
       this.addObject(c);
       // Sorta randomize the interval that we spawn cars
-      this._spawnCarCnt = this.rng.nextInt(this._spawnCarAt ~/ 2);
+      this._spawnCar1Cnt = this.rng.nextInt(this._spawnCar1At ~/ 2);
+    }
+    if (this._spawnCar2Cnt >= this._spawnCar2At){
+      int blah = this.rng.nextInt(2);
+      Car c = new Car(this.roadPath2, DIR_UP,
+          (blah == 0 ? this._car1Sprites : this._car2Sprites));
+      c.setLevel(this);
+      c.setDrawingComponent(
+          new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+      this.addObject(c);
+      this._spawnCar2Cnt = 0;
+    }
+    if (this._spawnCar3Cnt >= this._spawnCar3At){
+      int blah = this.rng.nextInt(2);
+      Car c = new Car(this.roadPath3, DIR_DOWN,
+          (blah == 0 ? this._car1Sprites : this._car2Sprites));
+      c.setLevel(this);
+      c.setDrawingComponent(
+          new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+      this.addObject(c);
+      this._spawnCar3Cnt = 0;
     }
 
     super.update();
   }
+
+  static final Map _houseSpriteSheetData = {
+    "wallTopLeft": [0, 0],
+    "wallMidLeft": [0, 32],
+    "wallBotLeft": [0, 64],
+    "wallTopMid": [32, 0],
+    "wallMidMid": [32, 32],
+    "wallBotMid": [32, 64],
+    "wallTopRight": [64, 0],
+    "wallMidRight": [64, 32],
+    "wallBotRight": [64, 64],
+    "door1Top": [96, 0],
+    "door1Bot": [96, 32],
+    "stairsTop": [128, 0],
+    "stairsBot": [128, 32],
+    "door2Top": [160, 0],
+    "door2Bot": [160, 32],
+    "window2Top": [256, 0],
+    "window2Bot": [256, 32],
+
+    "frontTopLeft": [224, 64],
+    "frontMidLeft": [224, 96],
+    "frontBotLeft": [224, 128],
+    "frontTopRight": [256, 64],
+    "frontMidRight": [256, 96],
+    "frontBotRight": [256, 128],
+
+    "roofSideAngleLeft": [0, 128],
+    "roofSideAngleRight": [64, 128],
+    "roofFrontAngleLeft": [0, 160],
+    "roofFrontAngleMid": [32, 160],
+    "roofFrontAngleRight": [64, 160],
+    "roofFrontAngleInvLeft": [0, 192],
+    "roofFrontAngleInvRight": [64, 192],
+
+    "roofFlatTopLeft": [96, 128],
+    "roofFlatTopMid": [128, 128],
+    "roofFlatTopRight": [160, 128],
+    "roofFlatMidLeft": [96, 192],
+    "roofFlatMidMid": [128, 192],
+    "roofFlatMidRight": [160, 192],
+    "roofFlatBotLeft": [96, 160],
+    "roofFlatBotMid": [128, 160],
+    "roofFlatBotRight": [160, 160],
+    "roofFlatOpenTop": [192, 160],
+  };
 
   static final Map _grassSpriteSheetData = {
     "grassBG1": [0, 160],

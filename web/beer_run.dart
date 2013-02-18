@@ -70,7 +70,8 @@ void main() {
 
   level = new Level1(canvasManager, canvasDrawer);
 
-  player = new Player(level, DIR_DOWN, 16, level.tileHeight * level.rows - 64);
+  player = new Player(level, DIR_DOWN, 32 * 35, 32 * 8);
+      //16, level.tileHeight * level.rows - 64);
   player.setControlComponent(keyboard);
   player.setDrawingComponent(drawer);
 
