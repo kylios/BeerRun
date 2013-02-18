@@ -197,6 +197,17 @@ class Level1 extends Level {
       this.setSpriteAt(swSprites["swVertMid"], r, 15);
     }
 
+    for (int r = 18; r < 30; r++) {
+      this.setSpriteAt(roadSprites["roadOuterLeft"], r, 30);
+      this.setSpriteAt(roadSprites["lineVertical"], r, 31);
+      this.setSpriteAt(roadSprites["roadOuterRight"], r, 32);
+    }
+    for (int c = 33; c < 40; c++) {
+      this.setSpriteAt(roadSprites["roadOuterTop"], 15, c);
+      this.setSpriteAt(roadSprites["lineHorizontal"], 16, c);
+      this.setSpriteAt(roadSprites["roadOuterBottom"], 17, c);
+    }
+
     // Apartment/fence layer
     //this.newLayer();
 
@@ -227,6 +238,20 @@ class Level1 extends Level {
     for (int r = 0; r < 30; r++) {
       this.setSpriteAt(fenceSprites["woodVertMid"], r, 29);
     }
+
+    for (int c = 30; c < 34; c++) {
+      this.setSpriteAt(fenceSprites["woodHorizMid"], 9, c);
+    }
+    this.setSpriteAt(fenceSprites["woodHorizRight"], 9, 34);
+    this.setSpriteAt(fenceSprites["woodHorizLeft"], 9, 37);
+    for (int c = 38; c < 40; c++) {
+      this.setSpriteAt(fenceSprites["woodHorizMid"], 9, c);
+    }
+    for (int c = 32; c < 36; c++) {
+      this.setSpriteAt(fenceSprites["woodHorizMid"], 14, c);
+    }
+    this.setSpriteAt(fenceSprites["woodHorizRight"], 14, 36);
+    this.setSpriteAt(fenceSprites["woodHorizLeft"], 14, 39);
 
     this.setSpriteAt(aptSprites["apt1TopLeft"], 0, 0);
     this.setSpriteAt(aptSprites["apt1TopRight"], 0, 1);
