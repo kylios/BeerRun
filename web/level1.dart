@@ -9,6 +9,7 @@ import 'package:BeerRun/canvas_manager.dart';
 import 'package:BeerRun/path.dart';
 import 'package:BeerRun/game.dart';
 import 'package:BeerRun/car.dart';
+import 'package:BeerRun/region.dart';
 
 class Level1 extends Level {
 
@@ -17,6 +18,11 @@ class Level1 extends Level {
   Path roadPath1;
   Path roadPath2;
   Path roadPath3;
+
+  Region npcRegion1;
+  Region npcRegion2;
+  Region npcRegion3;
+  Region npcRegion4;
 
   final int _spawnCar1At = 200;
   final int _spawnCar2At = 300;
@@ -58,7 +64,7 @@ class Level1 extends Level {
         Level.parseSpriteSheet(house, Level1._houseSpriteSheetData);
 
 
-    // Grass layer
+    // Grass layer0
     this.newLayer();
 
     Random rand = new Random();
@@ -151,6 +157,9 @@ class Level1 extends Level {
     this.setSpriteAt(swSprites["swBrkVertLeft"], 29, 10);
     this.setSpriteAt(swSprites["swVertRight"], 29, 11);
 
+    /**
+     * This is the parking lot.  Three hobos hang out here to steal your beer.
+     */
     for (int r = 10; r < 30; r++) {
       for (int c = 0; c < 10; c++) {
 
@@ -168,6 +177,17 @@ class Level1 extends Level {
         }
       }
     }
+
+    this.npcRegion1 = new Region(
+      0,
+      10 * this.tileWidth,
+      10 * this.tileHeight,
+      30 * this.tileHeight
+    );
+
+    /**
+     * END Parking Lot
+     */
 
     for (int c = 0; c < 12; c++) {
       this.setSpriteAt(roadSprites["roadOuterTop"], 4, c);

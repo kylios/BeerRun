@@ -11,6 +11,7 @@ import 'package:BeerRun/bullet.dart';
 import 'package:BeerRun/explosion.dart';
 import 'package:BeerRun/input.dart';
 import 'package:BeerRun/canvas_manager.dart';
+import 'package:BeerRun/region.dart';
 
 part 'src/npc/npc_input_component.dart';
 part 'src/npc/npc.dart';

@@ -16,7 +16,7 @@ final int CANVAS_HEIGHT = 480;
 CanvasManager canvasManager;
 CanvasDrawer canvasDrawer;
 
-Level level;
+Level1 level;
 
 SimpleInputComponent keyboard;
 DrawingComponent drawer;
@@ -70,24 +70,29 @@ void main() {
 
   level = new Level1(canvasManager, canvasDrawer);
 
-  player = new Player(level, DIR_DOWN, 32 * 35, 32 * 8);
+  player = new Player(level, DIR_DOWN, 32 * 1, 32 * 28);
       //16, level.tileHeight * level.rows - 64);
   player.setControlComponent(keyboard);
   player.setDrawingComponent(drawer);
 
   level.addPlayerObject(player);
 
-  NPC npc1 = new NPC(level, DIR_RIGHT, 0, 0);
-  NPC npc2 = new NPC(level, DIR_DOWN, 20, 48);
+  NPC npc1 = new NPC(level, DIR_RIGHT, 0, 400);
+  NPC npc2 = new NPC(level, DIR_DOWN, 20, 320);
+  NPC npc3 = new NPC(level, DIR_LEFT, 160, 420);
   npc1.setSpeed(2);
   npc2.setSpeed(2);
-  npc1.setControlComponent(new NPCInputComponent());
-  npc2.setControlComponent(new NPCInputComponent());
+  npc3.setSpeed(3);
+  npc1.setControlComponent(new NPCInputComponent(level.npcRegion1));
+  npc2.setControlComponent(new NPCInputComponent(level.npcRegion1));
+  npc3.setControlComponent(new NPCInputComponent(level.npcRegion1));
   npc1.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
   npc2.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
+  npc3.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
 
   level.addObject(npc1);
   level.addObject(npc2);
+  level.addObject(npc3);
 
   _loop(0);
 }

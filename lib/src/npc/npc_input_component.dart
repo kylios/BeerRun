@@ -5,12 +5,16 @@ class NPCInputComponent extends Component {
   int _paces = 0;
   int _maxPaces = 0;
 
+  Region _region;
+
+  NPCInputComponent(this._region);
+
   void update(GameObject obj) {
 
-    int x1 = 0;
-    int x2 = obj.level.tileWidth * obj.level.cols;
-    int y1 = 0;
-    int y2 = obj.level.tileHeight * obj.level.rows;
+    int x1 = this._region.left;
+    int x2 = this._region.right;
+    int y1 = this._region.top;
+    int y2 = this._region.bottom;
 
     bool changeDirs = (this._maxPaces == 0 || this._paces >= this._maxPaces);
 
