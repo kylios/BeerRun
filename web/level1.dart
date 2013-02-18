@@ -42,6 +42,10 @@ class Level1 extends Level {
     Map<String, Sprite> swSprites =
         Level.parseSpriteSheet(sw, Level1._swSpriteSheetData);
 
+    SpriteSheet fence = new SpriteSheet("img/fence.png", 32, 32);
+    Map<String, Sprite> fenceSprites =
+        Level.parseSpriteSheet(fence, Level1._fenceSpriteSheetData);
+
 
     // Grass layer
     this.newLayer();
@@ -71,31 +75,29 @@ class Level1 extends Level {
     this.setSpriteAt(swSprites["swHorzMidTopLeftConnector"], 3, 10);
     this.setSpriteAt(swSprites["swHorzMidTopRightConnector"], 3, 11);
 
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 0);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 1);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 2);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 3);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 4);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 5);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 6);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 7);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 8);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 9);
-    this.setSpriteAt(swSprites["swHorzTop"], 7, 10);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 0);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 1);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 2);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 3);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 4);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 5);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 6);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 7);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 8);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 9);
+    this.setSpriteAt(swSprites["swHorzTop"], 8, 10);
     //this.setSpriteAt(swSprites["swVertRight"], 7, 11);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 0);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 1);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 2);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 3);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 4);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 5);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 6);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 7);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 8);
-    this.setSpriteAt(swSprites["swBrkHorzBot"], 8, 9);
-    this.setSpriteAt(swSprites["swBrkDownLeft"], 8, 10);
-    this.setSpriteAt(swSprites["swVertRight"], 8, 11);
-    this.setSpriteAt(swSprites["swBrkVertLeft"], 9, 10);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 0);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 1);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 2);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 3);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 4);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 5);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 6);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 7);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 8);
+    this.setSpriteAt(swSprites["swBrkHorzBot"], 9, 9);
+    this.setSpriteAt(swSprites["swBrkDownLeft"], 9, 10);
     this.setSpriteAt(swSprites["swVertRight"], 9, 11);
     this.setSpriteAt(swSprites["swBrkVertLeft"], 10, 10);
     this.setSpriteAt(swSprites["swVertRight"], 10, 11);
@@ -138,7 +140,7 @@ class Level1 extends Level {
     this.setSpriteAt(swSprites["swBrkVertLeft"], 29, 10);
     this.setSpriteAt(swSprites["swVertRight"], 29, 11);
 
-    for (int r = 9; r < 30; r++) {
+    for (int r = 10; r < 30; r++) {
       for (int c = 0; c < 10; c++) {
 
         int rand = this.rng.nextInt(22);
@@ -175,8 +177,26 @@ class Level1 extends Level {
       this.setSpriteAt(swSprites["swVertMid"], r, 15);
     }
 
-    // Apartment layer
+    // Apartment/fence layer
     this.newLayer();
+
+    for (int c = 0; c < 6; c++) {
+      this.setSpriteAt(fenceSprites["wireHorizMid"], 7, c);
+    }
+    //this.setSpriteAt(fenceSprites["wireHorizRight"], 7, 5);
+    //this.setSpriteAt(fenceSprites["wireHorizLeft"], 7, 8);
+    for (int c = 8; c < 11; c++) {
+      this.setSpriteAt(fenceSprites["wireHorizMid"], 7, c);
+    }
+    this.setSpriteAt(fenceSprites["wireHorizRight"], 7, 11);
+
+    for (int r = 8; r < 30; r++) {
+      this.setSpriteAt(fenceSprites["wireVertMid"], r, 11);
+    }
+
+    for (int r = 0; r < 30; r++) {
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 16);
+    }
 
     this.setSpriteAt(aptSprites["apt1TopLeft"], 0, 0);
     this.setSpriteAt(aptSprites["apt1TopRight"], 0, 1);
@@ -399,5 +419,19 @@ class Level1 extends Level {
     "lineCurveDownLeft": [474, 132],
     "lineCurveUpLeft": [474, 348]
 
+  };
+
+  static final _fenceSpriteSheetData = {
+    "wireHorizLeft": [0, 0],
+    "wireHorizMid": [32, 0],
+    "wireHorizRight": [64, 0],
+    "wireVertMid": [0, 32],
+    "woodHorizLeft": [32, 32],
+    "woodHorizRight": [64, 32],
+    "woodDownRight": [0, 64],
+    "woodDownLeft": [64, 64],
+    "woodHorizMid": [32, 64],
+    "woodVertMid": [0, 96],
+    "woodVertBot": [32, 96],
   };
 }
