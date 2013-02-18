@@ -17,6 +17,7 @@ class Level extends GameObject implements ComponentListener {
   CanvasDrawer _drawer;
 
   List<List<Sprite>> _sprites;
+  List<bool> _blocked;
 
   List<GameObject> _objects;
   Player _player;
@@ -30,6 +31,8 @@ class Level extends GameObject implements ComponentListener {
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
     this._animations = new List<LevelAnimation>();
+    this._blocked = new List<bool>
+      .fixedLength(this._rows * this._cols, fill: true);
   }
 
   int get tileWidth => this._tileWidth;
@@ -48,7 +51,7 @@ class Level extends GameObject implements ComponentListener {
     this._layer++;
   }
 
-  void setSpriteAt(Sprite s, int row, int col) {
+  void setSpriteAt(Sprite s, int row, int col, [bool blocked]) {
 
     int pos = this._posToIdx(row, col);
     if (this._layer == -1 ||
@@ -58,6 +61,9 @@ class Level extends GameObject implements ComponentListener {
       return;
     }
 
+    if (?blocked) {
+      this._blocked[pos] = blocked;
+    }
     this._sprites[this._layer][pos] = s;
   }
   Sprite getSpriteAt(int row, int col) {
@@ -96,6 +102,18 @@ class Level extends GameObject implements ComponentListener {
   }
 
   void takeHit() {}
+
+  bool isBlocking(int row, int col) {
+
+    int pos = this._posToIdx(row, col);
+    if (this._layer == -1 ||
+        pos < 0 ||
+        pos >= this._blocked.length)
+    {
+      return true;
+    }
+    return this._blocked[pos];
+  }
 
   List<GameObject> checkCollision(GameObject obj) {
     List<GameObject> targets = null;

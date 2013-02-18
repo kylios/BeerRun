@@ -58,6 +58,11 @@ abstract class GameObject {
     this._speed = s;
   }
 
+  void setPos(int x, int y) {
+    this._x = x;
+    this._y = y;
+  }
+
   /**
    * This object got hit by something.
    */

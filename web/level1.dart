@@ -232,7 +232,7 @@ class Level1 extends Level {
     //this.newLayer();
 
     for (int c = 0; c < 6; c++) {
-      this.setSpriteAt(fenceSprites["wireHorizMid"], 7, c);
+      this.setSpriteAt(fenceSprites["wireHorizMid"], 7, c, true);
     }
     //this.setSpriteAt(fenceSprites["wireHorizRight"], 7, 5);
     //this.setSpriteAt(fenceSprites["wireHorizLeft"], 7, 8);
