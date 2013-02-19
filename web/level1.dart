@@ -68,6 +68,18 @@ class Level1 extends Level {
         Level.parseSpriteSheet(building, Level1._buildingSpriteSheetData);
 
 
+    SpriteSheet carSheet = new SpriteSheet('img/Cars_final.png');
+    Sprite brokenCarTopLeft = carSheet.spriteAt(384, 0, 32, 32);
+    Sprite brokenCarTopRight = carSheet.spriteAt(416, 0, 32, 32);
+    Sprite brokenCarMidTopLeft = carSheet.spriteAt(384, 32, 32, 32);
+    Sprite brokenCarMidTopRight = carSheet.spriteAt(416, 32, 32, 32);
+    Sprite brokenCarMidBotLeft = carSheet.spriteAt(384, 64, 32, 32);
+    Sprite brokenCarMidBotRight = carSheet.spriteAt(416, 64, 32, 32);
+    Sprite brokenCarBotLeft = carSheet.spriteAt(384, 96, 32, 32);
+    Sprite brokenCarBotRight = carSheet.spriteAt(416, 96, 32, 32);
+    Sprite tire = carSheet.spriteAt(384, 128, 32, 32);
+
+
     // Grass layer0
     this.newLayer();
 
@@ -407,7 +419,16 @@ class Level1 extends Level {
 
 
 
-
+    // CAR
+    this.setSpriteAt(brokenCarTopLeft, 4, 30, true);
+    this.setSpriteAt(brokenCarTopRight, 4, 31, true);
+    this.setSpriteAt(brokenCarMidTopLeft, 5, 30, true);
+    this.setSpriteAt(brokenCarMidTopRight, 5, 31, true);
+    this.setSpriteAt(brokenCarMidBotLeft, 6, 30, true);
+    this.setSpriteAt(brokenCarMidBotRight, 6, 31, true);
+    this.setSpriteAt(brokenCarBotLeft, 7, 30, true);
+    this.setSpriteAt(brokenCarBotRight, 7, 31, true);
+    this.setSpriteAt(tire, 5, 32, false);
 
     // BEER STORE
 
@@ -460,7 +481,6 @@ class Level1 extends Level {
                                    this.rows * this.tileHeight)
                                ]);
 
-    SpriteSheet carSheet = new SpriteSheet('img/Cars_final.png');
     this._car1Sprites = [
                          carSheet.spriteAt(96, 96, 96, 160),
                          carSheet.spriteAt(0, 96, 96, 160),
