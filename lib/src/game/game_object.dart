@@ -95,6 +95,19 @@ abstract class GameObject {
     this._x += this._speed;
   }
 
+  void faceUp() {
+    this._dir = DIR_UP;
+  }
+  void faceDown() {
+    this._dir = DIR_DOWN;
+  }
+  void faceLeft() {
+    this._dir = DIR_LEFT;
+  }
+  void faceRight() {
+    this._dir = DIR_RIGHT;
+  }
+
   void broadcast(GameEvent e, Collection<ComponentListener> listeners) {
     for (ComponentListener l in listeners) {
       l.listen(e);

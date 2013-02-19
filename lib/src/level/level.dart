@@ -32,7 +32,7 @@ class Level extends GameObject implements ComponentListener {
     this._objects = new List<GameObject>();
     this._animations = new List<LevelAnimation>();
     this._blocked = new List<bool>
-      .fixedLength(this._rows * this._cols, fill: true);
+      .fixedLength(this._rows * this._cols, fill: false);
   }
 
   int get tileWidth => this._tileWidth;
@@ -84,7 +84,6 @@ class Level extends GameObject implements ComponentListener {
   }
 
   void addAnimation(LevelAnimation a) {
-    window.console.log("Adding animation $a");
     this._animations.add(a);
   }
 
@@ -110,6 +109,7 @@ class Level extends GameObject implements ComponentListener {
         pos < 0 ||
         pos >= this._blocked.length)
     {
+      // Keep us on the screen
       return true;
     }
     return this._blocked[pos];

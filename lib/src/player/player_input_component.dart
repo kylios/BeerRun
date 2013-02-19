@@ -17,38 +17,57 @@ class SimpleInputComponent extends Component
 
   void update(Player obj) {
 
-    if (this._pressed[KeyboardListener.KEY_UP] == true ||
-        this._pressed[KeyboardListener.KEY_W] == true) {
-      obj.moveUp();
-    } else if (this._pressed[KeyboardListener.KEY_DOWN] == true ||
-        this._pressed[KeyboardListener.KEY_S] == true) {
-      obj.moveDown();
-    }
-    if (this._pressed[KeyboardListener.KEY_LEFT] == true ||
-        this._pressed[KeyboardListener.KEY_A] == true) {
-      obj.moveLeft();
-    } else if (this._pressed[KeyboardListener.KEY_RIGHT] == true ||
-        this._pressed[KeyboardListener.KEY_D] == true) {
-      obj.moveRight();
-    }
-
-
     int row = obj.y ~/ obj.level.tileHeight;
     int col = obj.x ~/ obj.level.tileWidth;
 
-    // Get surrounding tiles
-    List<List> tiles = [
-      [row - 1, col - 1, obj.level.isBlocking(row - 1, col - 1)],
-      [row - 1, col, obj.level.isBlocking(row - 1, col)],
-      [row - 1, col + 1, obj.level.isBlocking(row - 1, col + 1)],
-      [row, col + 1, obj.level.isBlocking(row, col + 1)],
-      [row + 1, col + 1, obj.level.isBlocking(row + 1, col + 1)],
-      [row + 1, col, obj.level.isBlocking(row + 1, col)],
-      [row + 1, col - 1, obj.level.isBlocking(row + 1, col - 1)],
-      [row, col - 1, obj.level.isBlocking(row, col - 1)],
-    ];
+    if ((this._pressed[KeyboardListener.KEY_UP] == true ||
+        this._pressed[KeyboardListener.KEY_W] == true)) {
+      if (! obj.level.isBlocking(row - 1, col)) {
+        obj.moveUp();
+      } else {
+        obj.faceUp();
+      }
+    } else if ((this._pressed[KeyboardListener.KEY_DOWN] == true ||
+        this._pressed[KeyboardListener.KEY_S] == true)) {
+      if (! obj.level.isBlocking(row + 1, col)) {
+        obj.moveDown();
+      } else {
+        obj.faceDown();
+      }
+    }
+    if ((this._pressed[KeyboardListener.KEY_LEFT] == true ||
+        this._pressed[KeyboardListener.KEY_A] == true)) {
+      if (! obj.level.isBlocking(row, col - 1)) {
+        obj.moveLeft();
+      } else {
+        obj.faceLeft();
+      }
+    } else if ((this._pressed[KeyboardListener.KEY_RIGHT] == true ||
+        this._pressed[KeyboardListener.KEY_D] == true)) {
+      if (! obj.level.isBlocking(row, col + 1)) {
+        obj.moveRight();
+      } else {
+        obj.faceRight();
+      }
+    }
 
 
+    // Translate the character's x,y into row and col
+
+    int oldRow = obj.oldY ~/ obj.level.tileHeight;
+    int oldCol = obj.oldX ~/ obj.level.tileWidth;
+
+    bool up = (obj.y < obj.oldY);
+    bool down = (obj.y > obj.oldY);
+    bool left = (obj.x < obj.oldX);
+    bool right = (obj.x > obj.oldX);
+
+
+    // if collided from top or collided from bottom
+    //if ((down && obj.level))
+
+
+    /*
     // Collision detection
     for (List t in tiles) {
 
@@ -70,6 +89,15 @@ class SimpleInputComponent extends Component
       bool zeroX = false;
       bool zeroY = false;
 
+      if (row == t[0].toInt() && col == t[1].toInt()) {
+        if (obj.dir == DIR_LEFT || obj.dir == DIR_RIGHT) {
+          zeroX = true;
+        } else if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
+          zeroY = true;
+        }
+      }
+
+
       if (obj.dir == DIR_LEFT && pX1 <= oX2 && pX1_old > oX2 &&
           ((pY1 <= oY2 && pY1 >= oY1) || (pY2 <= oY2 && pY2 >= oY1)) &&
           ((pY1_old <= oY2 && pY1_old >= oY1) || (pY2_old <= oY2 && pY2_old >= oY1))) {
@@ -89,17 +117,20 @@ class SimpleInputComponent extends Component
         zeroY = true;
       }
 
+
       if (zeroX) {
         obj.setPos(pX1_old, obj.y);
+        window.console.log("zeroX");
       }
       if (zeroY) {
         obj.setPos(obj.x, pY1_old);
+        window.console.log("zeroY");
       }
-
       if (zeroX || zeroY) {
-        //break;
+        break;
       }
     }
+    */
 
 
 
