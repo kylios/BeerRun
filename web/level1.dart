@@ -63,6 +63,10 @@ class Level1 extends Level {
     Map<String, Sprite> houseSprites =
         Level.parseSpriteSheet(house, Level1._houseSpriteSheetData);
 
+    SpriteSheet building = new SpriteSheet("img/Building.png", 32, 32);
+    Map<String, Sprite> buildingSprites =
+        Level.parseSpriteSheet(building, Level1._buildingSpriteSheetData);
+
 
     // Grass layer0
     this.newLayer();
@@ -237,41 +241,41 @@ class Level1 extends Level {
     //this.setSpriteAt(fenceSprites["wireHorizRight"], 7, 5);
     //this.setSpriteAt(fenceSprites["wireHorizLeft"], 7, 8);
     for (int c = 8; c < 11; c++) {
-      this.setSpriteAt(fenceSprites["wireHorizMid"], 7, c);
+      this.setSpriteAt(fenceSprites["wireHorizMid"], 7, c, true);
     }
-    this.setSpriteAt(fenceSprites["wireHorizRight"], 7, 11);
+    this.setSpriteAt(fenceSprites["wireHorizRight"], 7, 11, true);
 
     for (int r = 8; r < 30; r++) {
-      this.setSpriteAt(fenceSprites["wireVertMid"], r, 11);
+      this.setSpriteAt(fenceSprites["wireVertMid"], r, 11, true);
     }
 
     for (int r = 0; r < 30; r++) {
-      this.setSpriteAt(fenceSprites["woodVertMid"], r, 16);
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 16, true);
     }
 
     for (int r = 0; r < 30; r++) {
-      this.setSpriteAt(fenceSprites["woodVertMid"], r, 21);
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 21, true);
     }
     for (int r = 0; r < 30; r++) {
-      this.setSpriteAt(fenceSprites["woodVertMid"], r, 25);
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 25, true);
     }
     for (int r = 0; r < 30; r++) {
-      this.setSpriteAt(fenceSprites["woodVertMid"], r, 29);
+      this.setSpriteAt(fenceSprites["woodVertMid"], r, 29, true);
     }
 
     for (int c = 30; c < 34; c++) {
-      this.setSpriteAt(fenceSprites["woodHorizMid"], 9, c);
+      this.setSpriteAt(fenceSprites["woodHorizMid"], 9, c, true);
     }
-    this.setSpriteAt(fenceSprites["woodHorizRight"], 9, 34);
-    this.setSpriteAt(fenceSprites["woodHorizLeft"], 9, 37);
+    this.setSpriteAt(fenceSprites["woodHorizRight"], 9, 34, true);
+    this.setSpriteAt(fenceSprites["woodHorizLeft"], 9, 37, true);
     for (int c = 38; c < 40; c++) {
-      this.setSpriteAt(fenceSprites["woodHorizMid"], 9, c);
+      this.setSpriteAt(fenceSprites["woodHorizMid"], 9, c, true);
     }
     for (int c = 32; c < 36; c++) {
-      this.setSpriteAt(fenceSprites["woodHorizMid"], 14, c);
+      this.setSpriteAt(fenceSprites["woodHorizMid"], 14, c, true);
     }
-    this.setSpriteAt(fenceSprites["woodHorizRight"], 14, 36);
-    this.setSpriteAt(fenceSprites["woodHorizLeft"], 14, 39);
+    this.setSpriteAt(fenceSprites["woodHorizRight"], 14, 36, true);
+    this.setSpriteAt(fenceSprites["woodHorizLeft"], 14, 39, true);
 
     this.setSpriteAt(aptSprites["apt1TopLeft"], 0, 0);
     this.setSpriteAt(aptSprites["apt1TopRight"], 0, 1);
@@ -400,6 +404,43 @@ class Level1 extends Level {
     this.newLayer();
     this.setSpriteAt(houseSprites["stairsTop"], 5, 36);
     this.setSpriteAt(houseSprites["stairsBot"], 6, 36);
+
+
+
+
+
+    // BEER STORE
+
+    this.setSpriteAt(buildingSprites["storeWallMidLeft"], 28, 0, true);
+    this.setSpriteAt(buildingSprites["storeWallMidMid"], 28, 1, true);
+    this.setSpriteAt(buildingSprites["storeWallMidMid"], 28, 2, true);
+    this.setSpriteAt(buildingSprites["doorBotLeft"], 28, 3, true);
+    this.setSpriteAt(buildingSprites["doorBotRight"], 28, 4, true);
+    this.setSpriteAt(buildingSprites["storeWallMidRight"], 28, 5, true);
+    this.setSpriteAt(buildingSprites["storeWallMidLeft"], 27, 0, true);
+    this.setSpriteAt(buildingSprites["beerSignLeft"], 27, 1, true);
+    this.setSpriteAt(buildingSprites["beerSignRight"], 27, 2, true);
+    this.setSpriteAt(buildingSprites["doorTopLeft"], 27, 3, true);
+    this.setSpriteAt(buildingSprites["doorTopRight"], 27, 4, true);
+    this.setSpriteAt(buildingSprites["storeWallMidRight"], 27, 5, true);
+    this.setSpriteAt(buildingSprites["storeWallTopLeft"], 26, 0, true);
+    this.setSpriteAt(buildingSprites["storeWallTopMid"], 26, 1, true);
+    this.setSpriteAt(buildingSprites["storeWallTopMid"], 26, 2, true);
+    this.setSpriteAt(buildingSprites["storeWallTopMid"], 26, 3, true);
+    this.setSpriteAt(buildingSprites["storeWallTopMid"], 26, 4, true);
+    this.setSpriteAt(buildingSprites["storeWallTopRight"], 26, 5, true);
+    this.setSpriteAt(buildingSprites["storeRoofLeft"], 25, 0, true);
+    this.setSpriteAt(buildingSprites["storeRoofMid"], 25, 1, true);
+    this.setSpriteAt(buildingSprites["storeRoofMid"], 25, 2, true);
+    this.setSpriteAt(buildingSprites["storeRoofMid"], 25, 3, true);
+    this.setSpriteAt(buildingSprites["storeRoofMid"], 25, 4, true);
+    this.setSpriteAt(buildingSprites["storeRoofRight"], 25, 5, true);
+    this.setSpriteAt(buildingSprites["storeRoofBackLeft"], 24, 0, true);
+    this.setSpriteAt(buildingSprites["storeRoofBackMid"], 24, 1, true);
+    this.setSpriteAt(buildingSprites["storeRoofBackMid"], 24, 2, true);
+    this.setSpriteAt(buildingSprites["storeRoofBackMid"], 24, 3, true);
+    this.setSpriteAt(buildingSprites["storeRoofBackMid"], 24, 4, true);
+    this.setSpriteAt(buildingSprites["storeRoofBackRight"], 24, 5, true);
 
 
     this.roadPath1 = new Path([
@@ -662,5 +703,28 @@ class Level1 extends Level {
     "woodHorizMid": [32, 64],
     "woodVertMid": [0, 96],
     "woodVertBot": [32, 96],
+  };
+
+  static final _buildingSpriteSheetData = {
+    "storeWallMidMid": [224, 224],
+    "beerSignLeft": [0, 224],
+    "beerSignRight": [32, 224],
+    "storeWallMidLeft": [160, 192],
+    "storeWallMidRight": [224, 192],
+    "storeWallTopLeft": [160, 160],
+    "storeWallTopMid": [192, 160],
+    "storeWallTopRight": [224, 160],
+    "storeRoofLeft": [160, 128],
+    "storeRoofMid": [192, 128],
+    "storeRoofRight": [224, 128],
+    "storeRoofBackLeft": [160, 96],
+    "storeRoofBackMid": [192, 96],
+    "storeRoofBackRight": [224, 96],
+    "doorBotLeft": [64, 224],
+    "doorBotMid": [96, 224],
+    "doorBotRight": [128, 224],
+    "doorTopLeft": [64, 192],
+    "doorTopMid": [96, 192],
+    "doorTopRight": [128, 192],
   };
 }
