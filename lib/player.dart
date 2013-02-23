@@ -1,6 +1,7 @@
 library player;
 
 import 'dart:html';
+import 'dart:math';
 
 import 'package:BeerRun/game.dart';
 import 'package:BeerRun/component.dart';

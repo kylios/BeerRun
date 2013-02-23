@@ -20,6 +20,7 @@ class CanvasDrawer {
   int _boundY;
 
   String backgroundColor = "white";
+  String font = "12px";
 
   /**
    * Give us a manager so we can access the canvas' properties.
@@ -116,5 +117,20 @@ class CanvasDrawer {
     c.closePath();
     c.stroke();
 
+  }
+
+  void drawText(String text, int x, int y, [bool follow]) {
+    if (! ?follow) {
+      follow = true;
+    }
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    c.font = this.font;
+
+    if (follow) {
+      x = x - this._offsetX;
+      y = y - this._offsetY;
+    }
+
+    c.fillText(text, x, y);
   }
 }

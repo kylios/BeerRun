@@ -74,21 +74,33 @@ abstract class GameObject {
     }
   }
 
-  void moveUp() {
+  void moveUp([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_UP;
-    this._y -= this.speed;
+    this._y -= speed;
   }
-  void moveDown() {
+  void moveDown([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_DOWN;
-    this._y += this.speed;
+    this._y += speed;
   }
-  void moveLeft() {
+  void moveLeft([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_LEFT;
-    this._x -= this.speed;
+    this._x -= speed;
   }
-  void moveRight() {
+  void moveRight([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_RIGHT;
-    this._x += this.speed;
+    this._x += speed;
   }
 
   void faceUp() {

@@ -6,6 +6,8 @@ class PlayerInputComponent extends Component
   static final int BULLET_COOLDOWN = 10;
   static final int MAX_ACCELERATION = 4;
 
+  Random _rng;
+
   Map<int, bool> _pressed;
   DrawingComponent _drawer;
 
@@ -17,6 +19,7 @@ class PlayerInputComponent extends Component
 
   PlayerInputComponent(this._drawer) {
     this._pressed = new Map<int, bool>();
+    this._rng = new Random();
   }
 
 
@@ -74,17 +77,41 @@ class PlayerInputComponent extends Component
 
     if (this._holding) {
       this._holdFrames++;
+      obj.speed = 4 + (this._holdFrames * obj.drunkenness ~/ 16);
     } else {
       if (this._holdFrames == 1) {
         this._holdFrames = 0;
       } else {
-        this._holdFrames = this._holdFrames ~/ 2;
+        this._holdFrames =
+            (this._holdFrames ~/ obj.drunkenness) * (obj.drunkenness - 2);
       }
+      obj.speed = 4 + this._holdFrames * obj.drunkenness;
     }
 
-    obj.speed = 4 + (this._holdFrames * obj.drunkenness ~/ 6);
-    if (obj.speed > 10) {
-      obj.speed = 10;
+    if (obj.speed > 16) {
+      obj.speed = 16;
+    }
+
+    int wobble = this._rng.nextInt(18 - obj.speed);
+    if (wobble == 0)
+    {
+      Direction wobbleDir;
+      int dir = this._rng.nextInt(2);
+      if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
+        if (dir == 0) {
+          obj.moveLeft(obj.speed ~/ 4);
+        } else {
+          obj.moveRight(obj.speed ~/ 4);
+        }
+      } else {
+        if (dir == 0) {
+          obj.moveUp(obj.speed ~/ 4);
+        } else {
+          obj.moveDown(obj.speed ~/ 4);
+        }
+      }
+
+
     }
 
 

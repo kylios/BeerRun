@@ -50,6 +50,9 @@ void _loop(var _) {
   // TODO: HUD class?
   canvasDrawer.backgroundColor = "blue";
   canvasDrawer.drawRect(0, 0, 180, 92, 8, 8, false);
+  canvasDrawer.font = "bold 12px sans-serif";
+  canvasDrawer.drawText("Drunkenness: ${player.drunkenness}", 8, 8, false);
+  canvasDrawer.drawText("Speed: ${player.speed}", 8, 26, false);
 
   endtime = new Date.now().millisecondsSinceEpoch;
 
