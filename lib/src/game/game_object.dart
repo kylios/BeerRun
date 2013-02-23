@@ -2,7 +2,7 @@ part of game;
 
 abstract class GameObject {
 
-  int _speed = 5;
+  int speed = 5;
 
   int _x = 0;
   int _y = 0;
@@ -54,10 +54,6 @@ abstract class GameObject {
     this._level = l;
   }
 
-  void setSpeed(int s) {
-    this._speed = s;
-  }
-
   void setPos(int x, int y) {
     this._x = x;
     this._y = y;
@@ -80,19 +76,19 @@ abstract class GameObject {
 
   void moveUp() {
     this._dir = DIR_UP;
-    this._y -= this._speed;
+    this._y -= this.speed;
   }
   void moveDown() {
     this._dir = DIR_DOWN;
-    this._y += this._speed;
+    this._y += this.speed;
   }
   void moveLeft() {
     this._dir = DIR_LEFT;
-    this._x -= this._speed;
+    this._x -= this.speed;
   }
   void moveRight() {
     this._dir = DIR_RIGHT;
-    this._x += this._speed;
+    this._x += this.speed;
   }
 
   void faceUp() {

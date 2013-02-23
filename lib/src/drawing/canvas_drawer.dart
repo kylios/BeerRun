@@ -82,4 +82,39 @@ class CanvasDrawer {
 
     c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
   }
+
+  void drawRect(int x, int y, int width, int height,
+                [int radiusX, int radiusY, bool follow]) {
+
+    if (! ?follow) {
+      follow = true;
+    }
+    if (! ?radiusX) {
+      radiusX = 0;
+    }
+    if (! ?radiusY) {
+      radiusY = 0;
+    }
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+
+    if (follow) {
+      x = x - this._offsetX;
+      y = y - this._offsetY;
+    }
+
+    c.fillStyle = "blue";
+    c.beginPath();
+    c.moveTo(x + radiusX, y);
+    c.lineTo(x + width - radiusX, y);
+    c.quadraticCurveTo(x + width, y, x + width, y + radiusY);
+    c.lineTo(x + width, y + height - radiusY);
+    c.quadraticCurveTo(x + width, y + height, x + width - radiusX, y + height);
+    c.lineTo(x + radiusX, y + height);
+    c.quadraticCurveTo(x, y + height, x, y + height - radiusY);
+    c.lineTo(x, y + radiusY);
+    c.quadraticCurveTo(x, y, x + radiusX, y);
+    c.closePath();
+    c.stroke();
+
+  }
 }

@@ -18,7 +18,7 @@ CanvasDrawer canvasDrawer;
 
 Level1 level;
 
-SimpleInputComponent keyboard;
+PlayerInputComponent keyboard;
 DrawingComponent drawer;
 
 Player player;
@@ -46,6 +46,11 @@ void _loop(var _) {
 
   level.update();
 
+  // Draw HUD
+  // TODO: HUD class?
+  canvasDrawer.backgroundColor = "blue";
+  canvasDrawer.drawRect(0, 0, 180, 92, 8, 8, false);
+
   endtime = new Date.now().millisecondsSinceEpoch;
 
   window.requestAnimationFrame(_loop);
@@ -65,7 +70,7 @@ void main() {
 
   drawer = new DrawingComponent(canvasManager, canvasDrawer, true);
 
-  keyboard = new SimpleInputComponent(drawer);
+  keyboard = new PlayerInputComponent(drawer);
   canvasManager.addKeyboardListener(keyboard);
 
   level = new Level1(canvasManager, canvasDrawer);
@@ -80,9 +85,9 @@ void main() {
   NPC npc1 = new NPC(level, DIR_RIGHT, 0, 400);
   NPC npc2 = new NPC(level, DIR_DOWN, 20, 320);
   NPC npc3 = new NPC(level, DIR_LEFT, 160, 420);
-  npc1.setSpeed(2);
-  npc2.setSpeed(2);
-  npc3.setSpeed(3);
+  npc1.speed = 2;
+  npc2.speed = 2;
+  npc3.speed = 3;
   npc1.setControlComponent(new NPCInputComponent(level.npcRegion1));
   npc2.setControlComponent(new NPCInputComponent(level.npcRegion1));
   npc3.setControlComponent(new NPCInputComponent(level.npcRegion1));

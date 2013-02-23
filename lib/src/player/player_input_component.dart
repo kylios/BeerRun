@@ -1,9 +1,10 @@
 part of player;
 
-class SimpleInputComponent extends Component
+class PlayerInputComponent extends Component
   implements KeyboardListener {
 
   static final int BULLET_COOLDOWN = 10;
+  static final int MAX_ACCELERATION = 4;
 
   Map<int, bool> _pressed;
   DrawingComponent _drawer;
@@ -11,8 +12,91 @@ class SimpleInputComponent extends Component
   bool _spawnBullet = false;
   int _bulletCooldown = 0;
 
-  SimpleInputComponent(this._drawer) {
+  int _holdFrames = 0;
+  bool _holding = false;
+
+  PlayerInputComponent(this._drawer) {
     this._pressed = new Map<int, bool>();
+  }
+
+
+  /**
+   * TODO: when player gets drunk, he should accelerate as you hold down the
+   * movement keys.  He should accelerate up to a certain point that gets higher
+   * and higher the drunker he gets.  I think changing directions should be less
+   * responsive: that is, he gains some momentum in a given direction, and when
+   * you change directions, he decelerates in the original direction, but starts
+   * accelerating in the new direction.  That and he can overcompensate by
+   * "wobbling" back to the old direction.
+   *
+   *         +----- overcompensation for the turn
+   *         v
+   *          ...
+   *        .     .   . . . .  .  .   .   .   .
+   *       .        .
+   *
+   *       .         ^
+   *                 +----------------- "bounce back", like he's stumbling
+   *       .
+   *
+   *       .
+   *
+   *       .    <--- getting faster here
+   *       .
+   *       .
+   *       X    <--- START
+   *
+   *
+   * This effect should get greater and more pronounced the more beers he drinks
+   *
+   * It would also be cool if we could apply a neat blurring effect to the level
+   *
+   *
+   * Algorithm:
+   *
+   * if keypressed:
+   *    increment holdKey
+   *
+   * acceleration = holdKey * drunkenness
+   * speed += acceleration
+   *
+   *
+   *
+   *
+   *
+   *
+   */
+  void _moveObj(Player obj, Direction dir) {
+
+    if (this._holdFrames == 0) {
+      obj.speed = 4;
+    }
+
+    if (this._holding) {
+      this._holdFrames++;
+    } else {
+      if (this._holdFrames == 1) {
+        this._holdFrames = 0;
+      } else {
+        this._holdFrames = this._holdFrames ~/ 2;
+      }
+    }
+
+    obj.speed = 4 + (this._holdFrames * obj.drunkenness ~/ 6);
+    if (obj.speed > 10) {
+      obj.speed = 10;
+    }
+
+
+    if (dir == DIR_UP) {
+      obj.moveUp();
+    } else if (dir == DIR_DOWN) {
+      obj.moveDown();
+    } else if (dir == DIR_LEFT) {
+      obj.moveLeft();
+    } else if (dir == DIR_RIGHT) {
+      obj.moveRight();
+    }
   }
 
   void update(Player obj) {
@@ -21,31 +105,35 @@ class SimpleInputComponent extends Component
     int col = obj.x ~/ obj.level.tileWidth;
 
     if ((this._pressed[KeyboardListener.KEY_UP] == true ||
-        this._pressed[KeyboardListener.KEY_W] == true)) {
+        this._pressed[KeyboardListener.KEY_W] == true) ||
+        (this._holdFrames > 0 && obj.dir == DIR_UP)) {
       if (! obj.level.isBlocking(row - 1, col)) {
-        obj.moveUp();
+        this._moveObj(obj, DIR_UP);
       } else {
         obj.faceUp();
       }
     } else if ((this._pressed[KeyboardListener.KEY_DOWN] == true ||
-        this._pressed[KeyboardListener.KEY_S] == true)) {
+        this._pressed[KeyboardListener.KEY_S] == true) ||
+        (this._holdFrames > 0 && obj.dir == DIR_DOWN)) {
       if (! obj.level.isBlocking(row + 1, col)) {
-        obj.moveDown();
+        this._moveObj(obj, DIR_DOWN);
       } else {
         obj.faceDown();
       }
     }
     if ((this._pressed[KeyboardListener.KEY_LEFT] == true ||
-        this._pressed[KeyboardListener.KEY_A] == true)) {
+        this._pressed[KeyboardListener.KEY_A] == true) ||
+        (this._holdFrames > 0 && obj.dir == DIR_LEFT)) {
       if (! obj.level.isBlocking(row, col - 1)) {
-        obj.moveLeft();
+        this._moveObj(obj, DIR_LEFT);
       } else {
         obj.faceLeft();
       }
     } else if ((this._pressed[KeyboardListener.KEY_RIGHT] == true ||
-        this._pressed[KeyboardListener.KEY_D] == true)) {
+        this._pressed[KeyboardListener.KEY_D] == true) ||
+        (this._holdFrames > 0 && obj.dir == DIR_RIGHT)) {
       if (! obj.level.isBlocking(row, col + 1)) {
-        obj.moveRight();
+        this._moveObj(obj, DIR_RIGHT);
       } else {
         obj.faceRight();
       }
@@ -143,7 +231,7 @@ class SimpleInputComponent extends Component
     if (this._spawnBullet) {
       if (this._bulletCooldown == 0) {
         obj.spawnBullet();
-        this._bulletCooldown = SimpleInputComponent.BULLET_COOLDOWN;
+        this._bulletCooldown = PlayerInputComponent.BULLET_COOLDOWN;
       }
       this._spawnBullet = false;
     }
@@ -151,9 +239,13 @@ class SimpleInputComponent extends Component
 
   void onKeyDown(KeyboardEvent e) {
     this._pressed[e.keyCode] = true;
+
+    this._holding = true;
   }
   void onKeyUp(KeyboardEvent e) {
     this._pressed[e.keyCode] = false;
+
+    this._holding = false;
   }
   void onKeyPressed(KeyboardEvent e) {
     if (e.keyCode == KeyboardListener.KEY_SPACE) {

@@ -103,7 +103,7 @@ class Level extends GameObject implements ComponentListener {
   void takeHit() {}
 
   bool isBlocking(int row, int col) {
-    //return false;
+    return false;
     int pos = this._posToIdx(row, col);
     if (this._layer == -1 ||
         pos < 0 ||
