@@ -34,6 +34,11 @@ class Player extends GameObject {
         "img/Character1Walk.png",
         64, 64);
 
+    this.collisionXOffset = 17;
+    this.collisionYOffset = 32;
+    this.collisionWidth = 30;
+    this.collisionHeight = 32;
+
     List<Sprite> walkUp = new List<Sprite>();
     List<Sprite> walkDown = new List<Sprite>();
     List<Sprite> walkLeft = new List<Sprite>();

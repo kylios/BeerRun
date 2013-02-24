@@ -103,14 +103,14 @@ class Level extends GameObject implements ComponentListener {
   void takeHit() {}
 
   bool isBlocking(int row, int col) {
-    return false;
+    //return false;
     int pos = this._posToIdx(row, col);
     if (this._layer == -1 ||
         pos < 0 ||
         pos >= this._blocked.length)
     {
       // Keep us on the screen
-      return true;
+      return false;
     }
     return this._blocked[pos];
   }
@@ -210,6 +210,11 @@ class Level extends GameObject implements ComponentListener {
           d.drawSprite(s, col * this._tileWidth, row * this._tileHeight/*,
               this._tileWidth, this._tileHeight*/);
         }
+        //if (this.isBlocking(row, col)) {
+          //d.backgroundColor = "red";
+          //d.drawRect(col * this._tileWidth, row * this._tileHeight,
+          //    this._tileWidth, this._tileHeight, 0, 0, true);
+        //}
         col++;
         if (col >= this._cols) {
           row++;

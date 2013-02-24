@@ -10,6 +10,11 @@ abstract class GameObject {
   int _oldX = 0;
   int _oldY = 0;
 
+  int collisionXOffset = 0;
+  int collisionYOffset = 0;
+  int collisionWidth = 0;
+  int collisionHeight = 0;
+
   Direction _dir;
 
   Component _control;

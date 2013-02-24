@@ -92,6 +92,7 @@ class PlayerInputComponent extends Component
       obj.speed = 16;
     }
 
+    // Do a wobble thing, back and forth, because you're drunk
     int wobble = this._rng.nextInt(18 - obj.speed);
     if (wobble == 0)
     {
@@ -99,71 +100,121 @@ class PlayerInputComponent extends Component
       int dir = this._rng.nextInt(2);
       if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
         if (dir == 0) {
-          obj.moveLeft(obj.speed ~/ 4);
+          this._moveLeft(obj, obj.speed ~/ 4);
         } else {
-          obj.moveRight(obj.speed ~/ 4);
+          this._moveRight(obj, obj.speed ~/ 4);
         }
       } else {
         if (dir == 0) {
-          obj.moveUp(obj.speed ~/ 4);
+          this._moveUp(obj, obj.speed ~/ 4);
         } else {
-          obj.moveDown(obj.speed ~/ 4);
+          this._moveDown(obj, obj.speed ~/ 4);
         }
       }
-
-
     }
-
 
     if (dir == DIR_UP) {
-      obj.moveUp();
+      this._moveUp(obj);
     } else if (dir == DIR_DOWN) {
-      obj.moveDown();
+      this._moveDown(obj);
     } else if (dir == DIR_LEFT) {
-      obj.moveLeft();
+      this._moveLeft(obj);
     } else if (dir == DIR_RIGHT) {
-      obj.moveRight();
+      this._moveRight(obj);
     }
+
+    int row = (obj.y + obj.collisionYOffset) ~/ obj.level.tileHeight;
+    int col = (obj.x + obj.collisionXOffset) ~/ obj.level.tileWidth;
+    int row1 = (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/
+        obj.level.tileHeight;
+    int col1 = (obj.x + obj.collisionXOffset + obj.collisionWidth) ~/
+        obj.level.tileWidth;
+
+    if (obj.level.isBlocking(row, col) ||
+        obj.level.isBlocking(row1, col) ||
+        obj.level.isBlocking(row, col1) ||
+        obj.level.isBlocking(row1, col1)) {
+      obj.setPos(obj.oldX, obj.oldY);
+    }
+
   }
 
-  void update(Player obj) {
+  void _moveLeft(Player obj, [int speed]) {
+    if (! ?speed) {
+      speed = obj.speed;
+    }
 
     int row = obj.y ~/ obj.level.tileHeight;
     int col = obj.x ~/ obj.level.tileWidth;
 
+    //if (! obj.level.isBlocking(row, col)) {
+      obj.setPos(obj.x - speed, obj.y);
+    //}
+    obj.faceLeft();
+  }
+  void _moveRight(Player obj, [int speed]) {
+    if (! ?speed) {
+      speed = obj.speed;
+    }
+
+    int row = obj.y ~/ obj.level.tileHeight;
+    int col = obj.x ~/ obj.level.tileWidth;
+
+    //if (! obj.level.isBlocking(row, col + 1)) {
+      obj.setPos(obj.x + speed, obj.y);
+    //}
+    obj.faceRight();
+  }
+  void _moveUp(Player obj, [int speed]) {
+    if (! ?speed) {
+      speed = obj.speed;
+    }
+
+    int row = obj.y ~/ obj.level.tileHeight;
+    int col = obj.x ~/ obj.level.tileWidth;
+
+    //if (! obj.level.isBlocking(row, col)) {
+      obj.setPos(obj.x, obj.y - speed);
+    //}
+    obj.faceUp();
+  }
+  void _moveDown(Player obj, [int speed]) {
+    if (! ?speed) {
+      speed = obj.speed;
+    }
+
+    int row = obj.y ~/ obj.level.tileHeight;
+    int col = obj.x ~/ obj.level.tileWidth;
+
+    //if (! obj.level.isBlocking(row + 1, col)) {
+      obj.setPos(obj.x, obj.y + speed);
+    //}
+    obj.faceDown();
+  }
+
+  void update(Player obj) {
+
     if ((this._pressed[KeyboardListener.KEY_UP] == true ||
         this._pressed[KeyboardListener.KEY_W] == true) ||
         (this._holdFrames > 0 && obj.dir == DIR_UP)) {
-      if (! obj.level.isBlocking(row - 1, col)) {
-        this._moveObj(obj, DIR_UP);
-      } else {
-        obj.faceUp();
-      }
+
+      this._moveObj(obj, DIR_UP);
     } else if ((this._pressed[KeyboardListener.KEY_DOWN] == true ||
         this._pressed[KeyboardListener.KEY_S] == true) ||
         (this._holdFrames > 0 && obj.dir == DIR_DOWN)) {
-      if (! obj.level.isBlocking(row + 1, col)) {
-        this._moveObj(obj, DIR_DOWN);
-      } else {
-        obj.faceDown();
-      }
+
+      this._moveObj(obj, DIR_DOWN);
     }
     if ((this._pressed[KeyboardListener.KEY_LEFT] == true ||
         this._pressed[KeyboardListener.KEY_A] == true) ||
         (this._holdFrames > 0 && obj.dir == DIR_LEFT)) {
-      if (! obj.level.isBlocking(row, col - 1)) {
-        this._moveObj(obj, DIR_LEFT);
-      } else {
-        obj.faceLeft();
-      }
+
+      this._moveObj(obj, DIR_LEFT);
     } else if ((this._pressed[KeyboardListener.KEY_RIGHT] == true ||
         this._pressed[KeyboardListener.KEY_D] == true) ||
         (this._holdFrames > 0 && obj.dir == DIR_RIGHT)) {
-      if (! obj.level.isBlocking(row, col + 1)) {
-        this._moveObj(obj, DIR_RIGHT);
-      } else {
-        obj.faceRight();
-      }
+
+      this._moveObj(obj, DIR_RIGHT);
     }
 
 

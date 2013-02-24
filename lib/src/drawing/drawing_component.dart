@@ -30,7 +30,8 @@ class DrawingComponent extends Component
       s = obj.getMoveSprite();
     }
     this._drawer.drawSprite(s, obj.x, obj.y, obj.tileWidth, obj.tileHeight);
-
+    //this._drawer.backgroundColor = "black";
+    //this._drawer.drawRect(obj.x, obj.y, obj.tileWidth, obj.tileHeight, 0, 0, true);
 
   }
 
