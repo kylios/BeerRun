@@ -147,13 +147,13 @@ class Level extends GameObject implements ComponentListener {
     if (o != obj &&
       (
           (
-            o.x + o.tileWidth >= obj.x &&
-            o.x <= obj.x + obj.tileWidth
+            o.x + o.collisionXOffset+ o.collisionWidth >= obj.x &&
+            o.x + o.collisionXOffset <= obj.x + obj.tileWidth
           )
           &&
           (
-            o.y + o.tileHeight >= obj.y &&
-            o.y <= obj.y + obj.tileHeight
+            o.y + o.collisionYOffset + o.collisionHeight >= obj.y &&
+            o.y + o.collisionYOffset <= obj.y + obj.tileHeight
           )
         )
       )

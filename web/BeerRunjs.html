@@ -35,35 +35,45 @@
         border: 1px solid black;
       }
 
+      .left {
+        float: left;
+      }
+      .clear {
+        clear: both;
+      }
+
     </style>
   </head>
   <body>
-    <h1>BeerRun</h1>
+    <div class="left" style="width: 360px;">
+      <h1>BeerRun</h1>
 
-    <p>by Kyle Racette</p>
+      <p>by Kyle Racette</p>
 
-    <p>
-      <h3>WHAT DO??</h3>
-      You've been invited to the party of the century!
-      There's music, games, dancing, booze... but oh wait...
-      someone's gotta bring that last one.  Too bad, looks like you drew the
-      short straw here buddy... we need you to go out and get us some BEER if
-      you wanna come to the party.  Oh yea, and we recommend you maintain a
-      healthy buzz.  Good luck!
-    </p>
+      <p>
+        <h3>WHAT DO??</h3>
+        You've been invited to the party of the century!
+        There's music, games, dancing, booze... but oh wait...
+        someone's gotta bring that last one.  Too bad, looks like you drew the
+        short straw here buddy... we need you to go out and get us some BEER if
+        you wanna come to the party.  Oh yea, and we recommend you maintain a
+        healthy buzz.  Good luck!
+      </p>
 
-    <p>
-      <h3>CONTROLS:</h3>
-      <ul>
-        <li>Movement - arrows or WASD</li>
-        <li>Drink a beer - space bar</li>
-      </ul>
-    </p>
+      <p>
+        <h3>CONTROLS:</h3>
+        <ul>
+          <li>Movement - arrows or WASD</li>
+          <li>Drink a beer - space bar</li>
+        </ul>
+      </p>
+    </div>
 
-    <div id="container">
+    <div id="container" class="left">
       <div id="fps"></div>
       <canvas id="game_canvas"></canvas>
     </div>
+    <div class="clear"></div>
 
     <script src="beer_run.dart.js"></script>
   </body>
