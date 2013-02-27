@@ -448,8 +448,8 @@ class Level1 extends Level {
 
 
     this.newLayer();
-    this.setSpriteAt(houseSprites["door2Top"], 4, 36, true);
-    this.setSpriteAt(houseSprites["door2Bot"], 5, 36, true);
+    this.setSpriteAt(houseSprites["door2Top"], 4, 36, false);
+    this.setSpriteAt(houseSprites["door2Bot"], 5, 36, false);
     this.setSpriteAt(houseSprites["window2Top"], 2, 34, true);
     this.setSpriteAt(houseSprites["window2Bot"], 3, 34, true);
     this.setSpriteAt(houseSprites["window2Top"], 2, 32, true);

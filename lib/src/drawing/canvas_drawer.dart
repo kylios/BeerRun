@@ -9,7 +9,7 @@ part of drawing;
  * effect.  As the player moves around, they should always appear in the center
  * of the screen, unless we get too far to the edge of the level.
  */
-class CanvasDrawer {
+class CanvasDrawer implements DrawingInterface {
 
   CanvasManager _canvasManager;
 
@@ -57,6 +57,20 @@ class CanvasDrawer {
     c.fillStyle = this.backgroundColor;
     c.fillRect(0, 0, this._canvasManager.width, this._canvasManager.height);
   }
+
+  void drawImage(ImageElement i, int x, int y, [int width, int height]) {
+
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    if (?width)
+    {
+      c.drawImage(i, x, y, width);
+    }
+    else if (?height)
+    {
+      c.drawImage(i, x, y, width, height);
+    }
+  }
+
   void drawSprite(Sprite s, int x, int y, [int drawWidth, int drawHeight]) {
 
     if (null == s) {
@@ -85,11 +99,8 @@ class CanvasDrawer {
   }
 
   void drawRect(int x, int y, int width, int height,
-                [int radiusX, int radiusY, bool follow]) {
+                [int radiusX, int radiusY]) {
 
-    if (! ?follow) {
-      follow = true;
-    }
     if (! ?radiusX) {
       radiusX = 0;
     }
@@ -97,11 +108,6 @@ class CanvasDrawer {
       radiusY = 0;
     }
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
-
-    if (follow) {
-      x = x - this._offsetX;
-      y = y - this._offsetY;
-    }
 
     c.fillStyle = "blue";
     c.beginPath();
@@ -119,17 +125,10 @@ class CanvasDrawer {
 
   }
 
-  void drawText(String text, int x, int y, [bool follow]) {
-    if (! ?follow) {
-      follow = true;
-    }
+  void drawText(String text, int x, int y) {
+
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
     c.font = this.font;
-
-    if (follow) {
-      x = x - this._offsetX;
-      y = y - this._offsetY;
-    }
 
     c.fillText(text, x, y);
   }

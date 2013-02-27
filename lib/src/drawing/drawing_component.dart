@@ -7,7 +7,7 @@ class DrawingComponent extends Component
   static final DIRECTION_CHANGE_EVENT = 1;
   static final UPDATE_STEP_EVENT = 2;
 
-  CanvasDrawer _drawer;
+  DrawingInterface _drawer;
   CanvasManager _manager;
 
   bool _scrollBackground = false;

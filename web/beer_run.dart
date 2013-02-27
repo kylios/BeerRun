@@ -9,12 +9,15 @@ import 'package:BeerRun/level.dart';
 import 'level1.dart';
 import 'package:BeerRun/player.dart';
 import 'package:BeerRun/npc.dart';
+import 'package:BeerRun/ui.dart';
 
 final int CANVAS_WIDTH = 640;
 final int CANVAS_HEIGHT = 480;
 
 CanvasManager canvasManager;
 CanvasDrawer canvasDrawer;
+
+UI ui;
 
 Level1 level;
 
@@ -49,12 +52,14 @@ void _loop(var _) {
   // Draw HUD
   // TODO: HUD class?
   canvasDrawer.backgroundColor = "blue";
-  canvasDrawer.drawRect(0, 0, 180, 92, 8, 8, false);
+  canvasDrawer.drawRect(0, 0, 180, 92, 8, 8);
   canvasDrawer.font = "bold 12px sans-serif";
-  canvasDrawer.drawText("Drunkenness: ${player.drunkenness}", 8, 8, false);
-  canvasDrawer.drawText("Speed: ${player.speed}", 8, 26, false);
+  canvasDrawer.drawText("Drunkenness: ${player.drunkenness}", 8, 8);
+  canvasDrawer.drawText("Speed: ${player.speed}", 8, 26);
 
   endtime = new Date.now().millisecondsSinceEpoch;
+
+  ui.showView(null);
 
   window.requestAnimationFrame(_loop);
 }
@@ -71,6 +76,8 @@ void main() {
   canvasDrawer.setOffset(0, 0);
   canvasDrawer.backgroundColor = 'black';
 
+  ui = new UI(canvasDrawer);
+
   drawer = new DrawingComponent(canvasManager, canvasDrawer, true);
 
   keyboard = new PlayerInputComponent(drawer);
@@ -78,7 +85,7 @@ void main() {
 
   level = new Level1(canvasManager, canvasDrawer);
 
-  player = new Player(level, DIR_DOWN, 32 * 3, 32 * 26);
+  player = new Player(level, DIR_DOWN, 32 * 36, 32 * 5);
       //16, level.tileHeight * level.rows - 64);
   player.setControlComponent(keyboard);
   player.setDrawingComponent(drawer);

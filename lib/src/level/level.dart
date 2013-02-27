@@ -14,7 +14,7 @@ class Level extends GameObject implements ComponentListener {
   int _layer = -1;
 
   CanvasManager _manager;
-  CanvasDrawer _drawer;
+  DrawingInterface _drawer;
 
   List<List<Sprite>> _sprites;
   List<bool> _blocked;
