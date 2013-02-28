@@ -109,7 +109,7 @@ class CanvasDrawer implements DrawingInterface {
     }
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
 
-    c.fillStyle = "blue";
+    c.fillStyle = this.backgroundColor;
     c.beginPath();
     c.moveTo(x + radiusX, y);
     c.lineTo(x + width - radiusX, y);
@@ -125,10 +125,38 @@ class CanvasDrawer implements DrawingInterface {
 
   }
 
+  void fillRect(int x, int y, int width, int height,
+                [int radiusX, int radiusY]) {
+
+    if (! ?radiusX) {
+      radiusX = 0;
+    }
+    if (! ?radiusY) {
+      radiusY = 0;
+    }
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+
+    c.fillStyle = this.backgroundColor;
+    c.beginPath();
+    c.moveTo(x + radiusX, y);
+    c.lineTo(x + width - radiusX, y);
+    c.quadraticCurveTo(x + width, y, x + width, y + radiusY);
+    c.lineTo(x + width, y + height - radiusY);
+    c.quadraticCurveTo(x + width, y + height, x + width - radiusX, y + height);
+    c.lineTo(x + radiusX, y + height);
+    c.quadraticCurveTo(x, y + height, x, y + height - radiusY);
+    c.lineTo(x, y + radiusY);
+    c.quadraticCurveTo(x, y, x + radiusX, y);
+    c.closePath();
+    c.fill();
+
+  }
+
   void drawText(String text, int x, int y) {
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
     c.font = this.font;
+    c.fillStyle = this.backgroundColor;
 
     c.fillText(text, x, y);
   }

@@ -34,6 +34,8 @@ List<int> ticklist = new List<int>.fixedLength(MAXSAMPLES, fill: 0);
 int starttime = 0;
 int endtime = 0;
 
+bool introPopup = true;
+
 void _loop(var _) {
 
   ticksum-=ticklist[tickindex];  /* subtract value falling off */
@@ -59,7 +61,7 @@ void _loop(var _) {
 
   endtime = new Date.now().millisecondsSinceEpoch;
 
-  ui.showView(null);
+  ui.showView(new Dialog("Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to go out and get some BEER if you wanna come to the party.  Oh yea, and we recommend you maintain a healthy buzz.  Good luck!"));
 
   window.requestAnimationFrame(_loop);
 }
@@ -76,7 +78,7 @@ void main() {
   canvasDrawer.setOffset(0, 0);
   canvasDrawer.backgroundColor = 'black';
 
-  ui = new UI(canvasDrawer);
+  ui = new UI(new CanvasDrawer(canvasManager));
 
   drawer = new DrawingComponent(canvasManager, canvasDrawer, true);
 
