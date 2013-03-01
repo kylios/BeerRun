@@ -19,7 +19,6 @@ class DrawingUtils {
       if (len + spaceWidth + strlen >= maxWidth) {
 
         String line = sb.toString();
-        window.console.log(line);
         lines.add(line);
         sb = new StringBuffer();
         sb.add(s);

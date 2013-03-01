@@ -22,13 +22,13 @@ class Dialog extends View {
     drawer.backgroundColor = "black";
 
     List<String> lines = DrawingUtils.wrapText(
-        this._text, 640 - 64);
+        this._text, 640 - 128);
     int x = 64;
     int y = 64;
 
     for (String line in lines) {
 
-      drawer.drawText(this._text, x, y);
+      drawer.drawText(line, x, y);
       y += 16;
     }
   }
