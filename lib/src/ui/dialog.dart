@@ -20,6 +20,17 @@ class Dialog extends View {
     // TODO: blinking text
 
     drawer.backgroundColor = "black";
-    drawer.drawText(this._text, 64, 64);
+
+    List<String> lines = DrawingUtils.wrapText(
+        this._text, 640 - 64);
+    int x = 64;
+    int y = 64;
+
+    for (String line in lines) {
+
+      drawer.drawText(this._text, x, y);
+      y += 16;
+    }
   }
+
 }

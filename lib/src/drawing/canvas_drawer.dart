@@ -25,7 +25,12 @@ class CanvasDrawer implements DrawingInterface {
   /**
    * Give us a manager so we can access the canvas' properties.
    */
-  CanvasDrawer(this._canvasManager);
+  CanvasDrawer(this._canvasManager) {
+
+    if (_globalContext == null) {
+      _globalContext = this._canvasManager.canvas.getContext("2d");
+    }
+  }
 
   /**
    * Sets the draw offset.  Contsrains those offsets to certain boundaries so
