@@ -6,7 +6,7 @@ class Car extends GameObject {
 
   Car(Path p, Direction d, this._sprites) :
     super(d, p.start.x, p.start.y) {
-    this.setSpeed(6);
+    this.speed = 6;
     this.setControlComponent(new PathFollowerInputComponent(p));
   }
 

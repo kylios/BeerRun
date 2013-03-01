@@ -7,7 +7,7 @@ class DrawingComponent extends Component
   static final DIRECTION_CHANGE_EVENT = 1;
   static final UPDATE_STEP_EVENT = 2;
 
-  CanvasDrawer _drawer;
+  DrawingInterface _drawer;
   CanvasManager _manager;
 
   bool _scrollBackground = false;
@@ -30,7 +30,8 @@ class DrawingComponent extends Component
       s = obj.getMoveSprite();
     }
     this._drawer.drawSprite(s, obj.x, obj.y, obj.tileWidth, obj.tileHeight);
-
+    //this._drawer.backgroundColor = "black";
+    //this._drawer.drawRect(obj.x, obj.y, obj.tileWidth, obj.tileHeight, 0, 0, true);
 
   }
 

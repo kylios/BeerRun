@@ -14,7 +14,7 @@ class Bullet extends GameObject {
     this.setControlComponent(c);
     this.setDrawingComponent(drw);
 
-    this.setSpeed(8);
+    this.speed = 8;
 
     SpriteSheet sprites = new SpriteSheet(
         "img/Muzzleflashes-Shots.png",

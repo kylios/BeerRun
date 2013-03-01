@@ -2,13 +2,18 @@ part of game;
 
 abstract class GameObject {
 
-  int _speed = 5;
+  int speed = 5;
 
   int _x = 0;
   int _y = 0;
 
   int _oldX = 0;
   int _oldY = 0;
+
+  int collisionXOffset = 0;
+  int collisionYOffset = 0;
+  int collisionWidth = 0;
+  int collisionHeight = 0;
 
   Direction _dir;
 
@@ -54,10 +59,6 @@ abstract class GameObject {
     this._level = l;
   }
 
-  void setSpeed(int s) {
-    this._speed = s;
-  }
-
   void setPos(int x, int y) {
     this._x = x;
     this._y = y;
@@ -78,21 +79,33 @@ abstract class GameObject {
     }
   }
 
-  void moveUp() {
+  void moveUp([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_UP;
-    this._y -= this._speed;
+    this._y -= speed;
   }
-  void moveDown() {
+  void moveDown([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_DOWN;
-    this._y += this._speed;
+    this._y += speed;
   }
-  void moveLeft() {
+  void moveLeft([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_LEFT;
-    this._x -= this._speed;
+    this._x -= speed;
   }
-  void moveRight() {
+  void moveRight([int speed]) {
+    if (! ?speed) {
+      speed = this.speed;
+    }
     this._dir = DIR_RIGHT;
-    this._x += this._speed;
+    this._x += speed;
   }
 
   void faceUp() {

@@ -14,7 +14,7 @@ class Level extends GameObject implements ComponentListener {
   int _layer = -1;
 
   CanvasManager _manager;
-  CanvasDrawer _drawer;
+  DrawingInterface _drawer;
 
   List<List<Sprite>> _sprites;
   List<bool> _blocked;
@@ -110,7 +110,7 @@ class Level extends GameObject implements ComponentListener {
         pos >= this._blocked.length)
     {
       // Keep us on the screen
-      return true;
+      return false;
     }
     return this._blocked[pos];
   }
@@ -147,13 +147,13 @@ class Level extends GameObject implements ComponentListener {
     if (o != obj &&
       (
           (
-            o.x + o.tileWidth >= obj.x &&
-            o.x <= obj.x + obj.tileWidth
+            o.x + o.collisionXOffset+ o.collisionWidth >= obj.x &&
+            o.x + o.collisionXOffset <= obj.x + obj.tileWidth
           )
           &&
           (
-            o.y + o.tileHeight >= obj.y &&
-            o.y <= obj.y + obj.tileHeight
+            o.y + o.collisionYOffset + o.collisionHeight >= obj.y &&
+            o.y + o.collisionYOffset <= obj.y + obj.tileHeight
           )
         )
       )
@@ -210,6 +210,11 @@ class Level extends GameObject implements ComponentListener {
           d.drawSprite(s, col * this._tileWidth, row * this._tileHeight/*,
               this._tileWidth, this._tileHeight*/);
         }
+        //if (this.isBlocking(row, col)) {
+          //d.backgroundColor = "red";
+          //d.drawRect(col * this._tileWidth, row * this._tileHeight,
+          //    this._tileWidth, this._tileHeight, 0, 0, true);
+        //}
         col++;
         if (col >= this._cols) {
           row++;

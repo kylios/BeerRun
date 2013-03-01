@@ -9,7 +9,7 @@ part of drawing;
  * effect.  As the player moves around, they should always appear in the center
  * of the screen, unless we get too far to the edge of the level.
  */
-class CanvasDrawer {
+class CanvasDrawer implements DrawingInterface {
 
   CanvasManager _canvasManager;
 
@@ -20,11 +20,17 @@ class CanvasDrawer {
   int _boundY;
 
   String backgroundColor = "white";
+  String font = "12px";
 
   /**
    * Give us a manager so we can access the canvas' properties.
    */
-  CanvasDrawer(this._canvasManager);
+  CanvasDrawer(this._canvasManager) {
+
+    if (_globalContext == null) {
+      _globalContext = this._canvasManager.canvas.getContext("2d");
+    }
+  }
 
   /**
    * Sets the draw offset.  Contsrains those offsets to certain boundaries so
@@ -56,6 +62,20 @@ class CanvasDrawer {
     c.fillStyle = this.backgroundColor;
     c.fillRect(0, 0, this._canvasManager.width, this._canvasManager.height);
   }
+
+  void drawImage(ImageElement i, int x, int y, [int width, int height]) {
+
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    if (?width)
+    {
+      c.drawImage(i, x, y, width);
+    }
+    else if (?height)
+    {
+      c.drawImage(i, x, y, width, height);
+    }
+  }
+
   void drawSprite(Sprite s, int x, int y, [int drawWidth, int drawHeight]) {
 
     if (null == s) {
@@ -81,5 +101,68 @@ class CanvasDrawer {
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
 
     c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
+  }
+
+  void drawRect(int x, int y, int width, int height,
+                [int radiusX, int radiusY]) {
+
+    if (! ?radiusX) {
+      radiusX = 0;
+    }
+    if (! ?radiusY) {
+      radiusY = 0;
+    }
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+
+    c.fillStyle = this.backgroundColor;
+    c.beginPath();
+    c.moveTo(x + radiusX, y);
+    c.lineTo(x + width - radiusX, y);
+    c.quadraticCurveTo(x + width, y, x + width, y + radiusY);
+    c.lineTo(x + width, y + height - radiusY);
+    c.quadraticCurveTo(x + width, y + height, x + width - radiusX, y + height);
+    c.lineTo(x + radiusX, y + height);
+    c.quadraticCurveTo(x, y + height, x, y + height - radiusY);
+    c.lineTo(x, y + radiusY);
+    c.quadraticCurveTo(x, y, x + radiusX, y);
+    c.closePath();
+    c.stroke();
+
+  }
+
+  void fillRect(int x, int y, int width, int height,
+                [int radiusX, int radiusY]) {
+
+    if (! ?radiusX) {
+      radiusX = 0;
+    }
+    if (! ?radiusY) {
+      radiusY = 0;
+    }
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+
+    c.fillStyle = this.backgroundColor;
+    c.beginPath();
+    c.moveTo(x + radiusX, y);
+    c.lineTo(x + width - radiusX, y);
+    c.quadraticCurveTo(x + width, y, x + width, y + radiusY);
+    c.lineTo(x + width, y + height - radiusY);
+    c.quadraticCurveTo(x + width, y + height, x + width - radiusX, y + height);
+    c.lineTo(x + radiusX, y + height);
+    c.quadraticCurveTo(x, y + height, x, y + height - radiusY);
+    c.lineTo(x, y + radiusY);
+    c.quadraticCurveTo(x, y, x + radiusX, y);
+    c.closePath();
+    c.fill();
+
+  }
+
+  void drawText(String text, int x, int y) {
+
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    c.font = this.font;
+    c.fillStyle = this.backgroundColor;
+
+    c.fillText(text, x, y);
   }
 }

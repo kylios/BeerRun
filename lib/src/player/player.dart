@@ -3,6 +3,8 @@ part of player;
 class Player extends GameObject {
 
   static final int BUZZ_PER_BEER = 1;
+  static final int MAX_DRUNKENNESS = 10;
+  static final int MIN_DRUNKENNESS = 0;
 
   int _beers;
   int _buzz;
@@ -16,6 +18,10 @@ class Player extends GameObject {
   // Movement parameters
 
   int _balance = 1;
+  int _drunkenness = 8;  // out of 10
+
+  int get drunkenness => this._drunkenness;
+
   // TODO: add stuff for drunkenness :-P
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
@@ -27,6 +33,11 @@ class Player extends GameObject {
     SpriteSheet sprites = new SpriteSheet(
         "img/Character1Walk.png",
         64, 64);
+
+    this.collisionXOffset = 17;
+    this.collisionYOffset = 32;
+    this.collisionWidth = 30;
+    this.collisionHeight = 32;
 
     List<Sprite> walkUp = new List<Sprite>();
     List<Sprite> walkDown = new List<Sprite>();

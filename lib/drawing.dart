@@ -7,8 +7,13 @@ import 'package:BeerRun/component.dart';
 import 'package:BeerRun/input.dart';
 import 'package:BeerRun/game.dart';
 
+part 'src/drawing/drawing_interface.dart';
 part 'src/drawing/sprite.dart';
 part 'src/drawing/sprite_sheet.dart';
 part 'src/drawing/sprite_animation.dart';
 part 'src/drawing/drawing_component.dart';
 part 'src/drawing/canvas_drawer.dart';
+part 'src/drawing/drawing_utils.dart';
+
+// This is ugly and I hate it
+CanvasRenderingContext2D _globalContext = null;
