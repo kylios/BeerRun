@@ -24,6 +24,8 @@ class Level extends GameObject implements ComponentListener {
 
   List<LevelAnimation> _animations;
 
+  bool _paused = false;
+
   Level(this._drawer, this._manager,
       this._rows, this._cols, this._tileWidth, this._tileHeight) :
         super(DIR_DOWN, 0, 0)
@@ -49,6 +51,16 @@ class Level extends GameObject implements ComponentListener {
   void newLayer() {
     this._sprites.add(new List<Sprite>(this._rows * this._cols));
     this._layer++;
+  }
+
+  void pause() {
+    this._paused = true;
+  }
+  void unPause() {
+    this._paused = false;
+  }
+  bool isPaused() {
+    return this._paused;
   }
 
   void setSpriteAt(Sprite s, int row, int col, [bool blocked]) {
@@ -179,24 +191,28 @@ class Level extends GameObject implements ComponentListener {
   }
 
   void update() {
-    this.draw(this._drawer);
-    this._player.update();
 
-    this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
-    {
-      //window.console.log(o);
-      o.update();
-      //return true;
-      return ! o.isRemoved;
-    }));
+    if ( ! this._paused) {
+      this.draw(this._drawer);
+      this._player.update();
 
-    this._animations = new List<LevelAnimation>.from(
-        this._animations.where((LevelAnimation a) {
-          this._drawer.drawSprite(a.getNext(), a.x, a.y,
-              a.tileWidth, a.tileHeight);
-          return ! a.isDone();
-        })
-    );
+      // Loop through the objects, calling update on each.  Remove them from the
+      // list if they become removed from the level.
+      this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
+      {
+        o.update();
+        return ! o.isRemoved;
+      }));
+
+      // Process any animations going on
+      this._animations = new List<LevelAnimation>.from(
+          this._animations.where((LevelAnimation a) {
+            this._drawer.drawSprite(a.getNext(), a.x, a.y,
+                a.tileWidth, a.tileHeight);
+            return ! a.isDone();
+          })
+      );
+    }
   }
 
   void draw(CanvasDrawer d) {

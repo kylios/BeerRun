@@ -51,8 +51,15 @@ abstract class GameObject {
     this._control = c;
   }
 
+  Component getControlComponent() {
+    return this._control;
+  }
+
   void setDrawingComponent(DrawingComponent d) {
     this._drawer = d;
+  }
+  Component getDrawingComponent() {
+    return this._drawer;
   }
 
   void setLevel(Level l) {

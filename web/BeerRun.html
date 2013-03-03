@@ -40,6 +40,9 @@
       .left {
         float: left;
       }
+      .right {
+        float: right;
+      }
       .clear {
         clear: both;
       }
@@ -69,6 +72,10 @@
         font-weight: bold;
         font-family: sans;
         margin-bottom: 3px;
+      }
+      .ui.x {
+        margin-top: -8px;
+        margin-right: -12px;
       }
       .ui.body {
         background: #cccccc;
@@ -107,9 +114,13 @@
 
     <div class="ui window" id="root_pane">
       <div class="ui title">
-        <div class="ui text">
+        <div class="ui text left">
           Test UI
         </div>
+        <div class="ui x right">
+          <img src="img/ui/x.png" />
+        </div>
+        <div class="clear"></div>
       </div>
       <div class="ui body">
         <div class="ui root">

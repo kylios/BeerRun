@@ -2,12 +2,21 @@ part of ui;
 
 class WindowView extends View {
 
+  UI _parent;
+
   DivElement _uiElement;
+  DivElement _closeButton;
   DivElement _rootElement;
 
-  WindowView(this._uiElement) {
+  WindowView(this._parent, this._uiElement) {
 
+    this._closeButton = this._uiElement.query('div.ui.title > div.ui.x');
     this._rootElement = this._uiElement.query('div.ui.body > div.ui.root');
+
+    this._closeButton.onClick.listen((MouseEvent e) {
+      // Call the parent UI object to handle switching control back to the game
+      this._parent.closeWindow();
+    });
   }
 
   DivElement get rootElement => this._rootElement;

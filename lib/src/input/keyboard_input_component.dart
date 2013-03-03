@@ -4,7 +4,7 @@ part of input;
  * Thanks to this article for inspiration and code snippets:
  * http://dartgamedevs.org/blog/2012/12/11/keyboard-input/
  */
-class InputComponent extends Component implements KeyboardListener {
+class KeyboardInputComponent extends Component implements KeyboardListener {
 
   static final KEY_UP = 38;
   static final KEY_DOWN = 40;
@@ -17,7 +17,7 @@ class InputComponent extends Component implements KeyboardListener {
   int _currentIndex = 0;
   int _previousIndex = 1;
 
-  InputComponent();
+  KeyboardInputComponent();
 
   /** Process a keyboard event for the current frame.
   *
@@ -95,14 +95,14 @@ class InputComponent extends Component implements KeyboardListener {
     });
 
 
-    if (this.isDown(InputComponent.KEY_UP)) {
+    if (this.isDown(KeyboardInputComponent.KEY_UP)) {
       obj.moveUp();
-    } else if (this.isDown(InputComponent.KEY_DOWN)) {
+    } else if (this.isDown(KeyboardInputComponent.KEY_DOWN)) {
       obj.moveDown();
     }
-    if (this.isDown(InputComponent.KEY_LEFT)) {
+    if (this.isDown(KeyboardInputComponent.KEY_LEFT)) {
       obj.moveLeft();
-    } else if (this.isDown(InputComponent.KEY_RIGHT)) {
+    } else if (this.isDown(KeyboardInputComponent.KEY_RIGHT)) {
       obj.moveRight();
     }
   }

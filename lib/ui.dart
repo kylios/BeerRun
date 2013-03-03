@@ -4,6 +4,8 @@ import 'dart:html';
 
 import 'package:BeerRun/input.dart';
 import 'package:BeerRun/drawing.dart';
+import 'package:BeerRun/component.dart';
+import 'package:BeerRun/player.dart';
 
 /**
  * Ok, let's not do UI in canvas.  Let's take advantage of the fact we're on a
