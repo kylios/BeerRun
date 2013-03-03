@@ -61,7 +61,6 @@ void _loop(var _) {
 
   endtime = new Date.now().millisecondsSinceEpoch;
 
-  ui.showView(new Dialog("Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to go out and get some BEER if you wanna come to the party.  Oh yea, and we recommend you maintain a healthy buzz.  Good luck!"));
 
   window.requestAnimationFrame(_loop);
 }
@@ -110,6 +109,9 @@ void main() {
   level.addObject(npc1);
   level.addObject(npc2);
   level.addObject(npc3);
+
+  // Don't invoke UI every frame
+  ui.showView(new Dialog("Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to go out and get some BEER if you wanna come to the party.  Oh yea, and we recommend you maintain a healthy buzz.  Good luck!"));
 
   _loop(0);
 }
