@@ -77,7 +77,7 @@ void main() {
   canvasDrawer.setOffset(0, 0);
   canvasDrawer.backgroundColor = 'black';
 
-  ui = new UI(new CanvasDrawer(canvasManager));
+  ui = new UI(query("#root_pane"));
 
   drawer = new DrawingComponent(canvasManager, canvasDrawer, true);
 

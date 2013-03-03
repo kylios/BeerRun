@@ -2,7 +2,23 @@ part of ui;
 
 class WindowView extends View {
 
-  WindowView();
+  DivElement _uiElement;
+  DivElement _rootElement;
+
+  WindowView(this._uiElement) {
+
+    this._rootElement = this._uiElement.query('div.ui.body > div.ui.root');
+  }
+
+  DivElement get rootElement => this._rootElement;
+
+  void show() {
+    this._uiElement.style.display = "block";
+  }
+
+  void hide() {
+    this._uiElement.style.display = "none";
+  }
 
   onDraw(Element root) {
 

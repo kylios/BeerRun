@@ -13,24 +13,17 @@ class Dialog extends View {
     return this._text;
   }
 
-  void onDraw(CanvasDrawer drawer) {
+  DivElement get rootElement => null;
+  void show() {}
+  void hide() {}
+  void onDraw(Element root) {
 
-    // TODO: word wrapping
-    // TODO: print chars one frame at a time
-    // TODO: blinking text
-
-    drawer.backgroundColor = "black";
-
-    List<String> lines = DrawingUtils.wrapText(
-        this._text, 640 - 128);
-    int x = 64;
-    int y = 64;
-
-    for (String line in lines) {
-
-      drawer.drawText(line, x, y);
-      y += 16;
-    }
+    DivElement el = new DivElement();
+    el.text = this._text;
+    el.classes = ["ui", "text"];
+    root.append(
+      el
+    );
   }
 
 }
