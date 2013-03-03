@@ -16,12 +16,13 @@ class UI {
   void closeWindow() {
     this._player.setControlComponent(this._tmpInputComponent);
     this._rootView.hide();
+    this._rootView.clear();
     this._player.level.unPause();
   }
 
   void showView(View v, [bool pause]) {
 
-    if (! ?pause && pause == true) {
+    if (?pause && pause == true) {
       this._player.level.pause();
     }
 

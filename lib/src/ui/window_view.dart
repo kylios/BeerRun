@@ -29,6 +29,10 @@ class WindowView extends View {
     this._uiElement.style.display = "none";
   }
 
+  void clear() {
+    this._rootElement.children.forEach((Element e) {e.remove();});
+  }
+
   onDraw(Element root) {
 
     DivElement outer = new DivElement();

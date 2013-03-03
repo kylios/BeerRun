@@ -6,23 +6,23 @@ class Player extends GameObject {
   static final int MAX_DRUNKENNESS = 10;
   static final int MIN_DRUNKENNESS = 0;
 
-  int _beers;
-  int _buzz;
-
-  int _health = 3;
 
   bool _damaged = false;
   int _damageInterval = 0;
   int _damagedUntil = 0;
 
-  // Movement parameters
+  bool _wasHitByCar = false;
+  bool _wasBeerStolen = false;
 
-  int _balance = 1;
-  int _drunkenness = 8;  // out of 10
 
-  int get drunkenness => this._drunkenness;
+  int _health = 3;
+  int _beers = 0;
+  int _buzz = 3;  // out of 10;
 
-  // TODO: add stuff for drunkenness :-P
+  int _nextBuzzDecreaseTS = new Date.now().millisecondsSinceEpoch ~/ 1000 + 35;
+
+  int get drunkenness => this._buzz;
+  int get beers => this._beers;
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
@@ -57,8 +57,15 @@ class Player extends GameObject {
 
   void update() {
     if ( ! this.isRemoved) {
+
+      // Reset some single-frame state variables
+      this._wasHitByCar = false;
+      this._wasBeerStolen = false;
+
+      // Update super
       super.update();
 
+      // Make him blink when hit
       if (this._damaged) {
         this._damageInterval++;
 
@@ -72,6 +79,7 @@ class Player extends GameObject {
 
   void takeHit() {
     if ( ! this._damaged) {
+      this._wasHitByCar = true;
       this._health--;
       this._damaged = true;
       this._damagedUntil = new Date.now().millisecondsSinceEpoch + 2000;
@@ -85,6 +93,13 @@ class Player extends GameObject {
     }
   }
 
+  void beerStolen() {
+    if (this._beers <= 0) {
+      return;
+    }
+    this._beers--;
+    this._wasBeerStolen = true;
+  }
 
   void drinkBeer() {
     if (this._beers <= 0) {
@@ -115,6 +130,9 @@ class Player extends GameObject {
         this.dir, this, x, y),
         [ this.level ]);
   }
+
+  bool get wasHitByCar => this._wasHitByCar;
+  bool get wasBeerStolen => this._wasBeerStolen;
 
   int get tileWidth => 64;
   int get tileHeight => 64;

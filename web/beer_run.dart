@@ -34,6 +34,9 @@ List<int> ticklist = new List<int>.fixedLength(MAXSAMPLES, fill: 0);
 int starttime = 0;
 int endtime = 0;
 
+// Notification flags.
+bool notifyCar = true;
+bool notifyTheft = true;
 
 void _loop(var _) {
 
@@ -50,13 +53,28 @@ void _loop(var _) {
 
   level.update();
 
+  // Notify player
+  if (notifyCar && player.wasHitByCar) {
+
+    notifyCar = false;
+    ui.showView(new Dialog("Fuck.  Watch where you're going!"),
+        true /* pause game */);
+
+  } else if (notifyTheft && player.wasBeerStolen) {
+
+    notifyTheft = false;
+    ui.showView(new Dialog("Ohhh, the bum stole a beer!  One less for you!"),
+        true /* pause game */);
+  }
+
   // Draw HUD
   // TODO: HUD class?
-  canvasDrawer.backgroundColor = "blue";
-  canvasDrawer.drawRect(0, 0, 180, 92, 8, 8);
-  canvasDrawer.font = "bold 12px sans-serif";
-  canvasDrawer.drawText("Drunkenness: ${player.drunkenness}", 8, 8);
-  canvasDrawer.drawText("Speed: ${player.speed}", 8, 26);
+  canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
+  canvasDrawer.fillRect(0, 0, 180, 92, 8, 8);
+  canvasDrawer.backgroundColor = "black";
+  canvasDrawer.font = "bold 22px sans-serif";
+  canvasDrawer.drawText("Drunkenness: ${player.drunkenness}", 8, 26);
+  canvasDrawer.drawText("Beers: ${player.beers}", 8, 52);
 
   endtime = new Date.now().millisecondsSinceEpoch;
 

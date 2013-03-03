@@ -192,8 +192,9 @@ class Level extends GameObject implements ComponentListener {
 
   void update() {
 
+    this.draw(this._drawer);
+
     if ( ! this._paused) {
-      this.draw(this._drawer);
       this._player.update();
 
       // Loop through the objects, calling update on each.  Remove them from the
