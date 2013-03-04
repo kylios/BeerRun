@@ -38,6 +38,7 @@ int endtime = 0;
 bool notifyCar = true;
 bool notifyTheft = true;
 bool gameOver = false;
+bool notifyBored = true;
 
 int score = 0;
 
@@ -73,6 +74,11 @@ void _loop(var _) {
 
     notifyTheft = false;
     ui.showView(new Dialog("Ohhh, the bum stole a beer!  One less for you!"),
+        pause: false, seconds: 5);
+  } else if (notifyBored && player.boredNotify) {
+    notifyBored = false;
+    ui.showView(
+        new Dialog("Better drink a beer or this is going to get real boring"),
         pause: false, seconds: 5);
   }
 

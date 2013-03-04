@@ -17,6 +17,7 @@ class Player extends GameObject implements ComponentListener {
   bool _wasHitByCar = false;
   bool _wasBeerStolen = false;
   bool _beenToStore = false;
+  bool _boredNotify = false;
   int _beersDelivered = 0;
 
   int _health = 3;
@@ -65,7 +66,6 @@ class Player extends GameObject implements ComponentListener {
     this._beers += beers;
   }
   void resetBeersDelivered() {
-
     this._beersDelivered = 0;
   }
 
@@ -106,8 +106,9 @@ class Player extends GameObject implements ComponentListener {
         this._buzz--;
         this._buzzDecreaseTime = now.millisecondsSinceEpoch + Player.BUZZ_TIME;
         if (this._buzz <= 3) {
+          this._boredNotify = true;
           this.level.addAnimation(new TextAnimation(
-             "NEED.. MORE.. BEER..",
+             "*YAWN*",
              this.x, this.y, 3
           ));
         }
@@ -210,6 +211,7 @@ class Player extends GameObject implements ComponentListener {
   bool get wasHitByCar => this._wasHitByCar;
   bool get wasBeerStolen => this._wasBeerStolen;
   int get beersDelivered => this._beersDelivered;
+  bool get boredNotify => this._boredNotify;
 
   int get tileWidth => 64;
   int get tileHeight => 64;
