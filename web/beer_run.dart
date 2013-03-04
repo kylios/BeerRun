@@ -39,18 +39,22 @@ bool notifyCar = true;
 bool notifyTheft = true;
 bool gameOver = false;
 
+int score = 0;
+
 void onGameOver() {
 
 }
 
 void _loop(var _) {
 
+  /*
   ticksum-=ticklist[tickindex];  /* subtract value falling off */
   ticksum+=(endtime - starttime);              /* add new value */
   ticklist[tickindex]=(endtime - starttime);   /* save new value so it can be subtracted later */
   if(++tickindex==MAXSAMPLES)    /* inc buffer index */
     tickindex=0;
   fpsDisplay.innerHtml = (ticksum.toDouble() / MAXSAMPLES.toDouble()).toString();
+  */
 
   canvasDrawer.clear();
 
@@ -73,6 +77,8 @@ void _loop(var _) {
   }
 
   if (player.beersDelivered > 0) {
+    score += player.beersDelivered;
+    query("#score").innerHtml = score.toString();
     player.resetBeersDelivered();
     ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"), pause: true);
   }
