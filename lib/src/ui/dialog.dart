@@ -14,8 +14,8 @@ class Dialog extends View {
   }
 
   DivElement get rootElement => null;
-  void show() {}
-  void hide() {}
+
+  void onClose() {}
   void onDraw(Element root) {
 
     DivElement el = new DivElement();

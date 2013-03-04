@@ -15,23 +15,30 @@ class UI {
 
   void closeWindow() {
     this._player.setControlComponent(this._tmpInputComponent);
-    this._rootView.hide();
-    this._rootView.clear();
+    this._rootView.onClose();
     this._player.level.unPause();
   }
 
-  void showView(View v, [bool pause]) {
+  void showView(View v, {bool pause: false, int seconds: 0}) {
 
-    if (?pause && pause == true) {
+    if (pause) {
       this._player.level.pause();
     }
 
-    // Pause gameplay too
     this._tmpInputComponent = this._player.getControlComponent();
-    this._player.setControlComponent(new NullInputComponent());
 
     v.onDraw(this._rootView.rootElement);
     this._rootView.show();
+
+    if (seconds != 0) {
+      new Future.delayed(seconds * 1000, () {
+        this.closeWindow();
+      });
+    }
+    else {
+      // Pause gameplay too
+      this._player.setControlComponent(new NullInputComponent());
+    }
   }
 }
 

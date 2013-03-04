@@ -1,6 +1,6 @@
 part of game;
 
-abstract class GameObject {
+abstract class GameObject implements ComponentListener {
 
   int speed = 5;
 
@@ -71,19 +71,17 @@ abstract class GameObject {
     this._y = y;
   }
 
-  /**
-   * This object got hit by something.
-   */
-  void takeHit();
-
   void update() {
 
     this._oldX = this.x;
     this._oldY = this.y;
     this._control.update(this);
+
     if (this._drawer != null) {
       this._drawer.update(this);
     }
+  }
+  void draw() {
   }
 
   void moveUp([int speed]) {

@@ -32,13 +32,16 @@ class WindowView extends View {
   void clear() {
     this._rootElement.children.forEach((Element e) {e.remove();});
   }
+  void onClose() {
+    this.hide();
+    this.clear();
+  }
 
   onDraw(Element root) {
 
     DivElement outer = new DivElement();
     outer.style.backgroundColor = '#125c9a';
     outer.style.border = '2px solid #125c9a';
-
 
     root.append(outer);
   }

@@ -1,6 +1,6 @@
 part of player;
 
-class Player extends GameObject {
+class Player extends GameObject implements ComponentListener {
 
   static final int BUZZ_PER_BEER = 1;
   static final int MAX_DRUNKENNESS = 10;
@@ -10,6 +10,7 @@ class Player extends GameObject {
   bool _damaged = false;
   int _damageInterval = 0;
   int _damagedUntil = 0;
+  int _beerStolenUntil = 0;
 
   bool _wasHitByCar = false;
   bool _wasBeerStolen = false;
@@ -19,10 +20,11 @@ class Player extends GameObject {
   int _beers = 0;
   int _buzz = 3;  // out of 10;
 
-  int _nextBuzzDecreaseTS = new Date.now().millisecondsSinceEpoch ~/ 1000 + 35;
+  int _nextBuzzDecreaseTS = new DateTime.now().millisecondsSinceEpoch ~/ 1000 + 35;
 
   int get drunkenness => this._buzz;
   int get beers => this._beers;
+  int get health => this._health;
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
@@ -69,27 +71,39 @@ class Player extends GameObject {
       if (this._damaged) {
         this._damageInterval++;
 
-        if (this._damagedUntil <= new Date.now().millisecondsSinceEpoch) {
+        if (this._damagedUntil <= new DateTime.now().millisecondsSinceEpoch) {
           this._damaged = false;
           this._damageInterval = 0;
         }
       }
+
+      if (this._beerStolenUntil <= new DateTime.now().millisecondsSinceEpoch) {
+        this._beerStolenUntil = 0;
+      }
     }
   }
 
-  void takeHit() {
-    if ( ! this._damaged) {
-      this._wasHitByCar = true;
-      this._health--;
-      this._damaged = true;
-      this._damagedUntil = new Date.now().millisecondsSinceEpoch + 2000;
-    }
-    if (this._health <= 0) {
-
-      this.level.addAnimation(
-          new Explosion.createAt(this.x, this.y,
-                                 this.tileWidth, this.tileHeight));
-      this.remove();
+  void listen(GameEvent e) {
+    if (e.type == GameEvent.TAKE_HIT_EVENT) {
+      if ( ! this._damaged) {
+        int damage = e.value;
+        this._wasHitByCar = true;
+        this._health -= damage;
+        this._damaged = true;
+        this._damagedUntil = new DateTime.now().millisecondsSinceEpoch + 2000;
+      }
+      if (this._health <= 0) {
+        this.level.addAnimation(
+            new Explosion.createAt(this.x, this.y,
+                                   this.tileWidth, this.tileHeight));
+        this.remove();
+      }
+    } else if (e.type == GameEvent.BEER_STOLEN_EVENT) {
+      if (this._beerStolenUntil == 0 && this._beers > 0) {
+        this._wasBeerStolen = true;
+        this._beerStolenUntil = new DateTime.now().millisecondsSinceEpoch + 1000;
+        this._beers -= e.value;
+      }
     }
   }
 

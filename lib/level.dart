@@ -9,6 +9,5 @@ import 'package:BeerRun/component.dart';
 import 'package:BeerRun/player.dart';
 import 'package:BeerRun/bullet.dart';
 
-part 'src/level/create_bullet_event.dart';
 part 'src/level/level_animation.dart';
 part 'src/level/level.dart';

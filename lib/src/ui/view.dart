@@ -4,8 +4,7 @@ abstract class View {
 
   DivElement get rootElement;
 
-  void show();
-  void hide();
+  void onClose();
 
   void onDraw(Element root);
 }

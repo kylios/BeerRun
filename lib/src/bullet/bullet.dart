@@ -46,7 +46,10 @@ class Bullet extends GameObject {
           o = objs.removeLast();
         }
         if (o != this._creator) {
-          o.takeHit();
+          GameEvent e = new GameEvent();
+          e.type = GameEvent.TAKE_HIT_EVENT;
+          e.value = 1;
+          o.listen(e);
           this.remove();
         }
       } else {
@@ -55,6 +58,8 @@ class Bullet extends GameObject {
       }
     }
   }
+
+  void listen(GameEvent e) {}
 
   int get tileWidth => 32;
   int get tileHeight => 32;

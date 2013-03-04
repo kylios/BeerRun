@@ -15,7 +15,10 @@ class Car extends GameObject {
 
     GameObject obj = this.level.collidesWithPlayer(this);
     if (obj != null) {
-      obj.takeHit();
+      GameEvent e = new GameEvent();
+      e.type = GameEvent.TAKE_HIT_EVENT;
+      e.value = 1;
+      obj.listen(e);
     }
   }
 
@@ -45,4 +48,6 @@ class Car extends GameObject {
   Sprite getStaticSprite() {
     return this._sprites[this.dir.direction];
   }
+
+  void listen(GameEvent e) {}
 }

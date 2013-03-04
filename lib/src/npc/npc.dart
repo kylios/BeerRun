@@ -1,6 +1,6 @@
 part of npc;
 
-class NPC extends GameObject {
+class NPC extends GameObject implements ComponentListener {
 
   int _health = 3;
 
@@ -38,6 +38,7 @@ class NPC extends GameObject {
     if ( ! this.isRemoved) {
       super.update();
 
+      // If you're hit
       if (this._damaged) {
         this._damageInterval++;
 
@@ -45,23 +46,33 @@ class NPC extends GameObject {
           this._damaged = false;
           this._damageInterval = 0;
         }
+      } else {
+        // Only if you're not damaged can you steel beer
+        GameObject obj = this.level.collidesWithPlayer(this);
+        if (obj != null) {
+          GameEvent e = new GameEvent();
+          e.type = GameEvent.BEER_STOLEN_EVENT;
+          e.value = 1;
+          obj.listen(e);
+        }
       }
     }
   }
 
-  void takeHit() {
-    window.console.log("took a hit");
-    if ( ! this._damaged) {
-      this._health--;
-      this._damaged = true;
-      this._damagedUntil = new Date.now().millisecondsSinceEpoch + 2000;
-    }
-    if (this._health <= 0) {
+  void listen(GameEvent e) {
+    if (e.type == GameEvent.TAKE_HIT_EVENT) {
+      if ( ! this._damaged) {
+        this._health -= e.value;
+        this._damaged = true;
+        this._damagedUntil = new Date.now().millisecondsSinceEpoch + 2000;
+      }
+      if (this._health <= 0) {
 
-      this.level.addAnimation(
-          new Explosion.createAt(this.x, this.y,
-                                 this.tileWidth, this.tileHeight));
-      this.remove();
+        this.level.addAnimation(
+            new Explosion.createAt(this.x, this.y,
+                                   this.tileWidth, this.tileHeight));
+        this.remove();
+      }
     }
   }
 

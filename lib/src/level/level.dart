@@ -1,9 +1,7 @@
 
 part of level;
 
-class Level extends GameObject implements ComponentListener {
-
-  static final int CREATE_BULLET_EVENT = 1;
+class Level implements ComponentListener {
 
   int _rows;
   int _cols;
@@ -27,8 +25,7 @@ class Level extends GameObject implements ComponentListener {
   bool _paused = false;
 
   Level(this._drawer, this._manager,
-      this._rows, this._cols, this._tileWidth, this._tileHeight) :
-        super(DIR_DOWN, 0, 0)
+      this._rows, this._cols, this._tileWidth, this._tileHeight)
   {
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
@@ -93,6 +90,7 @@ class Level extends GameObject implements ComponentListener {
 
   void addPlayerObject(Player p) {
     this._player = p;
+    this.addObject(p);
   }
 
   void addAnimation(LevelAnimation a) {
@@ -177,7 +175,7 @@ class Level extends GameObject implements ComponentListener {
   }
 
   void listen(GameEvent e) {
-    if (e.type == Level.CREATE_BULLET_EVENT) {
+    if (e.type == GameEvent.CREATE_BULLET_EVENT) {
       Direction d = e.data["direction"];
       GameObject creator = e.creator;
       int x = e.data["x"];
@@ -194,17 +192,25 @@ class Level extends GameObject implements ComponentListener {
 
     this.draw(this._drawer);
 
+
     if ( ! this._paused) {
       this._player.update();
+      this._player.draw();
+    }
 
-      // Loop through the objects, calling update on each.  Remove them from the
-      // list if they become removed from the level.
-      this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
-      {
+
+    // Loop through the objects, calling update on each.  Remove them from the
+    // list if they become removed from the level.
+    this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
+    {
+      if ( ! this._paused) {
         o.update();
-        return ! o.isRemoved;
-      }));
+      }
+      o.draw();
+      return ! o.isRemoved;
+    }));
 
+    if ( ! this._paused) {
       // Process any animations going on
       this._animations = new List<LevelAnimation>.from(
           this._animations.where((LevelAnimation a) {

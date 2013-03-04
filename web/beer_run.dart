@@ -49,7 +49,7 @@ void _loop(var _) {
 
   canvasDrawer.clear();
 
-  starttime = new Date.now().millisecondsSinceEpoch;
+  starttime = new DateTime.now().millisecondsSinceEpoch;
 
   level.update();
 
@@ -58,13 +58,13 @@ void _loop(var _) {
 
     notifyCar = false;
     ui.showView(new Dialog("Fuck.  Watch where you're going!"),
-        true /* pause game */);
+        pause: false, seconds: 5);
 
   } else if (notifyTheft && player.wasBeerStolen) {
 
     notifyTheft = false;
     ui.showView(new Dialog("Ohhh, the bum stole a beer!  One less for you!"),
-        true /* pause game */);
+        pause: false, seconds: 5);
   }
 
   // Draw HUD
@@ -75,8 +75,9 @@ void _loop(var _) {
   canvasDrawer.font = "bold 22px sans-serif";
   canvasDrawer.drawText("Drunkenness: ${player.drunkenness}", 8, 26);
   canvasDrawer.drawText("Beers: ${player.beers}", 8, 52);
+  canvasDrawer.drawText("HP: ${player.health}", 8, 80);
 
-  endtime = new Date.now().millisecondsSinceEpoch;
+  endtime = new DateTime.now().millisecondsSinceEpoch;
 
 
   window.requestAnimationFrame(_loop);
