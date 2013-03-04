@@ -116,6 +116,15 @@ class Player extends GameObject implements ComponentListener {
         this.level.addAnimation(
             new TextAnimation("-1 BEER!", this.x, this.y, 2));
       }
+    } else if (e.type == GameEvent.BEER_STORE_EVENT) {
+      if (this._beers < 24) {
+        int diff = 24 - this._beers;
+        this.level.addAnimation(
+            new TextAnimation("+${diff} BEERS!", this.x, this.y, 2));
+      }
+      this._beers = 24;
+    } else if (e.type == GameEvent.PARTY_ARRIVAL_EVENT) {
+      // Only trigger if you've gone to the store at least once
     }
   }
 

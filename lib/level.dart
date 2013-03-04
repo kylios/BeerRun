@@ -11,3 +11,4 @@ import 'package:BeerRun/bullet.dart';
 import 'package:BeerRun/animation.dart';
 
 part 'src/level/level.dart';
+part 'src/level/trigger.dart';

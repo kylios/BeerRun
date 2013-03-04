@@ -20,6 +20,8 @@ class Level implements ComponentListener {
   List<GameObject> _objects;
   Player _player;
 
+  List<Trigger> _triggers;
+
   List<Animation> _animations;
 
   bool _paused = false;
@@ -30,6 +32,7 @@ class Level implements ComponentListener {
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
     this._animations = new List<Animation>();
+    this._triggers = new List<Trigger>(); // TODO: someday optimize this to be more location aware
     this._blocked = new List<bool>
       .fixedLength(this._rows * this._cols, fill: false);
   }
@@ -95,6 +98,10 @@ class Level implements ComponentListener {
 
   void addAnimation(Animation a) {
     this._animations.add(a);
+  }
+
+  void addTrigger(Trigger t) {
+    this._triggers.add(t);
   }
 
   void addObject(GameObject obj) {
@@ -196,6 +203,26 @@ class Level implements ComponentListener {
     if ( ! this._paused) {
       this._player.update();
       this._player.draw();
+
+      // Check if the player is standing on a trigger
+      for (Trigger t in this._triggers) {
+        int x = t.col * this._tileWidth;
+        int y = t.row * this._tileHeight;
+        GameObject o = this._player;
+        if (
+            (
+                o.x + o.collisionXOffset+ o.collisionWidth >= x &&
+                o.x + o.collisionXOffset <= x + o.tileWidth
+            )
+            &&
+            (
+                o.y + o.collisionYOffset + o.collisionHeight >= y &&
+                o.y + o.collisionYOffset <= y + o.tileHeight
+            )
+          ) {
+          o.listen(t.event);
+        }
+      }
     }
 
 
