@@ -23,6 +23,9 @@ class Level1 extends Level {
   Region npcRegion2;
   Region npcRegion3;
   Region npcRegion4;
+  Region npcRegion5;
+  Region npcRegion6;
+  Region npcRegion7;
 
   final int _spawnCar1At = 200;
   final int _spawnCar2At = 300;
@@ -155,11 +158,30 @@ class Level1 extends Level {
       }
     }
 
+    // Parking lot region
     this.npcRegion1 = new Region(
       0,
       10 * this.tileWidth,
       10 * this.tileHeight,
       30 * this.tileHeight
+    );
+    this.npcRegion2 = new Region(
+      17 * this.tileWidth,
+      20 * this.tileWidth,
+      0,
+      30 * this.tileHeight
+    );
+    this.npcRegion3 = new Region(
+        33 * this.tileWidth,
+        38 * this.tileWidth,
+        14 * this.tileHeight,
+        30 * this.tileHeight
+    );
+    this.npcRegion4 = new Region(
+      33 * this.tileWidth,
+      40 * this.tileWidth,
+      10 * this.tileHeight,
+      12 * this.tileHeight
     );
 
     /**

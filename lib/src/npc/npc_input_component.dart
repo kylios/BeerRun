@@ -31,19 +31,23 @@ class NPCInputComponent extends Component {
     Random r = new Random();
 
     if (changeDirs) {
-      this._maxPaces = r.nextInt(40);
+      this._maxPaces = r.nextInt(40) + 100;
       this._paces = 0;
 
-      int d = r.nextInt(4);
+      int d = r.nextInt(2);
 
-      if (d == DIR_UP.direction) {
-        obj.moveUp();
-      } else if (d == DIR_DOWN.direction) {
-        obj.moveDown();
-      } else if (d == DIR_LEFT.direction) {
-        obj.moveLeft();
-      } else if (d == DIR_RIGHT.direction) {
-        obj.moveRight();
+      if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
+        if (d == 0) {
+          obj.moveLeft();
+        } else {
+          obj.moveRight();
+        }
+      } else {
+        if (d == 0) {
+          obj.moveUp();
+        } else {
+          obj.moveDown();
+        }
       }
       this._paces++;
     } else {
@@ -59,6 +63,8 @@ class NPCInputComponent extends Component {
         } else if (obj.dir == DIR_RIGHT) {
           obj.moveRight();
         }
+      } else if (r.nextInt(2) == 0) {
+        this._paces = this._maxPaces;
       }
     }
   }

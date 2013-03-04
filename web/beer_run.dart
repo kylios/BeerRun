@@ -145,19 +145,39 @@ void main() {
   NPC npc1 = new NPC(level, DIR_RIGHT, 0, 400);
   NPC npc2 = new NPC(level, DIR_DOWN, 20, 320);
   NPC npc3 = new NPC(level, DIR_LEFT, 160, 420);
+  NPC npc4 = new NPC(level, DIR_UP, 17 * level.tileWidth, 20);
+  NPC npc5 = new NPC(level, DIR_DOWN, 17 * level.tileWidth, 28 * level.tileHeight);
+  NPC npc6 = new NPC(level, DIR_UP, 36 * level.tileWidth, 25 * level.tileHeight);
+  NPC npc7 = new NPC(level, DIR_RIGHT, 33 * level.tileWidth, 11 * level.tileHeight);
   npc1.speed = 2;
   npc2.speed = 2;
   npc3.speed = 3;
+  npc4.speed = 2;
+  npc5.speed = 2;
+  npc6.speed = 1;
+  npc7.speed = 1;
   npc1.setControlComponent(new NPCInputComponent(level.npcRegion1));
   npc2.setControlComponent(new NPCInputComponent(level.npcRegion1));
   npc3.setControlComponent(new NPCInputComponent(level.npcRegion1));
+  npc4.setControlComponent(new NPCInputComponent(level.npcRegion2));
+  npc5.setControlComponent(new NPCInputComponent(level.npcRegion2));
+  npc6.setControlComponent(new NPCInputComponent(level.npcRegion3));
+  npc7.setControlComponent(new NPCInputComponent(level.npcRegion4));
   npc1.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
   npc2.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
   npc3.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
+  npc4.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
+  npc5.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
+  npc6.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
+  npc7.setDrawingComponent(new DrawingComponent(canvasManager, canvasDrawer, false));
 
   level.addObject(npc1);
   level.addObject(npc2);
   level.addObject(npc3);
+  level.addObject(npc4);
+  level.addObject(npc5);
+  level.addObject(npc6);
+  level.addObject(npc7);
 
   ui = new UI(query("#root_pane"), player);
 
