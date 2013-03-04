@@ -11,9 +11,5 @@ class Trigger {
 
   int get row => this._row;
   int get col => this._col;
-  GameEvent get event => this.event;
-
-  void applyToObject(GameObject obj) {
-    obj.listen(this._event);
-  }
+  GameEvent get event => this._event;
 }

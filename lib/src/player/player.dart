@@ -5,6 +5,8 @@ class Player extends GameObject implements ComponentListener {
   static final int BUZZ_PER_BEER = 1;
   static final int MAX_DRUNKENNESS = 10;
   static final int MIN_DRUNKENNESS = 0;
+  static final int DAMAGE_INTERVAL = 200;
+  static final int BUZZ_TIME = 35000;
 
 
   bool _damaged = false;
@@ -14,10 +16,13 @@ class Player extends GameObject implements ComponentListener {
 
   bool _wasHitByCar = false;
   bool _wasBeerStolen = false;
+  bool _beenToStore = false;
+  int _beersDelivered = 0;
 
   int _health = 3;
   int _beers = 0;
   int _buzz = 3;  // out of 10;
+  int _buzzDecreaseTime = 0;
 
   int _nextBuzzDecreaseTS = new DateTime.now().millisecondsSinceEpoch ~/ 1000 + 35;
 
@@ -59,9 +64,19 @@ class Player extends GameObject implements ComponentListener {
   void addBeers(int beers) {
     this._beers += beers;
   }
+  void resetBeersDelivered() {
+
+    this._beersDelivered = 0;
+  }
 
   void update() {
+    DateTime now = new DateTime.now();
     if ( ! this.isRemoved) {
+
+      if (this._buzzDecreaseTime == 0) {
+        this._buzzDecreaseTime = now.millisecondsSinceEpoch +
+            Player.BUZZ_TIME;
+      }
 
       // Reset some single-frame state variables
       this._wasHitByCar = false;
@@ -72,19 +87,28 @@ class Player extends GameObject implements ComponentListener {
 
       // Make him blink when hit
       if (this._damaged) {
-        DateTime now = new DateTime.now();
         if (this._damagedUntil <= now.millisecondsSinceEpoch) {
           this._damaged = false;
           this._damageInterval = 0;
         } else {
           if (this._damageInterval <= now.millisecondsSinceEpoch) {
-            this._damageInterval = now.millisecondsSinceEpoch + 400;
+            this._damageInterval = now.millisecondsSinceEpoch +
+                Player.DAMAGE_INTERVAL;
           }
         }
       }
 
       if (this._beerStolenUntil <= new DateTime.now().millisecondsSinceEpoch) {
         this._beerStolenUntil = 0;
+      }
+
+      if (this._buzzDecreaseTime <= now.millisecondsSinceEpoch) {
+        this._buzz--;
+        this._buzzDecreaseTime = now.millisecondsSinceEpoch + Player.BUZZ_TIME;
+        this.level.addAnimation(new TextAnimation(
+           "NEED.. MORE.. BEER..",
+           this.x, this.y, 3
+        ));
       }
     }
   }
@@ -97,7 +121,8 @@ class Player extends GameObject implements ComponentListener {
         this._health -= damage;
         this._damaged = true;
         DateTime now = new DateTime.now();
-        this._damageInterval = now.millisecondsSinceEpoch + 400;
+        this._damageInterval = now.millisecondsSinceEpoch +
+            Player.DAMAGE_INTERVAL;
         this._damagedUntil = now.millisecondsSinceEpoch + 3000;
         this.level.addAnimation(
             new TextAnimation("OUCH!", this.x, this.y, 2));
@@ -123,11 +148,19 @@ class Player extends GameObject implements ComponentListener {
             new TextAnimation("+${diff} BEERS!", this.x, this.y, 2));
       }
       this._beers = 24;
-    } else if (e.type == GameEvent.PARTY_ARRIVAL_EVENT) {
+      this._beenToStore = true;
+    } else if (e.type == GameEvent.PARTY_ARRIVAL_EVENT && this._beenToStore) {
       // Only trigger if you've gone to the store at least once
+
+      // Gain score
+      this._beersDelivered = this._beers;
+      this._beers = 0;
+      this.level.addAnimation(
+          new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
     }
   }
 
+  /*
   void beerStolen() {
     if (this._beers <= 0) {
       return;
@@ -135,6 +168,7 @@ class Player extends GameObject implements ComponentListener {
     this._beers--;
     this._wasBeerStolen = true;
   }
+  */
 
   void drinkBeer() {
     if (this._beers <= 0) {
@@ -142,6 +176,11 @@ class Player extends GameObject implements ComponentListener {
     }
     this._beers--;
     this._buzz += BUZZ_PER_BEER;
+
+    this.level.addAnimation(new TextAnimation(
+        "+${BUZZ_PER_BEER} BUZZ", this.x, this.y - 16, 3));
+    this.level.addAnimation(new TextAnimation(
+        "-1 BEER", this.x, this.y + 8, 3));
   }
 
   void spawnBullet() {
@@ -168,6 +207,7 @@ class Player extends GameObject implements ComponentListener {
 
   bool get wasHitByCar => this._wasHitByCar;
   bool get wasBeerStolen => this._wasBeerStolen;
+  int get beersDelivered => this._beersDelivered;
 
   int get tileWidth => 64;
   int get tileHeight => 64;

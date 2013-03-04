@@ -4,6 +4,7 @@ class UI {
 
   WindowView _rootView;
   Player _player;
+  bool _opened = false;
 
   // This is to hold onto the player's input component while UI is showing
   Component _tmpInputComponent = null;
@@ -17,9 +18,14 @@ class UI {
     this._player.setControlComponent(this._tmpInputComponent);
     this._rootView.onClose();
     this._player.level.unPause();
+    this._opened = false;
   }
 
   void showView(View v, {bool pause: false, int seconds: 0}) {
+
+    if (this._opened) {
+      this.closeWindow();
+    }
 
     if (pause) {
       this._player.level.pause();
@@ -39,6 +45,7 @@ class UI {
       // Pause gameplay too
       this._player.setControlComponent(new NullInputComponent());
     }
+    this._opened = true;
   }
 }
 

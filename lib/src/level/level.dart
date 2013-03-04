@@ -208,19 +208,21 @@ class Level implements ComponentListener {
       for (Trigger t in this._triggers) {
         int x = t.col * this._tileWidth;
         int y = t.row * this._tileHeight;
+        this._drawer.drawRect(x, y, this._tileWidth, this.tileHeight);
         GameObject o = this._player;
         if (
             (
-                o.x + o.collisionXOffset+ o.collisionWidth >= x &&
-                o.x + o.collisionXOffset <= x + o.tileWidth
+                o.x + o.collisionXOffset + o.collisionWidth >= x &&
+                o.x + o.collisionXOffset <= x + this.tileWidth
             )
             &&
             (
                 o.y + o.collisionYOffset + o.collisionHeight >= y &&
-                o.y + o.collisionYOffset <= y + o.tileHeight
+                o.y + o.collisionYOffset <= y + this.tileHeight
             )
           ) {
-          o.listen(t.event);
+            GameEvent e = t.event;
+            o.listen(e);
         }
       }
     }

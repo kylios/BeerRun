@@ -541,6 +541,7 @@ class Level1 extends Level {
 
 
     // Add level triggers
+
     GameEvent beerStoreEvent = new GameEvent();
     beerStoreEvent.type = GameEvent.BEER_STORE_EVENT;
     beerStoreEvent.value = 24;
@@ -549,11 +550,13 @@ class Level1 extends Level {
 
     GameEvent partyEvent = new GameEvent();
     partyEvent.type = GameEvent.PARTY_ARRIVAL_EVENT;
-    Trigger partyTrigger = new Trigger(partyEvent, 4, 36);
+    Trigger partyTrigger = new Trigger(partyEvent, 6, 36);
 
     this.addTrigger(beerStoreTrigger);
     this.addTrigger(beerStoreTrigger2);
     this.addTrigger(partyTrigger);
+
+
   }
 
 

@@ -67,13 +67,18 @@ void _loop(var _) {
         pause: false, seconds: 5);
   }
 
+  if (player.beersDelivered > 0) {
+    player.resetBeersDelivered();
+    ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"), pause: true);
+  }
+
   // Draw HUD
   // TODO: HUD class?
   canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
   canvasDrawer.fillRect(0, 0, 180, 92, 8, 8);
   canvasDrawer.backgroundColor = "black";
   canvasDrawer.font = "bold 22px sans-serif";
-  canvasDrawer.drawText("Drunkenness: ${player.drunkenness}", 8, 26);
+  canvasDrawer.drawText("BAC: ${player.drunkenness.toDouble() / 10.0 * 0.24}", 8, 26);
   canvasDrawer.drawText("Beers: ${player.beers}", 8, 52);
   canvasDrawer.drawText("HP: ${player.health}", 8, 80);
 
