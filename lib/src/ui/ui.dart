@@ -33,12 +33,16 @@ class UI {
 
     this._tmpInputComponent = this._player.getControlComponent();
 
+    if (seconds > 0) {
+      this._rootView.hideX();
+    }
     v.onDraw(this._rootView.rootElement);
     this._rootView.show();
 
     if (seconds != 0) {
       new Future.delayed(seconds * 1000, () {
         this.closeWindow();
+        this._rootView.showX();
       });
     }
     else {

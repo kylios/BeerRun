@@ -37,6 +37,13 @@ class WindowView extends View {
     this.clear();
   }
 
+  void hideX() {
+    this._closeButton.style.display = "none";
+  }
+  void showX() {
+    this._closeButton.style.display = "block";
+  }
+
   onDraw(Element root) {
 
     DivElement outer = new DivElement();
