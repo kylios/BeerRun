@@ -15,7 +15,6 @@ class Player extends GameObject implements ComponentListener {
   bool _wasHitByCar = false;
   bool _wasBeerStolen = false;
 
-
   int _health = 3;
   int _beers = 0;
   int _buzz = 3;  // out of 10;
@@ -57,6 +56,10 @@ class Player extends GameObject implements ComponentListener {
     this._walkSprites[DIR_RIGHT.direction] = new SpriteAnimation(walkRight);
   }
 
+  void addBeers(int beers) {
+    this._beers += beers;
+  }
+
   void update() {
     if ( ! this.isRemoved) {
 
@@ -69,11 +72,14 @@ class Player extends GameObject implements ComponentListener {
 
       // Make him blink when hit
       if (this._damaged) {
-        this._damageInterval++;
-
-        if (this._damagedUntil <= new DateTime.now().millisecondsSinceEpoch) {
+        DateTime now = new DateTime.now();
+        if (this._damagedUntil <= now.millisecondsSinceEpoch) {
           this._damaged = false;
           this._damageInterval = 0;
+        } else {
+          if (this._damageInterval <= now.millisecondsSinceEpoch) {
+            this._damageInterval = now.millisecondsSinceEpoch + 400;
+          }
         }
       }
 
@@ -90,7 +96,11 @@ class Player extends GameObject implements ComponentListener {
         this._wasHitByCar = true;
         this._health -= damage;
         this._damaged = true;
-        this._damagedUntil = new DateTime.now().millisecondsSinceEpoch + 2000;
+        DateTime now = new DateTime.now();
+        this._damageInterval = now.millisecondsSinceEpoch + 400;
+        this._damagedUntil = now.millisecondsSinceEpoch + 3000;
+        this.level.addAnimation(
+            new TextAnimation("OUCH!", this.x, this.y, 2));
       }
       if (this._health <= 0) {
         this.level.addAnimation(
@@ -103,6 +113,8 @@ class Player extends GameObject implements ComponentListener {
         this._wasBeerStolen = true;
         this._beerStolenUntil = new DateTime.now().millisecondsSinceEpoch + 1000;
         this._beers -= e.value;
+        this.level.addAnimation(
+            new TextAnimation("-1 BEER!", this.x, this.y, 2));
       }
     }
   }
@@ -152,14 +164,17 @@ class Player extends GameObject implements ComponentListener {
   int get tileHeight => 64;
 
   Sprite getMoveSprite() {
-    if (this._damaged && this._damageInterval % 3 == 0) {
+    if (this._damaged && this._damageInterval >
+        new DateTime.now().millisecondsSinceEpoch) {
       return null;
     }
     return this._walkSprites[this.dir.direction].getNext();
   }
   Sprite getStaticSprite() {
+
     this._walkSprites[this.dir.direction].reset();
-    if (this._damaged && this._damageInterval % 3 == 0) {
+    if (this._damaged && this._damageInterval >
+        new DateTime.now().millisecondsSinceEpoch) {
       return null;
     }
     return this._walkSprites[this.dir.direction].getCur();

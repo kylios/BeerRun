@@ -21,5 +21,5 @@ abstract class DrawingInterface {
 
   void fillRect(int x, int y, int width, int height, [int radiusX, int radiusY]);
 
-  void drawText(String text, int x, int y);
+  void drawText(String text, int x, int y, {relative: false});
 }

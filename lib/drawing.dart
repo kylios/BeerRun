@@ -6,6 +6,7 @@ import 'package:BeerRun/canvas_manager.dart';
 import 'package:BeerRun/component.dart';
 import 'package:BeerRun/input.dart';
 import 'package:BeerRun/game.dart';
+import 'package:BeerRun/animation.dart';
 
 part 'src/drawing/drawing_interface.dart';
 part 'src/drawing/sprite.dart';

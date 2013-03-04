@@ -8,6 +8,6 @@ import 'package:BeerRun/game.dart';
 import 'package:BeerRun/component.dart';
 import 'package:BeerRun/player.dart';
 import 'package:BeerRun/bullet.dart';
+import 'package:BeerRun/animation.dart';
 
-part 'src/level/level_animation.dart';
 part 'src/level/level.dart';

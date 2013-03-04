@@ -4,8 +4,9 @@ import 'dart:html';
 
 import 'package:BeerRun/level.dart';
 import 'package:BeerRun/drawing.dart';
+import 'package:BeerRun/animation.dart';
 
-class Explosion extends LevelAnimation {
+class Explosion extends GraphicAnimation {
 
   factory Explosion.createAt(int x, int y, int width, int height) {
     SpriteSheet sheet = new SpriteSheet('img/Explosion.png', 128, 128);
@@ -28,12 +29,13 @@ class Explosion extends LevelAnimation {
       sheet.spriteAt(384, 384)
                             ];
 
-    return new Explosion._fromFactory(sprites, x, y, width, height);
+    SpriteAnimation anim = new SpriteAnimation(sprites, false);
+
+    return new Explosion._fromFactory(anim, x, y, width, height);
   }
 
-
-  Explosion._fromFactory(List<Sprite> sprites, x, y, width, height) :
-    super(sprites, x, y, width, height, false);
+  Explosion._fromFactory(SpriteAnimation sprites, x, y, width, height) :
+    super(sprites, x, y, width, height);
 
 }
 

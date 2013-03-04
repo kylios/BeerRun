@@ -157,11 +157,16 @@ class CanvasDrawer implements DrawingInterface {
 
   }
 
-  void drawText(String text, int x, int y) {
+  void drawText(String text, int x, int y, {relative: false}) {
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
     c.font = this.font;
     c.fillStyle = this.backgroundColor;
+
+    if (relative) {
+      x -= this._offsetX;
+      y -= this._offsetY;
+    }
 
     c.fillText(text, x, y);
   }

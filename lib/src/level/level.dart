@@ -20,7 +20,7 @@ class Level implements ComponentListener {
   List<GameObject> _objects;
   Player _player;
 
-  List<LevelAnimation> _animations;
+  List<Animation> _animations;
 
   bool _paused = false;
 
@@ -29,7 +29,7 @@ class Level implements ComponentListener {
   {
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
-    this._animations = new List<LevelAnimation>();
+    this._animations = new List<Animation>();
     this._blocked = new List<bool>
       .fixedLength(this._rows * this._cols, fill: false);
   }
@@ -93,7 +93,7 @@ class Level implements ComponentListener {
     this.addObject(p);
   }
 
-  void addAnimation(LevelAnimation a) {
+  void addAnimation(Animation a) {
     this._animations.add(a);
   }
 
@@ -212,11 +212,10 @@ class Level implements ComponentListener {
 
     if ( ! this._paused) {
       // Process any animations going on
-      this._animations = new List<LevelAnimation>.from(
-          this._animations.where((LevelAnimation a) {
-            this._drawer.drawSprite(a.getNext(), a.x, a.y,
-                a.tileWidth, a.tileHeight);
-            return ! a.isDone();
+      this._animations = new List<Animation>.from(
+          this._animations.where((Animation a) {
+            a.drawNext(this._drawer);
+            return ! a.isDone;
           })
       );
     }
