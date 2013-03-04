@@ -37,6 +37,11 @@ int endtime = 0;
 // Notification flags.
 bool notifyCar = true;
 bool notifyTheft = true;
+bool gameOver = false;
+
+void onGameOver() {
+
+}
 
 void _loop(var _) {
 
@@ -72,20 +77,36 @@ void _loop(var _) {
     ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"), pause: true);
   }
 
+  if (player.drunkenness <= 0) {
+    ui.showView(new Dialog("You're too sober.  You got bored and go home.  GAME OVER!"), pause: true);
+    gameOver = true;
+  } else if (player.drunkenness >= 10) {
+    ui.showView(new Dialog("You black out like a dumbass, before you even get to the party.  GAME OVER!"), pause: true);
+    gameOver = true;
+  }
+  if (player.health == 0) {
+    ui.showView(new Dialog("You are dead.  GAME OVER!"), pause: true);
+    gameOver = true;
+  }
+
   // Draw HUD
   // TODO: HUD class?
   canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
   canvasDrawer.fillRect(0, 0, 180, 92, 8, 8);
   canvasDrawer.backgroundColor = "black";
   canvasDrawer.font = "bold 22px sans-serif";
-  canvasDrawer.drawText("BAC: ${player.drunkenness.toDouble() / 10.0 * 0.24}", 8, 26);
+  canvasDrawer.drawText("BAC: ${(player.drunkenness.toDouble() / 10.0 * 0.24).toStringAsFixed(2)}%", 8, 26);
   canvasDrawer.drawText("Beers: ${player.beers}", 8, 52);
   canvasDrawer.drawText("HP: ${player.health}", 8, 80);
 
   endtime = new DateTime.now().millisecondsSinceEpoch;
 
-
-  window.requestAnimationFrame(_loop);
+  if (gameOver) {
+    onGameOver();
+    return;
+  } else {
+    window.requestAnimationFrame(_loop);
+  }
 }
 
 void main() {

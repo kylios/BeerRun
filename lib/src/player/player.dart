@@ -105,10 +105,12 @@ class Player extends GameObject implements ComponentListener {
       if (this._buzzDecreaseTime <= now.millisecondsSinceEpoch) {
         this._buzz--;
         this._buzzDecreaseTime = now.millisecondsSinceEpoch + Player.BUZZ_TIME;
-        this.level.addAnimation(new TextAnimation(
-           "NEED.. MORE.. BEER..",
-           this.x, this.y, 3
-        ));
+        if (this._buzz <= 3) {
+          this.level.addAnimation(new TextAnimation(
+             "NEED.. MORE.. BEER..",
+             this.x, this.y, 3
+          ));
+        }
       }
     }
   }
