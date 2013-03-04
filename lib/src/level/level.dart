@@ -124,10 +124,12 @@ class Level implements ComponentListener {
     int pos = this._posToIdx(row, col);
     if (this._layer == -1 ||
         pos < 0 ||
+        row >= this._rows ||
+        col >= this._cols ||
         pos >= this._blocked.length)
     {
       // Keep us on the screen
-      return false;
+      return true;
     }
     return this._blocked[pos];
   }
