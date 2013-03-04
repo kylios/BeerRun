@@ -179,6 +179,8 @@ class Player extends GameObject implements ComponentListener {
     }
     this._beers--;
     this._buzz += BUZZ_PER_BEER;
+    this._buzzDecreaseTime =
+        new DateTime.now().millisecondsSinceEpoch + Player.BUZZ_TIME;
 
     this.level.addAnimation(new TextAnimation(
         "+${BUZZ_PER_BEER} BUZZ", this.x, this.y - 16, 3));

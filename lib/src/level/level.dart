@@ -224,7 +224,7 @@ class Level implements ComponentListener {
             )
           ) {
             GameEvent e = t.event;
-            o.listen(e);
+            new Timer(0, (var _) => o.listen(e));
         }
       }
     }

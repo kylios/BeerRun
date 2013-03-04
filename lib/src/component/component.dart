@@ -8,7 +8,7 @@ abstract class Component {
 
   void broadcast(GameEvent e, Collection<ComponentListener> listeners) {
     for (ComponentListener l in listeners) {
-      l.listen(e);
+      new Timer(0, (var _) => l.listen(e));
     }
   }
 }

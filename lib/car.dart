@@ -1,6 +1,7 @@
 library car;
 
 import 'dart:html';
+import 'dart:async';
 
 import 'package:BeerRun/game.dart';
 import 'package:BeerRun/input.dart';

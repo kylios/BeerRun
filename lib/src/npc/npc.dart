@@ -53,7 +53,7 @@ class NPC extends GameObject implements ComponentListener {
           GameEvent e = new GameEvent();
           e.type = GameEvent.BEER_STOLEN_EVENT;
           e.value = 1;
-          obj.listen(e);
+          new Timer(0, (var _) => obj.listen(e));
         }
       }
     }
@@ -64,7 +64,7 @@ class NPC extends GameObject implements ComponentListener {
       if ( ! this._damaged) {
         this._health -= e.value;
         this._damaged = true;
-        this._damagedUntil = new Date.now().millisecondsSinceEpoch + 2000;
+        this._damagedUntil = new DateTime.now().millisecondsSinceEpoch + 2000;
       }
       if (this._health <= 0) {
 

@@ -1,6 +1,7 @@
 library level;
 
 import 'dart:html';
+import 'dart:async';
 
 import 'package:BeerRun/drawing.dart';
 import 'package:BeerRun/canvas_manager.dart';

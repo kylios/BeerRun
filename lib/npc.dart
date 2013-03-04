@@ -2,6 +2,7 @@ library npc;
 
 import 'dart:html';
 import 'dart:math';
+import 'dart:async';
 
 import 'package:BeerRun/game.dart';
 import 'package:BeerRun/component.dart';
