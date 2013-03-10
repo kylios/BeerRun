@@ -40,7 +40,7 @@ class UI {
     this._rootView.show();
 
     if (seconds != 0) {
-      new Future.delayed(seconds * 1000, () {
+      new Future.delayed(new Duration(seconds: seconds), () {
         this.closeWindow();
         this._rootView.showX();
       });

@@ -18,7 +18,7 @@ class Car extends GameObject {
       GameEvent e = new GameEvent();
       e.type = GameEvent.TAKE_HIT_EVENT;
       e.value = 1;
-      new Timer(0, (var _) => obj.listen(e));
+      Timer.run(() => obj.listen(e));
     }
   }
 

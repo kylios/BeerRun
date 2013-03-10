@@ -9,6 +9,8 @@ class PlayerInputComponent extends Component
   Random _rng;
 
   Map<int, bool> _pressed;
+  List<int> _accel;
+  List<bool> _dirsPressed;
   DrawingComponent _drawer;
 
   bool _spawnBullet = false;
@@ -20,6 +22,8 @@ class PlayerInputComponent extends Component
 
   PlayerInputComponent(this._drawer) {
     this._pressed = new Map<int, bool>();
+    this._accel = new List<int>.filled(4, 0);
+    this._dirsPressed = new List<bool>.filled(4, false);
     this._rng = new Random();
   }
 
@@ -58,12 +62,10 @@ class PlayerInputComponent extends Component
    *
    * Algorithm:
    *
-   * if keypressed:
-   *    increment holdKey
-   *
-   * acceleration = holdKey * drunkenness
-   * speed += acceleration
-   *
+   * We'll implement a directional acceleration system.  There will be a
+   * 4-element array of ints, representing the acceleration in each given
+   * direction.  Each frame, the acceleration is applied to the player's
+   * position.
    *
    *
    *
@@ -71,6 +73,8 @@ class PlayerInputComponent extends Component
    *
    */
   void _moveObj(Player obj, Direction dir) {
+
+
 
     if (this._holdFrames == 0) {
       obj.speed = 4;
@@ -145,9 +149,6 @@ class PlayerInputComponent extends Component
       speed = obj.speed;
     }
 
-    int row = obj.y ~/ obj.level.tileHeight;
-    int col = obj.x ~/ obj.level.tileWidth;
-
     obj.setPos(obj.x - speed, obj.y);
     obj.faceLeft();
   }
@@ -155,9 +156,6 @@ class PlayerInputComponent extends Component
     if (! ?speed) {
       speed = obj.speed;
     }
-
-    int row = obj.y ~/ obj.level.tileHeight;
-    int col = obj.x ~/ obj.level.tileWidth;
 
     obj.setPos(obj.x + speed, obj.y);
     obj.faceRight();
@@ -167,9 +165,6 @@ class PlayerInputComponent extends Component
       speed = obj.speed;
     }
 
-    int row = obj.y ~/ obj.level.tileHeight;
-    int col = obj.x ~/ obj.level.tileWidth;
-
     obj.setPos(obj.x, obj.y - speed);
     obj.faceUp();
   }
@@ -178,48 +173,113 @@ class PlayerInputComponent extends Component
       speed = obj.speed;
     }
 
-    int row = obj.y ~/ obj.level.tileHeight;
-    int col = obj.x ~/ obj.level.tileWidth;
-
     obj.setPos(obj.x, obj.y + speed);
     obj.faceDown();
   }
 
   void update(Player obj) {
 
+    for (int i = 0; i < 4; i++) {
+      this._dirsPressed[i] = false;
+    }
     if ((this._pressed[KeyboardListener.KEY_UP] == true ||
-        this._pressed[KeyboardListener.KEY_W] == true) ||
-        (this._holdFrames > 0 && obj.dir == DIR_UP)) {
+        this._pressed[KeyboardListener.KEY_W] == true)) {
 
-      this._moveObj(obj, DIR_UP);
+      this._accel[DIR_UP.direction] += obj.speed;
+      this._dirsPressed[DIR_UP.direction] = true;
+      obj.dir = DIR_UP;
+      this._holdFrames++;
     } else if ((this._pressed[KeyboardListener.KEY_DOWN] == true ||
-        this._pressed[KeyboardListener.KEY_S] == true) ||
-        (this._holdFrames > 0 && obj.dir == DIR_DOWN)) {
+        this._pressed[KeyboardListener.KEY_S] == true)) {
 
-      this._moveObj(obj, DIR_DOWN);
+      this._accel[DIR_DOWN.direction] += obj.speed;
+      this._dirsPressed[DIR_DOWN.direction]= true;
+      obj.dir = DIR_DOWN;
+      this._holdFrames++;
     }
     if ((this._pressed[KeyboardListener.KEY_LEFT] == true ||
-        this._pressed[KeyboardListener.KEY_A] == true) ||
-        (this._holdFrames > 0 && obj.dir == DIR_LEFT)) {
+        this._pressed[KeyboardListener.KEY_A] == true)) {
 
-      this._moveObj(obj, DIR_LEFT);
+      this._accel[DIR_LEFT.direction] += obj.speed;
+      this._dirsPressed[DIR_LEFT.direction]= true;
+      obj.dir = DIR_LEFT;
+      this._holdFrames++;
     } else if ((this._pressed[KeyboardListener.KEY_RIGHT] == true ||
-        this._pressed[KeyboardListener.KEY_D] == true) ||
-        (this._holdFrames > 0 && obj.dir == DIR_RIGHT)) {
+        this._pressed[KeyboardListener.KEY_D] == true)) {
 
-      this._moveObj(obj, DIR_RIGHT);
+      this._accel[DIR_RIGHT.direction] += obj.speed;
+      this._dirsPressed[DIR_RIGHT.direction]= true;
+      obj.dir = DIR_RIGHT;
+      this._holdFrames++;
     }
 
+    int playerX = obj.x;
+    int playerY = obj.y;
 
-    // Translate the character's x,y into row and col
+    // Increase the acceleration in the direction that's being pressed.  For
+    // every other direction, bring the acceleration back to zero.
+    int speed = 0;
+    for (int i = 0; i < 4; i++) {
+      if (this._dirsPressed[i]) {
+        if ((11 - obj.drunkenness) == this._holdFrames) {
+          this._accel[i] += obj.speed;
+          if (this._accel[i] > obj.drunkenness * 2) {
+            this._accel[i] = obj.drunkenness * 2;
+          }
+          this._holdFrames = 0;
+        }
+      } else if (this._accel[i] > 0) {
+        this._accel[i]--;
+      } else if (this._accel[i] < 0) {
+        this._accel[i]++;
+      }
+      speed += this._accel[i];
+    }
 
-    int oldRow = obj.oldY ~/ obj.level.tileHeight;
-    int oldCol = obj.oldX ~/ obj.level.tileWidth;
+    playerX = playerX + (this._accel[DIR_RIGHT.direction] - this._accel[DIR_LEFT.direction]);
+    playerY = playerY + (this._accel[DIR_DOWN.direction] - this._accel[DIR_UP.direction]);
 
-    bool up = (obj.y < obj.oldY);
-    bool down = (obj.y > obj.oldY);
-    bool left = (obj.x < obj.oldX);
-    bool right = (obj.x > obj.oldX);
+  // Do a wobble thing, back and forth, because you're drunk
+    if (speed > 0) {
+      int wobble = this._rng.nextInt(21 - this._accel[obj.dir.direction]);
+      if (wobble == 0)
+      {
+        Direction wobbleDir;
+        int dir = this._rng.nextInt(2);
+        if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
+          if (dir == 0) {
+            playerX -= 2;
+          } else {
+            playerX += 2;
+          }
+        } else {
+          if (dir == 0) {
+            playerY -= 2;
+          } else {
+            playerY += 2;
+          }
+        }
+      }
+    }
+
+    obj.setPos(playerX, playerY);
+
+
+
+    // Handle collision detection
+    int row = (obj.y + obj.collisionYOffset) ~/ obj.level.tileHeight;
+    int col = (obj.x + obj.collisionXOffset) ~/ obj.level.tileWidth;
+    int row1 = (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/
+        obj.level.tileHeight;
+    int col1 = (obj.x + obj.collisionXOffset + obj.collisionWidth) ~/
+        obj.level.tileWidth;
+
+    if (obj.level.isBlocking(row, col) ||
+        obj.level.isBlocking(row1, col) ||
+        obj.level.isBlocking(row, col1) ||
+        obj.level.isBlocking(row1, col1)) {
+      obj.setPos(obj.oldX, obj.oldY);
+    }
 
     if (this._bulletCooldown > 0) {
       this._bulletCooldown--;

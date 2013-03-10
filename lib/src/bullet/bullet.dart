@@ -49,7 +49,7 @@ class Bullet extends GameObject {
           GameEvent e = new GameEvent();
           e.type = GameEvent.TAKE_HIT_EVENT;
           e.value = 1;
-          new Timer(0, (var _) => o.listen(e));
+          Timer.run(() => o.listen(e));
           this.remove();
         }
       } else {

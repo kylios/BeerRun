@@ -15,7 +15,7 @@ abstract class GameObject implements ComponentListener {
   int collisionWidth = 0;
   int collisionHeight = 0;
 
-  Direction _dir;
+  Direction dir;
 
   Component _control;
 
@@ -35,7 +35,6 @@ abstract class GameObject implements ComponentListener {
   int get y => this._y;
   int get oldX => this._oldX;
   int get oldY => this._oldY;
-  Direction get dir => this._dir;
   int get numSteps => 9;
   Level get level => this._level;
   bool get isRemoved => this._remove;
@@ -45,7 +44,7 @@ abstract class GameObject implements ComponentListener {
     this._remove = true;
   }
 
-  GameObject(this._dir, this._x, this._y);
+  GameObject(this.dir, this._x, this._y);
 
   void setControlComponent(Component c) {
     this._control = c;
@@ -88,42 +87,42 @@ abstract class GameObject implements ComponentListener {
     if (! ?speed) {
       speed = this.speed;
     }
-    this._dir = DIR_UP;
+    this.dir = DIR_UP;
     this._y -= speed;
   }
   void moveDown([int speed]) {
     if (! ?speed) {
       speed = this.speed;
     }
-    this._dir = DIR_DOWN;
+    this.dir = DIR_DOWN;
     this._y += speed;
   }
   void moveLeft([int speed]) {
     if (! ?speed) {
       speed = this.speed;
     }
-    this._dir = DIR_LEFT;
+    this.dir = DIR_LEFT;
     this._x -= speed;
   }
   void moveRight([int speed]) {
     if (! ?speed) {
       speed = this.speed;
     }
-    this._dir = DIR_RIGHT;
+    this.dir = DIR_RIGHT;
     this._x += speed;
   }
 
   void faceUp() {
-    this._dir = DIR_UP;
+    this.dir = DIR_UP;
   }
   void faceDown() {
-    this._dir = DIR_DOWN;
+    this.dir = DIR_DOWN;
   }
   void faceLeft() {
-    this._dir = DIR_LEFT;
+    this.dir = DIR_LEFT;
   }
   void faceRight() {
-    this._dir = DIR_RIGHT;
+    this.dir = DIR_RIGHT;
   }
 
   void broadcast(GameEvent e, Collection<ComponentListener> listeners) {

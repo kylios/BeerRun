@@ -141,6 +141,7 @@ void main() {
   level = new Level1(canvasManager, canvasDrawer);
 
   player = new Player(level, DIR_DOWN, 32 * 36, 32 * 5);
+  player.speed = 1;
   player.addBeers(3);
       //16, level.tileHeight * level.rows - 64);
   player.setControlComponent(keyboard);
