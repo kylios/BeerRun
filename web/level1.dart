@@ -10,6 +10,7 @@ import 'package:BeerRun/path.dart';
 import 'package:BeerRun/game.dart';
 import 'package:BeerRun/car.dart';
 import 'package:BeerRun/region.dart';
+import 'package:BeerRun/npc.dart';
 
 class Level1 extends Level {
 
@@ -39,7 +40,8 @@ class Level1 extends Level {
   List<Sprite> _car2Sprites;
 
   Level1(CanvasManager manager, CanvasDrawer drawer) :
-    super(drawer, manager, 30, 40, 32, 32)
+    super(drawer, manager, new Duration(minutes: 3),
+        30, 40, 32, 32)
   {
 
     SpriteSheet road = new SpriteSheet("img/Street.png", 32, 32);
@@ -579,6 +581,57 @@ class Level1 extends Level {
     this.addTrigger(partyTrigger);
 
 
+    // ADD OBJECTS
+    NPC npc1 = new NPC(this, DIR_RIGHT, 0, 400);
+    NPC npc2 = new NPC(this, DIR_DOWN, 20, 320);
+    NPC npc3 = new NPC(this, DIR_LEFT, 160, 420);
+    NPC npc4 = new NPC(this, DIR_UP, 17 * this.tileWidth, 20);
+    NPC npc5 = new NPC(this, DIR_DOWN, 17 * this.tileWidth, 28 * this.tileHeight);
+    NPC npc6 = new NPC(this, DIR_UP, 36 * this.tileWidth, 25 * this.tileHeight);
+    NPC npc7 = new NPC(this, DIR_RIGHT, 33 * this.tileWidth, 11 * this.tileHeight);
+    npc1.speed = 2;
+    npc2.speed = 2;
+    npc3.speed = 3;
+    npc4.speed = 2;
+    npc5.speed = 2;
+    npc6.speed = 1;
+    npc7.speed = 1;
+    npc1.setControlComponent(new NPCInputComponent(this.npcRegion1));
+    npc2.setControlComponent(new NPCInputComponent(this.npcRegion1));
+    npc3.setControlComponent(new NPCInputComponent(this.npcRegion1));
+    npc4.setControlComponent(new NPCInputComponent(this.npcRegion2));
+    npc5.setControlComponent(new NPCInputComponent(this.npcRegion2));
+    npc6.setControlComponent(new NPCInputComponent(this.npcRegion3));
+    npc7.setControlComponent(new NPCInputComponent(this.npcRegion4));
+    npc1.setDrawingComponent(
+        new DrawingComponent(
+            this.canvasManager, this.canvasDrawer, false));
+    npc2.setDrawingComponent(
+        new DrawingComponent(
+            this.canvasManager, this.canvasDrawer, false));
+    npc3.setDrawingComponent(
+        new DrawingComponent(
+            this.canvasManager, this.canvasDrawer, false));
+    npc4.setDrawingComponent(
+        new DrawingComponent(
+            this.canvasManager, this.canvasDrawer, false));
+    npc5.setDrawingComponent(
+        new DrawingComponent(
+            this.canvasManager, this.canvasDrawer, false));
+    npc6.setDrawingComponent(
+        new DrawingComponent(
+            this.canvasManager, this.canvasDrawer, false));
+    npc7.setDrawingComponent(
+        new DrawingComponent(
+            this.canvasManager, this.canvasDrawer, false));
+
+    this.addObject(npc1);
+    this.addObject(npc2);
+    this.addObject(npc3);
+    this.addObject(npc4);
+    this.addObject(npc5);
+    this.addObject(npc6);
+    this.addObject(npc7);
   }
 
 

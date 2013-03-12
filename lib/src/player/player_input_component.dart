@@ -185,14 +185,12 @@ class PlayerInputComponent extends Component
     if ((this._pressed[KeyboardListener.KEY_UP] == true ||
         this._pressed[KeyboardListener.KEY_W] == true)) {
 
-      this._accel[DIR_UP.direction] += obj.speed;
       this._dirsPressed[DIR_UP.direction] = true;
       obj.dir = DIR_UP;
       this._holdFrames++;
     } else if ((this._pressed[KeyboardListener.KEY_DOWN] == true ||
         this._pressed[KeyboardListener.KEY_S] == true)) {
 
-      this._accel[DIR_DOWN.direction] += obj.speed;
       this._dirsPressed[DIR_DOWN.direction]= true;
       obj.dir = DIR_DOWN;
       this._holdFrames++;
@@ -200,14 +198,12 @@ class PlayerInputComponent extends Component
     if ((this._pressed[KeyboardListener.KEY_LEFT] == true ||
         this._pressed[KeyboardListener.KEY_A] == true)) {
 
-      this._accel[DIR_LEFT.direction] += obj.speed;
       this._dirsPressed[DIR_LEFT.direction]= true;
       obj.dir = DIR_LEFT;
       this._holdFrames++;
     } else if ((this._pressed[KeyboardListener.KEY_RIGHT] == true ||
         this._pressed[KeyboardListener.KEY_D] == true)) {
 
-      this._accel[DIR_RIGHT.direction] += obj.speed;
       this._dirsPressed[DIR_RIGHT.direction]= true;
       obj.dir = DIR_RIGHT;
       this._holdFrames++;

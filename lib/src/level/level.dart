@@ -14,19 +14,18 @@ class Level implements ComponentListener {
   CanvasManager _manager;
   DrawingInterface _drawer;
 
+  Duration _duration = null;
+  List<Animation> _animations;
   List<List<Sprite>> _sprites;
-  List<bool> _blocked;
-
   List<GameObject> _objects;
   Player _player;
 
+  List<bool> _blocked;
   List<Trigger> _triggers;
-
-  List<Animation> _animations;
 
   bool _paused = false;
 
-  Level(this._drawer, this._manager,
+  Level(this._drawer, this._manager, this._duration,
       this._rows, this._cols, this._tileWidth, this._tileHeight)
   {
     this._sprites = new List<List<Sprite>>();
@@ -43,6 +42,7 @@ class Level implements ComponentListener {
   int get cols => this._cols;
   CanvasManager get canvasManager => this._manager;
   CanvasDrawer get canvasDrawer => this._drawer;
+  Duration get duration => this._duration;
 
   int _posToIdx(int row, int col) {
     return this._cols * row + col;
