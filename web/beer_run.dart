@@ -43,7 +43,7 @@ int score = 0;
 
 GameManager game;
 
-class GameManager {
+class GameManager implements GameTimerListener {
 
   CanvasManager _canvasManager;
   CanvasDrawer _canvasDrawer;
@@ -59,6 +59,8 @@ class GameManager {
   bool _notifyCar = true;
   bool _notifyTheft = true;
   bool _notifyBored = true;
+
+  bool _continueLoop = true;
 
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
@@ -80,6 +82,8 @@ class GameManager {
     this._canvasManager.addKeyboardListener(playerInput);
 
     this._currentLevel = this._getNextLevel();
+    this._timer = new GameTimer(this._currentLevel.duration);
+    this._timer.addListener(this);
 
     this._player = new Player(this._currentLevel, DIR_DOWN, 32 * 36, 32 * 5);
     this._player.speed = 1;
@@ -93,7 +97,15 @@ class GameManager {
 
   }
 
-  bool update() {
+  bool get continueLoop => this._continueLoop;
+
+  void start() {
+    this._ui.showView(
+        new Dialog("Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to go out and get some BEER if you wanna come to the party.  Oh yea, and we recommend you maintain a healthy buzz.  Good luck!"));
+    this._timer.startCountdown();
+  }
+
+  void update() {
 
     this._canvasDrawer.clear();
     this._currentLevel.update();
@@ -138,6 +150,8 @@ class GameManager {
       gameOver = true;
     }
 
+    Duration duration = this._timer.getRemainingTime();
+
     // Draw HUD
     // TODO: HUD class?
     this._canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
@@ -147,13 +161,18 @@ class GameManager {
     this._canvasDrawer.drawText("BAC: ${(this._player.drunkenness.toDouble() / 10.0 * 0.24).toStringAsFixed(2)}%", 8, 26);
     this._canvasDrawer.drawText("Beers: ${this._player.beers}", 8, 52);
     this._canvasDrawer.drawText("HP: ${this._player.health}", 8, 80);
+    this._canvasDrawer.backgroundColor = "white";
+    this._canvasDrawer.font = "bold 32px sans-serif";
+    this._canvasDrawer.drawText("${duration.toString()}", 320, 48);
 
     if (gameOver) {
       this._onGameOver();
-      return false;
-    } else {
-      return true;
+      this._continueLoop = false;
     }
+  }
+
+  void stop() {
+    this._continueLoop = false;
   }
 
   Level _getNextLevel() {
@@ -164,24 +183,24 @@ class GameManager {
     return level;
   }
 
-  void _onLoopStart() {
-    // Don't invoke UI every frame
-    this._ui.showView(
-        new Dialog("Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to go out and get some BEER if you wanna come to the party.  Oh yea, and we recommend you maintain a healthy buzz.  Good luck!"));
-
-  }
-
   void _onGameOver() {
 
+    // Do gameover stuff
+    stop();
+  }
+
+  void onTimeOut() {
+    this.stop();
   }
 }
 
 void _loop(var _) {
 
-  if (! game.update()) {
-    return;
-  } else {
+  game.update();
+  if (game.continueLoop) {
     window.requestAnimationFrame(_loop);
+  } else {
+    return;
   }
 }
 
@@ -192,7 +211,7 @@ void main() {
       query('div#root_pane'),
       query('span#score'));
 
-
+  game.start();
 
 
 

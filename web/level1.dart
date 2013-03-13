@@ -40,7 +40,7 @@ class Level1 extends Level {
   List<Sprite> _car2Sprites;
 
   Level1(CanvasManager manager, CanvasDrawer drawer) :
-    super(drawer, manager, new Duration(minutes: 3),
+    super(drawer, manager, new Duration(minutes: 1),
         30, 40, 32, 32)
   {
 

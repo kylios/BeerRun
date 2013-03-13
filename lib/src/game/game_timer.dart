@@ -2,19 +2,20 @@ part of game;
 
 class GameTimer {
 
-  DateTime _end = null;
+  Duration _duration;
+  DateTime _end;
   List<GameTimerListener> _listeners = new List<GameTimerListener>();
   Timer _timer = null;
 
-  GameTimer(this._end);
+  GameTimer(this._duration);
 
   void startCountdown() {
     if (this._timer != null) {
       this._timer.cancel();
     }
 
-    Duration d = this.getRemainingTime();
-    this._timer = new Timer(d, () {
+    this._end = (new DateTime.now().add(this._duration));
+    this._timer = new Timer(this._duration, () {
       this._onEnd();
     });
   }
