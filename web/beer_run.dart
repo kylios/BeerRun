@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:async';
 
 import 'package:BeerRun/canvas_manager.dart';
 import 'package:BeerRun/drawing.dart';
@@ -13,33 +14,6 @@ import 'package:BeerRun/ui.dart';
 
 final int CANVAS_WIDTH = 640;
 final int CANVAS_HEIGHT = 480;
-
-/*
-CanvasManager canvasManager;
-CanvasDrawer canvasDrawer;
-
-UI ui;
-
-Level1 level;
-
-PlayerInputComponent keyboard;
-DrawingComponent drawer;
-
-Player player;
-
-DivElement fpsDisplay;
-final int MAXSAMPLES = 100;
-int tickindex=0;
-int ticksum=0;
-List<int> ticklist = new List<int>.fixedLength(MAXSAMPLES, fill: 0);
-int starttime = 0;
-int endtime = 0;
-
-// Notification flags.
-
-
-int score = 0;
-*/
 
 GameManager game;
 
@@ -102,6 +76,23 @@ class GameManager implements GameTimerListener {
   void start() {
     this._ui.showView(
         new Dialog("Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to go out and get some BEER if you wanna come to the party.  Oh yea, and we recommend you maintain a healthy buzz.  Good luck!"));
+
+
+    /*
+    this._canvasDrawer.clear();
+    this._currentLevel.draw(this._canvasDrawer);
+
+    new Timer.repeating(new Duration(milliseconds: 50), (Timer t) {
+
+      // Move the viewport closer to the beer store
+      this._canvasDrawer.moveOffset(-5, -5);
+
+      this._canvasDrawer.clear();
+      this._currentLevel.draw(this._canvasDrawer);
+    });
+    */
+
+
     this._timer.startCountdown();
   }
 

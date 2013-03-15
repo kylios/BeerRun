@@ -26,157 +26,6 @@ class PlayerInputComponent extends Component
     this._dirsPressed = new List<bool>.filled(4, false);
     this._rng = new Random();
   }
-
-
-  /**
-   * TODO: when player gets drunk, he should accelerate as you hold down the
-   * movement keys.  He should accelerate up to a certain point that gets higher
-   * and higher the drunker he gets.  I think changing directions should be less
-   * responsive: that is, he gains some momentum in a given direction, and when
-   * you change directions, he decelerates in the original direction, but starts
-   * accelerating in the new direction.  That and he can overcompensate by
-   * "wobbling" back to the old direction.
-   *
-   *         +----- overcompensation for the turn
-   *         v
-   *          ...
-   *        .     .   . . . .  .  .   .   .   .
-   *       .        .
-   *
-   *       .         ^
-   *                 +----------------- "bounce back", like he's stumbling
-   *       .
-   *
-   *       .
-   *
-   *       .    <--- getting faster here
-   *       .
-   *       .
-   *       X    <--- START
-   *
-   *
-   * This effect should get greater and more pronounced the more beers he drinks
-   *
-   * It would also be cool if we could apply a neat blurring effect to the level
-   *
-   *
-   * Algorithm:
-   *
-   * We'll implement a directional acceleration system.  There will be a
-   * 4-element array of ints, representing the acceleration in each given
-   * direction.  Each frame, the acceleration is applied to the player's
-   * position.
-   *
-   *
-   *
-   *
-   *
-   */
-  void _moveObj(Player obj, Direction dir) {
-
-
-
-    if (this._holdFrames == 0) {
-      obj.speed = 4;
-    }
-
-    if (this._holding) {
-      this._holdFrames++;
-      obj.speed = 4 + (this._holdFrames * obj.drunkenness ~/ 16);
-    } else {
-      if (this._holdFrames == 1) {
-        this._holdFrames = 0;
-      } else {
-        this._holdFrames =
-            (this._holdFrames ~/ obj.drunkenness) * (obj.drunkenness - 2);
-      }
-      obj.speed = 4 + this._holdFrames * obj.drunkenness;
-    }
-
-    if (obj.speed > 16) {
-      obj.speed = 16;
-    }
-
-    // Do a wobble thing, back and forth, because you're drunk
-    int wobble = this._rng.nextInt(18 - obj.speed);
-    if (wobble == 0)
-    {
-      Direction wobbleDir;
-      int dir = this._rng.nextInt(2);
-      if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
-        if (dir == 0) {
-          this._moveLeft(obj, obj.speed ~/ 4);
-        } else {
-          this._moveRight(obj, obj.speed ~/ 4);
-        }
-      } else {
-        if (dir == 0) {
-          this._moveUp(obj, obj.speed ~/ 4);
-        } else {
-          this._moveDown(obj, obj.speed ~/ 4);
-        }
-      }
-    }
-
-    if (dir == DIR_UP) {
-      this._moveUp(obj);
-    } else if (dir == DIR_DOWN) {
-      this._moveDown(obj);
-    } else if (dir == DIR_LEFT) {
-      this._moveLeft(obj);
-    } else if (dir == DIR_RIGHT) {
-      this._moveRight(obj);
-    }
-
-    int row = (obj.y + obj.collisionYOffset) ~/ obj.level.tileHeight;
-    int col = (obj.x + obj.collisionXOffset) ~/ obj.level.tileWidth;
-    int row1 = (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/
-        obj.level.tileHeight;
-    int col1 = (obj.x + obj.collisionXOffset + obj.collisionWidth) ~/
-        obj.level.tileWidth;
-
-    if (obj.level.isBlocking(row, col) ||
-        obj.level.isBlocking(row1, col) ||
-        obj.level.isBlocking(row, col1) ||
-        obj.level.isBlocking(row1, col1)) {
-      obj.setPos(obj.oldX, obj.oldY);
-    }
-
-  }
-
-  void _moveLeft(Player obj, [int speed]) {
-    if (! ?speed) {
-      speed = obj.speed;
-    }
-
-    obj.setPos(obj.x - speed, obj.y);
-    obj.faceLeft();
-  }
-  void _moveRight(Player obj, [int speed]) {
-    if (! ?speed) {
-      speed = obj.speed;
-    }
-
-    obj.setPos(obj.x + speed, obj.y);
-    obj.faceRight();
-  }
-  void _moveUp(Player obj, [int speed]) {
-    if (! ?speed) {
-      speed = obj.speed;
-    }
-
-    obj.setPos(obj.x, obj.y - speed);
-    obj.faceUp();
-  }
-  void _moveDown(Player obj, [int speed]) {
-    if (! ?speed) {
-      speed = obj.speed;
-    }
-
-    obj.setPos(obj.x, obj.y + speed);
-    obj.faceDown();
-  }
-
   void update(Player obj) {
 
     for (int i = 0; i < 4; i++) {
@@ -217,10 +66,10 @@ class PlayerInputComponent extends Component
     int speed = 0;
     for (int i = 0; i < 4; i++) {
       if (this._dirsPressed[i]) {
-        if ((11 - obj.drunkenness) == this._holdFrames) {
-          this._accel[i] += obj.speed;
-          if (this._accel[i] > obj.drunkenness * 2) {
-            this._accel[i] = obj.drunkenness * 2;
+        if ((11 - obj.drunkenness) <= this._holdFrames) {
+          this._accel[i] += 2 * obj.speed;
+          if (this._accel[i] > obj.drunkenness * 2 * 2) {
+            this._accel[i] = obj.drunkenness * 2 * 2;
           }
           this._holdFrames = 0;
         }
@@ -232,8 +81,10 @@ class PlayerInputComponent extends Component
       speed += this._accel[i];
     }
 
-    playerX = playerX + (this._accel[DIR_RIGHT.direction] - this._accel[DIR_LEFT.direction]);
-    playerY = playerY + (this._accel[DIR_DOWN.direction] - this._accel[DIR_UP.direction]);
+    playerX = playerX +
+        (this._accel[DIR_RIGHT.direction] - this._accel[DIR_LEFT.direction]) ~/ 2;
+    playerY = playerY +
+        (this._accel[DIR_DOWN.direction] - this._accel[DIR_UP.direction]) ~/ 2;
 
   // Do a wobble thing, back and forth, because you're drunk
     if (speed > 0) {
@@ -244,15 +95,15 @@ class PlayerInputComponent extends Component
         int dir = this._rng.nextInt(2);
         if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
           if (dir == 0) {
-            playerX -= 2;
+            playerX -= obj.speed;
           } else {
-            playerX += 2;
+            playerX += obj.speed;
           }
         } else {
           if (dir == 0) {
-            playerY -= 2;
+            playerY -= obj.speed;
           } else {
-            playerY += 2;
+            playerY += obj.speed;
           }
         }
       }

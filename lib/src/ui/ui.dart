@@ -36,6 +36,9 @@ class UI {
     if (seconds > 0) {
       this._rootView.hideX();
     }
+    if (v._container == null) {
+      v._container = this;
+    }
     v.onDraw(this._rootView.rootElement);
     this._rootView.show();
 

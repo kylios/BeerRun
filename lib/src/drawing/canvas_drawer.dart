@@ -48,6 +48,13 @@ class CanvasDrawer implements DrawingInterface {
     this._offsetY = y;
   }
 
+  void moveOffset(int dX, int dY) {
+    this._offsetX += dX;
+    this._offsetY += dY;
+    if (this._offsetX < 0)  this._offsetX = 0;
+    if (this._offsetY < 0)  this._offsetY = 0;
+  }
+
   void setBounds(int x, int y) {
     if (x < 0) x = 0;
     if (y < 0) y = 0;

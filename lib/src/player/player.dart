@@ -36,6 +36,7 @@ class Player extends GameObject implements ComponentListener {
   Player(Level l, Direction d, int x, int y) : super(d, x, y) {
 
     this.setLevel(l);
+    this.speed = 6;
 
     SpriteSheet sprites = new SpriteSheet(
         "img/Character1Walk.png",
