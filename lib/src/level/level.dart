@@ -43,6 +43,7 @@ class Level implements ComponentListener {
   CanvasManager get canvasManager => this._manager;
   CanvasDrawer get canvasDrawer => this._drawer;
   Duration get duration => this._duration;
+  List<GameObject> get objects => this._objects;
 
   int _posToIdx(int row, int col) {
     return this._cols * row + col;
