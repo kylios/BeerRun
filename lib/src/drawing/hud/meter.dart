@@ -19,6 +19,8 @@ class Meter
 
     num percent = this.value.toDouble() / this._max.toDouble();
     if (percent == 0) {
+      d.backgroundColor = 'black';
+      d.drawRect(this._x, this._y, this._width, this._height, 3, 3);
       return;
     }
     if (percent < 0.25) {
