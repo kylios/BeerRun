@@ -7,7 +7,9 @@ class WindowView extends View {
   DivElement _rootElement;
 
   WindowView(UI parent, this._uiElement) :
-      super(parent) {
+      super() {
+
+    this._container = parent;
 
     this._closeButton = this._uiElement.query('div.ui.title > div.ui.x');
     this._rootElement = this._uiElement.query('div.ui.body > div.ui.root');

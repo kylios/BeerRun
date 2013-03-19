@@ -21,7 +21,7 @@ class GameTimer {
   }
 
   Duration getRemainingTime() {
-    return new DateTime.now().difference(this._end);
+    return this._end.difference(new DateTime.now());
   }
 
   void _onEnd() {
@@ -32,5 +32,15 @@ class GameTimer {
 
   void addListener(GameTimerListener l) {
     this._listeners.add(l);
+  }
+
+  String getRemainingTimeFormat() {
+
+    Duration d = this.getRemainingTime();
+
+    int minutes = d.inMinutes;
+    int seconds = d.inSeconds % 60;
+
+    return "${minutes}:${seconds}";
   }
 }

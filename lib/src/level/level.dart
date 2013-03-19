@@ -1,7 +1,7 @@
 
 part of level;
 
-class Level implements ComponentListener {
+abstract class Level implements ComponentListener {
 
   int _rows;
   int _cols;
@@ -35,6 +35,12 @@ class Level implements ComponentListener {
     this._blocked = new List<bool>
       .fixedLength(this._rows * this._cols, fill: false);
   }
+
+  // Abstract methods
+  int get storeX;
+  int get storeY;
+  int get startX;
+  int get startY;
 
   int get tileWidth => this._tileWidth;
   int get tileHeight => this._tileHeight;
@@ -94,6 +100,7 @@ class Level implements ComponentListener {
 
   void addPlayerObject(Player p) {
     this._player = p;
+    this._player.setPos(this.startX, this.startY);
     this.addObject(p);
   }
 

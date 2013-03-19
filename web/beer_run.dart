@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:async';
+import 'dart:math';
 
 import 'package:BeerRun/canvas_manager.dart';
 import 'package:BeerRun/drawing.dart';
@@ -35,6 +36,11 @@ class GameManager implements GameTimerListener {
   bool _notifyBored = true;
 
   bool _continueLoop = true;
+  bool _showHUD = false;
+
+  bool _inTutorial = true;
+  int _tutorialDestX = 0;
+  int _tutorialDestY = 0;
 
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
@@ -49,7 +55,7 @@ class GameManager implements GameTimerListener {
     this._canvasDrawer.backgroundColor = 'black';
 
     DrawingComponent drawer =
-        new DrawingComponent(this._canvasManager, this._canvasDrawer, true);
+        new DrawingComponent(this._canvasManager, this._canvasDrawer, false);
 
     PlayerInputComponent playerInput =
         new PlayerInputComponent(drawer);
@@ -73,27 +79,128 @@ class GameManager implements GameTimerListener {
 
   bool get continueLoop => this._continueLoop;
 
-  void start() {
+  void _endTutorial() {
+
+    this._player.setPos(32 * 36, 32 * 5);
+    this._timer.startCountdown();
+    this._inTutorial = false;
+    this._player.setDrawingComponent(
+        new DrawingComponent(this._canvasManager, this._canvasDrawer, true)
+      );
+  }
+
+  void _continueTutorial3() {
+    window.console.log("continueTutorial3");
+
     this._ui.showView(
-        new Dialog("Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to go out and get some BEER if you wanna come to the party.  Oh yea, and we recommend you maintain a healthy buzz.  Good luck!"));
+        new Dialog("Well, what are you waiting for!?  Better get going!  Oh yea, and don't forget to keep your buzz going... don't get bored and bail on us!"),
+        callback: this._endTutorial
+      );
+  }
 
+  void _continueTutorial2() {
+    window.console.log("continueTutorial2");
 
-    /*
-    this._canvasDrawer.clear();
-    this._currentLevel.draw(this._canvasDrawer);
+    int tutorialDestX = this._currentLevel.startX;
+    int tutorialDestY = this._currentLevel.startY;
+    Timer _t = new Timer.repeating(new Duration(milliseconds: 5), (Timer t) {
 
-    new Timer.repeating(new Duration(milliseconds: 50), (Timer t) {
+      int offsetX = this._canvasDrawer.offsetX;
+      int offsetY = this._canvasDrawer.offsetY;
+
+      window.console.log("$offsetX - $offsetY");
+      if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+        t.cancel();
+        this._continueTutorial3();
+        return;
+      }
+
+      int moveX;
+      if (tutorialDestX < offsetX) {
+        moveX = max(-5, tutorialDestX - offsetX);
+      } else {
+        moveX = min(5, tutorialDestX - offsetX);
+      }
+      int moveY;
+      if (tutorialDestY < offsetY) {
+        moveY = max(-5, tutorialDestY - offsetY);
+      } else {
+        moveY = min(5, tutorialDestY - offsetY);
+      }
+
 
       // Move the viewport closer to the beer store
-      this._canvasDrawer.moveOffset(-5, -5);
+      this._canvasDrawer.moveOffset(moveX, moveY);
 
       this._canvasDrawer.clear();
       this._currentLevel.draw(this._canvasDrawer);
     });
-    */
+  }
+
+  void _continueTutorial() {
+
+    this._ui.showView(
+        new Dialog("Grab us a 24 pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!"),
+        callback: this._continueTutorial2
+      );
+  }
+
+  void _startTutorial() {
+
+    this._inTutorial = true;
+    int tutorialDestX = this._currentLevel.storeX;
+    int tutorialDestY = this._currentLevel.storeY;
+    Timer _t = new Timer.repeating(new Duration(milliseconds: 20), (Timer t) {
+
+      int offsetX = this._canvasDrawer.offsetX;
+      int offsetY = this._canvasDrawer.offsetY;
+
+      if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+        t.cancel();
+        this._continueTutorial();
+        return;
+      }
+
+      int moveX;
+      if (tutorialDestX < offsetX) {
+        moveX = max(-5, tutorialDestX - offsetX);
+      } else {
+        moveX = min(5, offsetX - tutorialDestX);
+      }
+      int moveY;
+      if (tutorialDestY < offsetY) {
+        moveY = max(-5, offsetY - tutorialDestY);
+      } else {
+        moveY = min(5, tutorialDestY - offsetY);
+      }
 
 
-    this._timer.startCountdown();
+      // Move the viewport closer to the beer store
+      this._canvasDrawer.moveOffset(moveX, moveY);
+
+      this._canvasDrawer.clear();
+      this._currentLevel.draw(this._canvasDrawer);
+    });
+  }
+
+  void start() {
+
+    int tutorialStartX = this._currentLevel.startX;
+    int tutorialStartY = this._currentLevel.startY;
+
+
+    this._canvasDrawer.setOffset(tutorialStartX, tutorialStartY);
+
+    this._canvasDrawer.clear();
+    this._currentLevel.draw(this._canvasDrawer);
+
+    // Start level tutorial
+    this._ui.showView(
+        new Dialog(
+            "Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to head down to the STORE and get some BEER if you wanna come to the party.  You can find the store down here..."
+        ),
+        callback: this._startTutorial
+      );
   }
 
   void update() {
@@ -141,20 +248,22 @@ class GameManager implements GameTimerListener {
       gameOver = true;
     }
 
-    Duration duration = this._timer.getRemainingTime();
 
     // Draw HUD
     // TODO: HUD class?
-    this._canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
-    this._canvasDrawer.fillRect(0, 0, 180, 92, 8, 8);
-    this._canvasDrawer.backgroundColor = "black";
-    this._canvasDrawer.font = "bold 22px sans-serif";
-    this._canvasDrawer.drawText("BAC: ${(this._player.drunkenness.toDouble() / 10.0 * 0.24).toStringAsFixed(2)}%", 8, 26);
-    this._canvasDrawer.drawText("Beers: ${this._player.beers}", 8, 52);
-    this._canvasDrawer.drawText("HP: ${this._player.health}", 8, 80);
-    this._canvasDrawer.backgroundColor = "white";
-    this._canvasDrawer.font = "bold 32px sans-serif";
-    this._canvasDrawer.drawText("${duration.toString()}", 320, 48);
+    if (!this._inTutorial) {
+      String duration = this._timer.getRemainingTimeFormat();
+      this._canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
+      this._canvasDrawer.fillRect(0, 0, 180, 92, 8, 8);
+      this._canvasDrawer.backgroundColor = "black";
+      this._canvasDrawer.font = "bold 22px sans-serif";
+      this._canvasDrawer.drawText("BAC: ${(this._player.drunkenness.toDouble() / 10.0 * 0.24).toStringAsFixed(2)}%", 8, 26);
+      this._canvasDrawer.drawText("Beers: ${this._player.beers}", 8, 52);
+      this._canvasDrawer.drawText("HP: ${this._player.health}", 8, 80);
+      this._canvasDrawer.backgroundColor = "white";
+      this._canvasDrawer.font = "bold 32px sans-serif";
+      this._canvasDrawer.drawText("You have ${duration} minutes!", 220, 48);
+    }
 
     if (gameOver) {
       this._onGameOver();

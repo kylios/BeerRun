@@ -39,8 +39,14 @@ class Level1 extends Level {
   List<Sprite> _car1Sprites;
   List<Sprite> _car2Sprites;
 
+  // Overridden from Level
+  int get startX => 32 * 20;
+  int get startY => 32 * 0;
+  int get storeX => 0 * 32;
+  int get storeY => 15 * 32;
+
   Level1(CanvasManager manager, CanvasDrawer drawer) :
-    super(drawer, manager, new Duration(minutes: 1),
+    super(drawer, manager, new Duration(minutes: 3),
         30, 40, 32, 32)
   {
 

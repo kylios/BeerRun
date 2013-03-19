@@ -32,6 +32,9 @@ class CanvasDrawer implements DrawingInterface {
     }
   }
 
+  int get offsetX => this._offsetX;
+  int get offsetY => this._offsetY;
+
   /**
    * Sets the draw offset.  Contsrains those offsets to certain boundaries so
    * we never draw just nothingness.
@@ -52,7 +55,9 @@ class CanvasDrawer implements DrawingInterface {
     this._offsetX += dX;
     this._offsetY += dY;
     if (this._offsetX < 0)  this._offsetX = 0;
+    else if (this._offsetX > this._boundX)  this._offsetX = this._boundX;
     if (this._offsetY < 0)  this._offsetY = 0;
+    else if  (this._offsetY > this._boundY) this._offsetY = this._boundY;
   }
 
   void setBounds(int x, int y) {

@@ -4,7 +4,8 @@ class Dialog extends View {
 
   String _text;
 
-  Dialog(this._text);
+  Dialog(this._text) :
+    super();
 
   void setText(String text) {
     this._text = text;
@@ -15,7 +16,6 @@ class Dialog extends View {
 
   DivElement get rootElement => null;
 
-  void onClose() {}
   void onDraw(Element root) {
 
     DivElement el = new DivElement();
