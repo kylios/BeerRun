@@ -88,6 +88,7 @@ class PlayerInputComponent extends Component
 
   // Do a wobble thing, back and forth, because you're drunk
     if (speed > 0) {
+      int max = min(this._accel[obj.dir.direction], 20);
       int wobble = this._rng.nextInt(21 - this._accel[obj.dir.direction]);
       if (wobble == 0)
       {

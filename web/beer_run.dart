@@ -42,6 +42,10 @@ class GameManager implements GameTimerListener {
   int _tutorialDestX = 0;
   int _tutorialDestY = 0;
 
+  // HUD
+  Meter _BACMeter;
+  Meter _HPMeter;
+
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
       SpanElement scoreElement) {
@@ -74,6 +78,9 @@ class GameManager implements GameTimerListener {
     this._currentLevel.addPlayerObject(this._player);
 
     this._ui = new UI(UIRootElement, this._player);
+
+    this._BACMeter = new Meter(10, 52, 10, 116, 22);
+    this._HPMeter = new Meter(3, 52, 36, 116, 22);
 
   }
 
@@ -199,7 +206,7 @@ class GameManager implements GameTimerListener {
         new Dialog(
             "Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to head down to the STORE and get some BEER if you wanna come to the party.  You can find the store down here..."
         ),
-        callback: this._startTutorial
+        callback: this._endTutorial //this._startTutorial
       );
   }
 
@@ -252,17 +259,24 @@ class GameManager implements GameTimerListener {
     // Draw HUD
     // TODO: HUD class?
     if (!this._inTutorial) {
+      this._BACMeter.value = this._player.drunkenness;
+      this._HPMeter.value = this._player.health;
+
       String duration = this._timer.getRemainingTimeFormat();
       this._canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
       this._canvasDrawer.fillRect(0, 0, 180, 92, 8, 8);
       this._canvasDrawer.backgroundColor = "black";
-      this._canvasDrawer.font = "bold 22px sans-serif";
-      this._canvasDrawer.drawText("BAC: ${(this._player.drunkenness.toDouble() / 10.0 * 0.24).toStringAsFixed(2)}%", 8, 26);
-      this._canvasDrawer.drawText("Beers: ${this._player.beers}", 8, 52);
-      this._canvasDrawer.drawText("HP: ${this._player.health}", 8, 80);
+      this._canvasDrawer.drawRect(0, 0, 180, 92, 8, 8);
+      this._canvasDrawer.font = "bold 16px sans-serif";
+      this._canvasDrawer.drawText("BAC:", 8, 26);
+      this._canvasDrawer.drawText("HP:", 8, 52);
+      this._canvasDrawer.drawText("Beers: ${this._player.beers}", 8, 80);
       this._canvasDrawer.backgroundColor = "white";
       this._canvasDrawer.font = "bold 32px sans-serif";
       this._canvasDrawer.drawText("You have ${duration} minutes!", 220, 48);
+
+      this._BACMeter.draw(this._canvasDrawer);
+      this._HPMeter.draw(this._canvasDrawer);
     }
 
     if (gameOver) {
