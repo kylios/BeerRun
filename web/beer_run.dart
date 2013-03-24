@@ -305,6 +305,10 @@ class GameManager implements GameTimerListener {
 
   void onTimeOut() {
     this.stop();
+
+    this._ui.showView(
+        new Dialog("You took way too long.  Go home!  GAME OVER"),
+        pause: true);
   }
 }
 
