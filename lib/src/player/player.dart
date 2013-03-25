@@ -39,7 +39,7 @@ class Player extends GameObject implements ComponentListener {
     this.speed = 6;
 
     SpriteSheet sprites = new SpriteSheet(
-        "img/Character1Walk.png",
+        "img/player/player.png",
         64, 64);
 
     this.collisionXOffset = 17;
