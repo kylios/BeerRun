@@ -15,7 +15,7 @@ class PathFollowerInputComponent extends Component {
       return;
     }
 
-    Point nextPoint = this._boundPath._points[this._currentPointIdx + 1];
+    GamePoint nextPoint = this._boundPath._points[this._currentPointIdx + 1];
 
     // Compare object's current point and the point at the next index in th
     // path.

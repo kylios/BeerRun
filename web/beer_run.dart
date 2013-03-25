@@ -110,7 +110,7 @@ class GameManager implements GameTimerListener {
 
     int tutorialDestX = this._currentLevel.startX;
     int tutorialDestY = this._currentLevel.startY;
-    Timer _t = new Timer.repeating(new Duration(milliseconds: 5), (Timer t) {
+    Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
 
       int offsetX = this._canvasDrawer.offsetX;
       int offsetY = this._canvasDrawer.offsetY;
@@ -157,7 +157,7 @@ class GameManager implements GameTimerListener {
     this._inTutorial = true;
     int tutorialDestX = this._currentLevel.storeX;
     int tutorialDestY = this._currentLevel.storeY;
-    Timer _t = new Timer.repeating(new Duration(milliseconds: 20), (Timer t) {
+    Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
 
       int offsetX = this._canvasDrawer.offsetX;
       int offsetY = this._canvasDrawer.offsetY;
@@ -206,7 +206,7 @@ class GameManager implements GameTimerListener {
         new Dialog(
             "Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to head down to the STORE and get some BEER if you wanna come to the party.  You can find the store down here..."
         ),
-        callback: this._endTutorial //this._startTutorial
+        callback: this._startTutorial //this._endTutorial //
       );
   }
 

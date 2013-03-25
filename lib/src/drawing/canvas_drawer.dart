@@ -78,13 +78,15 @@ class CanvasDrawer implements DrawingInterface {
   void drawImage(ImageElement i, int x, int y, [int width, int height]) {
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
-    if (?width)
+    if (?width && ?height)
     {
-      c.drawImage(i, x, y, width);
+      Rect destinationRect = new Rect(x, y, width, height);
+      Rect sourceRect = new Rect(0, 0, i.width, i.height);
+      c.drawImageAtScale(i, destinationRect);
     }
-    else if (?height)
+    else
     {
-      c.drawImage(i, x, y, width, height);
+      c.drawImage(i, x, y);
     }
   }
 
@@ -112,7 +114,11 @@ class CanvasDrawer implements DrawingInterface {
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
 
-    c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
+    Rect destRect = new Rect(x, y, width, height);
+    Rect sourceRect = new Rect(s.x, s.y, s.width, s.height);
+    c.drawImageAtScale(s.image, destRect, sourceRect: sourceRect);
+
+    //c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
   }
 
   void drawRect(int x, int y, int width, int height,

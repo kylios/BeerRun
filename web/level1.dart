@@ -538,21 +538,21 @@ class Level1 extends Level {
 
 
     this.roadPath1 = new Path([
-                              new Point(this.tileWidth * 13,// - this.tileWidth ~/ 2,
+                              new GamePoint(this.tileWidth * 13,// - this.tileWidth ~/ 2,
                                   this.rows * this.tileHeight),
-                              new Point(this.tileWidth * 13,// - this.tileWidth ~/ 2,
+                              new GamePoint(this.tileWidth * 13,// - this.tileWidth ~/ 2,
                                   5 * 32 - 48),
-                              new Point(-160, 5 * 32 - 48)
+                              new GamePoint(-160, 5 * 32 - 48)
                               ]);
     this.roadPath2 = new Path([
-                                new Point(27 * this.tileWidth + 16,
+                                new GamePoint(27 * this.tileWidth + 16,
                                    this.rows * this.tileHeight),
-                                new Point(27 * this.tileWidth + 16, -160)
+                                new GamePoint(27 * this.tileWidth + 16, -160)
                                ]);
     this.roadPath3 = new Path([
 
-                               new Point(22 * this.tileWidth, -160),
-                               new Point(22 * this.tileWidth,
+                               new GamePoint(22 * this.tileWidth, -160),
+                               new GamePoint(22 * this.tileWidth,
                                    this.rows * this.tileHeight)
                                ]);
 

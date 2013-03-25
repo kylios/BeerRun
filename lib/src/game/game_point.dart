@@ -1,10 +1,10 @@
 part of game;
 
-class Point {
+class GamePoint {
 
   final int x;
   final int y;
 
-  Point(this.x, this.y);
+  GamePoint(this.x, this.y);
 }
 

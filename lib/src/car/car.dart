@@ -24,7 +24,7 @@ class Car extends GameObject {
 
   void takeHit() {}
 
-  Point get point => new Point(this.x, this.y);
+  GamePoint get point => new GamePoint(this.x, this.y);
 
   int get tileWidth {
     if (this.dir == DIR_UP || this.dir == DIR_DOWN) {
