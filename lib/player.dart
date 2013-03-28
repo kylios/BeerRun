@@ -15,5 +15,6 @@ import 'package:BeerRun/car.dart';
 import 'package:BeerRun/animation.dart';
 
 part 'src/player/player_input_component.dart';
+part 'src/player/player_drawing_component.dart';
 part 'src/player/player.dart';
 

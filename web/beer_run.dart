@@ -92,7 +92,7 @@ class GameManager implements GameTimerListener {
     this._timer.startCountdown();
     this._inTutorial = false;
     this._player.setDrawingComponent(
-        new DrawingComponent(this._canvasManager, this._canvasDrawer, true)
+        new PlayerDrawingComponent(this._canvasManager, this._canvasDrawer, true)
       );
   }
 
@@ -211,6 +211,12 @@ class GameManager implements GameTimerListener {
   }
 
   void update() {
+
+    // Check win condition
+    if (this._currentLevel.beersToWin <= this._player.beers) {
+      // you win.. next level.
+      // TODO:
+    }
 
     this._canvasDrawer.clear();
     this._currentLevel.update();

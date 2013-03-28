@@ -3,25 +3,28 @@ part of level;
 
 abstract class Level implements ComponentListener {
 
+  // Level design parameters
   int _rows;
   int _cols;
 
   int _tileWidth;
-  int _tileHeight;
+  int _tileHeight;          //
 
+  Duration _duration = null; // how long you have to beat this level
+
+  List<bool> _blocked;      // blocked tiles
+  List<Trigger> _triggers;  // triggered tiles
+
+  // Level functionality members
   int _layer = -1;
 
   CanvasManager _manager;
   DrawingInterface _drawer;
 
-  Duration _duration = null;
   List<Animation> _animations;
   List<List<Sprite>> _sprites;
   List<GameObject> _objects;
   Player _player;
-
-  List<bool> _blocked;
-  List<Trigger> _triggers;
 
   bool _paused = false;
 
@@ -33,7 +36,7 @@ abstract class Level implements ComponentListener {
     this._animations = new List<Animation>();
     this._triggers = new List<Trigger>(); // TODO: someday optimize this to be more location aware
     this._blocked = new List<bool>
-      .fixedLength(this._rows * this._cols, fill: false);
+      .filled(this._rows * this._cols, false);
   }
 
   // Abstract methods
@@ -41,6 +44,7 @@ abstract class Level implements ComponentListener {
   int get storeY;
   int get startX;
   int get startY;
+  int get beersToWin;
 
   int get tileWidth => this._tileWidth;
   int get tileHeight => this._tileHeight;

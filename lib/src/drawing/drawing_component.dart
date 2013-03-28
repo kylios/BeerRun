@@ -14,6 +14,10 @@ class DrawingComponent extends Component
 
   DrawingComponent(this._manager, this._drawer, this._scrollBackground);
 
+  CanvasManager get manager => this._manager;
+  CanvasDrawer get drawer => this._drawer;
+  bool get scrollBackground => this._scrollBackground;
+
   void update(GameObject obj) {
 
     if (this._scrollBackground) {

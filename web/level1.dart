@@ -45,6 +45,8 @@ class Level1 extends Level {
   int get storeX => 0 * 32;
   int get storeY => 15 * 32;
 
+  int get beersToWin => 24;
+
   Level1(CanvasManager manager, CanvasDrawer drawer) :
     super(drawer, manager, new Duration(minutes: 3),
         30, 40, 32, 32)
