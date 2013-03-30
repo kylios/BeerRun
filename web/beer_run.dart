@@ -8,10 +8,12 @@ import 'package:BeerRun/component.dart';
 import 'package:BeerRun/input.dart';
 import 'package:BeerRun/game.dart';
 import 'package:BeerRun/level.dart';
-import 'level1.dart';
 import 'package:BeerRun/player.dart';
 import 'package:BeerRun/npc.dart';
 import 'package:BeerRun/ui.dart';
+import 'package:BeerRun/beer_run.dart';
+
+import 'level1.dart';
 
 final int CANVAS_WIDTH = 640;
 final int CANVAS_HEIGHT = 480;
@@ -213,9 +215,11 @@ class GameManager implements GameTimerListener {
   void update() {
 
     // Check win condition
-    if (this._currentLevel.beersToWin <= this._player.beers) {
+    if (true || this._currentLevel.beersToWin <= this._player.beers) {
       // you win.. next level.
       // TODO:
+      ScoreScreen ss = new ScoreScreen();
+      this._ui.showView(ss, pause: true);
     }
 
     this._canvasDrawer.clear();

@@ -1,5 +1,7 @@
 library beer_run;
 
+import 'dart:html';
+
 import 'package:BeerRun/ui.dart';
 
 /*

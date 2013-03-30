@@ -834,6 +834,10 @@ class Level1 extends Level {
     "aptSideRoofTopRight": [64, 128],
     "aptSideStairsTop": [0, 224],
     "aptSideStairsBot": [0, 256],
+
+    'flagPride': [0, 128],
+    'flagAmerica': [0, 160],
+    'flagCalifornia': [0, 192],
   };
 
   static final Map _roadSpriteSheetData = {
