@@ -9,6 +9,8 @@ class GameTimer {
 
   GameTimer(this._duration);
 
+  Duration get duration => this._duration;
+
   void startCountdown() {
     if (this._timer != null) {
       this._timer.cancel();
@@ -21,6 +23,9 @@ class GameTimer {
   }
 
   Duration getRemainingTime() {
+    if (null == this._end) {
+      return null;
+    }
     return this._end.difference(new DateTime.now());
   }
 
@@ -37,10 +42,20 @@ class GameTimer {
   String getRemainingTimeFormat() {
 
     Duration d = this.getRemainingTime();
+    if (d == null) {
+      return '';
+    }
 
     int minutes = d.inMinutes;
     int seconds = d.inSeconds % 60;
 
-    return "${minutes}:${seconds}";
+    String format = "${minutes}:";
+    if (seconds < 10) {
+      format = "${format}0${seconds}";
+    } else {
+      format = "${format}${seconds}";
+    }
+
+    return format;
   }
 }

@@ -18,6 +18,8 @@ abstract class Level implements ComponentListener {
   // Level functionality members
   int _layer = -1;
 
+  TutorialManager _tutorial;
+
   CanvasManager _manager;
   DrawingInterface _drawer;
 
@@ -37,6 +39,7 @@ abstract class Level implements ComponentListener {
     this._triggers = new List<Trigger>(); // TODO: someday optimize this to be more location aware
     this._blocked = new List<bool>
       .filled(this._rows * this._cols, false);
+    this._tutorial = new TutorialManager();
   }
 
   // Abstract methods
@@ -45,6 +48,7 @@ abstract class Level implements ComponentListener {
   int get startX;
   int get startY;
   int get beersToWin;
+  void setupTutorial(UI ui, Player p);
 
   int get tileWidth => this._tileWidth;
   int get tileHeight => this._tileHeight;
@@ -54,6 +58,7 @@ abstract class Level implements ComponentListener {
   CanvasDrawer get canvasDrawer => this._drawer;
   Duration get duration => this._duration;
   List<GameObject> get objects => this._objects;
+  TutorialManager get tutorial => this._tutorial;
 
   int _posToIdx(int row, int col) {
     return this._cols * row + col;

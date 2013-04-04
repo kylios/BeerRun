@@ -1,18 +1,6 @@
-library level1;
+part of beer_run;
 
-import 'dart:html';
-import 'dart:math';
-
-import 'package:BeerRun/level.dart';
-import 'package:BeerRun/drawing.dart';
-import 'package:BeerRun/canvas_manager.dart';
-import 'package:BeerRun/path.dart';
-import 'package:BeerRun/game.dart';
-import 'package:BeerRun/car.dart';
-import 'package:BeerRun/region.dart';
-import 'package:BeerRun/npc.dart';
-
-class Level1 extends Level {
+class Level2 extends Level {
 
   Random rng = new Random();
 
@@ -47,38 +35,38 @@ class Level1 extends Level {
 
   int get beersToWin => 24;
 
-  Level1(CanvasManager manager, CanvasDrawer drawer) :
+  Level2(CanvasManager manager, CanvasDrawer drawer) :
     super(drawer, manager, new Duration(minutes: 3),
         30, 40, 32, 32)
   {
 
     SpriteSheet road = new SpriteSheet("img/Street.png", 32, 32);
     Map<String, Sprite> roadSprites =
-        Level.parseSpriteSheet(road, Level1._roadSpriteSheetData);
+        Level.parseSpriteSheet(road, Level2._roadSpriteSheetData);
 
     SpriteSheet apt = new SpriteSheet("img/apartments.png", 32, 32);
     Map<String, Sprite> aptSprites =
-        Level.parseSpriteSheet(apt, Level1._aptSpriteSheetData);
+        Level.parseSpriteSheet(apt, Level2._aptSpriteSheetData);
 
     SpriteSheet grass = new SpriteSheet("img/LPC Base Assets/tiles/grass.png", 32, 32);
     Map<String, Sprite> grassSprites =
-        Level.parseSpriteSheet(grass, Level1._grassSpriteSheetData);
+        Level.parseSpriteSheet(grass, Level2._grassSpriteSheetData);
 
     SpriteSheet sw = new SpriteSheet("img/Sidewalk_dark.png", 32, 32);
     Map<String, Sprite> swSprites =
-        Level.parseSpriteSheet(sw, Level1._swSpriteSheetData);
+        Level.parseSpriteSheet(sw, Level2._swSpriteSheetData);
 
     SpriteSheet fence = new SpriteSheet("img/fence.png", 32, 32);
     Map<String, Sprite> fenceSprites =
-        Level.parseSpriteSheet(fence, Level1._fenceSpriteSheetData);
+        Level.parseSpriteSheet(fence, Level2._fenceSpriteSheetData);
 
     SpriteSheet house = new SpriteSheet("img/house.png", 32, 32);
     Map<String, Sprite> houseSprites =
-        Level.parseSpriteSheet(house, Level1._houseSpriteSheetData);
+        Level.parseSpriteSheet(house, Level2._houseSpriteSheetData);
 
     SpriteSheet building = new SpriteSheet("img/Building.png", 32, 32);
     Map<String, Sprite> buildingSprites =
-        Level.parseSpriteSheet(building, Level1._buildingSpriteSheetData);
+        Level.parseSpriteSheet(building, Level2._buildingSpriteSheetData);
 
 
     SpriteSheet carSheet = new SpriteSheet('img/Cars_final.png');
@@ -467,6 +455,12 @@ class Level1 extends Level {
     this.setSpriteAt(aptSprites["aptSideStairsBot"], 23, 37, true);
 
     this.newLayer();
+
+    this.setSpriteAt(aptSprites["flagPride"], 20, 37, false);
+    this.setSpriteAt(aptSprites["flagAmerica"], 22, 37, false);
+    this.setSpriteAt(aptSprites["flagCalifornia"], 24, 37, false);
+    this.setSpriteAt(aptSprites["flagAmerica"], 26, 37, false);
+
     this.setSpriteAt(houseSprites["wallTopLeft"], 3, 35, true);
     this.setSpriteAt(houseSprites["wallTopMid"], 3, 36, true);
     this.setSpriteAt(houseSprites["wallTopRight"], 3, 37, true);
@@ -642,6 +636,113 @@ class Level1 extends Level {
     this.addObject(npc7);
   }
 
+  void setupTutorial(UI ui, Player p) {
+
+    this.tutorial.onStart((var _) {
+
+      Completer c = new Completer();
+
+      int tutorialDestX = this.storeX;
+      int tutorialDestY = this.storeY;
+      Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
+
+        int offsetX = this.canvasDrawer.offsetX;
+        int offsetY = this.canvasDrawer.offsetY;
+
+        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+          t.cancel();
+          c.complete();
+        }
+
+        int moveX;
+        if (tutorialDestX < offsetX) {
+          moveX = max(-5, tutorialDestX - offsetX);
+        } else {
+          moveX = min(5, offsetX - tutorialDestX);
+        }
+        int moveY;
+        if (tutorialDestY < offsetY) {
+          moveY = max(-5, offsetY - tutorialDestY);
+        } else {
+          moveY = min(5, tutorialDestY - offsetY);
+        }
+
+        // Move the viewport closer to the beer store
+        this.canvasDrawer.moveOffset(moveX, moveY);
+
+        this.canvasDrawer.clear();
+        this.draw(this.canvasDrawer);
+      });
+
+      return c.future;
+    })
+    .addStep((var _) {
+      Completer c = new Completer();
+      ui.showView(
+          new Dialog("Grab us a 24 pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!"),
+          callback: c.complete
+      );
+      return c.future;
+    })
+    .addStep((var _) {
+      window.console.log("continueTutorial2");
+
+      Completer c = new Completer();
+
+      int tutorialDestX = this.startX;
+      int tutorialDestY = this.startY;
+      Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
+
+        int offsetX = this.canvasDrawer.offsetX;
+        int offsetY = this.canvasDrawer.offsetY;
+
+        window.console.log("$offsetX - $offsetY");
+        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+          t.cancel();
+          c.complete();
+          return c.future;
+        }
+
+        int moveX;
+        if (tutorialDestX < offsetX) {
+          moveX = max(-5, tutorialDestX - offsetX);
+        } else {
+          moveX = min(5, tutorialDestX - offsetX);
+        }
+        int moveY;
+        if (tutorialDestY < offsetY) {
+          moveY = max(-5, tutorialDestY - offsetY);
+        } else {
+          moveY = min(5, tutorialDestY - offsetY);
+        }
+
+        // Move the viewport closer to the beer store
+        this.canvasDrawer.moveOffset(moveX, moveY);
+
+        this.canvasDrawer.clear();
+        this.draw(this.canvasDrawer);
+      });
+
+      return c.future;
+    })
+    .addStep((var _) {
+      window.console.log("continueTutorial3");
+      Completer c = new Completer();
+
+      ui.showView(
+          new Dialog("Well, what are you waiting for!?  Better get going!  Oh yea, and don't forget to keep your buzz going... don't get bored and bail on us!"),
+          callback: () { c.complete(); }
+      );
+      return c.future;
+    })
+    .onFinish((var _) {
+
+      p.setPos(32 * 36, 32 * 5);
+      p.setDrawingComponent(
+        new PlayerDrawingComponent(this.canvasManager, this.canvasDrawer, true)
+      );
+    });
+  }
 
 
   void update() {

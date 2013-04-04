@@ -12,15 +12,14 @@ import 'package:BeerRun/player.dart';
 import 'package:BeerRun/npc.dart';
 import 'package:BeerRun/ui.dart';
 import 'package:BeerRun/beer_run.dart';
-
-import 'level1.dart';
+import 'package:BeerRun/tutorial.dart';
 
 final int CANVAS_WIDTH = 640;
 final int CANVAS_HEIGHT = 480;
 
 GameManager game;
 
-class GameManager implements GameTimerListener {
+class GameManager implements GameTimerListener, KeyboardListener {
 
   CanvasManager _canvasManager;
   CanvasDrawer _canvasDrawer;
@@ -48,6 +47,10 @@ class GameManager implements GameTimerListener {
   Meter _BACMeter;
   Meter _HPMeter;
 
+  // Debug settings
+  bool _DEBUG_skipTutorial = false;
+  bool _DEBUG_showScoreScreen = false;
+
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
       SpanElement scoreElement) {
@@ -66,6 +69,7 @@ class GameManager implements GameTimerListener {
     PlayerInputComponent playerInput =
         new PlayerInputComponent(drawer);
     this._canvasManager.addKeyboardListener(playerInput);
+    this._canvasManager.addKeyboardListener(this);
 
     this._currentLevel = this._getNextLevel();
     this._timer = new GameTimer(this._currentLevel.duration);
@@ -77,9 +81,10 @@ class GameManager implements GameTimerListener {
     this._player.setControlComponent(playerInput);
     this._player.setDrawingComponent(drawer);
 
-    this._currentLevel.addPlayerObject(this._player);
-
     this._ui = new UI(UIRootElement, this._player);
+
+    this._currentLevel.addPlayerObject(this._player);
+    this._currentLevel.setupTutorial(this._ui, this._player);
 
     this._BACMeter = new Meter(10, 52, 10, 116, 22);
     this._HPMeter = new Meter(3, 52, 36, 116, 22);
@@ -89,6 +94,12 @@ class GameManager implements GameTimerListener {
   bool get continueLoop => this._continueLoop;
 
   void _endTutorial() {
+
+    // Do some debug things
+    if (this._DEBUG_showScoreScreen) {
+      this._ui.showView(new ScoreScreen(22, new Duration(seconds: 3* 60), new Duration(seconds: 60)),
+          pause: true);
+    }
 
     this._player.setPos(32 * 36, 32 * 5);
     this._timer.startCountdown();
@@ -183,7 +194,6 @@ class GameManager implements GameTimerListener {
         moveY = min(5, tutorialDestY - offsetY);
       }
 
-
       // Move the viewport closer to the beer store
       this._canvasDrawer.moveOffset(moveX, moveY);
 
@@ -197,7 +207,6 @@ class GameManager implements GameTimerListener {
     int tutorialStartX = this._currentLevel.startX;
     int tutorialStartY = this._currentLevel.startY;
 
-
     this._canvasDrawer.setOffset(tutorialStartX, tutorialStartY);
 
     this._canvasDrawer.clear();
@@ -208,17 +217,22 @@ class GameManager implements GameTimerListener {
         new Dialog(
             "Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to head down to the STORE and get some BEER if you wanna come to the party.  You can find the store down here..."
         ),
-        callback: this._startTutorial //this._endTutorial //
+        callback: () {
+          ((this._DEBUG_skipTutorial ?
+            this._currentLevel.tutorial.end(null) :
+              this._currentLevel.tutorial.run()))
+              .then((var _) => this._endTutorial());
+          }
       );
   }
 
   void update() {
 
     // Check win condition
-    if (true || this._currentLevel.beersToWin <= this._player.beers) {
+    if (this._currentLevel.beersToWin <= this._score) {
       // you win.. next level.
       // TODO:
-      ScoreScreen ss = new ScoreScreen();
+      ScoreScreen ss = new ScoreScreen(this._score, this._timer.duration, this._timer.getRemainingTime());
       this._ui.showView(ss, pause: true);
     }
 
@@ -268,7 +282,8 @@ class GameManager implements GameTimerListener {
 
     // Draw HUD
     // TODO: HUD class?
-    if (!this._inTutorial) {
+    if (!this._currentLevel.tutorial.isStarted ||
+        this._currentLevel.tutorial.isComplete) {
       this._BACMeter.value = this._player.drunkenness;
       this._HPMeter.value = this._player.health;
 
@@ -301,7 +316,7 @@ class GameManager implements GameTimerListener {
 
   Level _getNextLevel() {
 
-    Level level = new Level1(
+    Level level = new Level2(
         this._canvasManager, this._canvasDrawer);
 
     return level;
@@ -319,6 +334,29 @@ class GameManager implements GameTimerListener {
     this._ui.showView(
         new Dialog("You took way too long.  Go home!  GAME OVER"),
         pause: true);
+  }
+
+  void onKeyDown(KeyboardEvent e) {
+
+  }
+
+  void onKeyUp(KeyboardEvent e) {
+
+  }
+
+  void onKeyPressed(KeyboardEvent e) {
+window.console.log("key pressed: ${e.keyCode}");
+    switch (e.charCode) {
+
+      case KeyboardListener.KEY_T:
+        window.console.log("key T");
+        // TODO: something like tutorialmgr.skip() ???
+        this._DEBUG_skipTutorial = true;
+        break;
+      case KeyboardListener.KEY_S:
+        this._DEBUG_showScoreScreen = true;
+        break;
+    }
   }
 }
 

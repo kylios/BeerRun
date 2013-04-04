@@ -20,7 +20,6 @@ class SpriteSheet {
     if ( ! ?height) {
       height = this._spriteHeight;
     }
-    window.console.log("Sprite at ${this._image} -> ${x},${y} at ${width}x${height}");
     return new Sprite(this._image, x, y, width, height);
   }
 }
