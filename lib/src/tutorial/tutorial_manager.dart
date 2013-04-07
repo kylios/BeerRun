@@ -68,11 +68,19 @@ class TutorialManager {
       }
     }
 
-    if (this._finishStep != null && ! this._isComplete) {
-      if (null == f) {
-        f = this._finishStep(null);
-      } else {
-        f = f.then(this._finishStep);
+    if (! this._isComplete) {
+      if (this._finishStep != null) {
+        if (null == f) {
+          f = (() {
+            this._isComplete = true;
+            return this._finishStep(null);
+          })();
+        } else {
+          f = f.then((var _) {
+            this._isComplete = true;
+            return this._finishStep(null);
+          });
+        }
       }
     }
 

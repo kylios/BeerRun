@@ -228,14 +228,6 @@ class GameManager implements GameTimerListener, KeyboardListener {
 
   void update() {
 
-    // Check win condition
-    if (this._currentLevel.beersToWin <= this._score) {
-      // you win.. next level.
-      // TODO:
-      ScoreScreen ss = new ScoreScreen(this._score, this._timer.duration, this._timer.getRemainingTime());
-      this._ui.showView(ss, pause: true);
-    }
-
     this._canvasDrawer.clear();
     this._currentLevel.update();
 
@@ -282,8 +274,7 @@ class GameManager implements GameTimerListener, KeyboardListener {
 
     // Draw HUD
     // TODO: HUD class?
-    if (!this._currentLevel.tutorial.isStarted ||
-        this._currentLevel.tutorial.isComplete) {
+    if (this._currentLevel.tutorial.isComplete) {
       this._BACMeter.value = this._player.drunkenness;
       this._HPMeter.value = this._player.health;
 
@@ -331,9 +322,7 @@ class GameManager implements GameTimerListener, KeyboardListener {
   void onTimeOut() {
     this.stop();
 
-    this._ui.showView(
-        new Dialog("You took way too long.  Go home!  GAME OVER"),
-        pause: true);
+    this._ui.showView(new ScoreScreen(this._score, this._timer.duration, this._timer.getRemainingTime()));
   }
 
   void onKeyDown(KeyboardEvent e) {
