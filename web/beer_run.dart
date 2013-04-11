@@ -75,7 +75,8 @@ class GameManager implements GameTimerListener, KeyboardListener {
     this._timer = new GameTimer(this._currentLevel.duration);
     this._timer.addListener(this);
 
-    this._player = new Player(this._currentLevel, DIR_DOWN, 32 * 36, 32 * 5);
+    this._player = new Player(this._currentLevel, DIR_DOWN,
+        this._currentLevel.startX, this._currentLevel.startY);
     this._player.speed = 1;
     this._player.addBeers(3);
     this._player.setControlComponent(playerInput);
@@ -92,115 +93,6 @@ class GameManager implements GameTimerListener, KeyboardListener {
   }
 
   bool get continueLoop => this._continueLoop;
-
-  void _endTutorial() {
-
-    // Do some debug things
-    if (this._DEBUG_showScoreScreen) {
-      this._ui.showView(new ScoreScreen(22, new Duration(seconds: 3* 60), new Duration(seconds: 60)),
-          pause: true);
-    }
-
-    this._player.setPos(32 * 36, 32 * 5);
-    this._timer.startCountdown();
-    this._inTutorial = false;
-    this._player.setDrawingComponent(
-        new PlayerDrawingComponent(this._canvasManager, this._canvasDrawer, true)
-      );
-  }
-
-  void _continueTutorial3() {
-    window.console.log("continueTutorial3");
-
-    this._ui.showView(
-        new Dialog("Well, what are you waiting for!?  Better get going!  Oh yea, and don't forget to keep your buzz going... don't get bored and bail on us!"),
-        callback: this._endTutorial
-      );
-  }
-
-  void _continueTutorial2() {
-    window.console.log("continueTutorial2");
-
-    int tutorialDestX = this._currentLevel.startX;
-    int tutorialDestY = this._currentLevel.startY;
-    Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
-
-      int offsetX = this._canvasDrawer.offsetX;
-      int offsetY = this._canvasDrawer.offsetY;
-
-      window.console.log("$offsetX - $offsetY");
-      if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-        t.cancel();
-        this._continueTutorial3();
-        return;
-      }
-
-      int moveX;
-      if (tutorialDestX < offsetX) {
-        moveX = max(-5, tutorialDestX - offsetX);
-      } else {
-        moveX = min(5, tutorialDestX - offsetX);
-      }
-      int moveY;
-      if (tutorialDestY < offsetY) {
-        moveY = max(-5, tutorialDestY - offsetY);
-      } else {
-        moveY = min(5, tutorialDestY - offsetY);
-      }
-
-
-      // Move the viewport closer to the beer store
-      this._canvasDrawer.moveOffset(moveX, moveY);
-
-      this._canvasDrawer.clear();
-      this._currentLevel.draw(this._canvasDrawer);
-    });
-  }
-
-  void _continueTutorial() {
-
-    this._ui.showView(
-        new Dialog("Grab us a 24 pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!"),
-        callback: this._continueTutorial2
-      );
-  }
-
-  void _startTutorial() {
-
-    this._inTutorial = true;
-    int tutorialDestX = this._currentLevel.storeX;
-    int tutorialDestY = this._currentLevel.storeY;
-    Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
-
-      int offsetX = this._canvasDrawer.offsetX;
-      int offsetY = this._canvasDrawer.offsetY;
-
-      if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-        t.cancel();
-        this._continueTutorial();
-        return;
-      }
-
-      int moveX;
-      if (tutorialDestX < offsetX) {
-        moveX = max(-5, tutorialDestX - offsetX);
-      } else {
-        moveX = min(5, offsetX - tutorialDestX);
-      }
-      int moveY;
-      if (tutorialDestY < offsetY) {
-        moveY = max(-5, offsetY - tutorialDestY);
-      } else {
-        moveY = min(5, tutorialDestY - offsetY);
-      }
-
-      // Move the viewport closer to the beer store
-      this._canvasDrawer.moveOffset(moveX, moveY);
-
-      this._canvasDrawer.clear();
-      this._currentLevel.draw(this._canvasDrawer);
-    });
-  }
 
   void start() {
 
@@ -224,6 +116,11 @@ class GameManager implements GameTimerListener, KeyboardListener {
               .then((var _) => this._endTutorial());
           }
       );
+  }
+
+  void _endTutorial() {
+    this._player.setDrawingComponent(new PlayerDrawingComponent(
+        this._canvasManager, this._canvasDrawer, true));
   }
 
   void update() {

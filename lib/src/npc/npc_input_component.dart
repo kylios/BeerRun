@@ -49,7 +49,7 @@ class NPCInputComponent extends Component {
       int _min = min(this._chDirDown,
                 min(this._chDirLeft,
                 min (this._chDirRight, this._chDirUp)));
-      this._maxPaces = r.nextInt(2 * _max - _min + 1) + 200;
+      this._maxPaces = r.nextInt(2 * _max - _min + 1) + 400;
       this._paces = 0;
 
       int d = r.nextInt(2);

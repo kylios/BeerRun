@@ -43,9 +43,9 @@ class CanvasDrawer implements DrawingInterface {
 
     // Stop "scrolling" when we get too close to the edge
     if (x < 0)  x = 0;
-    else if (x /*+ this._canvasManager.width*/ > this._boundX)  x = this._boundX;
+    else if (x /* + this._canvasManager.width*/ > this._boundX)  x = this._boundX;// - this._canvasManager.width;
     if (y < 0)  y = 0;
-    else if (y /*+ this._canvasManager.height*/ > this._boundY)  y = this._boundY;
+    else if (y /*+ this._canvasManager.height*/ > this._boundY)  y = this._boundY;// - this._canvasManager.height;
 
     this._offsetX = x;
     this._offsetY = y;
@@ -80,9 +80,10 @@ class CanvasDrawer implements DrawingInterface {
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
     if (?width && ?height)
     {
-      Rect destinationRect = new Rect(x, y, width, height);
-      Rect sourceRect = new Rect(0, 0, i.width, i.height);
-      c.drawImageAtScale(i, destinationRect);
+      //Rect destinationRect = new Rect(x, y, width, height);
+      //Rect sourceRect = new Rect(0, 0, i.width, i.height);
+      // TODO: durrrrrr
+      c.drawImage(i, x, y);
     }
     else
     {

@@ -69,22 +69,29 @@ class TutorialManager {
     }
 
     if (! this._isComplete) {
-      if (this._finishStep != null) {
-        if (null == f) {
-          f = (() {
-            this._isComplete = true;
+      if (null == f) {
+        f = (() {
+          this._isComplete = true;
+          if (this._finishStep != null) {
             return this._finishStep(null);
-          })();
-        } else {
-          f = f.then((var _) {
-            this._isComplete = true;
+          } else return null;
+        })();
+      } else {
+        f = f.then((var _) {
+          this._isComplete = true;
+          if (this._finishStep != null) {
             return this._finishStep(null);
-          });
-        }
+          } else return null;
+        });
       }
     }
 
-    f.then((var _) => c.complete());
+    if (f != null) {
+      f.then((var _) => c.complete());
+    } else {
+      c.complete();
+      f = c.future;
+    }
 
     return f;
   }
