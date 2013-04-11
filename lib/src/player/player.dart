@@ -23,7 +23,7 @@ class Player extends GameObject implements ComponentListener {
   int _health = 3;
   int _beers = 0;
   int _buzz = 3;  // out of 10;
-  int _buzzDecreaseTime = 0;
+  int _buzzDecreaseTime = -1;
 
   int _nextBuzzDecreaseTS = new DateTime.now().millisecondsSinceEpoch ~/ 1000 + 35;
 
@@ -69,14 +69,17 @@ class Player extends GameObject implements ComponentListener {
   void resetBeersDelivered() {
     this._beersDelivered = 0;
   }
+  void updateBuzzTime() {
+    this._buzzDecreaseTime = new DateTime.now().millisecondsSinceEpoch +
+        Player.BUZZ_TIME;
+  }
 
   void update() {
     DateTime now = new DateTime.now();
     if ( ! this.isRemoved) {
 
       if (this._buzzDecreaseTime == 0) {
-        this._buzzDecreaseTime = now.millisecondsSinceEpoch +
-            Player.BUZZ_TIME;
+        this.updateBuzzTime();
       }
 
       // Reset some single-frame state variables
@@ -103,7 +106,8 @@ class Player extends GameObject implements ComponentListener {
         this._beerStolenUntil = 0;
       }
 
-      if (this._buzzDecreaseTime <= now.millisecondsSinceEpoch) {
+      if (this._buzzDecreaseTime > 0 &&
+          this._buzzDecreaseTime <= now.millisecondsSinceEpoch) {
         this._buzz--;
         this._buzzDecreaseTime = now.millisecondsSinceEpoch + Player.BUZZ_TIME;
         if (this._buzz <= 3) {

@@ -121,6 +121,7 @@ class GameManager implements GameTimerListener, KeyboardListener {
   void _endTutorial() {
     this._player.setDrawingComponent(new PlayerDrawingComponent(
         this._canvasManager, this._canvasDrawer, true));
+    this._player.updateBuzzTime();
   }
 
   void update() {
