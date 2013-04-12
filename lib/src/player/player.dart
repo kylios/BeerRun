@@ -5,12 +5,13 @@ class Player extends GameObject implements ComponentListener {
   static final int BUZZ_PER_BEER = 1;
   static final int MAX_DRUNKENNESS = 10;
   static final int MIN_DRUNKENNESS = 0;
-  static final int DAMAGE_INTERVAL = 200;
+  static final int DAMAGE_INTERVAL = 50;
   static final int BUZZ_TIME = 35000;
 
 
   bool _damaged = false;
   int _damageInterval = 0;
+  int _blinkInterval = 0;
   int _damagedUntil = 0;
   int _beerStolenUntil = 0;
 
@@ -94,8 +95,11 @@ class Player extends GameObject implements ComponentListener {
         if (this._damagedUntil <= now.millisecondsSinceEpoch) {
           this._damaged = false;
           this._damageInterval = 0;
+          this._blinkInterval = 0;
         } else {
           if (this._damageInterval <= now.millisecondsSinceEpoch) {
+            this._blinkInterval = now.millisecondsSinceEpoch + 10;
+          } else if (this._blinkInterval <= now.millisecondsSinceEpoch) {
             this._damageInterval = now.millisecondsSinceEpoch +
                 Player.DAMAGE_INTERVAL;
           }

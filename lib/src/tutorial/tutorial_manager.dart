@@ -120,4 +120,48 @@ class TutorialManager {
 
     return c.future;
   }
+
+  Future skip(var _) {
+    Completer c = new Completer();
+
+    if (this._isComplete) {
+      c.complete();
+      return c.future;
+    }
+
+    Future f = null;
+
+    if (! this._isStarted) {
+      this._isStarted = true;
+      if (this._startStep != null) {
+        f = this._startStep(null);
+      }
+    }
+    if (! this._isComplete) {
+      if (null == f) {
+        f = (() {
+          this._isComplete = true;
+          if (this._finishStep != null) {
+            return this._finishStep(null);
+          } else return null;
+        })();
+      } else {
+        f = f.then((var _) {
+          this._isComplete = true;
+          if (this._finishStep != null) {
+            return this._finishStep(null);
+          } else return null;
+        });
+      }
+    }
+
+    if (f != null) {
+      f.then((var _) => c.complete());
+    } else {
+      c.complete();
+      f = c.future;
+    }
+
+    return f;
+  }
 }

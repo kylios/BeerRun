@@ -638,7 +638,7 @@ class Level2 extends Level {
 
   void setupTutorial(UI ui, Player p) {
 
-    this.tutorial.onStart((var _) {
+    this.tutorial.addStep((var _) {
 
       Completer c = new Completer();
 

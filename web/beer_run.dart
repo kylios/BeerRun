@@ -109,10 +109,14 @@ class GameManager implements GameTimerListener, KeyboardListener {
             "Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to head down to the STORE and get some BEER if you wanna come to the party.  You can find the store down here..."
         ),
         callback: () {
+          (this._currentLevel.tutorial.run())
+          .then((var _) => this._endTutorial());
+
+          /*
           ((this._DEBUG_skipTutorial ?
             this._currentLevel.tutorial.end(null) :
               this._currentLevel.tutorial.run()))
-              .then((var _) => this._endTutorial());
+              .then((var _) => this._endTutorial());*/
           }
       );
   }
@@ -244,7 +248,8 @@ window.console.log("key pressed: ${e.keyCode}");
       case KeyboardListener.KEY_T:
         window.console.log("key T");
         // TODO: something like tutorialmgr.skip() ???
-        this._DEBUG_skipTutorial = true;
+        //this._DEBUG_skipTutorial = true;
+        this._currentLevel.tutorial.skip(null);
         break;
       case KeyboardListener.KEY_S:
         this._DEBUG_showScoreScreen = true;

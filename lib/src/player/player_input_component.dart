@@ -82,9 +82,9 @@ class PlayerInputComponent extends Component
     }
 
     playerX = playerX +
-        (this._accel[DIR_RIGHT.direction] - this._accel[DIR_LEFT.direction]) ~/ 2;
+        (this._accel[DIR_RIGHT.direction] - this._accel[DIR_LEFT.direction]);// ~/ 2;
     playerY = playerY +
-        (this._accel[DIR_DOWN.direction] - this._accel[DIR_UP.direction]) ~/ 2;
+        (this._accel[DIR_DOWN.direction] - this._accel[DIR_UP.direction]);// ~/ 2;
 
   // Do a wobble thing, back and forth, because you're drunk
     if (speed > 0) {
