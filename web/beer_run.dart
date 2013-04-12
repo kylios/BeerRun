@@ -39,7 +39,6 @@ class GameManager implements GameTimerListener, KeyboardListener {
   bool _continueLoop = true;
   bool _showHUD = false;
 
-  bool _inTutorial = true;
   int _tutorialDestX = 0;
   int _tutorialDestY = 0;
 
@@ -124,10 +123,17 @@ class GameManager implements GameTimerListener, KeyboardListener {
     this._player.updateBuzzTime();
   }
 
+
+
+  // This is the main update loop
   void update() {
 
     this._canvasDrawer.clear();
     this._currentLevel.update();
+    if (this._currentLevel.tutorial.isComplete) {
+      this._player.draw();
+      window.console.log("drawing player");
+    }
 
     bool gameOver = false;
 

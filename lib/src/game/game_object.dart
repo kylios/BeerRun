@@ -71,16 +71,15 @@ abstract class GameObject implements ComponentListener {
   }
 
   void update() {
-
     this._oldX = this.x;
     this._oldY = this.y;
     this._control.update(this);
+  }
 
+  void draw() {
     if (this._drawer != null) {
       this._drawer.update(this);
     }
-  }
-  void draw() {
   }
 
   void moveUp([int speed]) {

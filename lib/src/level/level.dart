@@ -15,10 +15,10 @@ abstract class Level implements ComponentListener {
   List<bool> _blocked;      // blocked tiles
   List<Trigger> _triggers;  // triggered tiles
 
+  TutorialManager _tutorial;
+
   // Level functionality members
   int _layer = -1;
-
-  TutorialManager _tutorial;
 
   CanvasManager _manager;
   DrawingInterface _drawer;
@@ -216,12 +216,23 @@ abstract class Level implements ComponentListener {
 
   void update() {
 
+    // Eventually, it would be cool if drawing could be moved out of the
+    // main update loop.  How we do it, I'm not positive, but I'm thinking we
+    // could just call window.requestDrawFrame or whatever and pass in the main
+    // draw() function, and have update() called in an interval where we
+    // regulate the speed with an updatesPerSecond counter.  This would allow
+    // us to better control start/stops of the update loop too, and make it
+    // easier to pass in different update() functions for different modes of
+    // the game.
+    // TODO: for now I'm just moving player.draw() out of here, and that'll
+    //    have to be called explicitly from the game's loop.
     this.draw(this._drawer);
 
 
     if ( ! this._paused) {
-      this._player.update();
-      this._player.draw();
+      //this._player.update();
+      // TODO: don't draw here!  Draw in game.update().
+      //this._player.draw();
 
       // Check if the player is standing on a trigger
       for (Trigger t in this._triggers) {
@@ -254,7 +265,11 @@ abstract class Level implements ComponentListener {
       if ( ! this._paused) {
         o.update();
       }
-      o.draw();
+
+      // TODO: fuuuuuuuuuck this is so terrible
+      if (o != this._player) {
+        o.draw();
+      }
       return ! o.isRemoved;
     }));
 
@@ -269,6 +284,8 @@ abstract class Level implements ComponentListener {
     }
   }
 
+  // The main draw function.  Please see above for some rationale for moving
+  // this out of the update() function.
   void draw(CanvasDrawer d) {
 
     for (List<Sprite> layer in this._sprites) {
