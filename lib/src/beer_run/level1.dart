@@ -363,7 +363,7 @@ class Level1 extends Level {
 
   }
 
-  int get startX => 32 * 36 - 8;
+  int get startX => 32 * 36 - 16;
   int get startY => 32 * 6;
   int get storeX => 0 * 32;
   int get storeY => 0 * 32;
@@ -374,14 +374,17 @@ class Level1 extends Level {
     this.tutorial.onStart((var _) {
       Completer c = new Completer();
       this.canvasDrawer.setOffset(20 * 32, 0);
-      ui.showView(
-          new Dialog(
-              "Welcome to the party of the century!  We've got music, games, "
-              "dancing, booze... oh... wait... someone's gotta bring that last "
-              "one.  Too bad, looks like you drew the short straw here buddy..."
-              " we need you to head down to the STORE and get some BEER if you "
-              "wanna come to the party.  You can find the store down here..."
-          ), callback: c.complete);
+
+      View v = new TutorialDialog(this.tutorial,
+          "Welcome to the party of the century!  We've got music, games, "
+          "dancing, booze... oh... wait... someone's gotta bring that last "
+          "one.  Too bad, looks like you drew the short straw here buddy..."
+          " we need you to head down to the STORE and get some BEER if you "
+          "wanna come to the party.  You can find the store down here..."
+      );
+
+      ui.showView(v, callback: c.complete);
+
       return c.future;
     }).addStep((var _) {
 
@@ -424,7 +427,10 @@ class Level1 extends Level {
     .addStep((var _) {
       Completer c = new Completer();
       ui.showView(
-          new Dialog("Grab us a ${this.beersToWin} pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!"),
+          new TutorialDialog(this.tutorial,
+              "Grab us a ${this.beersToWin} pack and bring it back.  Better "
+              "avoid the bums... they like to steal your beer, and then you'll "
+              "have to go BACK and get MORE!"),
           callback: c.complete
       );
       return c.future;
@@ -475,7 +481,10 @@ class Level1 extends Level {
       Completer c = new Completer();
 
       ui.showView(
-          new Dialog("Well, what are you waiting for!?  Better get going!  Oh yea, and don't forget to keep your buzz going... don't get bored and bail on us!"),
+          new TutorialDialog(this.tutorial,
+              "Well, what are you waiting for!?  Better get going!  Oh yea, and"
+              " don't forget to keep your buzz going... don't get bored and"
+              " bail on us!"),
           callback: () { c.complete(); }
       );
       return c.future;

@@ -47,7 +47,7 @@ class UI {
 
     this._callback = callback;
     v._container = this;
-    v.onDraw(this._rootView.rootElement);
+    v.draw(this._rootView.rootElement);
     this._rootView.show();
 
     if (seconds != 0) {

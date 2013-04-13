@@ -13,3 +13,4 @@ part 'src/ui/ui.dart';
 part 'src/ui/view.dart';
 part 'src/ui/window_view.dart';
 part 'src/ui/dialog.dart';
+part 'src/ui/button.dart';
