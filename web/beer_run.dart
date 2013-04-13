@@ -94,37 +94,20 @@ class GameManager implements GameTimerListener, KeyboardListener {
   bool get continueLoop => this._continueLoop;
 
   void start() {
-
-    int tutorialStartX = this._currentLevel.startX;
-    int tutorialStartY = this._currentLevel.startY;
-
-    this._canvasDrawer.setOffset(tutorialStartX, tutorialStartY);
-
     this._canvasDrawer.clear();
     this._currentLevel.draw(this._canvasDrawer);
 
-    // Start level tutorial
-    this._ui.showView(
-        new Dialog(
-            "Welcome to the party of the century!  We've got music, games, dancing, booze... oh... wait... someone's gotta bring that last one.  Too bad, looks like you drew the short straw here buddy... we need you to head down to the STORE and get some BEER if you wanna come to the party.  You can find the store down here..."
-        ),
-        callback: () {
-          (this._currentLevel.tutorial.run())
-          .then((var _) => this._endTutorial());
-
-          /*
-          ((this._DEBUG_skipTutorial ?
-            this._currentLevel.tutorial.end(null) :
-              this._currentLevel.tutorial.run()))
-              .then((var _) => this._endTutorial());*/
-          }
-      );
+    this._currentLevel.tutorial.run()
+      .then((var _) => this._endTutorial());
   }
 
   void _endTutorial() {
     this._player.setDrawingComponent(new PlayerDrawingComponent(
         this._canvasManager, this._canvasDrawer, true));
     this._player.updateBuzzTime();
+    int playerStartX = this._currentLevel.startX;
+    int playerStartY = this._currentLevel.startY;
+    this._player.setPos(playerStartX, playerStartY);
   }
 
 
@@ -215,7 +198,7 @@ class GameManager implements GameTimerListener, KeyboardListener {
 
   Level _getNextLevel() {
 
-    Level level = new Level2(
+    Level level = new Level1(
         this._canvasManager, this._canvasDrawer);
 
     return level;

@@ -363,14 +363,131 @@ class Level1 extends Level {
 
   }
 
-  int get storeX => 0;
-  int get storeY => 0;
-  int get startX => 0;
-  int get startY => 0;
-  int get beersToWin => 24;
+  int get startX => 32 * 36 - 8;
+  int get startY => 32 * 6;
+  int get storeX => 0 * 32;
+  int get storeY => 0 * 32;
+  int get beersToWin => 12;
 
   void setupTutorial(UI ui, Player p) {
 
+    this.tutorial.onStart((var _) {
+      Completer c = new Completer();
+      this.canvasDrawer.setOffset(20 * 32, 0);
+      ui.showView(
+          new Dialog(
+              "Welcome to the party of the century!  We've got music, games, "
+              "dancing, booze... oh... wait... someone's gotta bring that last "
+              "one.  Too bad, looks like you drew the short straw here buddy..."
+              " we need you to head down to the STORE and get some BEER if you "
+              "wanna come to the party.  You can find the store down here..."
+          ), callback: c.complete);
+      return c.future;
+    }).addStep((var _) {
+
+      Completer c = new Completer();
+
+      int tutorialDestX = this.storeX;
+      int tutorialDestY = this.storeY;
+      Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
+
+        int offsetX = this.canvasDrawer.offsetX;
+        int offsetY = this.canvasDrawer.offsetY;
+
+        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+          t.cancel();
+          c.complete();
+        }
+
+        int moveX;
+        if (tutorialDestX < offsetX) {
+          moveX = max(-5, tutorialDestX - offsetX);
+        } else {
+          moveX = min(5, offsetX - tutorialDestX);
+        }
+        int moveY;
+        if (tutorialDestY < offsetY) {
+          moveY = max(-5, offsetY - tutorialDestY);
+        } else {
+          moveY = min(5, tutorialDestY - offsetY);
+        }
+
+        // Move the viewport closer to the beer store
+        this.canvasDrawer.moveOffset(moveX, moveY);
+
+        this.canvasDrawer.clear();
+        this.draw(this.canvasDrawer);
+      });
+
+      return c.future;
+    })
+    .addStep((var _) {
+      Completer c = new Completer();
+      ui.showView(
+          new Dialog("Grab us a ${this.beersToWin} pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!"),
+          callback: c.complete
+      );
+      return c.future;
+    })
+    .addStep((var _) {
+      window.console.log("continueTutorial2");
+
+      Completer c = new Completer();
+
+      int tutorialDestX = 20 * 32;
+      int tutorialDestY = 0;
+      Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
+
+        int offsetX = this.canvasDrawer.offsetX;
+        int offsetY = this.canvasDrawer.offsetY;
+
+        window.console.log("$offsetX - $offsetY");
+        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+          t.cancel();
+          c.complete();
+          return c.future;
+        }
+
+        int moveX;
+        if (tutorialDestX < offsetX) {
+          moveX = max(-5, tutorialDestX - offsetX);
+        } else {
+          moveX = min(5, tutorialDestX - offsetX);
+        }
+        int moveY;
+        if (tutorialDestY < offsetY) {
+          moveY = max(-5, tutorialDestY - offsetY);
+        } else {
+          moveY = min(5, tutorialDestY - offsetY);
+        }
+
+        // Move the viewport closer to the beer store
+        this.canvasDrawer.moveOffset(moveX, moveY);
+
+        this.canvasDrawer.clear();
+        this.draw(this.canvasDrawer);
+      });
+
+      return c.future;
+    })
+    .addStep((var _) {
+      window.console.log("continueTutorial3");
+      Completer c = new Completer();
+
+      ui.showView(
+          new Dialog("Well, what are you waiting for!?  Better get going!  Oh yea, and don't forget to keep your buzz going... don't get bored and bail on us!"),
+          callback: () { c.complete(); }
+      );
+      return c.future;
+    })
+    .onFinish((var _) {
+
+      p.setPos(this.startX, this.startY);
+      p.setDrawingComponent(
+        new PlayerDrawingComponent(this.canvasManager, this.canvasDrawer, true)
+      );
+    });
   }
+
 }
 

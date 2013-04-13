@@ -637,105 +637,7 @@ class Level2 extends Level {
   }
 
   void setupTutorial(UI ui, Player p) {
-
-    this.tutorial.addStep((var _) {
-
-      Completer c = new Completer();
-
-      int tutorialDestX = this.storeX;
-      int tutorialDestY = this.storeY;
-      Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
-
-        int offsetX = this.canvasDrawer.offsetX;
-        int offsetY = this.canvasDrawer.offsetY;
-
-        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-          t.cancel();
-          c.complete();
-        }
-
-        int moveX;
-        if (tutorialDestX < offsetX) {
-          moveX = max(-5, tutorialDestX - offsetX);
-        } else {
-          moveX = min(5, offsetX - tutorialDestX);
-        }
-        int moveY;
-        if (tutorialDestY < offsetY) {
-          moveY = max(-5, offsetY - tutorialDestY);
-        } else {
-          moveY = min(5, tutorialDestY - offsetY);
-        }
-
-        // Move the viewport closer to the beer store
-        this.canvasDrawer.moveOffset(moveX, moveY);
-
-        this.canvasDrawer.clear();
-        this.draw(this.canvasDrawer);
-      });
-
-      return c.future;
-    })
-    .addStep((var _) {
-      Completer c = new Completer();
-      ui.showView(
-          new Dialog("Grab us a 24 pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!"),
-          callback: c.complete
-      );
-      return c.future;
-    })
-    .addStep((var _) {
-      window.console.log("continueTutorial2");
-
-      Completer c = new Completer();
-
-      int tutorialDestX = this.startX;
-      int tutorialDestY = this.startY;
-      Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
-
-        int offsetX = this.canvasDrawer.offsetX;
-        int offsetY = this.canvasDrawer.offsetY;
-
-        window.console.log("$offsetX - $offsetY");
-        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-          t.cancel();
-          c.complete();
-          return c.future;
-        }
-
-        int moveX;
-        if (tutorialDestX < offsetX) {
-          moveX = max(-5, tutorialDestX - offsetX);
-        } else {
-          moveX = min(5, tutorialDestX - offsetX);
-        }
-        int moveY;
-        if (tutorialDestY < offsetY) {
-          moveY = max(-5, tutorialDestY - offsetY);
-        } else {
-          moveY = min(5, tutorialDestY - offsetY);
-        }
-
-        // Move the viewport closer to the beer store
-        this.canvasDrawer.moveOffset(moveX, moveY);
-
-        this.canvasDrawer.clear();
-        this.draw(this.canvasDrawer);
-      });
-
-      return c.future;
-    })
-    .addStep((var _) {
-      window.console.log("continueTutorial3");
-      Completer c = new Completer();
-
-      ui.showView(
-          new Dialog("Well, what are you waiting for!?  Better get going!  Oh yea, and don't forget to keep your buzz going... don't get bored and bail on us!"),
-          callback: () { c.complete(); }
-      );
-      return c.future;
-    })
-    .onFinish((var _) {
+    this.tutorial.onFinish((var _) {
 
       p.setPos(32 * 36, 32 * 5);
       p.setDrawingComponent(
@@ -743,7 +645,6 @@ class Level2 extends Level {
       );
     });
   }
-
 
   void update() {
     this._spawnCar1Cnt++;

@@ -21,12 +21,12 @@ class DrawingUtils {
         String line = sb.toString();
         lines.add(line);
         sb = new StringBuffer();
-        sb.add(s);
+        sb.write(s);
         len = strlen;
       } else {
 
-        sb.add(s);
-        sb.add(" ");
+        sb.write(s);
+        sb.write(" ");
         len += strlen + spaceWidth;
       }
     }
