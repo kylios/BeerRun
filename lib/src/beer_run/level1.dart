@@ -376,11 +376,10 @@ class Level1 extends Level {
       this.canvasDrawer.setOffset(20 * 32, 0);
 
       View v = new TutorialDialog(this.tutorial,
-          "Welcome to the party of the century!  We've got music, games, "
-          "dancing, booze... oh... wait... someone's gotta bring that last "
-          "one.  Too bad, looks like you drew the short straw here buddy..."
-          " we need you to head down to the STORE and get some BEER if you "
-          "wanna come to the party.  You can find the store down here..."
+          "What.. YOU want to come to our party!?  Well we need more "
+          "beer, and it looks like you drew the short straw here buddy... "
+          "We need you to head down to the STORE and get some BEER if you "
+          "wanna come to the party.  You can find the store over there..."
       );
 
       ui.showView(v, callback: c.complete);
