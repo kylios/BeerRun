@@ -34,9 +34,8 @@ class Player extends GameObject implements ComponentListener {
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
-  Player(Level l, Direction d, int x, int y) : super(d, x, y) {
+  Player() : super(DIR_DOWN, 0, 0) {
 
-    this.setLevel(l);
     this.speed = 6;
 
     SpriteSheet sprites = new SpriteSheet(
@@ -62,6 +61,12 @@ class Player extends GameObject implements ComponentListener {
     this._walkSprites[DIR_DOWN.direction] = new SpriteAnimation(walkDown);
     this._walkSprites[DIR_LEFT.direction] = new SpriteAnimation(walkLeft);
     this._walkSprites[DIR_RIGHT.direction] = new SpriteAnimation(walkRight);
+  }
+
+  void startInLevel(Level l) {
+    this.setLevel(l);
+    this.setPos(l.startX, l.startY);
+    this.dir = DIR_DOWN;
   }
 
   void addBeers(int beers) {

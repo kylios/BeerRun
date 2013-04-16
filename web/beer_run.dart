@@ -19,18 +19,20 @@ final int CANVAS_HEIGHT = 480;
 
 GameManager game;
 
-class GameManager implements GameTimerListener, KeyboardListener {
+class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
   CanvasManager _canvasManager;
   CanvasDrawer _canvasDrawer;
 
   int _score = 0;
+  bool _wonLevel = false;
 
   UI _ui;
   Player _player;
 
   GameTimer _timer;
   Level _currentLevel;
+  int _currentLevelIdx = 0;
 
   bool _notifyCar = true;
   bool _notifyTheft = true;
@@ -38,6 +40,7 @@ class GameManager implements GameTimerListener, KeyboardListener {
 
   bool _continueLoop = true;
   bool _showHUD = false;
+  bool _pause = false;
 
   int _tutorialDestX = 0;
   int _tutorialDestY = 0;
@@ -49,6 +52,11 @@ class GameManager implements GameTimerListener, KeyboardListener {
   // Debug settings
   bool _DEBUG_skipTutorial = false;
   bool _DEBUG_showScoreScreen = false;
+
+  List<Level> _levels = new List<Level>();
+
+
+  PlayerInputComponent _tmpInputComponent = null;
 
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
@@ -70,30 +78,48 @@ class GameManager implements GameTimerListener, KeyboardListener {
     this._canvasManager.addKeyboardListener(playerInput);
     this._canvasManager.addKeyboardListener(this);
 
-    this._currentLevel = this._getNextLevel();
-    this._timer = new GameTimer(this._currentLevel.duration);
-    this._timer.addListener(this);
-
-    this._player = new Player(this._currentLevel, DIR_DOWN,
-        this._currentLevel.startX, this._currentLevel.startY);
+    this._player = new Player();
     this._player.speed = 1;
     this._player.addBeers(3);
     this._player.setControlComponent(playerInput);
     this._player.setDrawingComponent(drawer);
 
-    this._ui = new UI(UIRootElement, this._player);
+    this._setupLevels();
 
-    this._currentLevel.addPlayerObject(this._player);
-    this._currentLevel.setupTutorial(this._ui, this._player);
+    this._ui = new UI(UIRootElement);
+    this._ui.addListener(this);
 
     this._BACMeter = new Meter(10, 52, 10, 116, 22);
     this._HPMeter = new Meter(3, 52, 36, 116, 22);
+  }
 
+  /**
+   * Prereqs:
+   * - this._canvasManager
+   * - this._canvasDrawer
+   */
+  void _setupLevels() {
+    this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
+    this._levels.add(new Level2(this._canvasManager, this._canvasDrawer));
   }
 
   bool get continueLoop => this._continueLoop;
 
   void start() {
+    this.startNextLevel();
+  }
+
+  void startNextLevel() {
+
+    this._currentLevel = this._getNextLevel();
+    this._player.startInLevel(this._currentLevel);
+
+    this._timer = new GameTimer(this._currentLevel.duration);
+    this._timer.addListener(this);
+
+    this._currentLevel.setupTutorial(this._ui, this._player);
+    this._currentLevel.addPlayerObject(this._player);
+
     this._canvasDrawer.clear();
     this._currentLevel.draw(this._canvasDrawer);
 
@@ -119,7 +145,6 @@ class GameManager implements GameTimerListener, KeyboardListener {
     this._currentLevel.update();
     if (this._currentLevel.tutorial.isComplete) {
       this._player.draw();
-      window.console.log("drawing player");
     }
 
     bool gameOver = false;
@@ -128,37 +153,50 @@ class GameManager implements GameTimerListener, KeyboardListener {
     if (this._notifyCar && this._player.wasHitByCar) {
 
       this._notifyCar = false;
+      this._pause = true;
       this._ui.showView(new Dialog("Fuck.  Watch where you're going!"),
-          pause: false, seconds: 5);
+          seconds: 5);
 
     } else if (this._notifyTheft && this._player.wasBeerStolen) {
 
       this._notifyTheft = false;
+      this._pause = true;
       this._ui.showView(new Dialog("Ohhh, the bum stole a beer!  One less for you!"),
-          pause: false, seconds: 5);
+          seconds: 5);
     } else if (this._notifyBored && this._player.boredNotify) {
       this._notifyBored = false;
+      this._pause = true;
       this._ui.showView(
           new Dialog("Better drink a beer or this is going to get real boring"),
-          pause: false, seconds: 5);
+          seconds: 5);
     }
 
     if (this._player.beersDelivered > 0) {
       this._score += this._player.beersDelivered;
       query("#score").innerHtml = this._score.toString();
       this._player.resetBeersDelivered();
-      this._ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"), pause: true);
+
+      if (this._score == this._currentLevel.beersToWin) {
+        this._wonLevel = true;
+        gameOver = true;
+      } else {
+        this._pause = true;
+        this._ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
+      }
     }
 
     if (this._player.drunkenness <= 0) {
-      this._ui.showView(new Dialog("You're too sober.  You got bored and go home.  GAME OVER!"), pause: true);
+      this._pause = true;
+      this._ui.showView(new Dialog("You're too sober.  You got bored and go home.  GAME OVER!"));
       gameOver = true;
     } else if (this._player.drunkenness >= 10) {
-      this._ui.showView(new Dialog("You black out like a dumbass, before you even get to the party.  GAME OVER!"), pause: true);
+      this._pause = true;
+      this._ui.showView(new Dialog("You black out like a dumbass, before you even get to the party.  GAME OVER!"));
       gameOver = true;
     }
     if (this._player.health == 0) {
-      this._ui.showView(new Dialog("You are dead.  GAME OVER!"), pause: true);
+      this._pause = true;
+      this._ui.showView(new Dialog("You are dead.  GAME OVER!"));
       gameOver = true;
     }
 
@@ -198,16 +236,30 @@ class GameManager implements GameTimerListener, KeyboardListener {
 
   Level _getNextLevel() {
 
-    Level level = new Level1(
-        this._canvasManager, this._canvasDrawer);
-
-    return level;
+    return this._levels[this._currentLevelIdx++];
   }
 
   void _onGameOver() {
 
     // Do gameover stuff
     stop();
+  }
+
+  void onWindowOpen(UI ui) {
+    // only IF we NEED to
+    if (this._pause) {
+      this._player.level.pause();
+      this._tmpInputComponent = this._player.getControlComponent();
+      this._player.setControlComponent(new NullInputComponent());
+      this._pause = false;
+    }
+  }
+  void onWindowClose(UI ui) {
+
+    if (this._tmpInputComponent != null) {
+      this._player.setControlComponent(this._tmpInputComponent);
+    }
+    this._player.level.unPause();
   }
 
   void onTimeOut() {

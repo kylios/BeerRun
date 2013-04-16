@@ -255,32 +255,31 @@ abstract class Level implements ComponentListener {
             Timer.run(() => o.listen(e));
         }
       }
-    }
 
+      // Loop through the objects, calling update on each.  Remove them from the
+      // list if they become removed from the level.
+      this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
+      {
+        if ( ! this._paused) {
+          o.update();
+        }
 
-    // Loop through the objects, calling update on each.  Remove them from the
-    // list if they become removed from the level.
-    this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
-    {
+        // TODO: fuuuuuuuuuck this is so terrible
+        if (o != this._player) {
+          o.draw();
+        }
+        return ! o.isRemoved;
+      }));
+
       if ( ! this._paused) {
-        o.update();
+        // Process any animations going on
+        this._animations = new List<Animation>.from(
+            this._animations.where((Animation a) {
+              a.drawNext(this._drawer);
+              return ! a.isDone;
+            })
+        );
       }
-
-      // TODO: fuuuuuuuuuck this is so terrible
-      if (o != this._player) {
-        o.draw();
-      }
-      return ! o.isRemoved;
-    }));
-
-    if ( ! this._paused) {
-      // Process any animations going on
-      this._animations = new List<Animation>.from(
-          this._animations.where((Animation a) {
-            a.drawNext(this._drawer);
-            return ! a.isDone;
-          })
-      );
     }
   }
 
