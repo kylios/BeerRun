@@ -11,6 +11,7 @@ class TutorialManager {
   Future _cur;
   bool _isStarted = false;
   bool _isComplete = false;
+  bool _isSkipped = false;
 
   TutorialManager() {
     this._steps = new List<tutorialStep>();
@@ -64,7 +65,12 @@ class TutorialManager {
       if (null == f) {
         f = fn(null);
       } else {
-        f = f.then(fn);
+        f = f.then((var _) {
+          if (! this._isSkipped) {
+            this._cur = fn(null);
+          }
+          return this._cur;
+        });
       }
     }
 
@@ -87,8 +93,12 @@ class TutorialManager {
     }
 
     if (f != null) {
-      f.then((var _) => c.complete());
+      f.then((var _) {
+        this._isSkipped = false;
+        c.complete();
+      });
     } else {
+      this._isSkipped = false;
       c.complete();
       f = c.future;
     }
@@ -121,47 +131,7 @@ class TutorialManager {
     return c.future;
   }
 
-  Future skip(var _) {
-    Completer c = new Completer();
-
-    if (this._isComplete) {
-      c.complete();
-      return c.future;
-    }
-
-    Future f = null;
-
-    if (! this._isStarted) {
-      this._isStarted = true;
-      if (this._startStep != null) {
-        f = this._startStep(null);
-      }
-    }
-    if (! this._isComplete) {
-      if (null == f) {
-        f = (() {
-          this._isComplete = true;
-          if (this._finishStep != null) {
-            return this._finishStep(null);
-          } else return null;
-        })();
-      } else {
-        f = f.then((var _) {
-          this._isComplete = true;
-          if (this._finishStep != null) {
-            return this._finishStep(null);
-          } else return null;
-        });
-      }
-    }
-
-    if (f != null) {
-      f.then((var _) => c.complete());
-    } else {
-      c.complete();
-      f = c.future;
-    }
-
-    return f;
+  void skip(var _) {
+    this._isSkipped = true;
   }
 }

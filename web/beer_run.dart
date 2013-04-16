@@ -127,6 +127,15 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       .then((var _) => this._endTutorial());
   }
 
+  void stopLevel() {
+    this.stop();
+
+    this._ui.showView(new ScoreScreen(this._score,
+        this._timer.duration,
+        this._timer.getRemainingTime()),
+        callback: this.startNextLevel);
+  }
+
   void _endTutorial() {
     this._player.setDrawingComponent(new PlayerDrawingComponent(
         this._canvasManager, this._canvasDrawer, true));
@@ -134,6 +143,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     int playerStartX = this._currentLevel.startX;
     int playerStartY = this._currentLevel.startY;
     this._player.setPos(playerStartX, playerStartY);
+    this._timer.startCountdown();
   }
 
 
@@ -241,8 +251,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
   void _onGameOver() {
 
-    // Do gameover stuff
-    stop();
+    if (this._wonLevel) {
+      this.stopLevel();
+    } else {
+
+      // Do gameover stuff
+      stop();
+      // TODO: show lose popups here?
+    }
   }
 
   void onWindowOpen(UI ui) {
@@ -263,9 +279,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   }
 
   void onTimeOut() {
-    this.stop();
-
-    this._ui.showView(new ScoreScreen(this._score, this._timer.duration, this._timer.getRemainingTime()));
+    this.stopLevel();
   }
 
   void onKeyDown(KeyboardEvent e) {
