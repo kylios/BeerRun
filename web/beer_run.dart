@@ -153,11 +153,16 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     this._canvasDrawer.clear();
     this._currentLevel.update();
-    if (this._currentLevel.tutorial.isComplete) {
-      this._player.draw();
-    }
 
     bool gameOver = false;
+
+    if (this._currentLevel.tutorial.isComplete) {
+      this._player.draw();
+      if (this._score >= this._currentLevel.beersToWin) {
+        this._wonLevel = true;
+        gameOver = true;
+      }
+    }
 
     // Notify player
     if (this._notifyCar && this._player.wasHitByCar) {
@@ -186,13 +191,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       query("#score").innerHtml = this._score.toString();
       this._player.resetBeersDelivered();
 
-      if (this._score == this._currentLevel.beersToWin) {
-        this._wonLevel = true;
-        gameOver = true;
-      } else {
-        this._pause = true;
-        this._ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
-      }
+      this._pause = true;
+      this._ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
     }
 
     if (this._player.drunkenness <= 0) {

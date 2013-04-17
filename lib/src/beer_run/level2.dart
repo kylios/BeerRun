@@ -637,13 +637,7 @@ class Level2 extends Level {
   }
 
   void setupTutorial(UI ui, Player p) {
-    this.tutorial.onFinish((var _) {
 
-      p.setPos(32 * 36, 32 * 5);
-      p.setDrawingComponent(
-        new PlayerDrawingComponent(this.canvasManager, this.canvasDrawer, true)
-      );
-    });
   }
 
   void update() {

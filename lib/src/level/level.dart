@@ -238,7 +238,6 @@ abstract class Level implements ComponentListener {
       for (Trigger t in this._triggers) {
         int x = t.col * this._tileWidth;
         int y = t.row * this._tileHeight;
-        this._drawer.drawRect(x, y, this._tileWidth, this.tileHeight);
         GameObject o = this._player;
         if (
             (

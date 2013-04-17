@@ -361,6 +361,22 @@ class Level1 extends Level {
 
     //this.setSpriteAt(s, row, col, blocked)
 
+
+
+    // Add level triggers
+    GameEvent beerStoreEvent = new GameEvent();
+    beerStoreEvent.type = GameEvent.BEER_STORE_EVENT;
+    beerStoreEvent.value = 24;
+    Trigger beerStoreTrigger = new Trigger(beerStoreEvent, 3, 3);
+    Trigger beerStoreTrigger2 = new Trigger(beerStoreEvent, 3, 4);
+
+    GameEvent partyEvent = new GameEvent();
+    partyEvent.type = GameEvent.PARTY_ARRIVAL_EVENT;
+    Trigger partyTrigger = new Trigger(partyEvent, 4, 36);
+
+    this.addTrigger(beerStoreTrigger);
+    this.addTrigger(beerStoreTrigger2);
+    this.addTrigger(partyTrigger);
   }
 
   int get startX => 32 * 36 - 16;

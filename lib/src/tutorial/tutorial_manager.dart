@@ -47,6 +47,13 @@ class TutorialManager {
 
     Completer c = new Completer();
 
+    if (this._startStep == null &&
+        this._finishStep == null &&
+        this._steps.length == 0) {
+      Timer.run(() => c.complete(null));
+      return c.future;
+    }
+
     if (this._isComplete) {
       c.complete();
       return c.future;
