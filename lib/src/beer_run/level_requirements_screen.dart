@@ -1,22 +1,39 @@
 part of beer_run;
 
-class ScoreScreen extends View {
+class LevelRequirementsScreen extends View {
 
-  int _score;
-  int _convertedScore;
-  Duration _timeAllowed;
-  Duration _timeRemaining;
+  String _name;
+  int _beers;
+  Duration _time;
 
   DivElement get rootElement => null;
 
-  ScoreScreen(this._score, this._convertedScore,
-      this._timeAllowed, this._timeRemaining) :
-    super();
+  LevelRequirementsScreen(this._name, this._beers, this._time) : super();
 
   void onDraw(Element root) {
 
     DivElement el = new DivElement();
     el.style.lineHeight = "24px";
+
+    DivElement nameEl = new DivElement();
+    nameEl.style.marginLeft = "auto";
+    nameEl.style.marginRight = "auto";
+    nameEl.style.width = "256px";
+    nameEl.style.background = "#5482a9";
+    nameEl.style.padding = "12px";
+    nameEl.style.borderRadius = "8px";
+    nameEl.style.height = "24px";
+
+    DivElement nameTextEl = new DivElement();
+    nameTextEl.text = "${this._name}";
+    nameTextEl.style.fontWeight = "bold";
+    nameTextEl.style.fontSize = "22px";
+    nameTextEl.style.height = "58px";
+    nameTextEl.style.marginLeft = "auto";
+    nameTextEl.style.marginRight = "auto";
+    nameEl.append(nameTextEl);
+
+    el.append(nameEl);
 
     DivElement beersEl = new DivElement();
     beersEl.style.marginLeft = "auto";
@@ -32,7 +49,7 @@ class ScoreScreen extends View {
     beersEl.append(beersIcon);
 
     DivElement beersTextEl = new DivElement();
-    beersTextEl.text = "${this._score} beers delivered";
+    beersTextEl.text = "Bring ${this._beers} beers to the party";
     beersTextEl.style.fontWeight = "bold";
     beersTextEl.style.fontSize = "22px";
     beersTextEl.style.height = "58px";
@@ -58,19 +75,15 @@ class ScoreScreen extends View {
     timeEl.append(clockIcon);
 
     DivElement timeTextEl = new DivElement();
-    int s1 = this._timeAllowed.inSeconds;
-    int s2 = this._timeRemaining.inSeconds;
-    int s3 = s1 - s2;
-    Duration timeTook = new Duration(seconds: s3);
-    int minutes = timeTook.inMinutes;
+    int seconds = this._time.inSeconds % 60;
+    int minutes = this._time.inMinutes;
     String formattedTime = "${minutes}:";
-    int seconds = timeTook.inSeconds % 60;
     if (seconds < 10) {
       formattedTime = "${formattedTime}0${seconds}";
     } else {
       formattedTime = "${formattedTime}${seconds}";
     }
-    timeTextEl.text = "You took ${formattedTime}!";
+    timeTextEl.text = "You have ${formattedTime}!";
     timeTextEl.style.fontWeight = "bold";
     timeTextEl.style.fontSize = "22px";
     timeTextEl.style.height = "58px";
@@ -82,25 +95,10 @@ class ScoreScreen extends View {
 
     el.append(timeEl);
 
-    DivElement scoreEl = new DivElement();
-    scoreEl.style.marginLeft = "auto";
-    scoreEl.style.marginRight = "auto";
-    scoreEl.style.width = "256px";
-    scoreEl.style.background = "#5482a9";
-    scoreEl.style.padding = "12px";
-    scoreEl.style.borderRadius = "8px";
-    scoreEl.style.height = "24px";
-
-    DivElement scoreTextEl = new DivElement();
-    scoreTextEl.text = "Your Score: ${this._convertedScore}";
-    scoreTextEl.style.fontWeight = "bold";
-    scoreTextEl.style.fontSize = "22px";
-    scoreTextEl.style.height = "58px";
-    scoreTextEl.style.marginLeft = "auto";
-    scoreTextEl.style.marginRight = "auto";
-    scoreEl.append(scoreTextEl);
-
-    el.append(scoreEl);
+    Button go = new Button("Start!", () {
+      this.close();
+    });
+    go.draw(el);
 
     el.classes = ["ui", "text"];
     root.append(
@@ -108,4 +106,3 @@ class ScoreScreen extends View {
     );
   }
 }
-

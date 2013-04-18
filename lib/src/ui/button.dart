@@ -8,9 +8,7 @@ class Button extends View {
 
   DivElement _rootEl = null;
 
-  Button(this._text, this._clickFn, [this._enabled = true]) {
-
-  }
+  Button(this._text, this._clickFn, [this._enabled = true]);
 
   DivElement get rootElement => this._rootEl;
 

@@ -124,13 +124,26 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._currentLevel.draw(this._canvasDrawer);
 
     this._currentLevel.tutorial.run()
-      .then((var _) => this._endTutorial());
+      .then((var _) =>
+          this._ui.showView(
+                            new LevelRequirementsScreen(
+                                "Level ${this._currentLevelIdx}",
+                                this._currentLevel.beersToWin,
+                                this._currentLevel.duration),
+                            callback: () => this._endTutorial()));
+
+    //this._currentLevel.tutorial.run().then((var _) => this._endTutorial());
   }
 
   void stopLevel() {
     this.stop();
 
-    this._ui.showView(new ScoreScreen(this._score,
+    this._ui.showView(new ScoreScreen(
+        this._score,
+        this._getConvertedScore(
+            this._score,
+            this._currentLevel.beersToWin,
+            this._timer.getRemainingTime()),
         this._timer.duration,
         this._timer.getRemainingTime()),
         callback: this.startNextLevel);
@@ -146,6 +159,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._timer.startCountdown();
   }
 
+  int _getConvertedScore(int score, int req, Duration timeLeft) {
+    int seconds = timeLeft.inSeconds;
+    return req + (score - req) * seconds;
+  }
 
 
   // This is the main update loop
