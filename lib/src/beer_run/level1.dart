@@ -392,10 +392,10 @@ class Level1 extends Level {
       this.canvasDrawer.setOffset(20 * 32, 0);
 
       View v = new TutorialDialog(this.tutorial,
-          "What.. YOU want to come to our party!?  Well we need more "
-          "beer, and it looks like you drew the short straw here buddy... "
-          "We need you to head down to the STORE and get some BEER if you "
-          "wanna come to the party.  You can find the store over there..."
+          "What.. who's this drunk idiot who wants to come to OUR party? "
+          "I suppose you can come in.. BUT, we're running low on beer! "
+          "Why don't you stumble on down to the store over there and grab us "
+          "some beers!"
       );
 
       ui.showView(v, callback: c.complete);
@@ -497,9 +497,8 @@ class Level1 extends Level {
 
       ui.showView(
           new TutorialDialog(this.tutorial,
-              "Well, what are you waiting for!?  Better get going!  Oh yea, and"
-              " don't forget to keep your buzz going... don't get bored and"
-              " bail on us!"),
+              "Well, what are you waiting for!?  Get moving, and don't sober "
+              "up too much!"),
           callback: () { c.complete(); }
       );
       return c.future;
