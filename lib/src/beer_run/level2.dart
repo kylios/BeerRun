@@ -28,8 +28,8 @@ class Level2 extends Level {
   List<Sprite> _car2Sprites;
 
   // Overridden from Level
-  int get startX => 32 * 20;
-  int get startY => 32 * 0;
+  int get startX => 32 * 36;
+  int get startY => 32 * 6;
   int get storeX => 0 * 32;
   int get storeY => 15 * 32;
 
@@ -637,7 +637,7 @@ class Level2 extends Level {
   }
 
   void setupTutorial(UI ui, Player p) {
-
+    this.tutorial.onFinish((var _) => p.setPos(this.startX, this.startY));
   }
 
   void update() {

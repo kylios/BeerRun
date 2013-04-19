@@ -506,9 +506,6 @@ class Level1 extends Level {
     .onFinish((var _) {
 
       p.setPos(this.startX, this.startY);
-      p.setDrawingComponent(
-        new PlayerDrawingComponent(this.canvasManager, this.canvasDrawer, true)
-      );
     });
   }
 
