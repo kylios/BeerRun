@@ -102,11 +102,13 @@ class Player extends GameObject implements ComponentListener {
           this._damageInterval = 0;
           this._blinkInterval = 0;
         } else {
-          if (this._damageInterval <= now.millisecondsSinceEpoch) {
-            this._blinkInterval = now.millisecondsSinceEpoch + 10;
+          if (this._damageInterval > -1 &&
+              this._damageInterval <= now.millisecondsSinceEpoch) {
+            this._blinkInterval = now.millisecondsSinceEpoch + 17;
+            this._damageInterval = -1;
           } else if (this._blinkInterval <= now.millisecondsSinceEpoch) {
             this._damageInterval = now.millisecondsSinceEpoch +
-                Player.DAMAGE_INTERVAL;
+                17;
           }
         }
       }
