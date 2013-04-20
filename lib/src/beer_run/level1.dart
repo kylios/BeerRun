@@ -3,6 +3,19 @@ part of beer_run;
 class Level1 extends Level {
   Random rng = new Random();
 
+  final int _spawnCar1At = 200;
+  final int _spawnCar2At = 300;
+  final int _spawnCar3At = 350;
+  int _spawnCar1Cnt = 200;
+  int _spawnCar2Cnt = 0;
+  int _spawnCar3Cnt = 150;
+
+  List<Sprite> _car1Sprites;
+  List<Sprite> _car2Sprites;
+
+  Path roadPath1;
+  Path roadPath2;
+
   Level1(CanvasManager manager, CanvasDrawer drawer) : super(
       drawer, manager,
       new Duration(minutes: 1, seconds: 30), 15, 40, 32, 32) {
@@ -35,8 +48,6 @@ class Level1 extends Level {
     Map<String, Sprite> buildingSprites =
         Level.parseSpriteSheet(building, Data._buildingSpriteSheetData);
 
-
-
     SpriteSheet carSheet = new SpriteSheet('img/Cars_final.png');
     Sprite brokenCarTopLeft = carSheet.spriteAt(384, 0, 32, 32);
     Sprite brokenCarTopRight = carSheet.spriteAt(416, 0, 32, 32);
@@ -48,6 +59,18 @@ class Level1 extends Level {
     Sprite brokenCarBotRight = carSheet.spriteAt(416, 96, 32, 32);
     Sprite tire = carSheet.spriteAt(384, 128, 32, 32);
 
+    this._car1Sprites = [
+                         carSheet.spriteAt(96, 96, 96, 160),
+                         carSheet.spriteAt(0, 96, 96, 160),
+                         carSheet.spriteAt(0, 0, 192, 96),
+                         carSheet.spriteAt(160, 0, 192, 96)
+                         ];
+    this._car2Sprites = [
+                         carSheet.spriteAt(198, 96, 96, 160),
+                         carSheet.spriteAt(288, 96, 96, 160),
+                         carSheet.spriteAt(0, 256, 192, 96),
+                         carSheet.spriteAt(160, 256, 192, 96)
+                         ];
 
     // Grass layer0
     this.newLayer();
@@ -377,6 +400,81 @@ class Level1 extends Level {
     this.addTrigger(beerStoreTrigger);
     this.addTrigger(beerStoreTrigger2);
     this.addTrigger(partyTrigger);
+
+    // Add cars
+    this.roadPath1 = new Path([
+      new GamePoint(21 * this.tileWidth, -160),
+      new GamePoint(21 * this.tileWidth, this.rows * this.tileHeight)
+    ]);
+    this.roadPath2 = new Path([
+      new GamePoint(30 * this.tileWidth, this.rows * this.tileHeight),
+      new GamePoint(30 * this.tileWidth, 7 * this.tileHeight),
+      new GamePoint(26 * this.tileWidth, 7 * this.tileHeight),
+      new GamePoint(26 * this.tileWidth, -160)
+    ]);
+
+    // Add NPCs
+    Region npcRegion1 = new Region(
+        0,
+        14 * this.tileWidth,
+        5 * this.tileHeight,
+        15 * this.tileHeight
+    );
+    Region npcRegion2 = new Region(
+        23 * this.tileWidth,
+        24 * this.tileWidth,
+        0,
+        15 * this.tileHeight
+    );
+
+    NPC npc1 = new NPC(this, DIR_DOWN, 8 * this.tileWidth, 10 * this.tileHeight);
+    NPC npc2 = new NPC(this, DIR_DOWN, 3 * this.tileWidth, 12 * this.tileHeight);
+    NPC npc3 = new NPC(this, DIR_DOWN, 23 * this.tileWidth, 10 * this.tileHeight);
+
+    npc1.speed = 2;
+    npc2.speed = 2;
+    npc3.speed = 1;
+    npc1.setControlComponent(new NPCInputComponent(npcRegion1));
+    npc2.setControlComponent(new NPCInputComponent(npcRegion1));
+    npc3.setControlComponent(new NPCInputComponent(npcRegion2));
+    npc1.setDrawingComponent(
+        new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+    npc2.setDrawingComponent(
+        new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+    npc3.setDrawingComponent(
+        new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+    this.addObject(npc1);
+    this.addObject(npc2);
+    this.addObject(npc3);
+  }
+
+  void update() {
+    this._spawnCar1Cnt++;
+    this._spawnCar2Cnt++;
+    this._spawnCar3Cnt++;
+    if (this._spawnCar1Cnt >= this._spawnCar1At) {
+      int blah = this.rng.nextInt(2);
+      Car c = new Car(this.roadPath1, DIR_UP,
+          (blah == 0 ? this._car1Sprites : this._car2Sprites));
+      c.setLevel(this);
+      c.setDrawingComponent(
+          new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+      this.addObject(c);
+      // Sorta randomize the interval that we spawn cars
+      this._spawnCar1Cnt = this.rng.nextInt(this._spawnCar1At ~/ 2);
+    }
+    if (this._spawnCar2Cnt >= this._spawnCar2At) {
+      int blah = this.rng.nextInt(2);
+      Car c = new Car(this.roadPath2, DIR_UP,
+          (blah == 0 ? this._car1Sprites : this._car2Sprites));
+      c.setLevel(this);
+      c.setDrawingComponent(
+          new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
+      this.addObject(c);
+      // Sorta randomize the interval that we spawn cars
+      this._spawnCar2Cnt = this.rng.nextInt(this._spawnCar2At ~/ 2);
+    }
+    super.update();
   }
 
   int get startX => 32 * 36 - 16;
