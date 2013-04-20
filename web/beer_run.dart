@@ -99,7 +99,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
    * - this._canvasDrawer
    */
   void _setupLevels() {
-    //this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
+    this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
     this._levels.add(new Level2(this._canvasManager, this._canvasDrawer));
   }
 
@@ -111,7 +111,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
   void startNextLevel() {
 
-    this._continueLoop = true;
     this._showHUD = false;
     this._pause = false;
     this._score = 0;
@@ -142,8 +141,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   }
 
   void stopLevel() {
-    this.stop();
-
     this._ui.showView(new ScoreScreen(
         this._score,
         this._getConvertedScore(
@@ -180,16 +177,13 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     bool gameOver = false;
 
-    if (this._currentLevel.tutorial.isComplete) {
+    if (this._currentLevel.tutorial.isComplete && ! this._wonLevel) {
       this._player.draw();
       if (this._score >= this._currentLevel.beersToWin) {
         this._wonLevel = true;
         gameOver = true;
       }
     }
-    window.console.log("gameOver: ${gameOver}");
-    window.console.log("wonLevel: ${this._wonLevel}");
-    window.console.log("continueLoop: ${this._continueLoop}");
 
     // Notify player
     if (this._notifyCar && this._player.wasHitByCar) {
@@ -263,7 +257,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     if (gameOver) {
       this._onGameOver();
-      this._continueLoop = false;
     }
   }
 
