@@ -183,14 +183,14 @@ class Data {
     "brokenRoad1": [0, 128],
     "brokenRoad2": [32, 128],
     "brokenRoad3": [64, 128],
-    "roadOuterTopLeft": [0, 0],
+    "roadOuterTopLeft": [128, 448],//[0, 0],
     "roadOuterTop": [32, 0],
-    "roadOuterTopRight": [64, 0],
+    "roadOuterTopRight": [160, 448],//[64, 0],
     "roadOuterLeft": [0, 32],
     "roadOuterRight": [64, 32],
-    "roadOuterBottomLeft": [0, 64],
+    "roadOuterBottomLeft": [128, 480],//[0, 64],
     "roadOuterBottom": [32, 64],
-    "roadOuterBottomRight": [64, 64],
+    "roadOuterBottomRight": [160, 480],//[64, 64],
     "roadInnerBottomRight": [0, 160],
     "roadInnerBottom": [32, 156],
     "roadInnerBottomLeft": [64, 160],
@@ -199,6 +199,10 @@ class Data {
     "roadInnerTopRight": [0, 224],
     "roadInnerTop": [32, 224],
     "roadInnerTopLeft": [64, 224],
+
+
+
+
     "lineVertical": [96, 0],
     "lineHorizontal": [96, 32],
     "lineCross": [96, 64],

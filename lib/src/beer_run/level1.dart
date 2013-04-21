@@ -198,56 +198,47 @@ class Level1 extends Level {
     }
 
     // Road
-    this.setSpriteAt(roadSprites["roadOuterRight"], 14, 31, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 13, 31, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 12, 31, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 11, 31, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 10, 31, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 14, 30, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 13, 30, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 12, 30, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 14, 29, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 13, 29, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 12, 29, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 14, 28, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 13, 28, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 12, 28, false);
+    this.setSpriteAt(roadSprites["roadOuterTopRight"], 8, 31, false);
 
+    for (int r = 11; r < 15; r++) {
+      this.setSpriteAt(roadSprites["roadOuterRight"], r, 31, false);
+      this.setSpriteAt(roadSprites["lineDottedVertLeft"], r, 30, false);
+      this.setSpriteAt(roadSprites["lineDottedVertRight"], r, 29, false);
+      this.setSpriteAt(roadSprites["roadOuterLeft"], r, 28, false);
+    }
+    this.setSpriteAt(roadSprites["roadOuterRight"], 9, 31, false);
+    this.setSpriteAt(roadSprites["roadOuterRight"], 10, 31, false);
+    this.setSpriteAt(roadSprites["road"], 9, 30, false);
+    this.setSpriteAt(roadSprites["road"], 10, 30, false);
+    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 10, 30, false);
+    this.setSpriteAt(roadSprites["lineDottedVertRight"], 10, 29, false);
+    this.setSpriteAt(roadSprites["roadInnerBottomLeft"], 10, 28, false);
+
+    for (int c = 26; c < 30; c++) {
+      this.setSpriteAt(roadSprites["lineHorizontal"], 9, c, false);
+    }
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 8, 24, false);
+    this.setSpriteAt(roadSprites["roadOuterLeft"], 9, 24, false);
+    this.setSpriteAt(roadSprites["road"], 9, 25, false);
+
+    this.setSpriteAt(roadSprites["roadOuterTop"], 8, 30, false);
     this.setSpriteAt(roadSprites["roadOuterTop"], 8, 29, false);
     this.setSpriteAt(roadSprites["roadOuterTop"], 8, 28, false);
+    this.setSpriteAt(roadSprites["roadInnerTopRight"], 8, 27, false);
+    this.setSpriteAt(roadSprites["roadOuterBottom"], 10, 27, false);
+    this.setSpriteAt(roadSprites["roadOuterBottom"], 10, 26, false);
+    this.setSpriteAt(roadSprites["roadOuterBottom"], 10, 25, false);
+    this.setSpriteAt(roadSprites["roadOuterBottomLeft"], 10, 24, false);
 
-    this.setSpriteAt(roadSprites["roadOuterRight"], 7, 27, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 6, 27, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 5, 27, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 4, 27, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 3, 27, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 2, 27, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 1, 27, false);
-    this.setSpriteAt(roadSprites["roadOuterRight"], 0, 27, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 7, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 6, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 5, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 4, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 3, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 2, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 1, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 0, 26, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 7, 25, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 6, 25, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 5, 25, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 4, 25, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 3, 25, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 2, 25, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 1, 25, false);
-    this.setSpriteAt(roadSprites["lineDottedVertRight"], 0, 25, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 7, 24, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 6, 24, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 5, 24, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 4, 24, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 3, 24, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 2, 24, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 1, 24, false);
-    this.setSpriteAt(roadSprites["roadOuterLeft"], 0, 24, false);
+    for (int r = 0; r < 8; r++) {
+      this.setSpriteAt(roadSprites["roadOuterRight"], r, 27, false);
+      this.setSpriteAt(roadSprites["lineDottedVertLeft"], r, 26, false);
+      this.setSpriteAt(roadSprites["lineDottedVertRight"], r, 25, false);
+      this.setSpriteAt(roadSprites["roadOuterLeft"], r, 24, false);
+    }
+    this.setSpriteAt(roadSprites["lineDottedVertLeft"], 8, 26, false);
+    this.setSpriteAt(roadSprites["lineDottedVertRight"], 8, 25, false);
+
 
     for (int r = 0; r < 15; r++) {
       this.setSpriteAt(roadSprites["roadOuterRight"], r, 22, false);
@@ -408,8 +399,8 @@ class Level1 extends Level {
     ]);
     this.roadPath2 = new Path([
       new GamePoint(30 * this.tileWidth, this.rows * this.tileHeight),
-      new GamePoint(30 * this.tileWidth, 7 * this.tileHeight),
-      new GamePoint(26 * this.tileWidth, 7 * this.tileHeight),
+      new GamePoint(30 * this.tileWidth, 8 * this.tileHeight),
+      new GamePoint(26 * this.tileWidth, 8 * this.tileHeight),
       new GamePoint(26 * this.tileWidth, -160)
     ]);
 
