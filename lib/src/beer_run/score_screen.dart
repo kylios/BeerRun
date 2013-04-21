@@ -2,14 +2,17 @@ part of beer_run;
 
 class ScoreScreen extends View {
 
+  bool _win;
   int _score;
   int _convertedScore;
+  int _totalScore;
   Duration _timeAllowed;
   Duration _timeRemaining;
 
   DivElement get rootElement => null;
 
-  ScoreScreen(this._score, this._convertedScore,
+  ScoreScreen(this._win,
+      this._score, this._convertedScore, this._totalScore,
       this._timeAllowed, this._timeRemaining) :
     super();
 
@@ -18,6 +21,24 @@ class ScoreScreen extends View {
     DivElement el = new DivElement();
     el.style.lineHeight = "24px";
 
+    // WIN OR LOSE?
+    DivElement winLoseEl = new DivElement();
+    winLoseEl.text = (this._win ? "YOU WON!" : "GAME OVER");
+    winLoseEl.style.textAlign = "center";
+    winLoseEl.style.marginLeft = "auto";
+    winLoseEl.style.marginRight = "auto";
+    winLoseEl.style.width = "256px";
+    winLoseEl.style.color = (this._win ? "black" : "white");
+    winLoseEl.style.background = (this._win ? "#CC9900" : "#CC0000");
+    winLoseEl.style.padding = "12px";
+    winLoseEl.style.borderRadius = "8px";
+    winLoseEl.style.height = "24px";
+    winLoseEl.style.fontWeight = "bold";
+    winLoseEl.style.fontSize = "22px";
+    winLoseEl.style.marginBottom = "8px";
+    el.append(winLoseEl);
+
+    // BEERS
     DivElement beersEl = new DivElement();
     beersEl.style.marginLeft = "auto";
     beersEl.style.marginRight = "auto";
@@ -44,6 +65,7 @@ class ScoreScreen extends View {
 
     el.append(beersEl);
 
+    // TIME
     DivElement timeEl = new DivElement();
     timeEl.style.marginLeft = "auto";
     timeEl.style.marginRight = "auto";
@@ -92,13 +114,49 @@ class ScoreScreen extends View {
     scoreEl.style.height = "24px";
 
     DivElement scoreTextEl = new DivElement();
-    scoreTextEl.text = "Your Score: ${this._convertedScore}";
+    scoreTextEl.text = "Your Score: ${this._totalScore}";
     scoreTextEl.style.fontWeight = "bold";
     scoreTextEl.style.fontSize = "22px";
     scoreTextEl.style.height = "58px";
     scoreTextEl.style.marginLeft = "auto";
     scoreTextEl.style.marginRight = "auto";
     scoreEl.append(scoreTextEl);
+
+    // TOTAL SCORE
+    DivElement tScoreEl = new DivElement();
+    tScoreEl.style.marginLeft = "auto";
+    tScoreEl.style.marginRight = "auto";
+    tScoreEl.style.width = "50%";
+    tScoreEl.style.color = "red";
+
+    DivElement totalBottomEl = new DivElement();
+    totalBottomEl.style.borderTop = "1px solid blue";
+    totalBottomEl.style.margin = "4px 8px";
+
+    DivElement totalTextEl = new DivElement();
+    totalTextEl.text = "${this._totalScore - this._convertedScore}";
+    totalTextEl.style.color = "blue";
+    totalTextEl.style.fontSize = "22px";
+    totalTextEl.style.float = "right";
+    totalTextEl.style.clear = "both";
+    totalBottomEl.append(totalTextEl);
+
+    DivElement tScoreTextEl = new DivElement();
+    tScoreTextEl.text = "+ ${this._convertedScore}";
+    tScoreTextEl.style.fontSize = "20px";
+    tScoreTextEl.style.height = "58px";
+    tScoreTextEl.style.float = "right";
+    tScoreTextEl.style.clear = "both";
+    totalBottomEl.append(tScoreTextEl);
+
+    DivElement tClearEl = new DivElement();
+    tClearEl.style.clear = "both";
+    totalBottomEl.append(tClearEl);
+
+    tScoreEl.append(totalBottomEl);
+
+    el.append(tScoreEl);
+
 
     el.append(scoreEl);
 

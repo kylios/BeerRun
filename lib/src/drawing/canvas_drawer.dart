@@ -14,10 +14,10 @@ class CanvasDrawer implements DrawingInterface {
   CanvasManager _canvasManager;
 
   // These variables help do the canvas scrolling thing as the player moves
-  int _offsetX;
-  int _offsetY;
-  int _boundX;
-  int _boundY;
+  int _offsetX = 0;
+  int _offsetY = 0;
+  int _boundX = 0;
+  int _boundY = 0;
 
   String backgroundColor = "white";
   String font = "12px";
@@ -43,9 +43,9 @@ class CanvasDrawer implements DrawingInterface {
 
     // Stop "scrolling" when we get too close to the edge
     if (x < 0)  x = 0;
-    else if (x /* + this._canvasManager.width*/ > this._boundX)  x = this._boundX;// - this._canvasManager.width;
+    else if (x + this._canvasManager.width >= this._boundX)  x = this._boundX - this._canvasManager.width;
     if (y < 0)  y = 0;
-    else if (y /*+ this._canvasManager.height*/ > this._boundY)  y = this._boundY;// - this._canvasManager.height;
+    else if (y + this._canvasManager.height >= this._boundY)  y = this._boundY - this._canvasManager.height;
 
     this._offsetX = x;
     this._offsetY = y;
@@ -55,9 +55,9 @@ class CanvasDrawer implements DrawingInterface {
     this._offsetX += dX;
     this._offsetY += dY;
     if (this._offsetX < 0)  this._offsetX = 0;
-    else if (this._offsetX > this._boundX)  this._offsetX = this._boundX;
+    else if (this._offsetX /*+ this._canvasManager.width*/ > this._boundX)  this._offsetX = this._boundX;
     if (this._offsetY < 0)  this._offsetY = 0;
-    else if  (this._offsetY > this._boundY) this._offsetY = this._boundY;
+    else if  (this._offsetY /*+ this._canvasManager.height*/ > this._boundY) this._offsetY = this._boundY;
   }
 
   void setBounds(int x, int y) {

@@ -63,7 +63,6 @@ class PlayerDrawingComponent extends DrawingComponent {
       s = obj.getMoveSprite();
     }
     if (obj.beers > 0) {
-      window.console.log("got beers");
       this.drawer.drawSprite(this._beerSprites[obj.dir.direction],
           obj.x, obj.y, obj.tileWidth, obj.tileHeight);
     }

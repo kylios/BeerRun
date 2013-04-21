@@ -25,6 +25,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   CanvasDrawer _canvasDrawer;
 
   int _score = 0;
+  int _totalScore = 0;
   bool _wonLevel = false;
 
   UI _ui;
@@ -66,7 +67,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._canvasManager.resize(CANVAS_WIDTH, CANVAS_HEIGHT);
 
     this._canvasDrawer = new CanvasDrawer(this._canvasManager);
-    this._canvasDrawer.setBounds(CANVAS_WIDTH, CANVAS_HEIGHT);
     this._canvasDrawer.setOffset(0, 0);
     this._canvasDrawer.backgroundColor = 'black';
 
@@ -117,6 +117,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._wonLevel = false;
 
     this._currentLevel = this._getNextLevel();
+    this._canvasDrawer.setBounds(
+        this._currentLevel.cols * this._currentLevel.tileWidth,
+        this._currentLevel.rows * this._currentLevel.tileHeight);
     this._player.startInLevel(this._currentLevel);
 
     this._timer = new GameTimer(this._currentLevel.duration);
@@ -128,28 +131,40 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._canvasDrawer.clear();
     this._currentLevel.draw(this._canvasDrawer);
 
+    /*View screen = new ScoreScreen(true,
+        12, 600, 980,
+        new Duration(minutes: 1, seconds: 30), new Duration(seconds: 20));*/
+    View screen = new LevelRequirementsScreen(
+        "Level ${this._currentLevelIdx}",
+        this._currentLevel.beersToWin,
+        this._currentLevel.duration);
     this._currentLevel.tutorial.run()
       .then((var _) =>
           this._ui.showView(
-                            new LevelRequirementsScreen(
-                                "Level ${this._currentLevelIdx}",
-                                this._currentLevel.beersToWin,
-                                this._currentLevel.duration),
+                            screen,
                             callback: () => this._endTutorial()));
 
     //this._currentLevel.tutorial.run().then((var _) => this._endTutorial());
   }
 
   void stopLevel() {
-    this._ui.showView(new ScoreScreen(
+    int converted = 0;
+    if (this._wonLevel) {
+      converted = this._getConvertedScore(
         this._score,
-        this._getConvertedScore(
-            this._score,
-            this._currentLevel.beersToWin,
-            this._timer.getRemainingTime()),
+        this._currentLevel.beersToWin,
+        this._timer.getRemainingTime());
+    }
+
+    this._totalScore += converted;
+    this._ui.showView(new ScoreScreen(
+        this._wonLevel,
+        this._score,
+        converted,
+        this._totalScore,
         this._timer.duration,
         this._timer.getRemainingTime()),
-        callback: this.startNextLevel);
+        callback: (this._wonLevel ? this.startNextLevel : this.stop));
   }
 
   void _endTutorial() {
@@ -271,14 +286,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
   void _onGameOver() {
 
-    if (this._wonLevel) {
-      this.stopLevel();
-    } else {
-
-      // Do gameover stuff
-      stop();
-      // TODO: show lose popups here?
-    }
+    this.stopLevel();
   }
 
   void onWindowOpen(UI ui) {
