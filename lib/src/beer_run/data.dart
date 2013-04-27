@@ -2,6 +2,15 @@ part of beer_run;
 
 class Data {
 
+  static final SpriteSheet road = new SpriteSheet("img/street.png", 32, 32);
+  static final SpriteSheet apt = new SpriteSheet("img/apartments.png", 32, 32);
+  static final SpriteSheet grass = new SpriteSheet("img/grass.png", 32, 32);
+  static final SpriteSheet sw = new SpriteSheet("img/sidewalk.png", 32, 32);
+  static final SpriteSheet fence = new SpriteSheet("img/fence.png", 32, 32);
+  static final SpriteSheet house = new SpriteSheet("img/house.png", 32, 32);
+  static final SpriteSheet building = new SpriteSheet("img/building.png", 32, 32);
+  static final SpriteSheet carSheet = new SpriteSheet('img/cars.png');
+
   static final Map _houseSpriteSheetData = {
     "wallTopLeft": [0, 0],
     "wallMidLeft": [0, 32],
