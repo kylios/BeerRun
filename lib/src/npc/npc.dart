@@ -15,7 +15,7 @@ class NPC extends GameObject implements ComponentListener {
     this.setLevel(l);
 
     SpriteSheet sprites = new SpriteSheet(
-        "img/Character1Walk.png",
+        "img/bum.png",
         this.tileWidth, this.tileHeight);
 
     List<Sprite> walkUp = new List<Sprite>();

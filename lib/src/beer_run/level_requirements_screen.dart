@@ -41,7 +41,7 @@ class LevelRequirementsScreen extends View {
     beersEl.style.width = "50%";
 
     ImageElement beersIcon = new ImageElement();
-    beersIcon.src = "img/beer.png";
+    beersIcon.src = "img/ui/icons/beer.png";
     beersIcon.style.float = "left";
     beersIcon.style.margin = "5px";
     beersIcon.width = 48;
@@ -67,7 +67,7 @@ class LevelRequirementsScreen extends View {
     timeEl.style.width = "50%";
 
     ImageElement clockIcon = new ImageElement();
-    clockIcon.src = "img/clock.png";
+    clockIcon.src = "img/ui/icons/clock.png";
     clockIcon.style.float = "left";
     clockIcon.style.margin = "5px";
     clockIcon.width = 48;

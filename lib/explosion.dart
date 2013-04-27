@@ -9,7 +9,7 @@ import 'package:BeerRun/animation.dart';
 class Explosion extends GraphicAnimation {
 
   factory Explosion.createAt(int x, int y, int width, int height) {
-    SpriteSheet sheet = new SpriteSheet('img/Explosion.png', 128, 128);
+    SpriteSheet sheet = new SpriteSheet('img/explosion.png', 128, 128);
     List<Sprite> sprites = [
       sheet.spriteAt(0, 0),
       sheet.spriteAt(128, 0),

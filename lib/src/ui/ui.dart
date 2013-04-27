@@ -21,6 +21,7 @@ class UI {
 
   void closeWindow() {
 
+    window.console.log("close window called");
     this._listeners.forEach((UIListener l) => l.onWindowClose(this));
     this._rootView.onClose();
     this._opened = false;

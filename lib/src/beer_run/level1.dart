@@ -17,38 +17,37 @@ class Level1 extends Level {
   Path roadPath2;
 
   Level1(CanvasManager manager, CanvasDrawer drawer) : super(
-      drawer, manager,
-      new Duration(minutes: 1, seconds: 30), 15, 40, 32, 32) {
+      drawer, manager, 15, 40, 32, 32) {
 
-    SpriteSheet road = new SpriteSheet("img/Street.png", 32, 32);
+    SpriteSheet road = Data.road;
     Map<String, Sprite> roadSprites =
         Level.parseSpriteSheet(road, Data._roadSpriteSheetData);
 
-    SpriteSheet apt = new SpriteSheet("img/apartments.png", 32, 32);
+    SpriteSheet apt = Data.apt;
     Map<String, Sprite> aptSprites =
         Level.parseSpriteSheet(apt, Data._aptSpriteSheetData);
 
-    SpriteSheet grass = new SpriteSheet("img/LPC Base Assets/tiles/grass.png", 32, 32);
+    SpriteSheet grass = Data.grass;
     Map<String, Sprite> grassSprites =
         Level.parseSpriteSheet(grass, Data._grassSpriteSheetData);
 
-    SpriteSheet sw = new SpriteSheet("img/Sidewalk_dark.png", 32, 32);
+    SpriteSheet sw = Data.sw;
     Map<String, Sprite> swSprites =
         Level.parseSpriteSheet(sw, Data._swSpriteSheetData);
 
-    SpriteSheet fence = new SpriteSheet("img/fence.png", 32, 32);
+    SpriteSheet fence = Data.fence;
     Map<String, Sprite> fenceSprites =
         Level.parseSpriteSheet(fence, Data._fenceSpriteSheetData);
 
-    SpriteSheet house = new SpriteSheet("img/house.png", 32, 32);
+    SpriteSheet house = Data.house;
     Map<String, Sprite> houseSprites =
         Level.parseSpriteSheet(house, Data._houseSpriteSheetData);
 
-    SpriteSheet building = new SpriteSheet("img/Building.png", 32, 32);
+    SpriteSheet building = Data.building;
     Map<String, Sprite> buildingSprites =
         Level.parseSpriteSheet(building, Data._buildingSpriteSheetData);
 
-    SpriteSheet carSheet = new SpriteSheet('img/Cars_final.png');
+    SpriteSheet carSheet = Data.carSheet;
     Sprite brokenCarTopLeft = carSheet.spriteAt(384, 0, 32, 32);
     Sprite brokenCarTopRight = carSheet.spriteAt(416, 0, 32, 32);
     Sprite brokenCarMidTopLeft = carSheet.spriteAt(384, 32, 32, 32);
@@ -473,6 +472,7 @@ class Level1 extends Level {
   int get storeX => 0 * 32;
   int get storeY => 0 * 32;
   int get beersToWin => 12;
+  Duration get duration => new Duration(minutes: 1, seconds: 30);
 
   void setupTutorial(UI ui, Player p) {
 

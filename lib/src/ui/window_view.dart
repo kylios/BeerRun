@@ -28,7 +28,11 @@ class WindowView extends View {
   }
 
   void clear() {
-    this._rootElement.children.forEach((Element e) {e.remove();});
+    this._rootElement.children.forEach((Element e) {
+      if (null != e) {
+        e.remove();
+      }
+    });
   }
   void onClose() {
     this.hide();
