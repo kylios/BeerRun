@@ -13,6 +13,7 @@ import 'package:BeerRun/npc.dart';
 import 'package:BeerRun/ui.dart';
 import 'package:BeerRun/beer_run.dart';
 import 'package:BeerRun/tutorial.dart';
+import 'package:BeerRun/loader.dart';
 
 final int CANVAS_WIDTH = 640;
 final int CANVAS_HEIGHT = 480;
@@ -39,9 +40,12 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   bool _notifyTheft = true;
   bool _notifyBored = true;
 
-  bool _continueLoop = true;
+  bool _continueLoop = false;
   bool _showHUD = false;
   bool _pause = false;
+  bool _gameOver = false;
+  bool _gameOverDialog = false;
+  String _gameOverText = '';
 
   int _tutorialDestX = 0;
   int _tutorialDestY = 0;
@@ -84,7 +88,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._player.setControlComponent(playerInput);
     this._player.setDrawingComponent(drawer);
 
-    this._setupLevels();
+    //this._setupLevels();
 
     this._ui = new UI(UIRootElement);
     this._ui.addListener(this);
@@ -93,20 +97,39 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._HPMeter = new Meter(3, 52, 36, 116, 22);
   }
 
+  Future init() {
+    return this._setupLevels();
+  }
+
   /**
    * Prereqs:
    * - this._canvasManager
    * - this._canvasDrawer
    */
-  void _setupLevels() {
-    this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
-    this._levels.add(new Level2(this._canvasManager, this._canvasDrawer));
+  Future _setupLevels() {
+
+    Completer c = new Completer();
+
+    Loader l = new Loader();
+    l.load("data/levels/level1.json")
+    .then((Map levelData) {
+      Level l = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+      this._levels.add(l);
+
+      //this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
+      //this._levels.add(new Level2(this._canvasManager, this._canvasDrawer));
+
+      c.complete();
+    });
+
+    return c.future;
   }
 
   bool get continueLoop => this._continueLoop;
 
   void start() {
     this.startNextLevel();
+    this._continueLoop = true;
   }
 
   void startNextLevel() {
@@ -115,6 +138,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._pause = false;
     this._score = 0;
     this._wonLevel = false;
+    this._gameOver = false;
 
     this._currentLevel = this._getNextLevel();
     this._canvasDrawer.setBounds(
@@ -157,24 +181,28 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     }
 
     this._totalScore += converted;
-    this._ui.showView(new ScoreScreen(
-        this._wonLevel,
-        this._score,
-        converted,
-        this._totalScore,
-        this._timer.duration,
-        this._timer.getRemainingTime()),
+
+    query("#score").innerHtml = "${this._totalScore}";
+
+    this._ui.showView(
+        new ScoreScreen(
+          this._wonLevel,
+          this._score,
+          converted,
+          this._totalScore,
+          this._timer.duration,
+          this._timer.getRemainingTime()),
         callback: (this._wonLevel ? this.startNextLevel : this.stop));
   }
 
   void _endTutorial() {
 
-    this._player.setDrawingComponent(new PlayerDrawingComponent(
-        this._canvasManager, this._canvasDrawer, true));
-    this._player.updateBuzzTime();
     int playerStartX = this._currentLevel.startX;
     int playerStartY = this._currentLevel.startY;
     this._player.setPos(playerStartX, playerStartY);
+    this._player.setDrawingComponent(new PlayerDrawingComponent(
+        this._canvasManager, this._canvasDrawer, true));
+    this._player.updateBuzzTime();
     this._timer.startCountdown();
   }
 
@@ -187,16 +215,26 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   // This is the main update loop
   void update() {
 
-    this._canvasDrawer.clear();
+    if (this._canvasDrawer != null) {
+      this._canvasDrawer.clear();
+    }
+
+    // Can't do anything without a level object
+    if (this._currentLevel == null) {
+      return;
+    }
+
     this._currentLevel.update();
 
-    bool gameOver = false;
+    if (this._gameOver) {
+      return;
+    }
 
     if (this._currentLevel.tutorial.isComplete && ! this._wonLevel) {
       this._player.draw();
       if (this._score >= this._currentLevel.beersToWin) {
         this._wonLevel = true;
-        gameOver = true;
+        this._gameOver = true;
       }
     }
 
@@ -224,7 +262,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     if (this._player.beersDelivered > 0) {
       this._score += this._player.beersDelivered;
-      query("#score").innerHtml = this._score.toString();
       this._player.resetBeersDelivered();
 
       this._pause = true;
@@ -232,18 +269,13 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     }
 
     if (this._player.drunkenness <= 0) {
-      this._pause = true;
-      this._ui.showView(new Dialog("You're too sober.  You got bored and go home.  GAME OVER!"));
-      gameOver = true;
+      this._setGameOver(true, "You're too sober.  You got bored and go home.  GAME OVER!");
     } else if (this._player.drunkenness >= 10) {
-      this._pause = true;
-      this._ui.showView(new Dialog("You black out like a dumbass, before you even get to the party.  GAME OVER!"));
-      gameOver = true;
+      this._setGameOver(true, "You black out like a dumbass, before you even get to the party.");
     }
     if (this._player.health == 0) {
-      this._pause = true;
-      this._ui.showView(new Dialog("You are dead.  GAME OVER!"));
-      gameOver = true;
+      this._setGameOver(true, "You are dead.");
+      this._currentLevel.removeObject(this._player);
     }
 
 
@@ -270,7 +302,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       this._HPMeter.draw(this._canvasDrawer);
     }
 
-    if (gameOver) {
+    if (this._gameOver) {
       this._onGameOver();
     }
   }
@@ -280,13 +312,32 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   }
 
   Level _getNextLevel() {
-
     return this._levels[this._currentLevelIdx++];
   }
 
-  void _onGameOver() {
+  void _setGameOver(bool dialog, String text) {
+    this._gameOverDialog = dialog;
+    this._gameOverText = text;
+    this._gameOver = true;
+  }
 
-    this.stopLevel();
+  void _onGameOver() {
+window.console.log("onGameOver");
+    if (! this._wonLevel) {
+      this.stop();
+    }
+    if (this._gameOverDialog) {
+      this._pause = true;
+      this._ui.showView(
+        new Dialog(this._gameOverText),
+        callback: () {
+          this._pause = true;
+          this._player.level.pause();
+          this.stopLevel();
+      });
+    } else {
+      this.stopLevel();
+    }
   }
 
   void onWindowOpen(UI ui) {
@@ -337,12 +388,11 @@ window.console.log("key pressed: ${e.keyCode}");
 
 void _loop(var _) {
 
-  game.update();
   if (game.continueLoop) {
-    window.requestAnimationFrame(_loop);
-  } else {
-    return;
+    game.update();
   }
+
+  window.requestAnimationFrame(_loop);
 }
 
 void main() {
@@ -352,7 +402,8 @@ void main() {
       query('div#root_pane'),
       query('span#score'));
 
-  game.start();
+  game.init().then((var _) => game.start());
+  //game.start();
 
 
 

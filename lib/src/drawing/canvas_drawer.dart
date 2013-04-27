@@ -92,7 +92,6 @@ class CanvasDrawer implements DrawingInterface {
   }
 
   void drawSprite(Sprite s, int x, int y, [int drawWidth, int drawHeight]) {
-
     if (null == s) {
       return;
     }

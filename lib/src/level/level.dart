@@ -1,5 +1,5 @@
-
 part of level;
+
 
 abstract class Level implements ComponentListener {
 
@@ -10,7 +10,12 @@ abstract class Level implements ComponentListener {
   int _tileWidth;
   int _tileHeight;          //
 
-  Duration _duration = null; // how long you have to beat this level
+  int _storeX;
+  int _storeY;
+  int _startX;
+  int _startY;
+  int _beersToWin;
+  Duration _duration; // how long you have to beat this level
 
   List<bool> _blocked;      // blocked tiles
   List<Trigger> _triggers;  // triggered tiles
@@ -30,7 +35,7 @@ abstract class Level implements ComponentListener {
 
   bool _paused = false;
 
-  Level(this._drawer, this._manager, this._duration,
+  Level(this._drawer, this._manager,
       this._rows, this._cols, this._tileWidth, this._tileHeight)
   {
     this._sprites = new List<List<Sprite>>();
@@ -43,11 +48,12 @@ abstract class Level implements ComponentListener {
   }
 
   // Abstract methods
-  int get storeX;
-  int get storeY;
-  int get startX;
-  int get startY;
-  int get beersToWin;
+  int get storeX => this._storeX;
+  int get storeY => this._storeY;
+  int get startX => this._startX;
+  int get startY => this._startY;
+  int get beersToWin => this._beersToWin;
+  Duration get duration => this._duration;
   void setupTutorial(UI ui, Player p);
 
   int get tileWidth => this._tileWidth;
@@ -56,7 +62,6 @@ abstract class Level implements ComponentListener {
   int get cols => this._cols;
   CanvasManager get canvasManager => this._manager;
   CanvasDrawer get canvasDrawer => this._drawer;
-  Duration get duration => this._duration;
   List<GameObject> get objects => this._objects;
   TutorialManager get tutorial => this._tutorial;
 
@@ -227,7 +232,7 @@ abstract class Level implements ComponentListener {
     // TODO: for now I'm just moving player.draw() out of here, and that'll
     //    have to be called explicitly from the game's loop.
     this.draw(this._drawer);
-
+window.console.log("${this._player.x}, ${this._player.y}");
 
     if ( ! this._paused) {
       //this._player.update();
@@ -292,8 +297,8 @@ abstract class Level implements ComponentListener {
       int col = 0;
       for (Sprite s in layer) {
         if (s != null) {
-          d.drawSprite(s, col * this._tileWidth, row * this._tileHeight/*,
-              this._tileWidth, this._tileHeight*/);
+          d.drawSprite(s, col * this._tileWidth, row * this._tileHeight,
+              this._tileWidth, this._tileHeight);
         }
         //if (this.isBlocking(row, col)) {
           //d.backgroundColor = "red";
@@ -326,4 +331,77 @@ abstract class Level implements ComponentListener {
 
   Sprite getStaticSprite() {}
   Sprite getMoveSprite() {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /**
+   * Load a level from a file.  Eventually we should move methods like these
+   * out into driver classes or something like that, I think, but for now,
+   * this'll do to get the logic straight.
+   * */
+  factory Level.fromJson(Map level, CanvasDrawer drawer, CanvasManager manager)
+  {
+    int height = level["height"].toInt();
+    int width = level["width"].toInt();
+    int tileHeight = level["tileheight"].toInt();
+    int tileWidth = level["tilewidth"].toInt();
+
+    List<Map> _tilesets = level["tilesets"];
+    List<Map> _layers = level["layers"];
+
+    List<_LevelTileset> tilesets = new List<_LevelTileset>();
+    for (Map tset in _tilesets) {
+      tilesets.add(new _LevelTileset.fromJson(tset));
+    }
+
+    List<_LevelLayer> layers = new List<_LevelLayer>();
+    for (Map ll in _layers) {
+      layers.add(new _LevelLayer.fromJson(ll));
+    }
+
+    Level l = new _LoadableLevel(drawer, manager,
+        height, width, tileWidth, tileHeight);
+    l._storeX = 0;
+    l._storeY = 0;
+    l._startX = 200;
+    l._startY = 48;
+    l._beersToWin = 18;
+    l._duration = new Duration(seconds: 45);
+
+    _TilesetIndex idx = new _TilesetIndex(tilesets);
+
+    // Load the tilesets into the level
+    for (_LevelLayer ll in layers) {
+      l.newLayer();
+
+      int row = 0;
+      int col = 0;
+      List<int> data = ll.data;
+      for (int gid in data) {
+
+        if (col >= ll.width) {
+          col = 0;
+          row++;
+        }
+
+        if (gid > 0) {
+          l.setSpriteAt(idx.tileByTileGID(gid), row, col);
+        }
+
+        col++;
+      }
+    }
+
+    return l;
+  }
 }

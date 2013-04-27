@@ -40,7 +40,6 @@ abstract class GameObject implements ComponentListener {
   bool get isRemoved => this._remove;
 
   void remove() {
-    window.console.log("removed");
     this._remove = true;
   }
 

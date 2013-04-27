@@ -15,3 +15,4 @@ import 'package:BeerRun/ui.dart';
 
 part 'src/level/level.dart';
 part 'src/level/trigger.dart';
+part 'src/level/level_parser.dart';
