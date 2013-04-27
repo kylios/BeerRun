@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32">
+  <image source="../web/img/grass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="19" name="street" tilewidth="32" tileheight="32">
+  <image source="../web/img/street.png" width="800" height="608"/>
+ </tileset>
+ <tileset firstgid="494" name="sidewalk" tilewidth="32" tileheight="32">
+  <image source="../web/img/sidewalk.png" width="128" height="224"/>
+ </tileset>
+ <tileset firstgid="522" name="fence" tilewidth="32" tileheight="32">
+  <image source="../web/img/fence.png" width="96" height="128"/>
+ </tileset>
+ <tileset firstgid="534" name="trees" tilewidth="32" tileheight="32">
+  <image source="../web/img/trees.png" width="192" height="320"/>
+ </tileset>
+ <tileset firstgid="594" name="house" tilewidth="32" tileheight="32">
+  <image source="../web/img/house.png" width="288" height="224"/>
+ </tileset>
+ <tileset firstgid="657" name="cars" tilewidth="32" tileheight="32">
+  <image source="../web/img/cars.png" width="480" height="352"/>
+ </tileset>
+ <tileset firstgid="822" name="building" tilewidth="32" tileheight="32">
+  <image source="../web/img/building.png" width="256" height="256"/>
+ </tileset>
+ <layer name="grass" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJyllkEOQjEIRHuEtvc/rC78SfN8DDUuSBQphWGGuscY823rsP3x7Y+dfsbRf55dyDFhG7Zw5slFn9VhNsd3L1P81utCPHuxfhn3fOf9hjHxYg/rB7McFsPZWW3VWcM13Wf4VXMjtqztBgPjl3EyYX7bGzmVZkY9kGOsp+vHOHmjCeNbNXP2ZLw1TVe8/6cH3mN4Vdzk7mGehDF1Y71aXZwf9VPtQtbY6TPhbD6brcWmeiv9Jy5Ve4R65/7tZlLN+maeVr/tyY6L1H2qoeJDqrf6nHaY8ajKbdrhnrK5p3e92yPV/wzDqdJY996k9zvtk/RWJv6cv70AOpoogw==
+  </data>
+ </layer>
+ <layer name="road-sidewalk" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzNlFEOgyAMhoteYcl2CJ232JF2jD3sSN6IKA8zYVn3YCQNte2DCMkXEEj88kOZHMCUwTPzlBn5twX7DvsbckXuO3OWxv03CM7xZL+YjD8V5qfNtAY/7i76Ss737PqIwh0r6UfXrT6ejK1+TQPwdRst+abrXH1q87T4jcgl4enkPPfeYa/w1fj1yEDolectvR9c3QSl3wt5wMY7s0fyW7OhWXLZpllKfrRZ60X7tuTcQwE/bR0Exr90ftozXp2P9vsBmWQ8uQ==
+  </data>
+ </layer>
+ <layer name="fence" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAcCDPRVj2lYLC6j5eJPPtG3QcBo+6jDJDrPj4k9YJMCMzPhJCHiQ2E++gFRt1HGaCl+xypYCa13QdzkxuQdgdiDyrlDxEquA/ZTT5A7AvEflRyHzUAtdyEDKjpPlwAACyDBvo=
+  </data>
+ </layer>
+ <layer name="house1" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztkc0KQEAURicPgQUWeCJkgx0eQXb+S/LQvilqmtjRvQunTnPv6p4aIWhoDCFGOGnu5zvD1iCKAx1u95orXOB27gNhX4TbsWandMk9IezLcDu/UXLNBWFfidvVjZJrrgn7nkgZNv28i4k/tqDN6K/VJge60GPUpzb5MIAhoz6OTT/fcwAOvxeb
+  </data>
+ </layer>
+ <layer name="house2" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztkEsKgzAUACXe0M+marvQFrFYpdDjtCdoT6AnqCfwNo4gaB+uw4NmYEjyIGRI6HteJIxRCwktqTBT1JfTUgjPFvsO5neV8ystN2ywxApri325WdcAQ4zMOp/7Host3i31PXn/Jf4s4RxjZvbv2ORNwwfHTUvB/ogXBX0dDf1Ox0lB28yXjkFJi8Ph+E8mR5YYbQ==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1" width="40" height="15"/>
+</map>
