@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="40" height="15" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="beers_to_win" value="12"/>
+  <property name="seconds" value="90"/>
+  <property name="start_x" value="1136"/>
+  <property name="start_y" value="192"/>
+  <property name="store_x" value="0"/>
+  <property name="store_y" value="0"/>
+ </properties>
  <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32">
   <image source="../web/img/grass.png" width="96" height="192"/>
  </tileset>
@@ -25,29 +33,95 @@
   <image source="../web/img/building.png" width="256" height="256"/>
  </tileset>
  <layer name="grass" width="40" height="15">
+  <properties>
+   <property name="blocking" value="false"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJyllkEOQjEIRHuEtvc/rC78SfN8DDUuSBQphWGGuscY823rsP3x7Y+dfsbRf55dyDFhG7Zw5slFn9VhNsd3L1P81utCPHuxfhn3fOf9hjHxYg/rB7McFsPZWW3VWcM13Wf4VXMjtqztBgPjl3EyYX7bGzmVZkY9kGOsp+vHOHmjCeNbNXP2ZLw1TVe8/6cH3mN4Vdzk7mGehDF1Y71aXZwf9VPtQtbY6TPhbD6brcWmeiv9Jy5Ve4R65/7tZlLN+maeVr/tyY6L1H2qoeJDqrf6nHaY8ajKbdrhnrK5p3e92yPV/wzDqdJY996k9zvtk/RWJv6cv70AOpoogw==
   </data>
  </layer>
  <layer name="road-sidewalk" width="40" height="15">
+  <properties>
+   <property name="blocking" value="false"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJzNlFEOgyAMhoteYcl2CJ232JF2jD3sSN6IKA8zYVn3YCQNte2DCMkXEEj88kOZHMCUwTPzlBn5twX7DvsbckXuO3OWxv03CM7xZL+YjD8V5qfNtAY/7i76Ss737PqIwh0r6UfXrT6ejK1+TQPwdRst+abrXH1q87T4jcgl4enkPPfeYa/w1fj1yEDolectvR9c3QSl3wt5wMY7s0fyW7OhWXLZpllKfrRZ60X7tuTcQwE/bR0Exr90ftozXp2P9vsBmWQ8uQ==
+   eJzNlEEKwjAQRZPmCoIewuotvIFb1+JKXHgMFx7JG4WahULE6aI0DJnOzKKjgUfSJNDHTyadd66rEIl5zBPo2xv6NfQrYAlsJuY0jfpvYpzzj/1yMX79SX7H4Nwp6DK19DuD26XiR93FOIPfvqH9qPO1rI9DxS8zd8zSD69rfSIaa/0ayOfjRwL6xutUfUrz1Pg9gEXB1fN5Tr3DUeAr8WuBLaIVnjf3flB1k4R+N2DnRu6VPZzfkA3Oksq2zJLzw01bL9K3peaeDPykdZAIf+v8pGc8OM/t9wUkyjtg
   </data>
  </layer>
  <layer name="fence" width="40" height="15">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJxjYKAcCDPRVj2lYLC6j5eJPPtG3QcBo+6jDJDrPj4k9YJMCMzPhJCHiQ2E++gFRt1HGaCl+xypYCa13QdzkxuQdgdiDyrlDxEquA/ZTT5A7AvEflRyHzUAtdyEDKjpPlwAACyDBvo=
   </data>
  </layer>
- <layer name="house1" width="40" height="15">
+ <layer name="doors" width="40" height="15">
+  <properties>
+   <property name="blocking" value="false"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJztkc0KQEAURicPgQUWeCJkgx0eQXb+S/LQvilqmtjRvQunTnPv6p4aIWhoDCFGOGnu5zvD1iCKAx1u95orXOB27gNhX4TbsWandMk9IezLcDu/UXLNBWFfidvVjZJrrgn7nkgZNv28i4k/tqDN6K/VJge60GPUpzb5MIAhoz6OTT/fcwAOvxeb
+   eJxjYBgFo2AUDBUQxjTQLsAP4ge5+0bBKBgFo4BeAADpGQC6
+  </data>
+ </layer>
+ <layer name="house1" width="40" height="15">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgYUMbEwNAExM1ouAdKtwBxBdMAOQ4I6oF2N6DhDiBuBeIuKL9xAN0XBLQ7GA3XI7kLxA8ZQPdFA+2OwYJBAMaOHUD3pQDtTsWCQQDGThtA942CkQvEgOlOHIglBlH6Q3aTDBDLArHcIHIfspuUgFgZiFUGkfsGo5tGAe0BABojF0M=
   </data>
  </layer>
  <layer name="house2" width="40" height="15">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJztkEsKgzAUACXe0M+marvQFrFYpdDjtCdoT6AnqCfwNo4gaB+uw4NmYEjyIGRI6HteJIxRCwktqTBT1JfTUgjPFvsO5neV8ystN2ywxApri325WdcAQ4zMOp/7Host3i31PXn/Jf4s4RxjZvbv2ORNwwfHTUvB/ogXBX0dDf1Ox0lB28yXjkFJi8Ph+E8mR5YYbQ==
+   eJwLZmZgCEHDoUA8WEA00C0xaDh2ELkvGeiWFDScSkf3RTGh0uji2UC35AFxPpKbcunovmQmBB0ExMFAHMKEEAe5rxSK6em+uUD756GFWTSUH8uEqZ7eYA3QDWuB+CaSW1Kg7LRB4L7dQDfsGQTuwAVOAd12ehC7bxSMglEw/AEAndMVlQ==
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="40" height="15"/>
+ <objectgroup name="triggers" width="40" height="15">
+  <object name="store1" type="trigger" x="96" y="96" width="32" height="32">
+   <properties>
+    <property name="type" value="beer_store"/>
+   </properties>
+  </object>
+  <object name="store2" type="trigger" x="128" y="96" width="32" height="32">
+   <properties>
+    <property name="type" value="beer_store"/>
+   </properties>
+  </object>
+  <object name="party1" type="trigger" x="1152" y="128" width="32" height="32">
+   <properties>
+    <property name="type" value="party_arrival"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="regions" width="40" height="15">
+  <object name="region1" type="region" x="0" y="160" width="448" height="320"/>
+  <object name="region2" type="region" x="736" y="0" width="32" height="480"/>
+ </objectgroup>
+ <objectgroup name="npcs" width="40" height="15">
+  <object name="npc1" type="npc" x="320" y="256" width="64" height="64">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region1"/>
+    <property name="speed" value="2"/>
+   </properties>
+  </object>
+  <object name="npc2" type="npc" x="384" y="160" width="64" height="64">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region1"/>
+    <property name="speed" value="2"/>
+   </properties>
+  </object>
+  <object name="npc3" type="npc" x="736" y="320" width="64" height="64">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region2"/>
+    <property name="speed" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

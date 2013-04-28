@@ -358,25 +358,76 @@ window.console.log("${this._player.x}, ${this._player.y}");
 
     List<Map> _tilesets = level["tilesets"];
     List<Map> _layers = level["layers"];
+    Map _properties = level["properties"];
+
+    Level l = new _LoadableLevel(drawer, manager,
+        height, width, tileWidth, tileHeight);
 
     List<_LevelTileset> tilesets = new List<_LevelTileset>();
     for (Map tset in _tilesets) {
       tilesets.add(new _LevelTileset.fromJson(tset));
     }
 
+    Map<String, Region> _regions = new Map<String, Region>();
+    List<_LayerNPC> _npcs = new List<_LayerNPC>();
+
     List<_LevelLayer> layers = new List<_LevelLayer>();
     for (Map ll in _layers) {
-      layers.add(new _LevelLayer.fromJson(ll));
+      if (ll["type"] == "tilelayer") {
+        layers.add(new _LevelLayer.fromJson(ll));
+      } else {
+        // objects
+        // TODO: this could be a lot better managed
+        for (Map object in ll["objects"]) {
+          int x = object["x"];
+          int y = object["y"];
+          int row = y ~/ tileHeight;
+          int col = x ~/ tileWidth;
+          int width = object["width"];
+          int height = object["height"];
+          String type = object["type"];
+          if (type == "trigger") {
+            if (object["properties"]["type"] == "beer_store") {
+              GameEvent beerStoreEvent = new GameEvent();
+              beerStoreEvent.type = GameEvent.BEER_STORE_EVENT;
+              beerStoreEvent.value = 24;
+              l.addTrigger(new Trigger(beerStoreEvent, row, col));
+            } else if (object["properties"]["type"] == "party_arrival") {
+              GameEvent partyArrivalEvent = new GameEvent();
+              partyArrivalEvent.type = GameEvent.PARTY_ARRIVAL_EVENT;
+              l.addTrigger(new Trigger(partyArrivalEvent, row, col));
+            }
+          } else if (type == "region") {
+            _LayerRegion r = new _LayerRegion.fromJson(object);
+            Region reg = new Region(r.x, r.x + r.width, r.y, r.y + r.height);
+            _regions[r.name] = reg;
+          } else if (type == "npc") {
+            _LayerNPC n = new _LayerNPC.fromJson(object);
+            _npcs.add(n);
+          }
+        }
+      }
     }
 
-    Level l = new _LoadableLevel(drawer, manager,
-        height, width, tileWidth, tileHeight);
-    l._storeX = 0;
-    l._storeY = 0;
-    l._startX = 200;
-    l._startY = 48;
-    l._beersToWin = 18;
-    l._duration = new Duration(seconds: 45);
+    for (_LayerNPC n in _npcs) {
+      Direction dir = (n.direction == "down" ? DIR_DOWN :
+                      n.direction == "up" ? DIR_UP :
+                        n.direction == "left" ? DIR_LEFT :
+                          n.direction == "right" ? DIR_RIGHT :
+                            null);
+      NPC npc = new NPC(l, dir, n.x, n.y);
+      npc.speed = n.speed;
+      npc.setDrawingComponent(new DrawingComponent(manager, drawer, false));
+      npc.setControlComponent(new NPCInputComponent(_regions[n.region]));
+      l.addObject(npc);
+    }
+
+    l._storeX = int.parse(_properties["store_x"]);
+    l._storeY = int.parse(_properties["store_y"]);
+    l._startX = int.parse(_properties["start_x"]);
+    l._startY = int.parse(_properties["start_y"]);
+    l._beersToWin = int.parse(_properties["beers_to_win"]);
+    l._duration = new Duration(seconds: int.parse(_properties["seconds"]));
 
     _TilesetIndex idx = new _TilesetIndex(tilesets);
 
@@ -386,6 +437,7 @@ window.console.log("${this._player.x}, ${this._player.y}");
 
       int row = 0;
       int col = 0;
+      bool blocking = ll.blocking;
       List<int> data = ll.data;
       for (int gid in data) {
 
@@ -395,7 +447,7 @@ window.console.log("${this._player.x}, ${this._player.y}");
         }
 
         if (gid > 0) {
-          l.setSpriteAt(idx.tileByTileGID(gid), row, col);
+          l.setSpriteAt(idx.tileByTileGID(gid), row, col, blocking);
         }
 
         col++;

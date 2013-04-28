@@ -4,10 +4,10 @@ part of level;
 /**
  *
  */
-class _LevelParseException extends Exception {
-  factory _LevelParseException([String message]) {
-    return new Exception(message);
-  }
+class _LevelParseException {
+  String _message;
+  _LevelParseException([this._message = ""]);
+  String toString() => this._message;
 }
 
 /**
@@ -28,7 +28,9 @@ class _LevelTileset {
   _LevelTileset(this.firstgid, this.image, this.imageheight, this.imagewidth,
       this.name, this.tilewidth, this.tileheight) {
     this._sprites =
-        new SpriteSheet(this.image, this.tilewidth, this.tileheight);
+        new SpriteSheet(
+            this.image.replaceAll('../../', ''),
+            this.tilewidth, this.tileheight);
   }
 
   Sprite tile(int gid) {
@@ -96,9 +98,10 @@ class _LevelLayer {
   final int width;
   final int x;
   final int y;
+  final bool blocking;
 
   _LevelLayer(this.name, this.type, this.opacity, this.visible,
-      this.height, this.width, this.x, this.y, this.data);
+      this.height, this.width, this.x, this.y, this.blocking, this.data);
 
   factory _LevelLayer.fromJson(Map json) {
 
@@ -120,6 +123,10 @@ class _LevelLayer {
       throw new _LevelParseException('"x" is null');
     } else if (null == json['y']) {
       throw new _LevelParseException('"y" is null');
+    } else if (null == json['properties']) {
+      throw new _LevelParseException('"properties" is null');
+    } else if (null == json['properties']['blocking']) {
+      throw new _LevelParseException('"blocking" is null');
     }
 
     _LevelLayer s = new _LevelLayer(
@@ -131,10 +138,83 @@ class _LevelLayer {
       json['width'],
       json['x'],
       json['y'],
+      (json['properties']['blocking'] == "true"),
       json['data']
     );
 
     return s;
+  }
+}
+
+class _LayerRegion {
+
+  final String name;
+  final int x;
+  final int y;
+  final int width;
+  final int height;
+
+  _LayerRegion(this.name, this.x, this.y, this.width, this.height);
+
+  factory _LayerRegion.fromJson(Map json) {
+
+    if (null == json['name']) {
+      throw new _LevelParseException('"name" is null');
+    } else if (null == json['x']) {
+      throw new _LevelParseException('"x" is null');
+    } else if (null == json['y']) {
+      throw new _LevelParseException('"y" is null');
+    } else if (null == json['width']) {
+      throw new _LevelParseException('"width" is null');
+    } else if (null == json['height']) {
+      throw new _LevelParseException('"height" is null');
+    }
+
+    return new _LayerRegion(json["name"], json["x"], json["y"],
+        json["width"], json["height"]);
+  }
+}
+
+class _LayerNPC {
+
+  final String name;
+  final int x;
+  final int y;
+  final int width;
+  final int height;
+  final int speed;
+  final String direction;
+  final String region;
+
+  _LayerNPC(this.name, this.x, this.y, this.width, this.height,
+      this.speed, this.direction, this.region);
+
+  factory _LayerNPC.fromJson(Map json) {
+
+    if (null == json['name']) {
+      throw new _LevelParseException('"name" is null');
+    } else if (null == json['x']) {
+      throw new _LevelParseException('"x" is null');
+    } else if (null == json['y']) {
+      throw new _LevelParseException('"y" is null');
+    } else if (null == json['width']) {
+      throw new _LevelParseException('"width" is null');
+    } else if (null == json['height']) {
+      throw new _LevelParseException('"height" is null');
+    } else if (null == json['properties']) {
+      throw new _LevelParseException('"properties" is null');
+    } else if (null == json['properties']['speed']) {
+      throw new _LevelParseException('"speed" is null');
+    } else if (null == json['properties']['direction']) {
+      throw new _LevelParseException('"direction" is null');
+    } else if (null == json['properties']['region']) {
+      throw new _LevelParseException('"region" is null');
+    }
+
+    return new _LayerNPC(json["name"], json["x"], json["y"],
+        json["width"], json["height"],
+        int.parse(json["properties"]["speed"]), json["properties"]["direction"],
+        json["properties"]["region"]);
   }
 }
 
