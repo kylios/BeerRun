@@ -48,6 +48,8 @@ class Level1 extends Level {
         Level.parseSpriteSheet(building, Data._buildingSpriteSheetData);
 
     SpriteSheet carSheet = Data.carSheet;
+    Map<String, Sprite> carSprites =
+        Level.parseSpriteSheet(carSheet, Data._carSpriteSheetData);
     Sprite brokenCarTopLeft = carSheet.spriteAt(384, 0, 32, 32);
     Sprite brokenCarTopRight = carSheet.spriteAt(416, 0, 32, 32);
     Sprite brokenCarMidTopLeft = carSheet.spriteAt(384, 32, 32, 32);

@@ -2,7 +2,7 @@ library canvas_manager;
 
 import 'dart:html';
 
-import 'package:BeerRun/input.dart';
+import 'package:beer_run/input.dart';
 
 class CanvasManager {
 

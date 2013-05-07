@@ -72,7 +72,9 @@ abstract class GameObject implements ComponentListener {
   void update() {
     this._oldX = this.x;
     this._oldY = this.y;
-    this._control.update(this);
+    if (this._control != null) {
+      this._control.update(this);
+    }
   }
 
   void draw() {
@@ -123,7 +125,7 @@ abstract class GameObject implements ComponentListener {
     this.dir = DIR_RIGHT;
   }
 
-  void broadcast(GameEvent e, Collection<ComponentListener> listeners) {
+  void broadcast(GameEvent e, List<ComponentListener> listeners) {
     for (ComponentListener l in listeners) {
       l.listen(e);
     }

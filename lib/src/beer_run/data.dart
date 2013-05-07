@@ -11,6 +11,27 @@ class Data {
   static final SpriteSheet building = new SpriteSheet("img/building.png", 32, 32);
   static final SpriteSheet carSheet = new SpriteSheet('img/cars.png');
 
+  static final Map _carSpriteSheetData = {
+    "brokenCarTopLeft": [384, 0],
+    "brokenCarTopRight": [416, 0],
+    "brokenCarMidTopLeft": [384, 32],
+    "brokenCarMidTopRight": [416, 32],
+    "brokenCarMidBotLeft": [384, 64],
+    "brokenCarMidBotRight": [416, 64],
+    "brokenCarBotLeft": [384, 96],
+    "brokenCarBotRight": [416, 96],
+    "tire": [384, 128],
+
+    "car1Up": [96, 96],
+    "car1Right": [0, 96],
+    "car1Down": [0, 0],
+    "car1Left": [160, 0],
+    "car2Up": [198, 96],
+    "car2Right": [288, 96],
+    "car2Down": [0, 256],
+    "car2Left": [160, 256]
+  };
+
   static final Map _houseSpriteSheetData = {
     "wallTopLeft": [0, 0],
     "wallMidLeft": [0, 32],

@@ -28,11 +28,15 @@ class WindowView extends View {
   }
 
   void clear() {
+    List<Element> toRemove = new List<Element>();
     this._rootElement.children.forEach((Element e) {
       if (null != e) {
-        e.remove();
+        toRemove.add(e);
       }
     });
+    for (Element e in toRemove) {
+      e.remove();
+    }
   }
   void onClose() {
     this.hide();

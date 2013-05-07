@@ -31,6 +31,7 @@ abstract class Level implements ComponentListener {
   List<Animation> _animations;
   List<List<Sprite>> _sprites;
   List<GameObject> _objects;
+  List<CarFactory> _carFactories;
   Player _player;
 
   bool _paused = false;
@@ -41,6 +42,7 @@ abstract class Level implements ComponentListener {
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
     this._animations = new List<Animation>();
+    this._carFactories = new List<CarFactory>();
     this._triggers = new List<Trigger>(); // TODO: someday optimize this to be more location aware
     this._blocked = new List<bool>
       .filled(this._rows * this._cols, false);
@@ -124,6 +126,10 @@ abstract class Level implements ComponentListener {
 
   void addTrigger(Trigger t) {
     this._triggers.add(t);
+  }
+
+  void addCarFactory(CarFactory f) {
+    this._carFactories.add(f);
   }
 
   void addObject(GameObject obj) {
@@ -275,15 +281,17 @@ window.console.log("${this._player.x}, ${this._player.y}");
         return ! o.isRemoved;
       }));
 
-      if ( ! this._paused) {
-        // Process any animations going on
-        this._animations = new List<Animation>.from(
-            this._animations.where((Animation a) {
-              a.drawNext(this._drawer);
-              return ! a.isDone;
-            })
-        );
+      for (CarFactory f in this._carFactories) {
+        f.update();
       }
+
+      // Process any animations going on
+      this._animations = new List<Animation>.from(
+          this._animations.where((Animation a) {
+            a.drawNext(this._drawer);
+            return ! a.isDone;
+          })
+      );
     }
   }
 
@@ -368,7 +376,10 @@ window.console.log("${this._player.x}, ${this._player.y}");
       tilesets.add(new _LevelTileset.fromJson(tset));
     }
 
+    _TilesetIndex idx = new _TilesetIndex(tilesets);
+
     Map<String, Region> _regions = new Map<String, Region>();
+    Map<String, _LayerPath> _paths = new Map<String, _LayerPath>();
     List<_LayerNPC> _npcs = new List<_LayerNPC>();
 
     List<_LevelLayer> layers = new List<_LevelLayer>();
@@ -401,6 +412,22 @@ window.console.log("${this._player.x}, ${this._player.y}");
             _LayerRegion r = new _LayerRegion.fromJson(object);
             Region reg = new Region(r.x, r.x + r.width, r.y, r.y + r.height);
             _regions[r.name] = reg;
+          } else if (type == "path") {
+            _LayerPath p = new _LayerPath.fromJson(object);
+            _paths[p.name] = p;
+            Path path = new Path(new List<GamePoint>());
+            for (_Point po in p.points) {
+              path.addPoint(new GamePoint(po.x, po.y));
+            }
+            _LevelTileset _tVert = idx.tilesetByName("cars_vert");
+            _LevelTileset _tHoriz = idx.tilesetByName("cars_horiz");
+            window.console.log("vert tset: ${_tVert}");
+            window.console.log("horiz tset: ${_tHoriz}");
+            SpriteSheet vert = _tVert.sprites;
+            SpriteSheet horiz = _tHoriz.sprites;
+            CarFactory f = new CarFactory(l, vert, horiz);
+            f.setGenerator(new CarGeneratorComponent(path, p.spawnAt));
+            l.addCarFactory(f);
           } else if (type == "npc") {
             _LayerNPC n = new _LayerNPC.fromJson(object);
             _npcs.add(n);
@@ -428,8 +455,6 @@ window.console.log("${this._player.x}, ${this._player.y}");
     l._startY = int.parse(_properties["start_y"]);
     l._beersToWin = int.parse(_properties["beers_to_win"]);
     l._duration = new Duration(seconds: int.parse(_properties["seconds"]));
-
-    _TilesetIndex idx = new _TilesetIndex(tilesets);
 
     // Load the tilesets into the level
     for (_LevelLayer ll in layers) {

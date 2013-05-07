@@ -4,15 +4,15 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:async';
 
-import 'package:BeerRun/game.dart';
-import 'package:BeerRun/component.dart';
-import 'package:BeerRun/drawing.dart';
-import 'package:BeerRun/level.dart';
-import 'package:BeerRun/bullet.dart';
-import 'package:BeerRun/explosion.dart';
-import 'package:BeerRun/input.dart';
-import 'package:BeerRun/canvas_manager.dart';
-import 'package:BeerRun/region.dart';
+import 'package:beer_run/game.dart';
+import 'package:beer_run/component.dart';
+import 'package:beer_run/drawing.dart';
+import 'package:beer_run/level.dart';
+import 'package:beer_run/bullet.dart';
+import 'package:beer_run/explosion.dart';
+import 'package:beer_run/input.dart';
+import 'package:beer_run/canvas_manager.dart';
+import 'package:beer_run/region.dart';
 
 part 'src/npc/npc_input_component.dart';
 part 'src/npc/npc.dart';

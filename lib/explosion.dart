@@ -2,9 +2,9 @@ library explosion;
 
 import 'dart:html';
 
-import 'package:BeerRun/level.dart';
-import 'package:BeerRun/drawing.dart';
-import 'package:BeerRun/animation.dart';
+import 'package:beer_run/level.dart';
+import 'package:beer_run/drawing.dart';
+import 'package:beer_run/animation.dart';
 
 class Explosion extends GraphicAnimation {
 

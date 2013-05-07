@@ -3,8 +3,8 @@ library input;
 import 'dart:html';
 import 'dart:math';
 
-import 'package:BeerRun/game.dart';
-import 'package:BeerRun/component.dart';
+import 'package:beer_run/game.dart';
+import 'package:beer_run/component.dart';
 
 part 'src/input/keyboard_input_component.dart';
 part 'src/input/keyboard_listener.dart';

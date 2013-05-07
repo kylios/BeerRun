@@ -32,6 +32,12 @@
  <tileset firstgid="822" name="building" tilewidth="32" tileheight="32">
   <image source="../web/img/building.png" width="256" height="256"/>
  </tileset>
+ <tileset firstgid="886" name="cars_vert" tilewidth="96" tileheight="160">
+  <image source="../web/img/cars_moving_vert.png" width="384" height="161"/>
+ </tileset>
+ <tileset firstgid="890" name="cars_horiz" tilewidth="192" tileheight="96">
+  <image source="../web/img/cars_moving_horiz.png" width="384" height="192"/>
+ </tileset>
  <layer name="grass" width="40" height="15">
   <properties>
    <property name="blocking" value="false"/>
@@ -100,6 +106,30 @@
  <objectgroup name="regions" width="40" height="15">
   <object name="region1" type="region" x="0" y="160" width="448" height="320"/>
   <object name="region2" type="region" x="736" y="0" width="32" height="480"/>
+ </objectgroup>
+ <objectgroup name="paths" width="40" height="15">
+  <object name="path1" type="path" x="672" y="-160" width="32" height="640">
+   <properties>
+    <property name="spawn_at" value="300"/>
+    <property name="x1" value="672"/>
+    <property name="x2" value="672"/>
+    <property name="y1" value="-160"/>
+    <property name="y2" value="480"/>
+   </properties>
+  </object>
+  <object name="path2" type="path" x="832" y="-160" width="128" height="640">
+   <properties>
+    <property name="spawn_at" value="400"/>
+    <property name="x1" value="960"/>
+    <property name="x2" value="960"/>
+    <property name="x3" value="832"/>
+    <property name="x4" value="832"/>
+    <property name="y1" value="480"/>
+    <property name="y2" value="256"/>
+    <property name="y3" value="256"/>
+    <property name="y4" value="-160"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="npcs" width="40" height="15">
   <object name="npc1" type="npc" x="320" y="256" width="64" height="64">

@@ -174,6 +174,53 @@
         }, 
         {
          "height":15,
+         "name":"paths",
+         "objects":[
+                {
+                 "height":640,
+                 "name":"path1",
+                 "properties":
+                    {
+                     "spawn_at":"300",
+                     "x1":"672",
+                     "x2":"672",
+                     "y1":"-160",
+                     "y2":"480"
+                    },
+                 "type":"path",
+                 "width":32,
+                 "x":672,
+                 "y":-160
+                }, 
+                {
+                 "height":640,
+                 "name":"path2",
+                 "properties":
+                    {
+                     "spawn_at":"400",
+                     "x1":"960",
+                     "x2":"960",
+                     "x3":"832",
+                     "x4":"832",
+                     "y1":"480",
+                     "y2":"256",
+                     "y3":"256",
+                     "y4":"-160"
+                    },
+                 "type":"path",
+                 "width":128,
+                 "x":832,
+                 "y":-160
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":40,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":15,
          "name":"npcs",
          "objects":[
                 {
@@ -356,6 +403,36 @@
          "spacing":0,
          "tileheight":32,
          "tilewidth":32
+        }, 
+        {
+         "firstgid":886,
+         "image":"..\/..\/img\/cars_moving_vert.png",
+         "imageheight":161,
+         "imagewidth":384,
+         "margin":0,
+         "name":"cars_vert",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":160,
+         "tilewidth":96
+        }, 
+        {
+         "firstgid":890,
+         "image":"..\/..\/img\/cars_moving_horiz.png",
+         "imageheight":192,
+         "imagewidth":384,
+         "margin":0,
+         "name":"cars_horiz",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":96,
+         "tilewidth":192
         }],
  "tilewidth":32,
  "version":1,

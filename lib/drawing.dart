@@ -2,11 +2,11 @@ library drawing;
 
 import 'dart:html';
 
-import 'package:BeerRun/canvas_manager.dart';
-import 'package:BeerRun/component.dart';
-import 'package:BeerRun/input.dart';
-import 'package:BeerRun/game.dart';
-import 'package:BeerRun/animation.dart';
+import 'package:beer_run/canvas_manager.dart';
+import 'package:beer_run/component.dart';
+import 'package:beer_run/input.dart';
+import 'package:beer_run/game.dart';
+import 'package:beer_run/animation.dart';
 
 part 'src/drawing/drawing_interface.dart';
 part 'src/drawing/sprite.dart';

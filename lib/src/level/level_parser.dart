@@ -23,14 +23,12 @@ class _LevelTileset {
   final int tilewidth;
   final int tileheight;
 
-  SpriteSheet _sprites;
-
   _LevelTileset(this.firstgid, this.image, this.imageheight, this.imagewidth,
-      this.name, this.tilewidth, this.tileheight) {
-    this._sprites =
-        new SpriteSheet(
-            this.image.replaceAll('../../', ''),
-            this.tilewidth, this.tileheight);
+      this.name, this.tilewidth, this.tileheight);
+
+  SpriteSheet get sprites {
+    return new SpriteSheet(this.image.replaceAll('../../', ''),
+        this.tilewidth, this.tileheight);
   }
 
   Sprite tile(int gid) {
@@ -49,7 +47,9 @@ class _LevelTileset {
     int x = c * this.tilewidth;
     int y = r * this.tileheight;
 
-    return this._sprites.spriteAt(x, y);
+    window.console.log("Sprites: ${this.sprites}");
+    window.console.log("SpriteAt: ${this.sprites.spriteAt(x, y)}");
+    return this.sprites.spriteAt(x, y);
   }
 
   factory _LevelTileset.fromJson(Map json) {
@@ -175,6 +175,56 @@ class _LayerRegion {
   }
 }
 
+class _Point {
+
+  final int x;
+  final int y;
+
+  _Point(this.x, this.y);
+}
+
+class _LayerPath {
+
+  final String name;
+  final List<_Point> points;
+  final int spawnAt;
+
+  _LayerPath(this.name, this.points, this.spawnAt);
+
+  factory _LayerPath.fromJson(Map json) {
+
+    if (null == json['name']) {
+      throw new _LevelParseException('"name" is null');
+    } else if (null == json['properties']) {
+      throw new _LevelParseException('"properties" is null');
+    } else if (null == json['properties']['spawn_at']) {
+      throw new _LevelParseException('"spawn_at" is null');
+    }
+
+    Map properties = json['properties'];
+    int spawnAt = int.parse(properties['spawn_at']);
+    List<_Point> points = new List<_Point>();
+
+    int i = 1;
+    bool loop = true;
+    while (true) {
+      if (null == properties["x${i}"] || null == properties["y${i}"]) {
+        break;
+      }
+
+      int x = int.parse(properties["x${i}"]);
+      int y = int.parse(properties["y${i}"]);
+
+      _Point p = new _Point(x, y);
+      points.add(p);
+
+      i++;
+    }
+
+    return new _LayerPath(json["name"], points, spawnAt);
+  }
+}
+
 class _LayerNPC {
 
   final String name;
@@ -221,14 +271,22 @@ class _LayerNPC {
 class _TilesetIndex {
 
   Map<int, _LevelTileset> _tilesets;
+  Map<String, _LevelTileset> _tilesetsByName;
 
   _TilesetIndex(List<_LevelTileset> ts) {
 
     this._tilesets = new Map<int, _LevelTileset>();
+    this._tilesetsByName = new Map<String, _LevelTileset>();
 
     for (_LevelTileset t in ts) {
       this._tilesets[t.firstgid] = t;
+      this._tilesetsByName[t.name] = t;
     }
+  }
+
+  _LevelTileset tilesetByName(String name) {
+
+    return this._tilesetsByName[name];
   }
 
   _LevelTileset tilesetByTileGID(int gid) {

@@ -4,17 +4,17 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:async';
 
-import 'package:BeerRun/ui.dart';
-import 'package:BeerRun/level.dart';
-import 'package:BeerRun/drawing.dart';
-import 'package:BeerRun/canvas_manager.dart';
-import 'package:BeerRun/path.dart';
-import 'package:BeerRun/game.dart';
-import 'package:BeerRun/car.dart';
-import 'package:BeerRun/region.dart';
-import 'package:BeerRun/npc.dart';
-import 'package:BeerRun/player.dart';
-import 'package:BeerRun/tutorial.dart';
+import 'package:beer_run/ui.dart';
+import 'package:beer_run/level.dart';
+import 'package:beer_run/drawing.dart';
+import 'package:beer_run/canvas_manager.dart';
+import 'package:beer_run/path.dart';
+import 'package:beer_run/game.dart';
+import 'package:beer_run/car.dart';
+import 'package:beer_run/region.dart';
+import 'package:beer_run/npc.dart';
+import 'package:beer_run/player.dart';
+import 'package:beer_run/tutorial.dart';
 
 /*
  * Just game-specific stuff.

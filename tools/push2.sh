@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SERVER_HOST=test.kyleracette.com
+SERVER_HOST=games.kyleracette.com
 UPLOAD_DIR=/home/kyle/.web_uploads
 UPLOAD_USER=kyle
 WEB_DIR=../web
@@ -16,6 +16,7 @@ fi
 #cd $WEB_DIR
 #$CMD
 
-rsync -rv ../web/* $UPLOAD_USER@$SERVER_HOST:$UPLOAD_DIR
-ssh $UPLOAD_USER@$SERVER_HOST "mv $UPLOAD_DIR/* /opt/www/$SERVER_HOST/public_html/"
+rsync --exclude=audio -rv ../* $UPLOAD_USER@$SERVER_HOST:$UPLOAD_DIR
+ssh $UPLOAD_USER@$SERVER_HOST "mv $UPLOAD_DIR/* /opt/www/$SERVER_HOST/"
+
 

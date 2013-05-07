@@ -6,7 +6,7 @@ abstract class Component {
 
   void update(GameObject obj);
 
-  void broadcast(GameEvent e, Collection<ComponentListener> listeners) {
+  void broadcast(GameEvent e, List<ComponentListener> listeners) {
     for (ComponentListener l in listeners) {
       Timer.run(() => l.listen(e));
     }

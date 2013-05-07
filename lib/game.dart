@@ -3,10 +3,10 @@ library game;
 import 'dart:html';
 import 'dart:async';
 
-import 'package:BeerRun/drawing.dart';
-import 'package:BeerRun/component.dart';
-import 'package:BeerRun/level.dart';
-import 'package:BeerRun/player.dart';
+import 'package:beer_run/drawing.dart';
+import 'package:beer_run/component.dart';
+import 'package:beer_run/level.dart';
+import 'package:beer_run/player.dart';
 
 part 'src/game/game_point.dart';
 part 'src/game/game_event.dart';

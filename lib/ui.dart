@@ -3,10 +3,10 @@ library ui;
 import 'dart:html';
 import 'dart:async';
 
-import 'package:BeerRun/input.dart';
-import 'package:BeerRun/drawing.dart';
-import 'package:BeerRun/component.dart';
-import 'package:BeerRun/player.dart';
+import 'package:beer_run/input.dart';
+import 'package:beer_run/drawing.dart';
+import 'package:beer_run/component.dart';
+import 'package:beer_run/player.dart';
 
 
 part 'src/ui/ui.dart';
