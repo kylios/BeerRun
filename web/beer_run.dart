@@ -116,12 +116,19 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       Level l = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
       this._levels.add(l);
 
-      //this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
-      //this._levels.add(new Level2(this._canvasManager, this._canvasDrawer));
-
       c.complete();
     });
 
+    (new Loader()).load("data/levels/level5.json")
+    .then((Map levelData) {
+      this._levels.add(
+          new Level.fromJson(levelData,
+                             this._canvasDrawer, this._canvasManager));
+    });
+
+    //this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
+    //this._levels.add(new Level2(this._canvasManager, this._canvasDrawer));
+//c.complete();
     return c.future;
   }
 

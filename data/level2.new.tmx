@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32">
+  <image source="../web/img/grass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="19" name="sidewalk" tilewidth="32" tileheight="32">
+  <image source="../web/img/sidewalk.png" width="128" height="224"/>
+ </tileset>
+ <tileset firstgid="47" name="street" tilewidth="32" tileheight="32">
+  <image source="../web/img/street.png" width="800" height="608"/>
+ </tileset>
+ <layer name="grass" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJyVlMsNwzAMQz2C0v2H7aUFAuKRlA9CElsfhqL0nHM+xR7zrja/e7VNbKs/IYfWcfUIF+EceTpMlF/rUg7lhPz/5wNn6j/ge8PFDZfEHf0z9V59taeUa8OZ+k+422qt6Uz5SzUJL83KnMxB6knT00b/hHHkm+rc4FYtpxl5oC75pDmlvjjebjSy2SMbTTmNJy0lTA6Lw9bqKO7UM8pFuyJxkXC2/eZ2EO2ezdylGWm6THy0vtB92tUuPsW4+DQv29xt5tLu2OxT1UTzcVohXThuky5VR2/7AtpkKQk=
+  </data>
+ </layer>
+ <layer name="road-sidewalk" width="40" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAP5IHYA4hNgNgYiL3wiCEDdHl0PrXAqPtG3TfqvlH3jbpv1H1D0X3KUKwNxDpIfBjWGmD3ieDBonjcQi/3SUCxEhJbDoilgFhyELgPAOOVQng=
+  </data>
+ </layer>
+</map>

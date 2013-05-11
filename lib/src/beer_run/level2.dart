@@ -645,33 +645,33 @@ class Level2 extends Level {
     this._spawnCar3Cnt++;
     if (this._spawnCar1Cnt >= this._spawnCar1At) {
       int blah = this.rng.nextInt(2);
-      Car c = new Car(this.roadPath1, DIR_UP,
+      /*Car c = new Car(this.roadPath1, DIR_UP,
           (blah == 0 ? this._car1Sprites : this._car2Sprites));
       c.setLevel(this);
       c.setDrawingComponent(
           new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
-      this.addObject(c);
+      this.addObject(c);*/
       // Sorta randomize the interval that we spawn cars
       this._spawnCar1Cnt = this.rng.nextInt(this._spawnCar1At ~/ 2);
     }
     if (this._spawnCar2Cnt >= this._spawnCar2At){
       int blah = this.rng.nextInt(2);
-      Car c = new Car(this.roadPath2, DIR_UP,
+      /*Car c = new Car(this.roadPath2, DIR_UP,
           (blah == 0 ? this._car1Sprites : this._car2Sprites));
       c.setLevel(this);
       c.setDrawingComponent(
           new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
-      this.addObject(c);
+      this.addObject(c);*/
       this._spawnCar2Cnt = 0;
     }
     if (this._spawnCar3Cnt >= this._spawnCar3At){
       int blah = this.rng.nextInt(2);
-      Car c = new Car(this.roadPath3, DIR_DOWN,
+      /*Car c = new Car(this.roadPath3, DIR_DOWN,
           (blah == 0 ? this._car1Sprites : this._car2Sprites));
       c.setLevel(this);
       c.setDrawingComponent(
           new DrawingComponent(this.canvasManager, this.canvasDrawer, false));
-      this.addObject(c);
+      this.addObject(c);*/
       this._spawnCar3Cnt = 0;
     }
 
