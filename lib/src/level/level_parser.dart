@@ -123,11 +123,12 @@ class _LevelLayer {
       throw new _LevelParseException('"x" is null');
     } else if (null == json['y']) {
       throw new _LevelParseException('"y" is null');
-    } else if (null == json['properties']) {
-      throw new _LevelParseException('"properties" is null');
-    } else if (null == json['properties']['blocking']) {
-      throw new _LevelParseException('"blocking" is null');
     }
+
+    // Allow the level not to specify
+    bool blocking = (json['properties'] == null ? false :
+      (json['properties']['blocking'] == null ? false :
+       (json['properties']['blocking'] == "true")));
 
     _LevelLayer s = new _LevelLayer(
       json['name'],
@@ -138,7 +139,7 @@ class _LevelLayer {
       json['width'],
       json['x'],
       json['y'],
-      (json['properties']['blocking'] == "true"),
+      blocking,
       json['data']
     );
 
