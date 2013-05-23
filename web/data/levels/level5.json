@@ -94,6 +94,7 @@
  "properties":
     {
      "beers_to_win":"24",
+     "name":"level5",
      "seconds":"180",
      "start_x":"1152",
      "start_y":"192",

@@ -25,4 +25,3 @@ part 'src/beer_run/score_screen.dart';
 part 'src/beer_run/level1.dart';
 part 'src/beer_run/level2.dart';
 part 'src/beer_run/data.dart';
-part 'src/beer_run/tutorial_dialog.dart';

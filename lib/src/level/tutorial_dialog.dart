@@ -1,4 +1,4 @@
-part of beer_run;
+part of level;
 
 class TutorialDialog extends Dialog {
 

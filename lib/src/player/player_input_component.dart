@@ -160,7 +160,7 @@ class PlayerInputComponent extends Component
   }
   void onKeyPressed(KeyboardEvent e) {
     if (e.keyCode == KeyboardListener.KEY_SPACE) {
-      //this._spawnBullet = true;
+      this._spawnBullet = true;
       this._drinkBeer = true;
     }
   }

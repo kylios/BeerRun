@@ -88,8 +88,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._player.setControlComponent(playerInput);
     this._player.setDrawingComponent(drawer);
 
-    //this._setupLevels();
-
     this._ui = new UI(UIRootElement);
     this._ui.addListener(this);
 
@@ -133,9 +131,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       });
     });
 
-    //this._levels.add(new Level1(this._canvasManager, this._canvasDrawer));
-    //this._levels.add(new Level2(this._canvasManager, this._canvasDrawer));
-//c.complete();
     return c.future;
   }
 
@@ -163,7 +158,11 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._timer = new GameTimer(this._currentLevel.duration);
     this._timer.addListener(this);
 
-    this._currentLevel.setupTutorial(this._ui, this._player);
+    // TODO: super hack.  Let's figure out how to script a level, k?
+    if (this._currentLevel.name == 'level1') {
+      Level.setupTutorial(this._currentLevel, this._ui, this._player);
+    }
+    //this._currentLevel.setupTutorial(this._ui, this._player);
     this._currentLevel.addPlayerObject(this._player);
 
     this._canvasDrawer.clear();

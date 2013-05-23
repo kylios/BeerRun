@@ -3,7 +3,7 @@
  <properties>
   <property name="beers_to_win" value="12"/>
   <property name="seconds" value="90"/>
-  <property name="start_x" value="1132"/>
+  <property name="start_x" value="1138"/>
   <property name="start_y" value="128"/>
   <property name="store_x" value="0"/>
   <property name="store_y" value="480"/>
@@ -75,7 +75,7 @@
    eJxjYBgFQxkIMaHS6OIDDaSZEDQXEHMDMQ8TQnygQCjQ/jA0NwhD+aKDIOxSgG5IRXOHDJQvNwjcVwx0Q8kgcAcu0AR0W/Mgdt8oGAWjYPgDABvMBJU=
   </data>
  </layer>
- <layer name="buildings3" width="40" height="15" visible="0">
+ <layer name="buildings3" width="40" height="15">
   <properties>
    <property name="blocking" value="false"/>
   </properties>

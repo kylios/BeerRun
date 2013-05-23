@@ -3,6 +3,8 @@ part of level;
 
 abstract class Level implements ComponentListener {
 
+  String _name;
+
   // Level design parameters
   int _rows;
   int _cols;
@@ -56,12 +58,12 @@ abstract class Level implements ComponentListener {
   int get startY => this._startY;
   int get beersToWin => this._beersToWin;
   Duration get duration => this._duration;
-  void setupTutorial(UI ui, Player p);
 
   int get tileWidth => this._tileWidth;
   int get tileHeight => this._tileHeight;
   int get rows => this._rows;
   int get cols => this._cols;
+  String get name => this._name;
   CanvasManager get canvasManager => this._manager;
   CanvasDrawer get canvasDrawer => this._drawer;
   List<GameObject> get objects => this._objects;
@@ -221,7 +223,10 @@ abstract class Level implements ComponentListener {
       Bullet b = new Bullet(this, creator, d, x, y,
           new BulletInputComponent(),
           new DrawingComponent(this._manager, this._drawer, false));
-      this.addObject(b);
+      // TODO: this messes up everything.  Can we queue this somehow?  Maybe
+      // queue the GameEvent before it gets to the level even.  The GameEvents
+      // should not be processed during any GameObject's update loop.
+      //this.addObject(b);
     }
   }
 
@@ -268,7 +273,7 @@ window.console.log("${this._player.x}, ${this._player.y}");
 
       // Loop through the objects, calling update on each.  Remove them from the
       // list if they become removed from the level.
-      this._objects = new List<GameObject>.from(this._objects.where((GameObject o)
+      List<GameObject> newObjects = new List<GameObject>.from(this._objects.where((GameObject o)
       {
         if ( ! this._paused) {
           o.update();
@@ -280,6 +285,7 @@ window.console.log("${this._player.x}, ${this._player.y}");
         }
         return ! o.isRemoved;
       }));
+      this._objects = newObjects;
 
       for (CarFactory f in this._carFactories) {
         f.update();
@@ -347,6 +353,130 @@ window.console.log("${this._player.x}, ${this._player.y}");
 
 
 
+  // TODO: temporary until I figure out how to script tutorials
+  static void setupTutorial(Level level, UI ui, Player p) {
+
+    level.tutorial.onStart((var _) {
+      Completer c = new Completer();
+      level.canvasDrawer.setOffset(20 * 32, 0);
+
+      View v = new TutorialDialog(level.tutorial,
+          "What.. who's level drunk idiot who wants to come to OUR party? "
+          "I suppose you can come in.. BUT, we're running low on beer! "
+          "Why don't you stumble on down to the store over there and grab us "
+          "some beers!"
+      );
+
+      ui.showView(v, callback: c.complete);
+
+      return c.future;
+    }).addStep((var _) {
+
+      Completer c = new Completer();
+
+      int tutorialDestX = level.storeX;
+      int tutorialDestY = level.storeY;
+      Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
+
+        int offsetX = level.canvasDrawer.offsetX;
+        int offsetY = level.canvasDrawer.offsetY;
+
+        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+          t.cancel();
+          c.complete();
+        }
+
+        int moveX;
+        if (tutorialDestX < offsetX) {
+          moveX = max(-5, tutorialDestX - offsetX);
+        } else {
+          moveX = min(5, offsetX - tutorialDestX);
+        }
+        int moveY;
+        if (tutorialDestY < offsetY) {
+          moveY = max(-5, offsetY - tutorialDestY);
+        } else {
+          moveY = min(5, tutorialDestY - offsetY);
+        }
+
+        // Move the viewport closer to the beer store
+        level.canvasDrawer.moveOffset(moveX, moveY);
+
+        level.canvasDrawer.clear();
+        level.draw(level.canvasDrawer);
+      });
+
+      return c.future;
+    })
+    .addStep((var _) {
+      Completer c = new Completer();
+      ui.showView(
+          new TutorialDialog(level.tutorial,
+              "Grab us a ${level.beersToWin} pack and bring it back.  Better "
+              "avoid the bums... they like to steal your beer, and then you'll "
+              "have to go BACK and get MORE!"),
+          callback: c.complete
+      );
+      return c.future;
+    })
+    .addStep((var _) {
+      window.console.log("continueTutorial2");
+
+      Completer c = new Completer();
+
+      int tutorialDestX = 20 * 32;
+      int tutorialDestY = 0;
+      Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
+
+        int offsetX = level.canvasDrawer.offsetX;
+        int offsetY = level.canvasDrawer.offsetY;
+
+        window.console.log("$offsetX - $offsetY");
+        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+          t.cancel();
+          c.complete();
+          return c.future;
+        }
+
+        int moveX;
+        if (tutorialDestX < offsetX) {
+          moveX = max(-5, tutorialDestX - offsetX);
+        } else {
+          moveX = min(5, tutorialDestX - offsetX);
+        }
+        int moveY;
+        if (tutorialDestY < offsetY) {
+          moveY = max(-5, tutorialDestY - offsetY);
+        } else {
+          moveY = min(5, tutorialDestY - offsetY);
+        }
+
+        // Move the viewport closer to the beer store
+        level.canvasDrawer.moveOffset(moveX, moveY);
+
+        level.canvasDrawer.clear();
+        level.draw(level.canvasDrawer);
+      });
+
+      return c.future;
+    })
+    .addStep((var _) {
+      window.console.log("continueTutorial3");
+      Completer c = new Completer();
+
+      ui.showView(
+          new TutorialDialog(level.tutorial,
+              "Well, what are you waiting for!?  Get moving, and don't sober "
+              "up too much!"),
+          callback: () { c.complete(); }
+      );
+      return c.future;
+    })
+    .onFinish((var _) {
+
+      p.setPos(level.startX, level.startY);
+    });
+  }
 
 
 
@@ -370,6 +500,7 @@ window.console.log("${this._player.x}, ${this._player.y}");
 
     Level l = new _LoadableLevel(drawer, manager,
         height, width, tileWidth, tileHeight);
+    l._name = _properties["name"];
 
     List<_LevelTileset> tilesets = new List<_LevelTileset>();
     for (Map tset in _tilesets) {
