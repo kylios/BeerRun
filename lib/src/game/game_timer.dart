@@ -22,6 +22,16 @@ class GameTimer {
     });
   }
 
+  void stop([bool invokeCallback = false]) {
+    if (this._timer == null) {
+      return;
+    }
+    this._timer.cancel();
+    if (invokeCallback) {
+      this._onEnd();
+    }
+  }
+
   Duration getRemainingTime() {
     if (null == this._end) {
       return null;

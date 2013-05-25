@@ -193,6 +193,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
         this._timer.getRemainingTime());
     }
 
+    this._timer.stop();
+
     this._totalScore += converted;
 
     query("#score").innerHtml = "${this._totalScore}";
@@ -277,7 +279,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       this._score += this._player.beersDelivered;
       this._player.resetBeersDelivered();
 
-      this._pause = true;
       this._ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
     }
 
