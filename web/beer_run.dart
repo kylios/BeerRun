@@ -326,7 +326,16 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   }
 
   Level _getNextLevel() {
-    return this._levels[this._currentLevelIdx++];
+    window.console.log(window.location.hash);
+    if (window.location.hash == '#level1') {
+      return this._levels[0];
+    } else if (window.location.hash == '#level2') {
+      return this._levels[1];
+    } else if (window.location.hash == '#level5') {
+      return this._levels[2];
+    } else {
+      return this._levels[this._currentLevelIdx++];
+    }
   }
 
   void _setGameOver(bool dialog, String text) {

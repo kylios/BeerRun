@@ -89,6 +89,141 @@
          "width":40,
          "x":0,
          "y":0
+        }, 
+        {
+         "height":30,
+         "name":"triggers",
+         "objects":[
+                {
+                 "height":32,
+                 "name":"party1",
+                 "properties":
+                    {
+                     "type":"party_arrival"
+                    },
+                 "type":"trigger",
+                 "width":32,
+                 "x":1152,
+                 "y":128
+                }, 
+                {
+                 "height":32,
+                 "name":"store1",
+                 "properties":
+                    {
+                     "type":"beer_store"
+                    },
+                 "type":"trigger",
+                 "width":32,
+                 "x":96,
+                 "y":832
+                }, 
+                {
+                 "height":32,
+                 "name":"store2",
+                 "properties":
+                    {
+                     "type":"beer_store"
+                    },
+                 "type":"trigger",
+                 "width":32,
+                 "x":128,
+                 "y":832
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":40,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":30,
+         "name":"regions",
+         "objects":[
+                {
+                 "height":640,
+                 "name":"region1",
+                 "properties":
+                    {
+
+                    },
+                 "type":"region",
+                 "width":320,
+                 "x":0,
+                 "y":320
+                }, 
+                {
+                 "height":960,
+                 "name":"region2",
+                 "properties":
+                    {
+
+                    },
+                 "type":"region",
+                 "width":96,
+                 "x":544,
+                 "y":0
+                }, 
+                {
+                 "height":512,
+                 "name":"region3",
+                 "properties":
+                    {
+
+                    },
+                 "type":"region",
+                 "width":160,
+                 "x":1024,
+                 "y":480
+                }, 
+                {
+                 "height":96,
+                 "name":"region4",
+                 "properties":
+                    {
+
+                    },
+                 "type":"region",
+                 "width":288,
+                 "x":992,
+                 "y":320
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":40,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "height":30,
+         "name":"paths",
+         "objects":[
+                {
+                 "height":864,
+                 "name":"path1",
+                 "properties":
+                    {
+                     "spawn_at":"200",
+                     "x1":"416",
+                     "x2":"416",
+                     "x3":"-160",
+                     "y1":"960",
+                     "y2":"112",
+                     "y3":"112"
+                    },
+                 "type":"path",
+                 "width":640,
+                 "x":-160,
+                 "y":96
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":40,
+         "x":0,
+         "y":0
         }],
  "orientation":"orthogonal",
  "properties":
@@ -237,6 +372,36 @@
          "spacing":0,
          "tileheight":32,
          "tilewidth":32
+        }, 
+        {
+         "firstgid":1186,
+         "image":"..\/..\/img\/cars_moving_vert.png",
+         "imageheight":161,
+         "imagewidth":384,
+         "margin":0,
+         "name":"cars_vert",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":160,
+         "tilewidth":96
+        }, 
+        {
+         "firstgid":1190,
+         "image":"..\/..\/img\/cars_moving_horiz.png",
+         "imageheight":192,
+         "imagewidth":384,
+         "margin":0,
+         "name":"cars_horiz",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":96,
+         "tilewidth":192
         }],
  "tilewidth":32,
  "version":1,

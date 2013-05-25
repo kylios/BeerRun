@@ -243,7 +243,6 @@ abstract class Level implements ComponentListener {
     // TODO: for now I'm just moving player.draw() out of here, and that'll
     //    have to be called explicitly from the game's loop.
     this.draw(this._drawer);
-window.console.log("${this._player.x}, ${this._player.y}");
 
     if ( ! this._paused) {
       //this._player.update();

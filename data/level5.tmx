@@ -36,6 +36,12 @@
  <tileset firstgid="1126" name="trees" tilewidth="32" tileheight="32">
   <image source="../web/img/trees.png" width="192" height="320"/>
  </tileset>
+ <tileset firstgid="1186" name="cars_vert" tilewidth="96" tileheight="160">
+  <image source="../web/img/cars_moving_vert.png" width="384" height="161"/>
+ </tileset>
+ <tileset firstgid="1190" name="cars_horiz" tilewidth="192" tileheight="96">
+  <image source="../web/img/cars_moving_horiz.png" width="384" height="192"/>
+ </tileset>
  <layer name="grass" width="40" height="30">
   <properties>
    <property name="blocking" value="false"/>
@@ -84,4 +90,40 @@
    eJztzgEJAAAIA7BjJvtns4UibAmWAF90XQ8AAABg3wBASwA3
   </data>
  </layer>
+ <objectgroup name="triggers" width="40" height="30">
+  <object name="party1" type="trigger" x="1152" y="128" width="32" height="32">
+   <properties>
+    <property name="type" value="party_arrival"/>
+   </properties>
+  </object>
+  <object name="store1" type="trigger" x="96" y="832" width="32" height="32">
+   <properties>
+    <property name="type" value="beer_store"/>
+   </properties>
+  </object>
+  <object name="store2" type="trigger" x="128" y="832" width="32" height="32">
+   <properties>
+    <property name="type" value="beer_store"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="regions" width="40" height="30">
+  <object name="region1" type="region" x="0" y="320" width="320" height="640"/>
+  <object name="region2" type="region" x="544" y="0" width="96" height="960"/>
+  <object name="region3" type="region" x="1024" y="480" width="160" height="512"/>
+  <object name="region4" type="region" x="992" y="320" width="288" height="96"/>
+ </objectgroup>
+ <objectgroup name="paths" width="40" height="30">
+  <object name="path1" type="path" x="-160" y="96" width="640" height="864">
+   <properties>
+    <property name="spawn_at" value="200"/>
+    <property name="x1" value="416"/>
+    <property name="x2" value="416"/>
+    <property name="x3" value="-160"/>
+    <property name="y1" value="960"/>
+    <property name="y2" value="112"/>
+    <property name="y3" value="112"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
