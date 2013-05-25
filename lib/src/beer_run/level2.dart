@@ -4,9 +4,9 @@ class Level2 extends Level {
 
   Random rng = new Random();
 
-  Path roadPath1;
-  Path roadPath2;
-  Path roadPath3;
+  GamePath roadPath1;
+  GamePath roadPath2;
+  GamePath roadPath3;
 
   Region npcRegion1;
   Region npcRegion2;
@@ -532,19 +532,19 @@ class Level2 extends Level {
     this.setSpriteAt(buildingSprites["storeRoofBackRight"], 23, 5, true);
 
 
-    this.roadPath1 = new Path([
+    this.roadPath1 = new GamePath([
                               new GamePoint(this.tileWidth * 13,// - this.tileWidth ~/ 2,
                                   this.rows * this.tileHeight),
                               new GamePoint(this.tileWidth * 13,// - this.tileWidth ~/ 2,
                                   5 * 32 - 48),
                               new GamePoint(-160, 5 * 32 - 48)
                               ]);
-    this.roadPath2 = new Path([
+    this.roadPath2 = new GamePath([
                                 new GamePoint(27 * this.tileWidth + 16,
                                    this.rows * this.tileHeight),
                                 new GamePoint(27 * this.tileWidth + 16, -160)
                                ]);
-    this.roadPath3 = new Path([
+    this.roadPath3 = new GamePath([
 
                                new GamePoint(22 * this.tileWidth, -160),
                                new GamePoint(22 * this.tileWidth,

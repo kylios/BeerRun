@@ -545,7 +545,7 @@ abstract class Level implements ComponentListener {
           } else if (type == "path") {
             _LayerPath p = new _LayerPath.fromJson(object);
             _paths[p.name] = p;
-            Path path = new Path(new List<GamePoint>());
+            GamePath path = new GamePath(new List<GamePoint>());
             for (_Point po in p.points) {
               path.addPoint(new GamePoint(po.x, po.y));
             }

@@ -3,7 +3,7 @@ part of path;
 class PathFollowerInputComponent extends Component {
 
   int _currentPointIdx = 0;
-  Path _boundPath;
+  GamePath _boundPath;
 
   PathFollowerInputComponent(this._boundPath);
 

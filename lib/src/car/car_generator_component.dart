@@ -5,7 +5,7 @@ class CarGeneratorComponent extends Component {
   Random _rng = new Random();
 
   Level _level;
-  Path _path;
+  GamePath _path;
 
   int _spawnCount = 0;
   int _spawnAt;

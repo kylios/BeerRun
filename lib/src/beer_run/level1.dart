@@ -13,8 +13,8 @@ class Level1 extends Level {
   List<Sprite> _car1Sprites;
   List<Sprite> _car2Sprites;
 
-  Path roadPath1;
-  Path roadPath2;
+  GamePath roadPath1;
+  GamePath roadPath2;
 
   Level1(CanvasManager manager, CanvasDrawer drawer) : super(
       drawer, manager, 15, 40, 32, 32) {
@@ -394,11 +394,11 @@ class Level1 extends Level {
     this.addTrigger(partyTrigger);
 
     // Add cars
-    this.roadPath1 = new Path([
+    this.roadPath1 = new GamePath([
       new GamePoint(21 * this.tileWidth, -160),
       new GamePoint(21 * this.tileWidth, this.rows * this.tileHeight)
     ]);
-    this.roadPath2 = new Path([
+    this.roadPath2 = new GamePath([
       new GamePoint(30 * this.tileWidth, this.rows * this.tileHeight),
       new GamePoint(30 * this.tileWidth, 8 * this.tileHeight),
       new GamePoint(26 * this.tileWidth, 8 * this.tileHeight),

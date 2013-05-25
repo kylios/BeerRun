@@ -7,7 +7,7 @@ class Car extends GameObject {
   final SpriteSheet _horiz;
   final SpriteSheet _vert;
 
-  Car(Path p, Direction d, this._type, this._vert, this._horiz) :
+  Car(GamePath p, Direction d, this._type, this._vert, this._horiz) :
     super(d, p.start.x, p.start.y) {
     this.speed = 6;
     this.setControlComponent(new PathFollowerInputComponent(p));

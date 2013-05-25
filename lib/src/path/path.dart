@@ -1,11 +1,11 @@
 part of path;
 
 
-class Path {
+class GamePath {
 
   List<GamePoint> _points;
 
-  Path(this._points);
+  GamePath(this._points);
 
   void addPoint(GamePoint p) {
     this._points.add(p);
