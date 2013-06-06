@@ -22,6 +22,4 @@ import 'package:beer_run/tutorial.dart';
 
 part 'src/beer_run/level_requirements_screen.dart';
 part 'src/beer_run/score_screen.dart';
-part 'src/beer_run/level1.dart';
-part 'src/beer_run/level2.dart';
 part 'src/beer_run/data.dart';
