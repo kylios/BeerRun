@@ -22,6 +22,7 @@ GameManager game;
 
 class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
+  StatsManager _statsManager;
   CanvasManager _canvasManager;
   CanvasDrawer _canvasDrawer;
 
@@ -65,7 +66,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
-      SpanElement scoreElement) {
+      SpanElement scoreElement,
+      DivElement statsElement) {
+
+    this._statsManager = new StatsManager(statsElement);
 
     this._canvasManager = new CanvasManager(canvasElement);
     this._canvasManager.resize(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -82,7 +86,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._canvasManager.addKeyboardListener(playerInput);
     this._canvasManager.addKeyboardListener(this);
 
-    this._player = new Player();
+    this._player = new Player(this._statsManager);
+    this._player.setHealth(3);
     this._player.speed = 1;
     this._player.addBeers(3);
     this._player.setControlComponent(playerInput);
@@ -239,7 +244,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       return;
     }
 
+   // this._statsManager.duration = this._timer.duration;
+
     this._currentLevel.update();
+    this._statsManager.update();
 
     if (this._gameOver) {
       return;
@@ -295,6 +303,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     // Draw HUD
     // TODO: HUD class?
+
     if (this._currentLevel.tutorial.isComplete) {
       this._BACMeter.value = this._player.drunkenness;
       this._HPMeter.value = this._player.health;
@@ -380,8 +389,12 @@ window.console.log("onGameOver");
     this._player.level.unPause();
   }
 
-  void onTimeOut() {
+  void onTimeOut(GameTimer t) {
     this.stopLevel();
+  }
+
+  void onTick(GameTimer t) {
+    this._statsManager.duration = t.getRemainingTime();
   }
 
   void onKeyDown(KeyboardEvent e) {
@@ -397,9 +410,6 @@ window.console.log("key pressed: ${e.keyCode}");
     switch (e.charCode) {
 
       case KeyboardListener.KEY_T:
-        window.console.log("key T");
-        // TODO: something like tutorialmgr.skip() ???
-        //this._DEBUG_skipTutorial = true;
         this._currentLevel.tutorial.skip(null);
         break;
       case KeyboardListener.KEY_S:
@@ -423,10 +433,10 @@ void main() {
   game = new GameManager(
       query('canvas#game_canvas'),
       query('div#root_pane'),
-      query('span#score'));
+      query('span#score'),
+      query('div#stats'));
 
   game.init().then((var _) => game.start());
-  //game.start();
 
 
 

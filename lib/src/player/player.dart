@@ -8,6 +8,7 @@ class Player extends GameObject implements ComponentListener {
   static final int DAMAGE_INTERVAL = 50;
   static final int BUZZ_TIME = 35000;
 
+  StatsManager _stats;
 
   bool _damaged = false;
   int _damageInterval = 0;
@@ -21,7 +22,7 @@ class Player extends GameObject implements ComponentListener {
   bool _boredNotify = false;
   int _beersDelivered = 0;
 
-  int _health = 3;
+  int _health = 0;
   int _beers = 0;
   int _buzz = 3;  // out of 10;
   int _buzzDecreaseTime = -1;
@@ -34,7 +35,7 @@ class Player extends GameObject implements ComponentListener {
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
-  Player() : super(DIR_DOWN, 0, 0) {
+  Player(this._stats) : super(DIR_DOWN, 0, 0) {
 
     this.speed = 6;
 
@@ -69,8 +70,14 @@ class Player extends GameObject implements ComponentListener {
     this.dir = DIR_DOWN;
   }
 
+  void setHealth(int health) {
+    this._health = health;
+    this._stats.health = health;
+  }
+
   void addBeers(int beers) {
     this._beers += beers;
+    this._stats.beers = beers;
   }
   void resetBeersDelivered() {
     this._beersDelivered = 0;
@@ -145,6 +152,8 @@ class Player extends GameObject implements ComponentListener {
         this._damagedUntil = now.millisecondsSinceEpoch + 3000;
         this.level.addAnimation(
             new TextAnimation("OUCH!", this.x, this.y, 2));
+
+        this._stats.health = this._health;
       }
       if (this._health <= 0) {
         this.level.addAnimation(
@@ -159,6 +168,8 @@ class Player extends GameObject implements ComponentListener {
         this._beers -= e.value;
         this.level.addAnimation(
             new TextAnimation("-1 BEER!", this.x, this.y, 2));
+
+        this._stats.beers = this._beers;
       }
     } else if (e.type == GameEvent.BEER_STORE_EVENT) {
       if (this._beers < 24) {
@@ -168,6 +179,8 @@ class Player extends GameObject implements ComponentListener {
       }
       this._beers = 24;
       this._beenToStore = true;
+
+      this._stats.beers = this._beers;
     } else if (e.type == GameEvent.PARTY_ARRIVAL_EVENT && this._beenToStore) {
       // Only trigger if you've gone to the store at least once
 
@@ -176,6 +189,8 @@ class Player extends GameObject implements ComponentListener {
       this._beers = 0;
       this.level.addAnimation(
           new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
+
+      this._stats.beers = this._beers;
     }
   }
 

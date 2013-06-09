@@ -29,6 +29,34 @@ canvas#game_canvas {
   border: 1px solid black;
 }
 
+div#stats {
+  background: black;
+  color: white;
+  font-weight: bold;
+  height: 16px;
+  font-size: 22px;
+  padding: 8px;
+}
+div#stats div {
+  display: inline-block;
+}
+
+div#beers_stats {
+  float: left;
+  margin-right: 172px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+div#health_stats {
+  float: right;
+  width: 128px;
+}
+
+div#duration {
+  margin: auto 10px;
+}
+
 .left {
   float: left;
 }

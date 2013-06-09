@@ -324,6 +324,7 @@ class _LoadableLevel extends Level {
       int rows, int cols, int tileWidth, int tileHeight) :
         super(drawer, manager, rows, cols, tileWidth, tileHeight);
 
+  /*
   void setupTutorial(UI ui, Player p) {
 
 
@@ -332,4 +333,5 @@ class _LoadableLevel extends Level {
       p.setPos(this.startX, this.startY);
     });
   }
+  */
 }

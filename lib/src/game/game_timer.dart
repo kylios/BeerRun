@@ -2,10 +2,13 @@ part of game;
 
 class GameTimer {
 
+  static final Duration ONE_SECOND = new Duration(seconds: 1);
+
   Duration _duration;
   DateTime _end;
   List<GameTimerListener> _listeners = new List<GameTimerListener>();
   Timer _timer = null;
+  Timer _ticker = null;
 
   GameTimer(this._duration);
 
@@ -15,10 +18,18 @@ class GameTimer {
     if (this._timer != null) {
       this._timer.cancel();
     }
+    if (this._ticker != null) {
+      this._ticker.cancel();
+    }
 
     this._end = (new DateTime.now().add(this._duration));
     this._timer = new Timer(this._duration, () {
       this._onEnd();
+    });
+    this._ticker = new Timer.periodic(GameTimer.ONE_SECOND, (Timer t) {
+      for (GameTimerListener l in this._listeners) {
+        l.onTick(this);
+      }
     });
   }
 
@@ -27,6 +38,7 @@ class GameTimer {
       return;
     }
     this._timer.cancel();
+    this._ticker.cancel();
     if (invokeCallback) {
       this._onEnd();
     }
@@ -41,7 +53,7 @@ class GameTimer {
 
   void _onEnd() {
     for (GameTimerListener l in this._listeners) {
-      l.onTimeOut();
+      l.onTimeOut(this);
     }
   }
 
