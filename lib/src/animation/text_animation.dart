@@ -28,11 +28,13 @@ class TextAnimation extends Animation {
   void drawNext(DrawingInterface drawer) {
     _TextAnimationFrame frame = this._getNext();
     drawer.backgroundColor = "blue";
+    drawer.font = "bold 22px sans-serif";
     drawer.drawText(this._text, this.x, this.y + frame._y, relative: true);
   }
   void drawCur(DrawingInterface drawer) {
     _TextAnimationFrame frame = this._getCur();
     drawer.backgroundColor = "blue";
+    drawer.font = "bold 22px sans-serif";
     drawer.drawText(this._text, this.x, this.y + frame._y, relative: true);
   }
 

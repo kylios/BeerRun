@@ -31,6 +31,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   bool _wonLevel = false;
 
   UI _ui;
+  BeerRunHUD _hud;
   Player _player;
 
   GameTimer _timer;
@@ -95,6 +96,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     this._ui = new UI(UIRootElement);
     this._ui.addListener(this);
+
+    this._hud = new BeerRunHUD(this._canvasDrawer, this._player);
 
     this._BACMeter = new Meter(10, 52, 10, 116, 22);
     this._HPMeter = new Meter(3, 52, 36, 116, 22);
@@ -303,8 +306,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     // Draw HUD
     // TODO: HUD class?
-
-    if (this._currentLevel.tutorial.isComplete) {
+    this._hud.draw();
+/*
       this._BACMeter.value = this._player.drunkenness;
       this._HPMeter.value = this._player.health;
 
@@ -323,7 +326,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
       this._BACMeter.draw(this._canvasDrawer);
       this._HPMeter.draw(this._canvasDrawer);
-    }
+      */
 
     if (this._gameOver) {
       this._onGameOver();

@@ -19,8 +19,8 @@ class CanvasDrawer implements DrawingInterface {
   int _boundX = 0;
   int _boundY = 0;
 
-  String backgroundColor = "white";
-  String font = "12px";
+  String _backgroundColor = "white";
+  String _font = "12px";
 
   /**
    * Give us a manager so we can access the canvas' properties.
@@ -30,6 +30,20 @@ class CanvasDrawer implements DrawingInterface {
     if (_globalContext == null) {
       _globalContext = this._canvasManager.canvas.getContext("2d");
     }
+  }
+
+  String get backgroundColor => this._backgroundColor;
+  set backgroundColor(String color) {
+    this._backgroundColor = color;
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    c.fillStyle = this._backgroundColor;
+  }
+
+  String get font => this._font;
+  set font(String font) {
+    this._font = font;
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    c.font = this._font;
   }
 
   int get offsetX => this._offsetX;
@@ -184,5 +198,10 @@ class CanvasDrawer implements DrawingInterface {
     }
 
     c.fillText(text, x, y);
+  }
+
+  TextMetrics measureText(String text) {
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    return c.measureText(text);
   }
 }

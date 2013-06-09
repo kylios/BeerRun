@@ -217,6 +217,8 @@ class Player extends GameObject implements ComponentListener {
         "+${BUZZ_PER_BEER} BUZZ", this.x, this.y - 16, 3));
     this.level.addAnimation(new TextAnimation(
         "-1 BEER", this.x, this.y + 8, 3));
+
+    this._stats.beers = this._beers;
   }
 
   void spawnBullet() {
