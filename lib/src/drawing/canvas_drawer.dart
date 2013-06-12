@@ -49,6 +49,10 @@ class CanvasDrawer implements DrawingInterface {
   int get offsetX => this._offsetX;
   int get offsetY => this._offsetY;
 
+  CanvasManager get canvas => this._canvasManager;
+  CanvasRenderingContext2D get context =>
+      this._canvasManager.canvas.getContext("2d");
+
   /**
    * Sets the draw offset.  Contsrains those offsets to certain boundaries so
    * we never draw just nothingness.
@@ -203,5 +207,9 @@ class CanvasDrawer implements DrawingInterface {
   TextMetrics measureText(String text) {
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
     return c.measureText(text);
+  }
+
+  DrawingPath getPath() {
+    return new DrawingPath(this._canvasManager.canvas.getContext("2d"));
   }
 }

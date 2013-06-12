@@ -1,6 +1,7 @@
 library drawing;
 
 import 'dart:html';
+import 'dart:math';
 
 import 'package:beer_run/canvas_manager.dart';
 import 'package:beer_run/component.dart';
@@ -16,6 +17,8 @@ part 'src/drawing/drawing_component.dart';
 part 'src/drawing/canvas_drawer.dart';
 part 'src/drawing/drawing_utils.dart';
 part 'src/drawing/hud/meter.dart';
+part 'src/drawing/drawing_path.dart';
+part 'src/drawing/path_object.dart';
 
 // This is ugly and I hate it
 CanvasRenderingContext2D _globalContext = null;
