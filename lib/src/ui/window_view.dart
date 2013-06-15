@@ -6,13 +6,13 @@ class WindowView extends View {
   DivElement _closeButton;
   DivElement _rootElement;
 
-  WindowView(UI parent, this._uiElement) :
+  WindowView(UIInterface parent, this._uiElement) :
       super() {
 
     this._container = parent;
 
-    this._closeButton = this._uiElement.query('div.ui.title > div.ui.x');
-    this._rootElement = this._uiElement.query('div.ui.body > div.ui.root');
+    this._closeButton = this._uiElement.query('div.ui2.title > div.ui2.x');
+    this._rootElement = this._uiElement.query('div.ui2.body > div.ui2.root');
 
     this.attachCloseButton(this._closeButton);
   }

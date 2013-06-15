@@ -4,6 +4,7 @@ author: Kyle Racette <kracette@gmail.com>
 description: A sample application
 dependencies:
   browser: any
+  intl: any
 
 #  js: any
 #  unittest: any

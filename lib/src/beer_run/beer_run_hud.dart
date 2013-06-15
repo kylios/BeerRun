@@ -35,9 +35,32 @@ class BeerRunHUD {
 
   Player _player;
 
+  NumberFormat _bacFormat = new NumberFormat('0.00', 'en_US');
+
+  // Timestamps to make the HUD flash
+  int _onTime = 0;
+  int _offTime = 0;
+  bool _flashing = false;
+
   BeerRunHUD(this._drawer, this._player);
 
+  void startFlashing() {
+    if (! this._flashing) {
+      int time = new DateTime.now().millisecondsSinceEpoch;
+      this._flashing = true;
+      this._onTime = time + 250;
+      this._offTime = 0;
+    }
+  }
+  void stopFlashing() {
+    this._flashing = false;
+    this._onTime = 0;
+    this._offTime = 0;
+  }
+
   void draw() {
+
+    int time = new DateTime.now().millisecondsSinceEpoch;
 
     int bac = this._player.drunkenness;
     String word = BeerRunHUD._STAGES[bac];
@@ -51,17 +74,39 @@ class BeerRunHUD {
     this._drawer.fillRect(0, 0, hudWidth, 84);
     this._drawer.drawImage(BeerRunHUD._BEER_METER, 0, 0);
 
+
+
     this._drawer.font = "bold 14px sans-serif";
     this._drawer.backgroundColor = "white";
     var dim = this._drawer.measureText("YOU ARE");
     this._drawer.drawText("YOU ARE",
         (hudWidth - dim.width) ~/ 2 + iconWidth ~/ 2, 32);
 
-    this._drawer.font = "bold 16px sans-serif";
-    this._drawer.backgroundColor = BeerRunHUD._COLORS[bac];
-    dim = this._drawer.measureText(word);
-    this._drawer.drawText(word,
-        (hudWidth - dim.width) ~/ 2 + iconWidth ~/ 2, 48);
+
+    // Make the text flash
+    if (! this._flashing || (this._flashing && time <= this._onTime)) {
+      this._drawer.font = "bold 16px sans-serif";
+      this._drawer.backgroundColor = BeerRunHUD._COLORS[bac];
+      dim = this._drawer.measureText(word);
+      this._drawer.drawText(word,
+          (hudWidth - dim.width) ~/ 2 + iconWidth ~/ 2, 48);
+    }
+    if (this._flashing) {
+      if (this._onTime != 0 && this._onTime < time) {
+        this._onTime = 0;
+        this._offTime = time + 250;
+      } else if (this._offTime != 0 && this._offTime < time) {
+        this._offTime = 0;
+        this._onTime = time + 250;
+      }
+    }
+
+    num realBAC = 0.28 * bac / 10;
+
+    this._drawer.font = "bold 12px sans-serif";
+    this._drawer.backgroundColor = "white";
+    this._drawer.drawText("BAC: ${this._bacFormat.format(realBAC)}",
+        (hudWidth - dim.width) ~/ 2 + iconWidth ~/ 2, 64);
   }
 
   void _fillBeer(int bac) {

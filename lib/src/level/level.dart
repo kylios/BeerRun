@@ -353,7 +353,7 @@ abstract class Level implements ComponentListener {
 
 
   // TODO: temporary until I figure out how to script tutorials
-  static void setupTutorial(Level level, UI ui, Player p) {
+  static void setupTutorial(Level level, UIInterface ui, Player p) {
 
     level.tutorial.onStart((var _) {
       Completer c = new Completer();

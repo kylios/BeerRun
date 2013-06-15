@@ -41,6 +41,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   bool _notifyCar = true;
   bool _notifyTheft = true;
   bool _notifyBored = true;
+  bool _notifyDrunk = true;
 
   bool _continueLoop = false;
   bool _showHUD = false;
@@ -67,6 +68,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
+      DivElement DialogElement,
       SpanElement scoreElement,
       DivElement statsElement) {
 
@@ -276,21 +278,28 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
       this._notifyTheft = false;
       this._pause = true;
-      this._ui.showView(new Dialog("Ohhh, the bum stole a beer!  One less for you!"),
+      this._ui.showView(
+          new Message("Ohhh, the bum stole a beer!  One less for you!"),
           seconds: 5);
     } else if (this._notifyBored && this._player.boredNotify) {
       this._notifyBored = false;
       this._pause = true;
       this._ui.showView(
-          new Dialog("Better drink a beer or this is going to get real boring"),
+          new Message(
+              "Your buzz is wearing off!  Drink a beer before things get too boring."),
           seconds: 5);
+    } else if (this._notifyDrunk && this._player.drunkNotify) {
+      this._notifyDrunk = false;
+      this._ui.showView(
+          new Message("Be careful, don't get too drunk!"), seconds: 5);
     }
 
     if (this._player.beersDelivered > 0) {
       this._score += this._player.beersDelivered;
       this._player.resetBeersDelivered();
 
-      this._ui.showView(new Dialog("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
+      this._ui.showView(
+          new Message("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
     }
 
     if (this._player.drunkenness <= 0) {
@@ -305,7 +314,11 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
 
     // Draw HUD
-    // TODO: HUD class?
+    if (this._player.drunkenness == 1 || this._player.drunkenness >= 8) {
+      this._hud.startFlashing();
+    } else {
+      this._hud.stopFlashing();
+    }
     this._hud.draw();
 /*
       this._BACMeter.value = this._player.drunkenness;
@@ -436,6 +449,7 @@ void main() {
   game = new GameManager(
       query('canvas#game_canvas'),
       query('div#root_pane'),
+      query('div#dialog'),
       query('span#score'),
       query('div#stats'));
 

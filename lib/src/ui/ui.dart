@@ -1,6 +1,6 @@
 part of ui;
 
-class UI {
+class UI implements UIInterface {
 
   WindowView _rootView;
   bool _opened = false;

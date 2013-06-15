@@ -15,7 +15,7 @@ class TutorialDialog extends Dialog {
 
   void draw(Element root) {
     this.onDraw(root);
-    this.closeButton.draw(this.rootElement);
     this.skipButton.draw(this.rootElement);
+    this.closeButton.draw(this.rootElement);
   }
 }

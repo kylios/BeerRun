@@ -20,6 +20,7 @@ class Player extends GameObject implements ComponentListener {
   bool _wasBeerStolen = false;
   bool _beenToStore = false;
   bool _boredNotify = false;
+  bool _drunkNotify = false;
   int _beersDelivered = 0;
 
   int _health = 0;
@@ -218,6 +219,10 @@ class Player extends GameObject implements ComponentListener {
     this.level.addAnimation(new TextAnimation(
         "-1 BEER", this.x, this.y + 8, 3));
 
+    if (this._buzz >= 8) {
+      this._drunkNotify = true;
+    }
+
     this._stats.beers = this._beers;
   }
 
@@ -247,6 +252,7 @@ class Player extends GameObject implements ComponentListener {
   bool get wasBeerStolen => this._wasBeerStolen;
   int get beersDelivered => this._beersDelivered;
   bool get boredNotify => this._boredNotify;
+  bool get drunkNotify => this._drunkNotify;
 
   int get tileWidth => 64;
   int get tileHeight => 64;

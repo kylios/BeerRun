@@ -13,5 +13,8 @@ part 'src/ui/ui.dart';
 part 'src/ui/view.dart';
 part 'src/ui/window_view.dart';
 part 'src/ui/dialog.dart';
+part 'src/ui/message.dart';
 part 'src/ui/button.dart';
 part 'src/ui/ui_listener.dart';
+part 'src/ui/window2_view.dart';
+part 'src/ui/ui_interface.dart';

@@ -2,12 +2,12 @@ part of ui;
 
 abstract class View {
 
-  UI _container = null;
+  UIInterface _container = null;
 
   View();
 
   DivElement get rootElement;
-  UI get container => this._container;
+  UIInterface get container => this._container;
 
   void close() {
     this._container.closeWindow();

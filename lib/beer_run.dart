@@ -4,6 +4,8 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:async';
 
+import 'package:intl/intl.dart';
+
 import 'package:beer_run/ui.dart';
 import 'package:beer_run/level.dart';
 import 'package:beer_run/drawing.dart';
