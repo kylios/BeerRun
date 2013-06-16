@@ -149,6 +149,7 @@ class PlayerInputComponent extends Component
   }
 
   void onKeyDown(KeyboardEvent e) {
+    //window.alert("Key pressed: ${e.keyCode}");
     this._pressed[e.keyCode] = true;
 
     this._holding = true;

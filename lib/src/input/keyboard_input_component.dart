@@ -24,6 +24,7 @@ class KeyboardInputComponent extends Component implements KeyboardListener {
   * NOTE: This function should be thought of as internal.
   * */
   void keyboardEvent(KeyboardEvent event, bool down) {
+    //window.console.log("Key Code: ${event.keyCode}");
     if (down) {
       _keyboardStates[_currentIndex].add(event.keyCode);
     } else {

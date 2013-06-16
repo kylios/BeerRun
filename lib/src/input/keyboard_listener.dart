@@ -48,7 +48,7 @@ abstract class KeyboardListener {
   static const KEY_P = 80;
   static const KEY_Q = 81;
   static const KEY_R = 82;
-  static const KEY_S = 115;
+  static const KEY_S = 83;
   static const KEY_T = 116;
   static const KEY_U = 85;
   static const KEY_V = 86;

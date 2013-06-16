@@ -68,7 +68,7 @@ class Player extends GameObject implements ComponentListener {
   void startInLevel(Level l) {
     this.setLevel(l);
     this.setPos(l.startX, l.startY);
-    this.dir = DIR_DOWN;
+    this.dir = DIR_UP;
   }
 
   void setHealth(int health) {

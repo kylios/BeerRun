@@ -258,8 +258,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       return;
     }
 
+    this._player.draw();
     if (this._currentLevel.tutorial.isComplete && ! this._wonLevel) {
-      this._player.draw();
+
       if (this._score >= this._currentLevel.beersToWin) {
         this._wonLevel = true;
         this._gameOver = true;
