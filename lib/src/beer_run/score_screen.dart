@@ -8,13 +8,17 @@ class ScoreScreen extends View {
   int _totalScore;
   Duration _timeAllowed;
   Duration _timeRemaining;
+  Button _nextButton;
 
   DivElement get rootElement => null;
 
   ScoreScreen(this._win,
       this._score, this._convertedScore, this._totalScore,
       this._timeAllowed, this._timeRemaining) :
-    super();
+    super() {
+
+    this._nextButton = new Button("Next", this.close);
+  }
 
   void onDraw(Element root) {
 
@@ -159,6 +163,9 @@ class ScoreScreen extends View {
 
 
     el.append(scoreEl);
+
+
+    this._nextButton.draw(el);
 
     el.classes = ["ui", "text"];
     root.append(

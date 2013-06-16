@@ -90,15 +90,27 @@ div#dialog {
   position: absolute;
   top: 240px;
   left: 212px;
-
+  display: none;
 }
 .ui2.title {
   display: none;
 }
 .ui2.button {
-  display: none;
+  float: right;
+  display: inline-block;
+  margin: 5px;
+  padding: 5px;
+  text-align: center;
+  border: 1px solid white;
+  border-radius: 4px;
+  height: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
 }
 .ui2.button:hover {
+  background: white;
+  color: black;
 }
 .ui2.x {
   display: none;
