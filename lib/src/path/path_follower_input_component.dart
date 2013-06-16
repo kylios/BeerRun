@@ -23,17 +23,32 @@ class PathFollowerInputComponent extends Component {
     int nextX = nextPoint.x;
     int nextY = nextPoint.y;
 
+    int widthBefore = obj.tileWidth;
+    int heightBefore = obj.tileHeight;
+
     // Move horizontally or vertically?
     if ((nextX - obj.x).abs() > (nextY - obj.y).abs()) {
       // Move horizontally
       if (obj.x < nextX) {
         obj.moveRight();
+
+        // Adjust for changes in width/height
+        if (widthBefore < obj.tileWidth) {
+          obj.setPos(obj.x + widthBefore + (obj.tileWidth - widthBefore), obj.y);
+        }
+
         // Did we reach the next point yet?
         if (obj.x > nextX) {
           this._currentPointIdx++;
         }
       } else if (obj.x > nextX) {
         obj.moveLeft();
+
+        // Adjust for changes in width/height
+        if (widthBefore < obj.tileWidth) {
+          obj.setPos(obj.x - (obj.tileWidth - widthBefore), obj.y);
+        }
+
         // Did we reach the next point yet?
         if (obj.x < nextX) {
           this._currentPointIdx++;
