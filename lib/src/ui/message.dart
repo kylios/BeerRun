@@ -23,7 +23,8 @@ class Message extends View {
 
     DivElement el = new DivElement();
     el.text = this._text;
-    el.classes = ["ui2", "text"];
+    el.classes.add("ui2");
+    el.classes.add("text");
     el.append(new BRElement());
     root.append(
       el

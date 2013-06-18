@@ -100,7 +100,8 @@ class LevelRequirementsScreen extends View {
     });
     go.draw(el);
 
-    el.classes = ["ui", "text"];
+    el.classes .add("ui");
+    el.classes.add("text");
     root.append(
       el
     );

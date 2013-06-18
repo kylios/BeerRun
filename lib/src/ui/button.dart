@@ -15,7 +15,8 @@ class Button extends View {
   void onDraw(Element root) {
     DivElement el = new DivElement();
     el.text = this._text;
-    el.classes = [ 'ui2', 'button' ];
+    el.classes.add("ui2");
+    el.classes.add("button");
     if (! this._enabled) {
       el.classes.add('disabled');
     }

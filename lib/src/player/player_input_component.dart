@@ -115,20 +115,7 @@ class PlayerInputComponent extends Component
 
 
 
-    // Handle collision detection
-    int row = (obj.y + obj.collisionYOffset) ~/ obj.level.tileHeight;
-    int col = (obj.x + obj.collisionXOffset) ~/ obj.level.tileWidth;
-    int row1 = (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/
-        obj.level.tileHeight;
-    int col1 = (obj.x + obj.collisionXOffset + obj.collisionWidth) ~/
-        obj.level.tileWidth;
-
-    if (obj.level.isBlocking(row, col) ||
-        obj.level.isBlocking(row1, col) ||
-        obj.level.isBlocking(row, col1) ||
-        obj.level.isBlocking(row1, col1)) {
-      obj.setPos(obj.oldX, obj.oldY);
-    }
+    this._handleCollisionDetection(obj);
 
     if (this._bulletCooldown > 0) {
       this._bulletCooldown--;
@@ -146,6 +133,53 @@ class PlayerInputComponent extends Component
       obj.drinkBeer();
       this._drinkBeer = false;
     }
+  }
+
+  /**
+   * Determines whether the player's current location is valid,
+   * and sets the location back to its previous state if not.
+   * Returns false in that case.
+   * Returns true if the current position is valid and is unchanged.
+   */
+  bool _handleCollisionDetection(Player obj) {
+
+    // Handle collision detection
+    int row = (obj.y + obj.collisionYOffset) ~/ obj.level.tileHeight;
+    int col = (obj.x + obj.collisionXOffset) ~/ obj.level.tileWidth;
+    int row1 = (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/
+        obj.level.tileHeight;
+    int col1 = (obj.x + obj.collisionXOffset + obj.collisionWidth) ~/
+        obj.level.tileWidth;
+
+    /*
+    if (obj.level.isBlocking(row, col) ||
+        obj.level.isBlocking(row1, col) ||
+        obj.level.isBlocking(row, col1) ||
+        obj.level.isBlocking(row1, col1)) {
+      obj.setPos(obj.oldX, obj.oldY);
+      return false;
+    }
+    */
+
+    Level l = obj.level;
+    if ((obj.dir == DIR_DOWN &&
+        (l.isBlocking(row1, col) ||
+            l.isBlocking(row1, col1))) ||
+        (obj.dir == DIR_UP &&
+        (l.isBlocking(row, col) ||
+            l.isBlocking(row, col1)))) {
+      obj.setPos(obj.x, obj.oldY);
+    }
+    if ((obj.dir == DIR_LEFT &&
+        (l.isBlocking(row, col) ||
+            l.isBlocking(row1, col))) ||
+        (obj.dir == DIR_RIGHT &&
+        (l.isBlocking(row, col1) ||
+            l.isBlocking(row1, col1)))) {
+      obj.setPos(obj.oldX, obj.y);
+    }
+
+    return true;
   }
 
   void onKeyDown(KeyboardEvent e) {

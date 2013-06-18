@@ -50,12 +50,12 @@ div#beers_stats {
 }
 
 div#health_stats {
-  float: right;
   width: 128px;
 }
 
 div#duration {
   margin: auto 10px;
+  float: right;
 }
 
 div#dialog {

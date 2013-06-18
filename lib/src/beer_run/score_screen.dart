@@ -167,7 +167,8 @@ class ScoreScreen extends View {
 
     this._nextButton.draw(el);
 
-    el.classes = ["ui", "text"];
+    el.classes.add("ui");
+    el.classes.add("text");
     root.append(
       el
     );
