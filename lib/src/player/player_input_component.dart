@@ -3,200 +3,281 @@ part of player;
 class PlayerInputComponent extends Component
   implements KeyboardListener {
 
-  static final int BULLET_COOLDOWN = 10;
-  static final int MAX_ACCELERATION = 4;
+  static final int ACCEL_MOD = 1;
+  static final int MAX_ACCEL = 8;
+  static final double ACCEL_EASING = 0.1;
+
+  // Identify which keys control our character
+  static final List<int> MOVE_LEFT_KEYS = [
+      KeyboardListener.KEY_LEFT,
+      KeyboardListener.KEY_A
+                                            ];
+  static final List<int> MOVE_RIGHT_KEYS = [
+      KeyboardListener.KEY_RIGHT,
+      KeyboardListener.KEY_D
+                                            ];
+  static final List<int> MOVE_UP_KEYS = [
+      KeyboardListener.KEY_UP,
+      KeyboardListener.KEY_W
+                                         ];
+  static final List<int> MOVE_DOWN_KEYS = [
+      KeyboardListener.KEY_DOWN,
+      KeyboardListener.KEY_S
+                                           ];
+  static final int DRINK_BEER_KEY = KeyboardListener.KEY_SPACE;
 
   Random _rng;
 
-  Map<int, bool> _pressed;
-  List<int> _accel;
-  List<bool> _dirsPressed;
-  DrawingComponent _drawer;
+  double _horizAccel = 0.0;
+  double _vertAccel = 0.0;
+  Direction _horizDir = null;
+  Direction _vertDir = null;
 
-  bool _spawnBullet = false;
-  bool _drinkBeer = false;
-  int _bulletCooldown = 0;
+  Map<Direction, bool> _pressed = {
+                                    DIR_UP: false,
+                                    DIR_DOWN: false,
+                                    DIR_LEFT: false,
+                                    DIR_RIGHT: false
+  };
 
-  int _holdFrames = 0;
-  bool _holding = false;
-
-  PlayerInputComponent(this._drawer) {
-    this._pressed = new Map<int, bool>();
-    this._accel = new List<int>.filled(4, 0);
-    this._dirsPressed = new List<bool>.filled(4, false);
+  PlayerInputComponent() {
     this._rng = new Random();
   }
+
   void update(Player obj) {
 
-    for (int i = 0; i < 4; i++) {
-      this._dirsPressed[i] = false;
-    }
-    if ((this._pressed[KeyboardListener.KEY_UP] == true ||
-        this._pressed[KeyboardListener.KEY_W] == true)) {
-
-      this._dirsPressed[DIR_UP.direction] = true;
+    // Increase acceleration depending on what we're pressing
+    if (this._pressed[DIR_UP] && this._vertAccel > -1 * MAX_ACCEL) {
+      this._vertAccel -= ACCEL_MOD;
       obj.dir = DIR_UP;
-      this._holdFrames++;
-    } else if ((this._pressed[KeyboardListener.KEY_DOWN] == true ||
-        this._pressed[KeyboardListener.KEY_S] == true)) {
-
-      this._dirsPressed[DIR_DOWN.direction]= true;
+    } else if (this._pressed[DIR_DOWN] && this._vertAccel < MAX_ACCEL) {
+      this._vertAccel += ACCEL_MOD;
       obj.dir = DIR_DOWN;
-      this._holdFrames++;
     }
-    if ((this._pressed[KeyboardListener.KEY_LEFT] == true ||
-        this._pressed[KeyboardListener.KEY_A] == true)) {
-
-      this._dirsPressed[DIR_LEFT.direction]= true;
+    if (this._pressed[DIR_LEFT] && this._horizAccel > -1 * MAX_ACCEL) {
+      this._horizAccel -= ACCEL_MOD;
       obj.dir = DIR_LEFT;
-      this._holdFrames++;
-    } else if ((this._pressed[KeyboardListener.KEY_RIGHT] == true ||
-        this._pressed[KeyboardListener.KEY_D] == true)) {
-
-      this._dirsPressed[DIR_RIGHT.direction]= true;
+    } else if (this._pressed[DIR_RIGHT] && this._horizAccel < MAX_ACCEL) {
+      this._horizAccel += ACCEL_MOD;
       obj.dir = DIR_RIGHT;
-      this._holdFrames++;
     }
 
-    int playerX = obj.x;
-    int playerY = obj.y;
 
-    // Increase the acceleration in the direction that's being pressed.  For
-    // every other direction, bring the acceleration back to zero.
-    int speed = 0;
-    for (int i = 0; i < 4; i++) {
-      if (this._dirsPressed[i]) {
-        if ((11 - obj.drunkenness) <= this._holdFrames) {
-          this._accel[i] += 2 * obj.speed;
-          if (this._accel[i] > obj.drunkenness * 2 * 2) {
-            this._accel[i] = obj.drunkenness * 2 * 2;
-          }
-          this._holdFrames = 0;
-        }
-      } else if (this._accel[i] > 0) {
-        this._accel[i]--;
-      } else if (this._accel[i] < 0) {
-        this._accel[i]++;
-      }
-      speed += this._accel[i];
-    }
+    int newX = obj.x;
+    int newY = obj.y;
+    bool zeroHorizAccel = false;
+    bool zeroVertAccel = false;
 
-    playerX = playerX +
-        (this._accel[DIR_RIGHT.direction] - this._accel[DIR_LEFT.direction]);// ~/ 2;
-    playerY = playerY +
-        (this._accel[DIR_DOWN.direction] - this._accel[DIR_UP.direction]);// ~/ 2;
-
-  // Do a wobble thing, back and forth, because you're drunk
-    if (speed > 0) {
-      int max = min(this._accel[obj.dir.direction], 20);
-      //window.console.log("accel: ${this._accel[obj.dir.direction]}, drunkenness: ${obj.drunkenness}");
-      int wobble = this._rng.nextInt(11 - obj.drunkenness);
-      if (wobble == 0)
-      {
-        Direction wobbleDir;
-        int dir = this._rng.nextInt(2);
-        if (obj.dir == DIR_UP || obj.dir == DIR_DOWN) {
-          if (dir == 0) {
-            playerX -= obj.speed;
-          } else {
-            playerX += obj.speed;
+    // If we aren't pressing any keys, decelerate
+    if (! this._pressed[DIR_UP] && ! this._pressed[DIR_DOWN]){
+      if (this._vertAccel > 0) {
+        int tileY = ((1 + newY ~/ 16) * 16);
+        int dist = (tileY - newY);
+        if (dist > 1) {
+          this._vertAccel -= dist * ACCEL_EASING;
+          if (this._vertAccel < 1) {
+            this._vertAccel = 1.0;
           }
         } else {
-          if (dir == 0) {
-            playerY -= obj.speed;
-          } else {
-            playerY += obj.speed;
+          this._vertAccel = (tileY - newY).toDouble();
+          zeroVertAccel = true;
+        }
+      } else if (this._vertAccel < 0) {
+        int tileY = ((newY ~/ 16) * 16);
+        int dist = (newY - tileY);
+        if (dist > 1) {
+          this._vertAccel += dist * ACCEL_EASING;
+          if (this._vertAccel > -1) {
+            this._vertAccel = -1.0;
           }
+        } else {
+          this._vertAccel = (tileY - newY).toDouble();
+          zeroVertAccel = true;
         }
       }
     }
 
-    obj.setPos(playerX, playerY);
-
-
-
-    this._handleCollisionDetection(obj);
-
-    if (this._bulletCooldown > 0) {
-      this._bulletCooldown--;
-    }
-
-    if (this._spawnBullet) {
-      if (this._bulletCooldown == 0) {
-        obj.spawnBullet();
-        this._bulletCooldown = PlayerInputComponent.BULLET_COOLDOWN;
+    if (! this._pressed[DIR_LEFT] && ! this._pressed[DIR_RIGHT]) {
+      if (this._horizAccel > 0) {
+        int tileX = ((1 + newX ~/ 16) * 16);
+        int dist = (tileX - newX);
+        //window.console.log("my x: ${newX}, tile x: ${((1 + newX ~/ 16) * 16.0)}");
+        //window.console.log("dist: ${dist}, horizAccel: ${this._horizAccel}");
+        if (dist > 1) {
+          this._horizAccel -= dist * ACCEL_EASING;
+          if (this._horizAccel < 1) {
+            this._horizAccel = 1.0;
+          }
+        } else {
+          this._horizAccel = (tileX - newX).toDouble();
+          zeroHorizAccel = true;
+        }
+      } else if (this._horizAccel < 0) {
+        int tileX = ((newX ~/ 16) * 16);
+        int dist = (newX - tileX);
+        //window.console.log("my x: ${newX}, tile x: ${tileX}");
+        //window.console.log("dist: ${dist}, horizAccel: ${this._horizAccel}");
+        if (dist > 1) {
+          this._horizAccel += dist * ACCEL_EASING;
+          if (this._horizAccel > -1) {
+            this._horizAccel = -1.0;
+          }
+        } else {
+          this._horizAccel = (tileX - newX).toDouble();
+          zeroHorizAccel = true;
+        }
       }
-      this._spawnBullet = false;
     }
 
-    if (this._drinkBeer) {
-      obj.drinkBeer();
-      this._drinkBeer = false;
+    if (this._horizAccel > 15) {
+      this._horizAccel = 15.0;
+    } else if (this._horizAccel < -15) {
+      this._horizAccel = -15.0;
     }
-  }
+    if (this._vertAccel > 15) {
+      this._vertAccel = 15.0;
+    } else if (this._vertAccel < -15) {
+      this._vertAccel = -15.0;
+    }
 
-  /**
-   * Determines whether the player's current location is valid,
-   * and sets the location back to its previous state if not.
-   * Returns false in that case.
-   * Returns true if the current position is valid and is unchanged.
-   */
-  bool _handleCollisionDetection(Player obj) {
+    // handle collisions
+    Level l = obj.level;
 
-    // Handle collision detection
-    int row = (obj.y + obj.collisionYOffset) ~/ obj.level.tileHeight;
-    int col = (obj.x + obj.collisionXOffset) ~/ obj.level.tileWidth;
-    int row1 = (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/
+    int row = (newY + obj.collisionYOffset) ~/ obj.level.tileHeight;
+    int col = (newX + obj.collisionXOffset) ~/ obj.level.tileWidth;
+    int row1 = (newY + obj.collisionYOffset + obj.collisionHeight) ~/
         obj.level.tileHeight;
-    int col1 = (obj.x + obj.collisionXOffset + obj.collisionWidth) ~/
+    int col1 = (newX + obj.collisionXOffset + obj.collisionWidth) ~/
         obj.level.tileWidth;
 
-    /*
-    if (obj.level.isBlocking(row, col) ||
-        obj.level.isBlocking(row1, col) ||
-        obj.level.isBlocking(row, col1) ||
-        obj.level.isBlocking(row1, col1)) {
-      obj.setPos(obj.oldX, obj.oldY);
-      return false;
-    }
-    */
 
-    Level l = obj.level;
-    if ((obj.dir == DIR_DOWN &&
+    newX += this._horizAccel.toInt();
+    newY += this._vertAccel.toInt();
+
+    row = newY ~/ l.tileHeight;
+    col = newX ~/ l.tileWidth;
+    row1 = (newY + 64) ~/ l.tileHeight;
+    col1 = (newX + 64) ~/ l.tileWidth;
+
+    if ((this._vertAccel > 0 &&
         (l.isBlocking(row1, col) ||
             l.isBlocking(row1, col1))) ||
-        (obj.dir == DIR_UP &&
+        (this._vertAccel < 0 &&
         (l.isBlocking(row, col) ||
             l.isBlocking(row, col1)))) {
-      obj.setPos(obj.x, obj.oldY);
-    }
-    if ((obj.dir == DIR_LEFT &&
-        (l.isBlocking(row, col) ||
-            l.isBlocking(row1, col))) ||
-        (obj.dir == DIR_RIGHT &&
-        (l.isBlocking(row, col1) ||
-            l.isBlocking(row1, col1)))) {
-      obj.setPos(obj.oldX, obj.y);
+      this._vertAccel = 0.0;
+      newY = obj.y;
     }
 
-    return true;
+    row = (newY + obj.collisionYOffset) ~/ obj.level.tileHeight;
+    col = (newX + obj.collisionXOffset) ~/ obj.level.tileWidth;
+    row1 = (newY + obj.collisionYOffset + obj.collisionHeight) ~/
+        obj.level.tileHeight;
+    col1 = (newX + obj.collisionXOffset + obj.collisionWidth) ~/
+        obj.level.tileWidth;
+
+
+    row = newY ~/ l.tileHeight;
+    col = newX ~/ l.tileWidth;
+    row1 = (newY + 64) ~/ l.tileHeight;
+    col1 = (newX + 64) ~/ l.tileWidth;
+
+    if ((this._horizAccel < 0 &&
+        (l.isBlocking(row, col) ||
+            l.isBlocking(row1, col))) ||
+        (this._horizAccel > 0 &&
+        (l.isBlocking(row, col1) ||
+            l.isBlocking(row1, col1)))) {
+      this._horizAccel = 0.0;
+      newX = obj.x;
+    }
+
+
+    if (zeroHorizAccel) {
+      this._horizAccel = 0.0;
+    }
+    if (zeroVertAccel) {
+      this._vertAccel = 0.0;
+    }
+
+    obj.setPos(newX, newY);
   }
 
   void onKeyDown(KeyboardEvent e) {
-    //window.alert("Key pressed: ${e.keyCode}");
-    this._pressed[e.keyCode] = true;
+    //window.console.log("Key down: ${e.keyCode}");
 
-    this._holding = true;
+    if (MOVE_DOWN_KEYS.contains(e.keyCode)) {
+      if (this._vertDir == DIR_UP) {
+        this._vertDir = null;
+      } else {
+        this._vertDir = DIR_DOWN;
+      }
+      this._pressed[DIR_DOWN] = true;
+    } else if (MOVE_UP_KEYS.contains(e.keyCode)) {
+      if (this._vertDir == DIR_DOWN) {
+        this._vertDir = null;
+      } else {
+        this._vertDir = DIR_UP;
+      }
+      this._pressed[DIR_UP] = true;
+    }
+
+    if (MOVE_LEFT_KEYS.contains(e.keyCode)) {
+      if (this._horizDir == DIR_RIGHT) {
+        this._horizDir = null;
+      } else {
+        this._horizDir = DIR_LEFT;
+      }
+      this._pressed[DIR_LEFT] = true;
+    } else if (MOVE_RIGHT_KEYS.contains(e.keyCode)) {
+      if (this._horizDir == DIR_LEFT) {
+        this._horizDir = null;
+      } else {
+        this._horizDir = DIR_RIGHT;
+      }
+      this._pressed[DIR_RIGHT] = true;
+    }
   }
   void onKeyUp(KeyboardEvent e) {
-    this._pressed[e.keyCode] = false;
+    //window.console.log("Key up: ${e.keyCode}");
 
-    this._holding = false;
+    if (MOVE_DOWN_KEYS.contains(e.keyCode)) {
+      if (this._vertDir == null) {
+        this._vertDir = DIR_UP;
+      } else {
+        this._vertDir = null;
+      }
+      this._pressed[DIR_DOWN] = false;
+    } else if (MOVE_UP_KEYS.contains(e.keyCode)) {
+      if (this._vertDir == null) {
+        this._vertDir = DIR_DOWN;
+      } else {
+        this._vertDir = null;
+      }
+      this._pressed[DIR_UP] = false;
+    }
+
+    if (MOVE_LEFT_KEYS.contains(e.keyCode)) {
+      if (this._horizDir == null) {
+        this._horizDir = DIR_RIGHT;
+      } else {
+        this._horizDir = null;
+      }
+      this._pressed[DIR_LEFT] = false;
+    } else if (MOVE_RIGHT_KEYS.contains(e.keyCode)) {
+      if (this._horizDir == null) {
+        this._horizDir = DIR_LEFT;
+      } else {
+        this._horizDir = null;
+      }
+      this._pressed[DIR_RIGHT] = false;
+    }
   }
   void onKeyPressed(KeyboardEvent e) {
+    //window.console.log("Key pressed: ${e.keyCode}");
+
     if (e.keyCode == KeyboardListener.KEY_SPACE) {
-      this._spawnBullet = true;
-      this._drinkBeer = true;
+      //this._drinkBeer = true;
     }
   }
 }

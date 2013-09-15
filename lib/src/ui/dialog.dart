@@ -26,7 +26,7 @@ class Dialog extends View {
   void onDraw(Element root) {
 
     DivElement el = new DivElement();
-    el.text = this._text;
+    el.innerHtml = this._text;
     el.classes.add("ui");
     el.classes.add("text");
     el.append(new BRElement());

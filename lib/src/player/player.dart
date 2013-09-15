@@ -88,6 +88,23 @@ class Player extends GameObject implements ComponentListener {
         Player.BUZZ_TIME;
   }
 
+  void _blink(DateTime now) {
+    if (this._damagedUntil <= now.millisecondsSinceEpoch) {
+      this._damaged = false;
+      this._damageInterval = 0;
+      this._blinkInterval = 0;
+    } else {
+      if (this._damageInterval > -1 &&
+          this._damageInterval <= now.millisecondsSinceEpoch) {
+        this._blinkInterval = now.millisecondsSinceEpoch + 17;
+        this._damageInterval = -1;
+      } else if (this._blinkInterval <= now.millisecondsSinceEpoch) {
+        this._damageInterval = now.millisecondsSinceEpoch +
+            17;
+      }
+    }
+  }
+
   void update() {
     DateTime now = new DateTime.now();
     if ( ! this.isRemoved) {
@@ -103,22 +120,11 @@ class Player extends GameObject implements ComponentListener {
       // Update super
       super.update();
 
+
+
       // Make him blink when hit
       if (this._damaged) {
-        if (this._damagedUntil <= now.millisecondsSinceEpoch) {
-          this._damaged = false;
-          this._damageInterval = 0;
-          this._blinkInterval = 0;
-        } else {
-          if (this._damageInterval > -1 &&
-              this._damageInterval <= now.millisecondsSinceEpoch) {
-            this._blinkInterval = now.millisecondsSinceEpoch + 17;
-            this._damageInterval = -1;
-          } else if (this._blinkInterval <= now.millisecondsSinceEpoch) {
-            this._damageInterval = now.millisecondsSinceEpoch +
-                17;
-          }
-        }
+        this._blink(now);
       }
 
       if (this._beerStolenUntil <= new DateTime.now().millisecondsSinceEpoch) {

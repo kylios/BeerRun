@@ -14,10 +14,10 @@ class SpriteSheet {
 
   Sprite spriteAt(int x, int y, [int width, int height]) {
 
-    if ( ! ?width) {
+    if (null == width) {
       width = this._spriteWidth;
     }
-    if ( ! ?height) {
+    if (null == height) {
       height = this._spriteHeight;
     }
     return new Sprite(this._image, x, y, width, height);

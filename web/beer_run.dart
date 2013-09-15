@@ -1,15 +1,12 @@
 import 'dart:html';
 import 'dart:async';
-import 'dart:math';
 
 import 'package:beer_run/canvas_manager.dart';
 import 'package:beer_run/drawing.dart';
-import 'package:beer_run/component.dart';
 import 'package:beer_run/input.dart';
 import 'package:beer_run/game.dart';
 import 'package:beer_run/level.dart';
 import 'package:beer_run/player.dart';
-import 'package:beer_run/npc.dart';
 import 'package:beer_run/ui.dart';
 import 'package:beer_run/beer_run.dart';
 import 'package:beer_run/tutorial.dart';
@@ -69,7 +66,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
   GameManager(CanvasElement canvasElement,
       DivElement UIRootElement,
       DivElement DialogElement,
-      SpanElement scoreElement,
       DivElement statsElement) {
 
     this._statsManager = new StatsManager(statsElement);
@@ -85,7 +81,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
         new DrawingComponent(this._canvasManager, this._canvasDrawer, false);
 
     PlayerInputComponent playerInput =
-        new PlayerInputComponent(drawer);
+        new PlayerInputComponent();
     this._canvasManager.addKeyboardListener(playerInput);
     this._canvasManager.addKeyboardListener(this);
 
@@ -109,6 +105,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     return this._setupLevels();
   }
 
+
+
   /**
    * Prereqs:
    * - this._canvasManager
@@ -116,30 +114,78 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
    */
   Future _setupLevels() {
 
-    Completer c = new Completer();
+    Completer<Level> c = new Completer<Level>();
+
+    List<String> levels = [
+        "data/levels/test_level.json",
+        "data/levels/level1.json",
+        "data/levels/level2.json",
+        "data/levels/level5.json"
+                           ];
 
     Loader l = new Loader();
-    l.load("data/levels/level1.json")
+    Future f = c.future;
+    l.load(levels[0]).then((Map levelData) {
+      Level level = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+      this._levels.add(level);
+      c.complete();
+    });
+    l.load(levels[1]).then((Map levelData) {
+      Level level = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+      f.then((var _) {
+        this._levels.add(level);
+        c = new Completer();
+        f = c.future;
+      });
+    });
+    l.load(levels[2]).then((Map levelData) {
+      Level level = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+      f.then((var _) {
+        this._levels.add(level);
+        c = new Completer();
+        f = c.future;
+      });
+    });
+    l.load(levels[3]).then((Map levelData) {
+      Level level = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+      f.then((var _) {
+        this._levels.add(level);
+        c = new Completer();
+        f = c.future;
+      });
+    });
+
+
+/*
+    l.load("data/levels/test_level.json")
+    .then((Map levelData) {
+      Level l = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+      this._levels.add(l);
+      c.complete();
+    (new Loader()).load("data/levels/level1.json")
     .then((Map levelData) {
       Level l = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
       this._levels.add(l);
 
-      c.complete();
-    });
 
-    (new Loader()).load("data/levels/level2.json")
-    .then((Map levelData) {
-      this._levels.add(
-          new Level.fromJson(levelData,
-                             this._canvasDrawer, this._canvasManager));
-
-      (new Loader()).load("data/levels/level5.json")
+      (new Loader()).load("data/levels/level2.json")
       .then((Map levelData) {
         this._levels.add(
             new Level.fromJson(levelData,
                                this._canvasDrawer, this._canvasManager));
+
+        (new Loader()).load("data/levels/level5.json")
+        .then((Map levelData) {
+          this._levels.add(
+              new Level.fromJson(levelData,
+                                 this._canvasDrawer, this._canvasManager));
+        });
       });
     });
+
+      });
+*/
+
 
     return c.future;
   }
@@ -207,7 +253,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
 
     this._totalScore += converted;
 
-    query("#score").innerHtml = "${this._totalScore}";
+    // TODO: set score in stats manager
 
     this._ui.showView(
         new ScoreScreen(
@@ -451,7 +497,6 @@ void main() {
       query('canvas#game_canvas'),
       query('div#root_pane'),
       query('div#dialog'),
-      query('span#score'),
       query('div#stats'));
 
   game.init().then((var _) => game.start());

@@ -47,8 +47,6 @@ class _LevelTileset {
     int x = c * this.tilewidth;
     int y = r * this.tileheight;
 
-    window.console.log("Sprites: ${this.sprites}");
-    window.console.log("SpriteAt: ${this.sprites.spriteAt(x, y)}");
     return this.sprites.spriteAt(x, y);
   }
 

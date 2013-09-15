@@ -95,9 +95,7 @@ class LevelRequirementsScreen extends View {
 
     el.append(timeEl);
 
-    Button go = new Button("Start!", () {
-      this.close();
-    });
+    Button go = new Button("Start!", this.close);
     go.draw(el);
 
     el.classes .add("ui");

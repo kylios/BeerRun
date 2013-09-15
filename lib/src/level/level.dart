@@ -98,7 +98,7 @@ abstract class Level implements ComponentListener {
       return;
     }
 
-    if (?blocked) {
+    if (null != blocked) {
       this._blocked[pos] = blocked;
     }
     this._sprites[this._layer][pos] = s;
@@ -163,6 +163,17 @@ abstract class Level implements ComponentListener {
     }
     return this._blocked[pos];
   }
+
+  /*
+  int checkX(int oldX, int newX, int ) {
+    int oldCol = oldX ~/ this.tileWidth;
+    int newCol = newX ~/ this.tileWidth;
+
+    for (int i = oldCol; i <= newCol; i++) {
+      if ()
+    }
+  }
+  */
 
   List<GameObject> checkCollision(GameObject obj) {
     List<GameObject> targets = null;
@@ -419,7 +430,6 @@ abstract class Level implements ComponentListener {
       return c.future;
     })
     .addStep((var _) {
-      window.console.log("continueTutorial2");
 
       Completer c = new Completer();
 
@@ -430,7 +440,6 @@ abstract class Level implements ComponentListener {
         int offsetX = level.canvasDrawer.offsetX;
         int offsetY = level.canvasDrawer.offsetY;
 
-        window.console.log("$offsetX - $offsetY");
         if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
           t.cancel();
           c.complete();
@@ -460,13 +469,24 @@ abstract class Level implements ComponentListener {
       return c.future;
     })
     .addStep((var _) {
-      window.console.log("continueTutorial3");
       Completer c = new Completer();
 
       ui.showView(
           new TutorialDialog(level.tutorial,
               "Well, what are you waiting for!?  Get moving, and don't sober "
               "up too much!"),
+          callback: () { c.complete(); }
+      );
+      return c.future;
+    })
+    .addStep((var _) {
+      Completer c = new Completer();
+
+      ui.showView(
+          new TutorialDialog(level.tutorial,
+              "Controls: <br />"
+              "WASD, arrow keys: movement <br />"
+              "SPACEBAR: drink a beer"),
           callback: () { c.complete(); }
       );
       return c.future;

@@ -96,7 +96,7 @@ class CanvasDrawer implements DrawingInterface {
   void drawImage(ImageElement i, int x, int y, [int width, int height]) {
 
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
-    if (?width && ?height)
+    if (null != width && null != height)
     {
       //Rect destinationRect = new Rect(x, y, width, height);
       //Rect sourceRect = new Rect(0, 0, i.width, i.height);
@@ -114,8 +114,8 @@ class CanvasDrawer implements DrawingInterface {
       return;
     }
 
-    int width = (?drawWidth ? drawWidth : s.width);
-    int height = (?drawHeight ? drawHeight : s.height);
+    int width = ((null != drawWidth) ? drawWidth : s.width);
+    int height = ((null != drawHeight) ? drawHeight : s.height);
 
     // If the sprite won't show up on screen, then just don't draw it!
     if (s == null || x == null || y == null ||
@@ -134,15 +134,17 @@ class CanvasDrawer implements DrawingInterface {
 
     c.drawImageScaledFromSource(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
     //c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
+
+    this.drawRect(x, y, drawWidth, drawHeight);
   }
 
   void drawRect(int x, int y, int width, int height,
                 [int radiusX, int radiusY]) {
 
-    if (! ?radiusX) {
+    if (null == radiusX) {
       radiusX = 0;
     }
-    if (! ?radiusY) {
+    if (null == radiusY) {
       radiusY = 0;
     }
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
@@ -166,10 +168,10 @@ class CanvasDrawer implements DrawingInterface {
   void fillRect(int x, int y, int width, int height,
                 [int radiusX, int radiusY]) {
 
-    if (! ?radiusX) {
+    if (null == radiusX) {
       radiusX = 0;
     }
-    if (! ?radiusY) {
+    if (null == radiusY) {
       radiusY = 0;
     }
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");

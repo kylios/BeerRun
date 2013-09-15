@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="48" height="48" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="beers_to_win" value="1"/>
+  <property name="name" value="test"/>
+  <property name="seconds" value="8000"/>
+  <property name="start_x" value="480"/>
+  <property name="start_y" value="480"/>
+  <property name="store_x" value="1"/>
+  <property name="store_y" value="1"/>
+ </properties>
+ <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32">
+  <image source="../web/img/grass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="19" name="trees" tilewidth="32" tileheight="32">
+  <image source="../web/img/trees.png" width="192" height="320"/>
+ </tileset>
+ <tileset firstgid="79" name="fence" tilewidth="32" tileheight="32">
+  <image source="../web/img/fence.png" width="96" height="128"/>
+ </tileset>
+ <tileset firstgid="91" name="apartments" tilewidth="32" tileheight="32">
+  <image source="../web/img/apartments.png" width="640" height="480"/>
+ </tileset>
+ <layer name="nonblocking1" width="48" height="48">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKHL8P3DLsdAwVVTVVVVVVVVVVVfPhL6ogE=
+  </data>
+ </layer>
+ <layer name="nonblocking2" width="48" height="48">
+  <data encoding="base64" compression="zlib">
+   eJztzqENACAUQ8HuRhDA/vvwBRMgwNwlL7VNAAAAkna2f31xb1SzWr+PAAAAAADAYxvikAFn
+  </data>
+ </layer>
+ <layer name="blocking1" width="48" height="48">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1kEKgCAQRuE5WatuUFRgd6g71MFzKRYtNP0x3gfDbCTeIlBnZqsfV3iXsvnZK+xSDj9nhY1/mqKZtTnZFnVAJvq16NeiX4t+rbi/k1Ski/t7SUW6v/0/rRns/ib9YnjXatGvRb8W/Vr0P3u7M8fgXO69HH4LAAAAANCeC1qPO9I=
+  </data>
+ </layer>
+ <layer name="blocking2" width="48" height="48">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzrENgDAQBEH3YBxgAnD/TXI1OHkJZqTNtzUAAL6ipyON6pFNZ5rpqh7ZdKcnreIPAAAAAADgX148AQDr
+  </data>
+ </layer>
+</map>

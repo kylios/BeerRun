@@ -84,28 +84,28 @@ abstract class GameObject implements ComponentListener {
   }
 
   void moveUp([int speed]) {
-    if (! ?speed) {
+    if (null == speed) {
       speed = this.speed;
     }
     this.dir = DIR_UP;
     this._y -= speed;
   }
   void moveDown([int speed]) {
-    if (! ?speed) {
+    if (null == speed) {
       speed = this.speed;
     }
     this.dir = DIR_DOWN;
     this._y += speed;
   }
   void moveLeft([int speed]) {
-    if (! ?speed) {
+    if (null == speed) {
       speed = this.speed;
     }
     this.dir = DIR_LEFT;
     this._x -= speed;
   }
   void moveRight([int speed]) {
-    if (! ?speed) {
+    if (null == speed) {
       speed = this.speed;
     }
     this.dir = DIR_RIGHT;
