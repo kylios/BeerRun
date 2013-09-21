@@ -114,17 +114,42 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
    */
   Future _setupLevels() {
 
-    Completer<Level> c = new Completer<Level>();
-
     List<String> levels = [
-        "data/levels/test_level.json",
+        //"data/levels/test_level.json",
         "data/levels/level1.json",
         "data/levels/level2.json",
         "data/levels/level5.json"
                            ];
 
     Loader l = new Loader();
-    Future f = c.future;
+
+    Future f = null;
+    for (String levelPath in levels) {
+
+      var fn = (String url) {
+        Completer<Level> c = new Completer<Level>();
+        l.load(url).then((Map levelData) {
+          return new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+        }).then((var _) => c.complete(_));
+        return c.future;
+      };
+
+      if (f == null) {
+        f = fn(levelPath);
+      } else {
+        f = f.then((Level l) {
+          this._levels.add(l);
+          return fn(levelPath);
+        });
+      }
+
+
+    }
+
+
+
+
+/*
     l.load(levels[0]).then((Map levelData) {
       Level level = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
       this._levels.add(level);
@@ -154,40 +179,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
         f = c.future;
       });
     });
-
-
-/*
-    l.load("data/levels/test_level.json")
-    .then((Map levelData) {
-      Level l = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
-      this._levels.add(l);
-      c.complete();
-    (new Loader()).load("data/levels/level1.json")
-    .then((Map levelData) {
-      Level l = new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
-      this._levels.add(l);
-
-
-      (new Loader()).load("data/levels/level2.json")
-      .then((Map levelData) {
-        this._levels.add(
-            new Level.fromJson(levelData,
-                               this._canvasDrawer, this._canvasManager));
-
-        (new Loader()).load("data/levels/level5.json")
-        .then((Map levelData) {
-          this._levels.add(
-              new Level.fromJson(levelData,
-                                 this._canvasDrawer, this._canvasManager));
-        });
-      });
-    });
-
-      });
 */
 
-
-    return c.future;
+    return f;
   }
 
   bool get continueLoop => this._continueLoop;
@@ -367,26 +361,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
       this._hud.stopFlashing();
     }
     this._hud.draw();
-/*
-      this._BACMeter.value = this._player.drunkenness;
-      this._HPMeter.value = this._player.health;
-
-      String duration = this._timer.getRemainingTimeFormat();
-      this._canvasDrawer.backgroundColor = "rgba(224, 224, 224, 0.5)";
-      this._canvasDrawer.fillRect(0, 0, 180, 92, 8, 8);
-      this._canvasDrawer.backgroundColor = "black";
-      this._canvasDrawer.drawRect(0, 0, 180, 92, 8, 8);
-      this._canvasDrawer.font = "bold 16px sans-serif";
-      this._canvasDrawer.drawText("BAC:", 8, 26);
-      this._canvasDrawer.drawText("HP:", 8, 52);
-      this._canvasDrawer.drawText("Beers: ${this._player.beers}", 8, 80);
-      this._canvasDrawer.backgroundColor = "white";
-      this._canvasDrawer.font = "bold 32px sans-serif";
-      this._canvasDrawer.drawText("You have ${duration} minutes!", 220, 48);
-
-      this._BACMeter.draw(this._canvasDrawer);
-      this._HPMeter.draw(this._canvasDrawer);
-      */
 
     if (this._gameOver) {
       this._onGameOver();

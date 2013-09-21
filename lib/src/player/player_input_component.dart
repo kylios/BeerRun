@@ -35,6 +35,8 @@ class PlayerInputComponent extends Component
 
   int _vertDrift = 0;
   int _horizDrift = 0;
+  int _vertDriftCooldown = 0;
+  int _horizDriftCooldown = 0;
 
   bool _drinkBeer = false;
 
@@ -169,6 +171,7 @@ class PlayerInputComponent extends Component
 
       if (this._vertDrift > 16) {
         this._vertDrift = 0;
+        this._vertDriftCooldown = 300;
       }
     } else if (this._vertDrift < 0) {
       this._vertDrift--;
@@ -177,8 +180,10 @@ class PlayerInputComponent extends Component
       if (this._vertDrift < -16) {
         this._vertDrift = 0;
       }
-    } else if (this._horizAccel != 0 && (this._pressed[DIR_LEFT.direction] || this._pressed[DIR_RIGHT.direction]) &&
-        this._rng.nextInt(300) < obj.drunkenness * 2) {
+    } else if (this._horizAccel != 0 && this._horizDrift == 0 && --this._horizDriftCooldown <= 0 &&
+        /*(this._pressed[DIR_LEFT.direction] ||
+            this._pressed[DIR_RIGHT.direction]) &&*/
+        this._rng.nextInt(300) < obj.drunkenness) {
       this._vertDrift = this._rng.nextInt(3 /* max exclusive */) - 1;
     }
     if (this._horizDrift > 0) {
@@ -187,6 +192,7 @@ class PlayerInputComponent extends Component
 
       if (this._horizDrift > 16) {
         this._horizDrift = 0;
+        this._horizDriftCooldown = 300;
       }
     } else if (this._horizDrift < 0) {
       this._horizDrift--;
@@ -195,8 +201,10 @@ class PlayerInputComponent extends Component
       if (this._horizDrift < -16) {
         this._horizDrift = 0;
       }
-    } else if (this._vertAccel != 0 && (this._pressed[DIR_UP.direction] || this._pressed[DIR_RIGHT.direction]) &&
-        this._rng.nextInt(300) < obj.drunkenness * 2) {
+    } else if (this._vertAccel != 0 && this._vertDrift == 0 && --this._vertDriftCooldown <= 0 &&
+        /*(this._pressed[DIR_UP.direction] ||
+            this._pressed[DIR_RIGHT.direction]) &&*/
+        this._rng.nextInt(300) < obj.drunkenness) {
       this._horizDrift = this._rng.nextInt(3 /* max exclusive */) - 1;
     }
 
@@ -229,10 +237,10 @@ class PlayerInputComponent extends Component
 
     // check blocks given vertical movement TL, BL, TR, BR
     List<List<int>> yBlocks = [
-      [(obj.x + obj.collisionXOffset) ~/ tileWidth, (newY + obj.collisionYOffset) ~/ tileHeight],
-      [(obj.x + obj.collisionXOffset) ~/ tileWidth, (newY + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
-      [(obj.x + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (newY + obj.collisionYOffset) ~/ tileHeight],
-      [(obj.x + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (newY + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight]
+      [(obj.x + obj.collisionXOffset + 1) ~/ tileWidth, (newY + obj.collisionYOffset + 1) ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset + 1) ~/ tileWidth, (newY + obj.collisionYOffset - 1+ obj.collisionHeight) ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset - 1 + obj.collisionWidth) ~/ tileWidth, (newY + obj.collisionYOffset + 1) ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset - 1 + obj.collisionWidth) ~/ tileWidth, (newY + obj.collisionYOffset - 1 + obj.collisionHeight) ~/ tileHeight]
     ];
 
     // if overlapping edges, move back a little
@@ -250,10 +258,10 @@ class PlayerInputComponent extends Component
     }
 
     List<List<int>> xBlocks = [
-      [(newX + obj.collisionXOffset) ~/ tileWidth, (obj.y + obj.collisionYOffset) ~/ tileHeight],
-      [(newX + obj.collisionXOffset) ~/ tileWidth, (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
-      [(newX + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (obj.y + obj.collisionYOffset) ~/ tileHeight],
-      [(newX + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight]
+      [(newX + obj.collisionXOffset + 1) ~/ tileWidth, (obj.y + obj.collisionYOffset + 1) ~/ tileHeight],
+      [(newX + obj.collisionXOffset + 1) ~/ tileWidth, (obj.y + obj.collisionYOffset - 1 + obj.collisionHeight) ~/ tileHeight],
+      [(newX + obj.collisionXOffset - 1 + obj.collisionWidth) ~/ tileWidth, (obj.y + obj.collisionYOffset + 1) ~/ tileHeight],
+      [(newX + obj.collisionXOffset - 1 + obj.collisionWidth) ~/ tileWidth, (obj.y + obj.collisionYOffset - 1 + obj.collisionHeight) ~/ tileHeight]
     ];
 
     // if overlapping edges, move back a little
@@ -262,8 +270,7 @@ class PlayerInputComponent extends Component
          l.isBlocking(xBlocks[1][1], xBlocks[1][0]))) {
       this._horizAccel = 0.0;
       newX = obj.x;
-    }
-    else if (this._horizAccel > 0 &&
+    } else if (this._horizAccel > 0 &&
         (l.isBlocking(xBlocks[2][1], xBlocks[2][0]) ||
          l.isBlocking(xBlocks[3][1], xBlocks[3][0]))) {
       this._horizAccel = 0.0;
