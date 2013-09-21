@@ -177,7 +177,7 @@ class PlayerInputComponent extends Component
       if (this._vertDrift < -16) {
         this._vertDrift = 0;
       }
-    } else if (this._horizAccel != 0 &&
+    } else if (this._horizAccel != 0 && (this._pressed[DIR_LEFT.direction] || this._pressed[DIR_RIGHT.direction]) &&
         this._rng.nextInt(300) < obj.drunkenness * 2) {
       this._vertDrift = this._rng.nextInt(3 /* max exclusive */) - 1;
     }
@@ -195,7 +195,7 @@ class PlayerInputComponent extends Component
       if (this._horizDrift < -16) {
         this._horizDrift = 0;
       }
-    } else if (this._vertAccel != 0 &&
+    } else if (this._vertAccel != 0 && (this._pressed[DIR_UP.direction] || this._pressed[DIR_RIGHT.direction]) &&
         this._rng.nextInt(300) < obj.drunkenness * 2) {
       this._horizDrift = this._rng.nextInt(3 /* max exclusive */) - 1;
     }
