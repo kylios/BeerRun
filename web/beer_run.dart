@@ -88,7 +88,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener {
     this._player = new Player(this._statsManager);
     this._player.setHealth(3);
     this._player.speed = 1;
-    this._player.addBeers(3);
+    this._player.addBeers(300);
     this._player.setControlComponent(playerInput);
     this._player.setDrawingComponent(drawer);
 

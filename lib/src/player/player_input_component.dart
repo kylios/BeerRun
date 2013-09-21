@@ -33,6 +33,8 @@ class PlayerInputComponent extends Component
   Direction _horizDir = null;
   Direction _vertDir = null;
 
+  bool _drinkBeer = false;
+
   List<bool> _pressed = [false, false, false, false];
 
   PlayerInputComponent() {
@@ -41,18 +43,32 @@ class PlayerInputComponent extends Component
 
   void update(Player obj) {
 
+    if (this._drinkBeer) {
+      this._drinkBeer = false;
+      obj.drinkBeer();
+    }
+
+
+
+    // TODO: make this a curve?
+    double horizAccelMax = 1.5 * obj.drunkenness;
+    double vertAccelMax = 1.5 * obj.drunkenness;
+
+
+
+
     // Increase acceleration depending on what we're pressing
-    if (this._pressed[DIR_UP.direction] && this._vertAccel > -1 * MAX_ACCEL) {
+    if (this._pressed[DIR_UP.direction]) {
       this._vertAccel -= ACCEL_MOD;
       obj.dir = DIR_UP;
-    } else if (this._pressed[DIR_DOWN.direction] && this._vertAccel < MAX_ACCEL) {
+    } else if (this._pressed[DIR_DOWN.direction]) {
       this._vertAccel += ACCEL_MOD;
       obj.dir = DIR_DOWN;
     }
-    if (this._pressed[DIR_LEFT.direction] && this._horizAccel > -1 * MAX_ACCEL) {
+    if (this._pressed[DIR_LEFT.direction]) {
       this._horizAccel -= ACCEL_MOD;
       obj.dir = DIR_LEFT;
-    } else if (this._pressed[DIR_RIGHT.direction] && this._horizAccel < MAX_ACCEL) {
+    } else if (this._pressed[DIR_RIGHT.direction]) {
       this._horizAccel += ACCEL_MOD;
       obj.dir = DIR_RIGHT;
     }
@@ -69,7 +85,7 @@ class PlayerInputComponent extends Component
         int tileY = ((1 + newY ~/ 16) * 16);
         int dist = (tileY - newY);
         if (dist > 1) {
-          this._vertAccel -= dist * ACCEL_EASING;
+          this._vertAccel -= dist * ACCEL_EASING / obj.drunkenness;
           if (this._vertAccel < 1) {
             this._vertAccel = 1.0;
           }
@@ -81,7 +97,7 @@ class PlayerInputComponent extends Component
         int tileY = ((newY ~/ 16) * 16);
         int dist = (newY - tileY);
         if (dist > 1) {
-          this._vertAccel += dist * ACCEL_EASING;
+          this._vertAccel += dist * ACCEL_EASING / obj.drunkenness;
           if (this._vertAccel > -1) {
             this._vertAccel = -1.0;
           }
@@ -99,7 +115,7 @@ class PlayerInputComponent extends Component
         //window.console.log("my x: ${newX}, tile x: ${((1 + newX ~/ 16) * 16.0)}");
         //window.console.log("dist: ${dist}, horizAccel: ${this._horizAccel}");
         if (dist > 1) {
-          this._horizAccel -= dist * ACCEL_EASING;
+          this._horizAccel -= dist * ACCEL_EASING / obj.drunkenness;
           if (this._horizAccel < 1) {
             this._horizAccel = 1.0;
           }
@@ -113,7 +129,7 @@ class PlayerInputComponent extends Component
         //window.console.log("my x: ${newX}, tile x: ${tileX}");
         //window.console.log("dist: ${dist}, horizAccel: ${this._horizAccel}");
         if (dist > 1) {
-          this._horizAccel += dist * ACCEL_EASING;
+          this._horizAccel += dist * ACCEL_EASING / obj.drunkenness;
           if (this._horizAccel > -1) {
             this._horizAccel = -1.0;
           }
@@ -124,20 +140,36 @@ class PlayerInputComponent extends Component
       }
     }
 
-    if (this._horizAccel > 15) {
-      this._horizAccel = 15.0;
-    } else if (this._horizAccel < -15) {
-      this._horizAccel = -15.0;
+    if (this._horizAccel > horizAccelMax) {
+      this._horizAccel = horizAccelMax;
+    } else if (this._horizAccel < -horizAccelMax) {
+      this._horizAccel = -horizAccelMax;
     }
-    if (this._vertAccel > 15) {
-      this._vertAccel = 15.0;
-    } else if (this._vertAccel < -15) {
-      this._vertAccel = -15.0;
+    if (this._vertAccel > vertAccelMax) {
+      this._vertAccel = vertAccelMax;
+    } else if (this._vertAccel < -vertAccelMax) {
+      this._vertAccel = -vertAccelMax;
     }
 
 
     newX += this._horizAccel.toInt();
     newY += this._vertAccel.toInt();
+
+
+    // Add the wobble
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // handle collisions
     Level l = obj.level;
@@ -278,7 +310,7 @@ class PlayerInputComponent extends Component
     //window.console.log("Key pressed: ${e.keyCode}");
 
     if (e.keyCode == KeyboardListener.KEY_SPACE) {
-      //this._drinkBeer = true;
+      this._drinkBeer = true;
     }
   }
 }
