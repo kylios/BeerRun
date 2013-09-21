@@ -153,9 +153,9 @@ class PlayerInputComponent extends Component
 
     // check blocks given vertical movement TL, BL, TR, BR
     List<List<int>> yBlocks = [
-      [obj.x ~/ tileWidth, newY ~/ tileHeight],
-      [obj.x ~/ tileWidth, (newY + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
-      [(obj.x + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, newY ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset) ~/ tileWidth, (newY + obj.collisionYOffset) ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset) ~/ tileWidth, (newY + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (newY + obj.collisionYOffset) ~/ tileHeight],
       [(obj.x + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (newY + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight]
     ];
 
@@ -174,9 +174,9 @@ class PlayerInputComponent extends Component
     }
 
     List<List<int>> xBlocks = [
-      [newX ~/ tileWidth, obj.y ~/ tileHeight],
-      [newX ~/ tileWidth, (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
-      [(newX + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, obj.y ~/ tileHeight],
+      [(newX + obj.collisionXOffset) ~/ tileWidth, (obj.y + obj.collisionYOffset) ~/ tileHeight],
+      [(newX + obj.collisionXOffset) ~/ tileWidth, (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
+      [(newX + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (obj.y + obj.collisionYOffset) ~/ tileHeight],
       [(newX + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight]
     ];
 

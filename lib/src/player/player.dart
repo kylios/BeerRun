@@ -44,9 +44,9 @@ class Player extends GameObject implements ComponentListener {
         "img/player/player.png",
         64, 64);
 
-    this.collisionXOffset = 17;
+    this.collisionXOffset = 16;
     this.collisionYOffset = 32;
-    this.collisionWidth = 30;
+    this.collisionWidth = 32;
     this.collisionHeight = 32;
 
     List<Sprite> walkUp = new List<Sprite>();

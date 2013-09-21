@@ -11,7 +11,6 @@ import 'package:beer_run/bullet.dart';
 import 'package:beer_run/explosion.dart';
 import 'package:beer_run/input.dart';
 import 'package:beer_run/canvas_manager.dart';
-import 'package:beer_run/car.dart';
 import 'package:beer_run/animation.dart';
 import 'package:beer_run/beer_run.dart';
 
