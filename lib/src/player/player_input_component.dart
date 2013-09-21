@@ -33,6 +33,9 @@ class PlayerInputComponent extends Component
   Direction _horizDir = null;
   Direction _vertDir = null;
 
+  int _vertDrift = 0;
+  int _horizDrift = 0;
+
   bool _drinkBeer = false;
 
   List<bool> _pressed = [false, false, false, false];
@@ -152,17 +155,58 @@ class PlayerInputComponent extends Component
     }
 
 
-    newX += this._horizAccel.toInt();
-    newY += this._vertAccel.toInt();
+
+
+
 
 
     // Add the wobble
 
 
+    if (this._vertDrift > 0) {
+      this._vertAccel++;
+      this._vertDrift++;
+
+      if (this._vertDrift > 16) {
+        this._vertDrift = 0;
+      }
+    } else if (this._vertDrift < 0) {
+      this._vertDrift--;
+      this._vertAccel--;
+
+      if (this._vertDrift < -16) {
+        this._vertDrift = 0;
+      }
+    } else if (this._horizAccel != 0 &&
+        this._rng.nextInt(300) < obj.drunkenness * 2) {
+      this._vertDrift = this._rng.nextInt(3 /* max exclusive */) - 1;
+    }
+    if (this._horizDrift > 0) {
+      this._horizDrift++;
+      this._horizAccel++;
+
+      if (this._horizDrift > 16) {
+        this._horizDrift = 0;
+      }
+    } else if (this._horizDrift < 0) {
+      this._horizDrift--;
+      this._horizAccel--;
+
+      if (this._horizDrift < -16) {
+        this._horizDrift = 0;
+      }
+    } else if (this._vertAccel != 0 &&
+        this._rng.nextInt(300) < obj.drunkenness * 2) {
+      this._horizDrift = this._rng.nextInt(3 /* max exclusive */) - 1;
+    }
 
 
 
 
+
+
+    newX += this._horizAccel.toInt();
+    newY += this._vertAccel.toInt();
 
 
 
