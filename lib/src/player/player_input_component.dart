@@ -33,12 +33,7 @@ class PlayerInputComponent extends Component
   Direction _horizDir = null;
   Direction _vertDir = null;
 
-  Map<Direction, bool> _pressed = {
-                                    DIR_UP: false,
-                                    DIR_DOWN: false,
-                                    DIR_LEFT: false,
-                                    DIR_RIGHT: false
-  };
+  List<bool> _pressed = [false, false, false, false];
 
   PlayerInputComponent() {
     this._rng = new Random();
@@ -47,17 +42,17 @@ class PlayerInputComponent extends Component
   void update(Player obj) {
 
     // Increase acceleration depending on what we're pressing
-    if (this._pressed[DIR_UP] && this._vertAccel > -1 * MAX_ACCEL) {
+    if (this._pressed[DIR_UP.direction] && this._vertAccel > -1 * MAX_ACCEL) {
       this._vertAccel -= ACCEL_MOD;
       obj.dir = DIR_UP;
-    } else if (this._pressed[DIR_DOWN] && this._vertAccel < MAX_ACCEL) {
+    } else if (this._pressed[DIR_DOWN.direction] && this._vertAccel < MAX_ACCEL) {
       this._vertAccel += ACCEL_MOD;
       obj.dir = DIR_DOWN;
     }
-    if (this._pressed[DIR_LEFT] && this._horizAccel > -1 * MAX_ACCEL) {
+    if (this._pressed[DIR_LEFT.direction] && this._horizAccel > -1 * MAX_ACCEL) {
       this._horizAccel -= ACCEL_MOD;
       obj.dir = DIR_LEFT;
-    } else if (this._pressed[DIR_RIGHT] && this._horizAccel < MAX_ACCEL) {
+    } else if (this._pressed[DIR_RIGHT.direction] && this._horizAccel < MAX_ACCEL) {
       this._horizAccel += ACCEL_MOD;
       obj.dir = DIR_RIGHT;
     }
@@ -69,7 +64,7 @@ class PlayerInputComponent extends Component
     bool zeroVertAccel = false;
 
     // If we aren't pressing any keys, decelerate
-    if (! this._pressed[DIR_UP] && ! this._pressed[DIR_DOWN]){
+    if (! this._pressed[DIR_UP.direction] && ! this._pressed[DIR_DOWN.direction]){
       if (this._vertAccel > 0) {
         int tileY = ((1 + newY ~/ 16) * 16);
         int dist = (tileY - newY);
@@ -97,7 +92,7 @@ class PlayerInputComponent extends Component
       }
     }
 
-    if (! this._pressed[DIR_LEFT] && ! this._pressed[DIR_RIGHT]) {
+    if (! this._pressed[DIR_LEFT.direction] && ! this._pressed[DIR_RIGHT.direction]) {
       if (this._horizAccel > 0) {
         int tileX = ((1 + newX ~/ 16) * 16);
         int dist = (tileX - newX);
@@ -140,58 +135,64 @@ class PlayerInputComponent extends Component
       this._vertAccel = -15.0;
     }
 
-    // handle collisions
-    Level l = obj.level;
-
-    int row = (newY + obj.collisionYOffset) ~/ obj.level.tileHeight;
-    int col = (newX + obj.collisionXOffset) ~/ obj.level.tileWidth;
-    int row1 = (newY + obj.collisionYOffset + obj.collisionHeight) ~/
-        obj.level.tileHeight;
-    int col1 = (newX + obj.collisionXOffset + obj.collisionWidth) ~/
-        obj.level.tileWidth;
-
 
     newX += this._horizAccel.toInt();
     newY += this._vertAccel.toInt();
 
-    row = newY ~/ l.tileHeight;
-    col = newX ~/ l.tileWidth;
-    row1 = (newY + 64) ~/ l.tileHeight;
-    col1 = (newX + 64) ~/ l.tileWidth;
+    // handle collisions
+    Level l = obj.level;
 
-    if ((this._vertAccel > 0 &&
-        (l.isBlocking(row1, col) ||
-            l.isBlocking(row1, col1))) ||
-        (this._vertAccel < 0 &&
-        (l.isBlocking(row, col) ||
-            l.isBlocking(row, col1)))) {
+    int tileWidth = obj.level.tileWidth;
+    int tileHeight = obj.level.tileHeight;
+
+    /*
+     * Thanks to https://github.com/mrspeaker
+     * for the movement code.  Inspiration taken from:
+     * https://raw.github.com/mrspeaker/Omega500/master/%CE%A9/entities/Entity.js
+     */
+
+    // check blocks given vertical movement TL, BL, TR, BR
+    List<List<int>> yBlocks = [
+      [obj.x ~/ tileWidth, newY ~/ tileHeight],
+      [obj.x ~/ tileWidth, (newY + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, newY ~/ tileHeight],
+      [(obj.x + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (newY + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight]
+    ];
+
+    // if overlapping edges, move back a little
+    if (this._vertAccel < 0 &&
+        (l.isBlocking(yBlocks[0][1], yBlocks[0][0]) ||
+         l.isBlocking(yBlocks[2][1], yBlocks[2][0]))) {
+      this._vertAccel = 0.0;
+      newY = obj.y;
+    }
+    else if (this._vertAccel > 0 &&
+        (l.isBlocking(yBlocks[1][1], yBlocks[1][0]) ||
+         l.isBlocking(yBlocks[3][1], yBlocks[3][0]))) {
       this._vertAccel = 0.0;
       newY = obj.y;
     }
 
-    row = (newY + obj.collisionYOffset) ~/ obj.level.tileHeight;
-    col = (newX + obj.collisionXOffset) ~/ obj.level.tileWidth;
-    row1 = (newY + obj.collisionYOffset + obj.collisionHeight) ~/
-        obj.level.tileHeight;
-    col1 = (newX + obj.collisionXOffset + obj.collisionWidth) ~/
-        obj.level.tileWidth;
+    List<List<int>> xBlocks = [
+      [newX ~/ tileWidth, obj.y ~/ tileHeight],
+      [newX ~/ tileWidth, (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight],
+      [(newX + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, obj.y ~/ tileHeight],
+      [(newX + obj.collisionXOffset + obj.collisionWidth) ~/ tileWidth, (obj.y + obj.collisionYOffset + obj.collisionHeight) ~/ tileHeight]
+    ];
 
-
-    row = newY ~/ l.tileHeight;
-    col = newX ~/ l.tileWidth;
-    row1 = (newY + 64) ~/ l.tileHeight;
-    col1 = (newX + 64) ~/ l.tileWidth;
-
-    if ((this._horizAccel < 0 &&
-        (l.isBlocking(row, col) ||
-            l.isBlocking(row1, col))) ||
-        (this._horizAccel > 0 &&
-        (l.isBlocking(row, col1) ||
-            l.isBlocking(row1, col1)))) {
+    // if overlapping edges, move back a little
+    if (this._horizAccel < 0 &&
+        (l.isBlocking(xBlocks[0][1], xBlocks[0][0]) ||
+         l.isBlocking(xBlocks[1][1], xBlocks[1][0]))) {
       this._horizAccel = 0.0;
       newX = obj.x;
     }
-
+    else if (this._horizAccel > 0 &&
+        (l.isBlocking(xBlocks[2][1], xBlocks[2][0]) ||
+         l.isBlocking(xBlocks[3][1], xBlocks[3][0]))) {
+      this._horizAccel = 0.0;
+      newX = obj.x;
+    }
 
     if (zeroHorizAccel) {
       this._horizAccel = 0.0;
@@ -212,14 +213,14 @@ class PlayerInputComponent extends Component
       } else {
         this._vertDir = DIR_DOWN;
       }
-      this._pressed[DIR_DOWN] = true;
+      this._pressed[DIR_DOWN.direction] = true;
     } else if (MOVE_UP_KEYS.contains(e.keyCode)) {
       if (this._vertDir == DIR_DOWN) {
         this._vertDir = null;
       } else {
         this._vertDir = DIR_UP;
       }
-      this._pressed[DIR_UP] = true;
+      this._pressed[DIR_UP.direction] = true;
     }
 
     if (MOVE_LEFT_KEYS.contains(e.keyCode)) {
@@ -228,14 +229,14 @@ class PlayerInputComponent extends Component
       } else {
         this._horizDir = DIR_LEFT;
       }
-      this._pressed[DIR_LEFT] = true;
+      this._pressed[DIR_LEFT.direction] = true;
     } else if (MOVE_RIGHT_KEYS.contains(e.keyCode)) {
       if (this._horizDir == DIR_LEFT) {
         this._horizDir = null;
       } else {
         this._horizDir = DIR_RIGHT;
       }
-      this._pressed[DIR_RIGHT] = true;
+      this._pressed[DIR_RIGHT.direction] = true;
     }
   }
   void onKeyUp(KeyboardEvent e) {
@@ -247,14 +248,14 @@ class PlayerInputComponent extends Component
       } else {
         this._vertDir = null;
       }
-      this._pressed[DIR_DOWN] = false;
+      this._pressed[DIR_DOWN.direction] = false;
     } else if (MOVE_UP_KEYS.contains(e.keyCode)) {
       if (this._vertDir == null) {
         this._vertDir = DIR_DOWN;
       } else {
         this._vertDir = null;
       }
-      this._pressed[DIR_UP] = false;
+      this._pressed[DIR_UP.direction] = false;
     }
 
     if (MOVE_LEFT_KEYS.contains(e.keyCode)) {
@@ -263,14 +264,14 @@ class PlayerInputComponent extends Component
       } else {
         this._horizDir = null;
       }
-      this._pressed[DIR_LEFT] = false;
+      this._pressed[DIR_LEFT.direction] = false;
     } else if (MOVE_RIGHT_KEYS.contains(e.keyCode)) {
       if (this._horizDir == null) {
         this._horizDir = DIR_LEFT;
       } else {
         this._horizDir = null;
       }
-      this._pressed[DIR_RIGHT] = false;
+      this._pressed[DIR_RIGHT.direction] = false;
     }
   }
   void onKeyPressed(KeyboardEvent e) {
