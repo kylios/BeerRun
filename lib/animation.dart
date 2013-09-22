@@ -1,7 +1,5 @@
 library animation;
 
-import 'dart:html';
-
 import 'package:beer_run/drawing.dart';
 
 part 'src/animation/animation.dart';

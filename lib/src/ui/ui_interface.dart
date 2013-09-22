@@ -7,6 +7,6 @@ abstract class UIInterface {
   void closeWindow();
 
   void showView(View v, {
-    int seconds: 0,
+    int seconds: null,
     var callback: null});
 }

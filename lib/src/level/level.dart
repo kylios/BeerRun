@@ -1,7 +1,10 @@
 part of level;
 
-
-abstract class Level implements ComponentListener {
+// TODO: we need to fix the Component and GameObject classes.  There are
+// functions that exist in both that can be condensed into a single class,
+// and there are functions that don't need to be in these classes that can be
+// part of more specific derived classes.
+abstract class Level extends Component implements ComponentListener {
 
   String _name;
 
@@ -241,7 +244,7 @@ abstract class Level implements ComponentListener {
     }
   }
 
-  void update() {
+  void update(var _) {
 
     // Eventually, it would be cool if drawing could be moved out of the
     // main update loop.  How we do it, I'm not positive, but I'm thinking we
@@ -261,10 +264,11 @@ abstract class Level implements ComponentListener {
       //this._player.draw();
 
       // Check if the player is standing on a trigger
+
+      GameObject o = this._player;
       for (Trigger t in this._triggers) {
         int x = t.col * this._tileWidth;
         int y = t.row * this._tileHeight;
-        GameObject o = this._player;
         if (
             (
                 o.x + o.collisionXOffset + o.collisionWidth >= x &&
@@ -277,7 +281,7 @@ abstract class Level implements ComponentListener {
             )
           ) {
             GameEvent e = t.event;
-            Timer.run(() => o.listen(e));
+            this.broadcast(e, [ o ]);
         }
       }
 

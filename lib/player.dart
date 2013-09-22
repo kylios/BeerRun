@@ -13,6 +13,7 @@ import 'package:beer_run/input.dart';
 import 'package:beer_run/canvas_manager.dart';
 import 'package:beer_run/animation.dart';
 import 'package:beer_run/beer_run.dart';
+import 'package:beer_run/ui.dart';
 
 part 'src/player/player_input_component.dart';
 part 'src/player/player_drawing_component.dart';

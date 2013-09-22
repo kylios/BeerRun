@@ -34,11 +34,15 @@ class UI implements UIInterface {
   }
 
   void showView(View v, {
-                int seconds: 0,
+                int seconds: null,
                 var callback: null}) {
 
     if (this._opened) {
       this.closeWindow();
+    }
+
+    if (seconds == null) {
+      seconds = 0;
     }
 
     if (seconds > 0) {

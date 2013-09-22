@@ -69,6 +69,7 @@ class Player extends GameObject implements ComponentListener {
     this.setLevel(l);
     this.setPos(l.startX, l.startY);
     this.dir = DIR_UP;
+    this.resetBeersDelivered();
   }
 
   void setHealth(int health) {
@@ -147,6 +148,7 @@ class Player extends GameObject implements ComponentListener {
   }
 
   void listen(GameEvent e) {
+    window.console.log("entered event handler");
     if (e.type == GameEvent.TAKE_HIT_EVENT) {
       if ( ! this._damaged) {
         int damage = e.value;
@@ -191,14 +193,43 @@ class Player extends GameObject implements ComponentListener {
     } else if (e.type == GameEvent.PARTY_ARRIVAL_EVENT && this._beenToStore) {
       // Only trigger if you've gone to the store at least once
 
+      // TODO stats.score <- update
+      //this._score += this._player.beersDelivered;
+
+
+
       // Gain score
-      this._beersDelivered = this._beers;
+      //this._stats.beers += this._beers;
+      this._beersDelivered += this._beers;
+
       this._beers = 0;
       this.level.addAnimation(
           new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
 
-      this._stats.beers = this._beers;
+      GameManager g = new GameManager();
+
+      GameEvent addScoreEvent = new GameEvent();
+      addScoreEvent.type = GameEvent.ADD_SCORE_EVENT;
+      addScoreEvent.value = this._beers;
+      this.broadcast(addScoreEvent, [ g ]);
+
+      if (this._beersDelivered >= this.level.beersToWin) {
+        // send event to the game
+
+        GameEvent e = new GameEvent();
+        e.type = GameEvent.GAME_WON_EVENT;
+        e.creator = this;
+        e.value = 0;
+        this.broadcast(e, [
+                           g
+                          ]);
+      } else {
+        g.showView(
+            new Message("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
+      }
     }
+
+    window.console.log("Exit event handler");
   }
 
   /*
