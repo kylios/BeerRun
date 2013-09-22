@@ -324,6 +324,10 @@ class PlayerInputComponent extends Component
   }
   void onKeyUp(KeyboardEvent e) {
     //window.console.log("Key up: ${e.keyCode}");
+    if (e.keyCode == KeyboardListener.KEY_SPACE) {
+      this._drinkBeer = true;
+      return;
+    }
 
     if (MOVE_DOWN_KEYS.contains(e.keyCode)) {
       if (this._vertDir == null) {
@@ -339,9 +343,7 @@ class PlayerInputComponent extends Component
         this._vertDir = null;
       }
       this._pressed[DIR_UP.direction] = false;
-    }
-
-    if (MOVE_LEFT_KEYS.contains(e.keyCode)) {
+    } else if (MOVE_LEFT_KEYS.contains(e.keyCode)) {
       if (this._horizDir == null) {
         this._horizDir = DIR_RIGHT;
       } else {
@@ -358,11 +360,8 @@ class PlayerInputComponent extends Component
     }
   }
   void onKeyPressed(KeyboardEvent e) {
-    //window.console.log("Key pressed: ${e.keyCode}");
 
-    if (e.keyCode == KeyboardListener.KEY_SPACE) {
-      this._drinkBeer = true;
-    }
+
   }
 }
 
