@@ -16,5 +16,5 @@ fi
 #cd $WEB_DIR
 #$CMD
 
-rsync -rv ../web/* $UPLOAD_USER@$SERVER_HOST:$UPLOAD_DIR
+rsync -arv ../web/* $UPLOAD_USER@$SERVER_HOST:$UPLOAD_DIR
 
