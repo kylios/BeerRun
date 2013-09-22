@@ -148,7 +148,6 @@ class Player extends GameObject implements ComponentListener {
   }
 
   void listen(GameEvent e) {
-    window.console.log("entered event handler");
     if (e.type == GameEvent.TAKE_HIT_EVENT) {
       if ( ! this._damaged) {
         int damage = e.value;
@@ -229,7 +228,6 @@ class Player extends GameObject implements ComponentListener {
       }
     }
 
-    window.console.log("Exit event handler");
   }
 
   /*

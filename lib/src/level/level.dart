@@ -264,11 +264,10 @@ abstract class Level extends Component implements ComponentListener {
       //this._player.draw();
 
       // Check if the player is standing on a trigger
-
-      GameObject o = this._player;
       for (Trigger t in this._triggers) {
         int x = t.col * this._tileWidth;
         int y = t.row * this._tileHeight;
+        GameObject o = this._player;
         if (
             (
                 o.x + o.collisionXOffset + o.collisionWidth >= x &&
@@ -524,6 +523,8 @@ abstract class Level extends Component implements ComponentListener {
     Level l = new _LoadableLevel(drawer, manager,
         height, width, tileWidth, tileHeight);
     l._name = _properties["name"];
+
+    window.console.log("Parsing level ${l._name}");
 
     List<_LevelTileset> tilesets = new List<_LevelTileset>();
     for (Map tset in _tilesets) {
