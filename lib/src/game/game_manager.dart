@@ -90,9 +90,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._canvasManager.addKeyboardListener(this);
 
     this._player = new Player(this._statsManager);
-    this._player.setHealth(3);
-    this._player.speed = 1;
-    this._player.addBeers(300);
     this._player.setControlComponent(playerInput);
     this._player.setDrawingComponent(drawer);
 
@@ -344,10 +341,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     if (this._player.drunkenness <= 0) {
       this._setGameOver(true, "You're too sober.  You got bored and go home.  GAME OVER!");
     } else if (this._player.drunkenness >= 10) {
-      this._setGameOver(true, "You black out like a dumbass, before you even get to the party.");
+      this._setGameOver(true, "You black out like a dumbass, before you even get to the party!");
     }
     if (this._player.health == 0) {
-      this._setGameOver(true, "You are dead.");
+      this._setGameOver(true, "Oops, you are dead!");
       this._currentLevel.removeObject(this._player);
     }
 

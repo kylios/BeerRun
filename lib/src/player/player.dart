@@ -70,6 +70,9 @@ class Player extends GameObject implements ComponentListener {
     this.setPos(l.startX, l.startY);
     this.dir = DIR_UP;
     this.resetBeersDelivered();
+
+    this.setHealth(3);
+    this.addBeers(300);
   }
 
   void setHealth(int health) {

@@ -37,15 +37,15 @@ class GameOverScreen extends View {
     messageEl.style.marginLeft = "auto";
     messageEl.style.marginRight = "auto";
     messageEl.style.width = "80%";
-
     messageEl.text = this._text;
     messageEl.style.fontWeight = "bold";
     messageEl.style.fontSize = "22px";
     messageEl.style.height = "58px";
+    messageEl.style.color = "white";
     el.append(messageEl);
 
 
-    el.classes .add("ui");
+    el.classes.add("ui");
     el.classes.add("text");
     root.append(
       el
