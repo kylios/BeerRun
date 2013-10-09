@@ -191,7 +191,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     if (this._currentLevel.name == 'level1') {
       Level.setupTutorial(this._currentLevel, this._ui, this._player);
     }
-    //this._currentLevel.setupTutorial(this._ui, this._player);
+
     this._currentLevel.addPlayerObject(this._player);
 
     this._canvasDrawer.clear();

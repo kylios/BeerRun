@@ -246,22 +246,9 @@ abstract class Level extends Component implements ComponentListener {
 
   void update(var _) {
 
-    // Eventually, it would be cool if drawing could be moved out of the
-    // main update loop.  How we do it, I'm not positive, but I'm thinking we
-    // could just call window.requestDrawFrame or whatever and pass in the main
-    // draw() function, and have update() called in an interval where we
-    // regulate the speed with an updatesPerSecond counter.  This would allow
-    // us to better control start/stops of the update loop too, and make it
-    // easier to pass in different update() functions for different modes of
-    // the game.
-    // TODO: for now I'm just moving player.draw() out of here, and that'll
-    //    have to be called explicitly from the game's loop.
     this.draw(this._drawer);
 
     if ( ! this._paused) {
-      //this._player.update();
-      // TODO: don't draw here!  Draw in game.update().
-      //this._player.draw();
 
       // Check if the player is standing on a trigger
       for (Trigger t in this._triggers) {

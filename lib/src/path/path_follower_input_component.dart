@@ -26,6 +26,8 @@ class PathFollowerInputComponent extends Component {
     int widthBefore = obj.tileWidth;
     int heightBefore = obj.tileHeight;
 
+    Direction prevDir = obj.dir;
+
     // Move horizontally or vertically?
     if ((nextX - obj.x).abs() > (nextY - obj.y).abs()) {
       // Move horizontally
@@ -58,11 +60,18 @@ class PathFollowerInputComponent extends Component {
       // Move vertically
       if (obj.y < nextY) {
         obj.moveDown();
+
         if (obj.y > nextY) {
           this._currentPointIdx++;
         }
       } else if (obj.y > nextY) {
         obj.moveUp();
+
+        // Adjust for changes in width/height
+        if (prevDir == DIR_LEFT || prevDir == DIR_RIGHT) {
+          obj.setPos(obj.x, obj.y - (obj.tileHeight - heightBefore));
+        }
+
         if (obj.y < nextY) {
           this._currentPointIdx++;
         }
