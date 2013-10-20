@@ -4,32 +4,32 @@ packages:
   analyzer_experimental:
     description: analyzer_experimental
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1+2"
   args:
     description: args
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1"
   browser:
     description: browser
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1"
   intl:
     description: intl
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1"
   logging:
     description: logging
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1"
   meta:
     description: meta
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1"
   path:
     description: path
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1"
   unmodifiable_collection:
     description: unmodifiable_collection
     source: hosted
-    version: "0.7.3+1"
+    version: "0.8.1"
