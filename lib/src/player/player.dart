@@ -124,8 +124,6 @@ class Player extends GameObject implements ComponentListener {
       // Update super
       super.update();
 
-
-
       // Make him blink when hit
       if (this._damaged) {
         this._blink(now);

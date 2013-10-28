@@ -1,6 +1,6 @@
 part of game;
 
-abstract class GameObject implements ComponentListener {
+abstract class GameObject extends Broadcaster implements ComponentListener {
 
   int speed = 5;
 
@@ -22,11 +22,10 @@ abstract class GameObject implements ComponentListener {
   Level _level;
   bool _remove = false;
 
-  DrawingComponent _drawer;
+  DrawingComponent drawer;
 
   int get tileWidth;
   int get tileHeight;
-  DrawingComponent get drawer => this._drawer;
 
   Sprite getStaticSprite();
   Sprite getMoveSprite();
@@ -54,10 +53,10 @@ abstract class GameObject implements ComponentListener {
   }
 
   void setDrawingComponent(DrawingComponent d) {
-    this._drawer = d;
+    this.drawer = d;
   }
-  Component getDrawingComponent() {
-    return this._drawer;
+  DrawingComponent getDrawingComponent() {
+    return this.drawer;
   }
 
   void setLevel(Level l) {
@@ -78,8 +77,8 @@ abstract class GameObject implements ComponentListener {
   }
 
   void draw() {
-    if (this._drawer != null) {
-      this._drawer.update(this);
+    if (this.drawer != null) {
+      this.drawer.update(this);
     }
   }
 
@@ -123,12 +122,6 @@ abstract class GameObject implements ComponentListener {
   }
   void faceRight() {
     this.dir = DIR_RIGHT;
-  }
-
-  void broadcast(GameEvent e, List<ComponentListener> listeners) {
-    for (ComponentListener l in listeners) {
-      l.listen(e);
-    }
   }
 }
 

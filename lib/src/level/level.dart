@@ -4,7 +4,7 @@ part of level;
 // functions that exist in both that can be condensed into a single class,
 // and there are functions that don't need to be in these classes that can be
 // part of more specific derived classes.
-abstract class Level extends Component implements ComponentListener {
+abstract class Level extends Broadcaster implements ComponentListener {
 
   String _name;
 
@@ -25,7 +25,7 @@ abstract class Level extends Component implements ComponentListener {
   List<bool> _blocked;      // blocked tiles
   List<Trigger> _triggers;  // triggered tiles
 
-  TutorialManager _tutorial;
+  Tutorial _tutorial;
 
   // Level functionality members
   int _layer = -1;
@@ -41,7 +41,7 @@ abstract class Level extends Component implements ComponentListener {
 
   bool _paused = false;
 
-  Level(this._drawer, this._manager,
+  Level(this._drawer, this._manager, this._player,
       this._rows, this._cols, this._tileWidth, this._tileHeight)
   {
     this._sprites = new List<List<Sprite>>();
@@ -51,7 +51,6 @@ abstract class Level extends Component implements ComponentListener {
     this._triggers = new List<Trigger>(); // TODO: someday optimize this to be more location aware
     this._blocked = new List<bool>
       .filled(this._rows * this._cols, false);
-    this._tutorial = new TutorialManager();
   }
 
   // Abstract methods
@@ -70,7 +69,8 @@ abstract class Level extends Component implements ComponentListener {
   CanvasManager get canvasManager => this._manager;
   CanvasDrawer get canvasDrawer => this._drawer;
   List<GameObject> get objects => this._objects;
-  TutorialManager get tutorial => this._tutorial;
+  Tutorial get tutorial => this._tutorial;
+  Player get player => this._player;
 
   int _posToIdx(int row, int col) {
     return this._cols * row + col;
@@ -119,11 +119,13 @@ abstract class Level extends Component implements ComponentListener {
     return this._sprites[this._layer][pos];
   }
 
+  /*
   void addPlayerObject(Player p) {
     this._player = p;
     this._player.setPos(this.startX, this.startY);
     this.addObject(p);
   }
+  */
 
   void addAnimation(Animation a) {
     this._animations.add(a);
@@ -244,7 +246,7 @@ abstract class Level extends Component implements ComponentListener {
     }
   }
 
-  void update(var _) {
+  void update() {
 
     this.draw(this._drawer);
 
@@ -279,10 +281,6 @@ abstract class Level extends Component implements ComponentListener {
           o.update();
         }
 
-        // TODO: fuuuuuuuuuck this is so terrible
-        if (o != this._player) {
-          o.draw();
-        }
         return ! o.isRemoved;
       }));
       this._objects = newObjects;
@@ -354,8 +352,34 @@ abstract class Level extends Component implements ComponentListener {
 
 
   // TODO: temporary until I figure out how to script tutorials
-  static void setupTutorial(Level level, UIInterface ui, Player p) {
+  static void setupTutorial(Level level) {
 
+    Tutorial t = new Tutorial(level);
+
+    t.onStart(level.startY, level.startX, "What.. who's level drunk idiot who wants to come to OUR party? "
+    "I suppose you can come in.. BUT, we're running low on beer! "
+    "Why don't you stumble on down to the store over there and grab us "
+    "some beers!")
+    .addPan(level.storeY, level.storeX, 5)
+    .addDialog("Grab us a ${level.beersToWin} pack and bring it back.  Better "
+    "avoid the bums... they like to steal your beer, and then you'll "
+    "have to go BACK and get MORE!")
+    .addPan(level.startY, level.startX, 10)
+    .addDialog("Well, what are you waiting for!?  Get moving, and don't sober "
+              "up too much!")
+    .addDialog("Controls: <br />"
+              "WASD, arrow keys: movement <br />"
+              "SPACEBAR: drink a beer")
+    .onStop(level.startY, level.startX);
+
+
+    level._tutorial = t;
+    return;
+
+
+
+
+/*
     level.tutorial.onStart((var _) {
       Completer c = new Completer();
       window.console.log("starting at (${level.startX}, ${level.startY})");
@@ -499,6 +523,7 @@ abstract class Level extends Component implements ComponentListener {
 
       p.setPos(level.startX, level.startY);
     });
+    */
   }
 
 
@@ -521,7 +546,7 @@ abstract class Level extends Component implements ComponentListener {
    * out into driver classes or something like that, I think, but for now,
    * this'll do to get the logic straight.
    * */
-  factory Level.fromJson(Map level, CanvasDrawer drawer, CanvasManager manager)
+  factory Level.fromJson(Map level, CanvasDrawer drawer, CanvasManager manager, Player player)
   {
     int height = level["height"].toInt();
     int width = level["width"].toInt();
@@ -533,12 +558,6 @@ abstract class Level extends Component implements ComponentListener {
     Map _properties = level["properties"];
 
     Level._validateProperties(_properties);
-
-    Level l = new _LoadableLevel(drawer, manager,
-        height, width, tileWidth, tileHeight);
-    l._name = _properties["name"];
-
-    window.console.log("Parsing level ${l._name}");
 
     List<_LevelTileset> tilesets = new List<_LevelTileset>();
     for (Map tset in _tilesets) {
@@ -552,6 +571,33 @@ abstract class Level extends Component implements ComponentListener {
     List<_LayerNPC> _npcs = new List<_LayerNPC>();
 
     List<_LevelLayer> layers = new List<_LevelLayer>();
+
+    Level l = new _LoadableLevel(drawer, manager, player,
+        height, width, tileWidth, tileHeight);
+
+    l._name = _properties["name"];
+    l._storeX = int.parse(_properties["store_x"]);
+    l._storeY = int.parse(_properties["store_y"]);
+    l._startX = int.parse(_properties["start_x"]);
+    l._startY = int.parse(_properties["start_y"]);
+    l._beersToWin = int.parse(_properties["beers_to_win"]);
+    l._duration = new Duration(seconds: int.parse(_properties["seconds"]));
+
+    window.console.log("set level properties: storeX=${l._storeX}, storeY=${l._storeY}, startX=${l._startX}, startY=${l._startY}, beersToWin=${l._beersToWin}, duration=${l._duration}");
+
+    for (_LayerNPC n in _npcs) {
+      Direction dir = (n.direction == "down" ? DIR_DOWN :
+                      n.direction == "up" ? DIR_UP :
+                        n.direction == "left" ? DIR_LEFT :
+                          n.direction == "right" ? DIR_RIGHT :
+                            null);
+      NPC npc = new NPC(l, dir, n.x, n.y);
+      npc.speed = n.speed;
+      npc.setDrawingComponent(new DrawingComponent(manager, drawer, false));
+      npc.setControlComponent(new NPCInputComponent(_regions[n.region]));
+      l.addObject(npc);
+    }
+
     for (Map ll in _layers) {
       if (ll["type"] == "tilelayer") {
         layers.add(new _LevelLayer.fromJson(ll));
@@ -605,28 +651,6 @@ abstract class Level extends Component implements ComponentListener {
       }
     }
 
-    for (_LayerNPC n in _npcs) {
-      Direction dir = (n.direction == "down" ? DIR_DOWN :
-                      n.direction == "up" ? DIR_UP :
-                        n.direction == "left" ? DIR_LEFT :
-                          n.direction == "right" ? DIR_RIGHT :
-                            null);
-      NPC npc = new NPC(l, dir, n.x, n.y);
-      npc.speed = n.speed;
-      npc.setDrawingComponent(new DrawingComponent(manager, drawer, false));
-      npc.setControlComponent(new NPCInputComponent(_regions[n.region]));
-      l.addObject(npc);
-    }
-
-    l._storeX = tileWidth * int.parse(_properties["store_x"]);
-    l._storeY = tileHeight * int.parse(_properties["store_y"]);
-    l._startX = tileWidth * int.parse(_properties["start_x"]);
-    l._startY = tileHeight * int.parse(_properties["start_y"]);
-    l._beersToWin = int.parse(_properties["beers_to_win"]);
-    l._duration = new Duration(seconds: int.parse(_properties["seconds"]));
-
-    window.console.log("set level properties: storeX=${l._storeX}, storeY=${l._storeY}, startX=${l._startX}, startY=${l._startY}, beersToWin=${l._beersToWin}, duration=${l._duration}");
-
     // Load the tilesets into the level
     for (_LevelLayer ll in layers) {
       l.newLayer();
@@ -648,6 +672,10 @@ abstract class Level extends Component implements ComponentListener {
 
         col++;
       }
+    }
+
+    if (l.name == "new test level") {
+      Level.setupTutorial(l);
     }
 
     return l;

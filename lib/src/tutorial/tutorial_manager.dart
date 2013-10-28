@@ -1,10 +1,8 @@
 part of tutorial;
 
-typedef Future tutorialStep(var _);
-
 class TutorialManager {
 
-  List<tutorialStep> _steps;
+  List<tutorialStep> _steps = new List<tutorialStep>();
   tutorialStep _startStep = null;
   tutorialStep _finishStep = null;
 
@@ -12,10 +10,6 @@ class TutorialManager {
   bool _isStarted = false;
   bool _isComplete = false;
   bool _isSkipped = false;
-
-  TutorialManager() {
-    this._steps = new List<tutorialStep>();
-  }
 
   bool get isStarted => this._isStarted;
   bool get isComplete => this._isComplete;

@@ -48,6 +48,8 @@ class PlayerInputComponent extends Component
 
   void update(Player obj) {
 
+    GameManager mgr = new GameManager();
+    //window.console.log("${mgr.tickNo}: playerInputComponent.update()");
     if (this._drinkBeer) {
       this._drinkBeer = false;
       obj.drinkBeer();

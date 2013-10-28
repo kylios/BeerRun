@@ -3,6 +3,8 @@ part of game;
 class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     ComponentListener {
 
+  int _tickNo = 0;
+
   StatsManager _statsManager;
   CanvasManager _canvasManager;
   CanvasDrawer _canvasDrawer;
@@ -30,7 +32,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   bool _continueLoop = false;
   bool _showHUD = false;
   bool _pause = false;
-  bool _gameOver = false;
+  bool _gameOver = true;
   bool _gameOverDialog = false;
   String _gameOverText = '';
 
@@ -47,6 +49,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
   List<Level> _levels = new List<Level>();
 
+  int get tickNo => this._tickNo;
 
   PlayerInputComponent _tmpInputComponent = null;
 
@@ -81,9 +84,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._canvasDrawer.setOffset(0, 0);
     this._canvasDrawer.backgroundColor = 'black';
 
-    DrawingComponent drawer =
-        new DrawingComponent(this._canvasManager, this._canvasDrawer, false);
-
     PlayerInputComponent playerInput =
         new PlayerInputComponent();
     this._canvasManager.addKeyboardListener(playerInput);
@@ -91,7 +91,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     this._player = new Player(this._statsManager);
     this._player.setControlComponent(playerInput);
-    this._player.setDrawingComponent(drawer);
 
     this._ui = new UI(UIRootElement);
     this._ui.addListener(this);
@@ -132,7 +131,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         Completer<Level> c = new Completer<Level>();
         l.load(url)
           .then((Map levelData) {
-            return new Level.fromJson(levelData, this._canvasDrawer, this._canvasManager);
+            return new Level.fromJson(
+                levelData, this._canvasDrawer,
+                this._canvasManager,
+                this._player);
           })
           .then((Level l) {
 
@@ -177,23 +179,16 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._pause = false;
     this._score = 0;
     this._wonLevel = false;
-    this._gameOver = false;
 
     this._currentLevel = this._getNextLevel();
     this._canvasDrawer.setBounds(
         this._currentLevel.cols * this._currentLevel.tileWidth,
         this._currentLevel.rows * this._currentLevel.tileHeight);
     this._player.startInLevel(this._currentLevel);
-
+    this._player.setDrawingComponent(new PlayerDrawingComponent(
+        this._canvasManager, this._canvasDrawer, true));
     this._timer = new GameTimer(this._currentLevel.duration);
     this._timer.addListener(this);
-
-    // TODO: super hack.  Let's figure out how to script a level, k?
-    if (this._currentLevel.name == 'new test level') {
-      Level.setupTutorial(this._currentLevel, this._ui, this._player);
-    }
-
-    this._currentLevel.addPlayerObject(this._player);
 
     this._canvasDrawer.clear();
     this._currentLevel.draw(this._canvasDrawer);
@@ -242,13 +237,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
   void _endTutorial() {
 
-    int playerStartX = this._currentLevel.startX;
-    int playerStartY = this._currentLevel.startY;
-    this._player.setPos(playerStartX, playerStartY);
-    this._player.setDrawingComponent(new PlayerDrawingComponent(
-        this._canvasManager, this._canvasDrawer, true));
     this._player.updateBuzzTime();
     this._timer.startCountdown();
+
+    this._gameOver = false;
   }
 
   int _getConvertedScore(int score, int req, Duration timeLeft) {
@@ -292,13 +284,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
    // this._statsManager.duration = this._timer.duration;
 
-    this._currentLevel.update(null);
+    this._currentLevel.update();
     this._statsManager.update();
 
     if (this._gameOver) {
       return;
     }
 
+    this._player.update();
     this._player.draw();
 
     /*
@@ -357,6 +350,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       this._hud.stopFlashing();
     }
     this._hud.draw();
+
+    this._tickNo++;
   }
 
   void stop() {
@@ -443,7 +438,7 @@ window.console.log("key pressed: ${e.keyCode}");
     switch (e.charCode) {
 
       case KeyboardListener.KEY_T:
-        this._currentLevel.tutorial.skip(null);
+        this._currentLevel.tutorial.skip();
         break;
       case KeyboardListener.KEY_S:
         this._DEBUG_showScoreScreen = true;

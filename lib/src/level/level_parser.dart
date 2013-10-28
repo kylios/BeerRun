@@ -319,8 +319,9 @@ class _TilesetIndex {
 class _LoadableLevel extends Level {
 
   _LoadableLevel(CanvasDrawer drawer, CanvasManager manager,
+      Player player,
       int rows, int cols, int tileWidth, int tileHeight) :
-        super(drawer, manager, rows, cols, tileWidth, tileHeight);
+        super(drawer, manager, player, rows, cols, tileWidth, tileHeight);
 
   /*
   void setupTutorial(UI ui, Player p) {
