@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="58" height="57" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="beers_to_win" value="16"/>
+  <property name="name" value="new test level"/>
+  <property name="seconds" value="84600"/>
+  <property name="start_x" value="12"/>
+  <property name="start_y" value="20"/>
+  <property name="store_x" value="43"/>
+  <property name="store_y" value="47"/>
+ </properties>
+ <tileset firstgid="1" name="building" tilewidth="32" tileheight="32">
+  <image source="../web/img/sprites/building.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="1025" name="sidewalk" tilewidth="32" tileheight="32">
+  <image source="../web/img/sprites/sidewalk.png" width="224" height="192"/>
+ </tileset>
+ <tileset firstgid="1067" name="street" tilewidth="32" tileheight="32">
+  <image source="../web/img/street.png" width="800" height="608"/>
+ </tileset>
+ <tileset firstgid="1542" name="fence" tilewidth="32" tileheight="32">
+  <image source="../web/img/fence.png" width="96" height="128"/>
+ </tileset>
+ <tileset firstgid="1554" name="grass" tilewidth="32" tileheight="32">
+  <image source="../web/img/grass.png" width="96" height="192"/>
+ </tileset>
+ <layer name="grass" width="58" height="57">
+  <data encoding="base64" compression="zlib">
+   eJzt1lEKgCAQRdG+3IfN/vcYfUjDpAVpQ433gIRR5tNKlwUAAHhZ07kuqX6tl70PrfJUTuf6LDl72hvBI2dveyO8kdPeK0Fz2m9xr9s59ub13s6QMwfNWVs/Z8kZ8T808z4hYk6bKep+KFrO8j7a66Pt+yQdRWer7fv+/H3quZSLnGX9zGpc7LnWM6/6N6rcsf3W+e14ZNWuqKM02vhSTgAAAAAAAAAAAAD/twEpjycT
+  </data>
+ </layer>
+ <layer name="road" width="58" height="57">
+  <data encoding="base64" compression="zlib">
+   eJztmmkOgjAQhf3R27geAvUU6pGAW6i3INxCPIwlgaQZK4uUdnidl7wQE9vO8KVLmCZqtToafmlvAJ2QPFFty/MM+IyV5137Cmia50kbUW2eu0jyFJ4YEp5YEp5YEp5YEp5YipFnDpxnGSHPGPIUnhgSnlgSnlgSnliiPGkdqVJh6j5DPCa2WOoO9Hxbm0Pdx/VzDp45A37UHOpIz44YHo7G4LDe+oiBw/7pIwb6LgvhOZtcxLBW33tq1XgLND/rPg7ae+N9tb+LJs8MgKftHGD2h8KzHMCTw/xMJ8Zg5kH33xsQT3N+2tpz4Tk1BrMP296IyLMrz6XzLHvaI/KMZX4O4bnU822MPGW9XT7PvvWWnn9D3I9/E57/xND28at9qO+amefxON2Pn3P8sTzTkf935anjXlT4u+s+/AHHAXSq
+  </data>
+ </layer>
+ <layer name="sidewalk" width="58" height="57">
+  <data encoding="base64" compression="zlib">
+   eJztWstOxDAM7KEX4AIFBFvQ0i5v/v8DSaVESiPHsdOkTVOPNJc2Tj3rvOxs0wgEAkF5uG+b5kHzjcArxWti260I4aSef1RGCL1+d6v4grALtLvT9NlRvgHZT/xU/FL8VvxB/PrVzyCMut2r570b96dAO2y8cG05/Yf6Fp1x/fnsROcyiM45RGdcfz470bkMonMOrs5zi58jfXapdRofhkw6p/OVOZ9RkEunOSd2mXQeZdzuXafJJeycobP016ITiucI6CxlHTK1gRTrEKTTziEpyLkO2fknVSfUDtK593F7FJ32vLP34HM734+hdhgHSyfXltN/aN0YLT9qIYRn9fzS4vWpFFzzGwKBQFAi7Huk3Hz0rIWYD+beivMdCGvun77cL/VdFgTsHikVTkSdWA7s5hHQvRVW56Dm2UtgfHxPoDPWz6Pp9PmQAn3Ax9rieRSdJYzbPcfT3X8h1DA/3TMAhDXimVtnz9CZM5655ydH557jWcq4zR1Pjs41xm0J83OqC94ANHkR9I7KAfHR9SFUv4yNp/tbbJGXcXLDWJ1TXZPyP7oUNco/xAdKnxdPH669QCAQbI1/THOFEA==
+  </data>
+ </layer>
+ <layer name="walls" width="58" height="57">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt2bsNwjAUhWGnghTMwbMDZuBdATPwroAZgEmASYCtuKAgRZFj2YRn9H/SaSLb8pGsNFcpAAAAAHFOkrMhF82ejCRriC+pekrVDKl7726Gf1KSVCLJffVGn0PP5/4XNntGsm5syCRhp9u7LSv7d9uXOw0MGWp62uzZyLqtIbuEPduSjqQbShp7TiUzyTyURQp7uqJnunou5U4rQ9aanjZ79rLuYMjxcxUBAAAAAADuwrMs/8t3eae8pBCkqNI7b4n21KHn/9C9W928xfX7r4n2jJu3uH538TgjfE4vQSedhqQZpKXi5y2u31284gwAAODuCkBecvE=
+  </data>
+ </layer>
+ <layer name="stairs" width="58" height="57">
+  <data encoding="base64" compression="zlib">
+   eJzt2cENgCAMBVC86iYqm+j+68gC9UAIScN79w/5SdNLSwEAAIBc7m1OJlIHvvXn6finJxN5J/Ukn73NxrHAfJyt4xX0tIfGZiL2EAAAAAAAmbmpAMCaPoNKA70=
+  </data>
+ </layer>
+ <layer name="sidewalk_items" width="58" height="57">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt2lEPgiAQB3AfCLVSe+rN7/81kynrojsEpYb4/22uvCHzyt0OZlUBwJFd1PzZKD4ujd9LC/O4cXtf0vjQ+7kv4wbFx6Xxrj4y3gXG7X1J46X7AQAAAADwSdW/525Lvyz18PAbg35/p89lr7/HHhnNkz6XQ8F5rsWl9bxPLrUrJk9pPe+Tcq2/p6bF5Hlk1ymfbjluJLdHYXmWzt3D5NAa8lTz4cYpU6e4eTW5Vpqfqpm4mZeL++Yx3D1MDq0ho5oPN06ZOsXN25Frpfkprt6YeaU6hH1NAAAAnp760NpzlKLVnz2ZYc+5XuuoTJ6j01fZc67X+rcta3NOm/mzuWVtzsk9z1TOnKddv5S0R3zm/zMnqLfraB+Qe5570D6g5Dxp/9okzLOkPtHH7RNj3tfkfqOQvdMcxLyvOTL7jiF7pwAApXgBC1oI/g==
+  </data>
+ </layer>
+ <layer name="doors" width="58" height="57">
+  <data encoding="base64" compression="zlib">
+   eJzt2bENwjAQQFGnh21gE7IJ2QQ2gS1IF7aAjvRcE8kltkQswXvSb2z5dL1TAgAAAPiuWzS2XmIFj+jZeokVbLqUtl3rLQAAAAAA4Pf845/KLtpnd1N0rzgvscw4RkN0ia6FMz6R/6kcoj67e0VzxXmJZcYpOhe+BQDqvQEwBRmU
+  </data>
+ </layer>
+ <layer name="windows" width="58" height="57">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt2NdNw0AcgHGzQEjZg7oHJexB3YIWyhaQhLYFSNQtQKIuwPdsyTrfYQlsvk/6vTi6i6X7yw+XZWZmZmZm/6cWJtFGB130AmuucVPiWeyalH3LNoVpzGAWc5gPrHnGS4lnsWtS9i3bAhaxhGX0sVLBvn+tlLmtYylzW8dS5raO36GU6vgdsuKc25+tcW7NzMzMzMzMzH6/ovv5W9zhHg94xBNWsYZ1bGATW5H/WcUeobaxg13sZcX38694wzs+8Ikv7GOAAxziCMeR71DFHqFOcIohRlnx/XxrgnNGGx100cOY385wjgtc4iryHarYI1T+PJs6t/nzbOrc5mvq3JqZmZk1vW/XopNT
+  </data>
+ </layer>
+ <layer name="roof" width="58" height="57">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt2UEOwiAQQFF6IfUW6ka9hXZjvYV6EvWW4sKEIKUMGTAl/yWzgcy0k6YsBmMAAKhn0Rmz9GLV/fut9O1sT3svDpE+13ZvE4ltIDclJ6duyT6Pdu8UiT6Qm5KTU5c+f51t/uDFJVLzavdukbgHclNycuqW9LDPe0biFXiflJycuiXN9RySmuv/SZ9hnENtnUMAAAAAAAC+sXsl6brGMzW5c9PPjHTsHkK6LqFRY4o7T+wb7vM7T2y9T/97jt0rSdclNGpMcefDtWfBNbnzYWbBAAAAAKDvDUvjtjc=
+  </data>
+ </layer>
+ <layer name="trinkets" width="58" height="57">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt2U0OgjAQhmG4A5wBWOJN9CZ6/wVl0cQ0VPvRHyi8T+JmUmUGzCw+mgYAAOQ2tPvP/fpuyHn1N0uZhB5Cz44Z5/ruIeb+KXMfZTY9PiroM9bTzPi6wZxvM+NHmJM9lO783dR+f9zdd9Vd6O6+q+5Cd/epuxAAAAAAAKC0NTPdyth8Waqtx7wbyflexVKz4Jw5Y8kM899zC62fmS9DVespr52S/b/4MlS1vkfJ/NaXoar1lNcGcA6d+fRHNwEAAFChBRMbE0Q=
+  </data>
+ </layer>
+</map>

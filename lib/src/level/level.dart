@@ -358,7 +358,14 @@ abstract class Level extends Component implements ComponentListener {
 
     level.tutorial.onStart((var _) {
       Completer c = new Completer();
-      level.canvasDrawer.setOffset(20 * 32, 0);
+      window.console.log("starting at (${level.startX}, ${level.startY})");
+
+      int halfWidth = level.canvasManager.width ~/ 2;
+      int halfHeight = level.canvasManager.height ~/ 2;
+
+      level.canvasDrawer.setOffset(
+          level.startX - halfWidth + p.tileWidth,
+          level.startY - halfHeight + p.tileHeight);
 
       View v = new TutorialDialog(level.tutorial,
           "What.. who's level drunk idiot who wants to come to OUR party? "
@@ -374,27 +381,25 @@ abstract class Level extends Component implements ComponentListener {
 
       Completer c = new Completer();
 
-      int tutorialDestX = level.storeX;
-      int tutorialDestY = level.storeY;
+      int halfWidth = level.canvasManager.width ~/ 2;
+      int halfHeight = level.canvasManager.height ~/ 2;
+
+      int tutorialDestX = level.storeX - halfWidth;
+      int tutorialDestY = level.storeY - halfHeight;
       Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
 
         int offsetX = level.canvasDrawer.offsetX;
         int offsetY = level.canvasDrawer.offsetY;
 
-        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-          t.cancel();
-          c.complete();
-        }
-
         int moveX;
         if (tutorialDestX < offsetX) {
           moveX = max(-5, tutorialDestX - offsetX);
         } else {
-          moveX = min(5, offsetX - tutorialDestX);
+          moveX = min(5, tutorialDestX - offsetX);
         }
         int moveY;
         if (tutorialDestY < offsetY) {
-          moveY = max(-5, offsetY - tutorialDestY);
+          moveY = max(-5, tutorialDestY - offsetY);
         } else {
           moveY = min(5, tutorialDestY - offsetY);
         }
@@ -404,6 +409,12 @@ abstract class Level extends Component implements ComponentListener {
 
         level.canvasDrawer.clear();
         level.draw(level.canvasDrawer);
+
+        window.console.log("X: $offsetX -> $tutorialDestX, Y: $offsetY -> $tutorialDestY");
+        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+          t.cancel();
+          c.complete();
+        }
       });
 
       return c.future;
@@ -423,8 +434,11 @@ abstract class Level extends Component implements ComponentListener {
 
       Completer c = new Completer();
 
-      int tutorialDestX = 20 * 32;
-      int tutorialDestY = 0;
+      int halfWidth = level.canvasManager.width ~/ 2;
+      int halfHeight = level.canvasManager.height ~/ 2;
+
+      int tutorialDestX = level.startX - halfWidth + p.tileWidth;
+      int tutorialDestY = level.startY - halfHeight + p.tileHeight;
       Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
 
         int offsetX = level.canvasDrawer.offsetX;
@@ -488,7 +502,18 @@ abstract class Level extends Component implements ComponentListener {
   }
 
 
+  static void _validateProperties(Map properties) {
+    List<String> propNames = [
+      "name", "store_x", "store_y", "start_x", "start_y",
+      "beers_to_win", "seconds"
+    ];
 
+    for (String prop in propNames) {
+      if (!properties.containsKey(prop)) {
+        throw new Exception("Required property '$prop' not set");
+      }
+    }
+  }
 
 
   /**
@@ -506,6 +531,8 @@ abstract class Level extends Component implements ComponentListener {
     List<Map> _tilesets = level["tilesets"];
     List<Map> _layers = level["layers"];
     Map _properties = level["properties"];
+
+    Level._validateProperties(_properties);
 
     Level l = new _LoadableLevel(drawer, manager,
         height, width, tileWidth, tileHeight);
@@ -591,12 +618,14 @@ abstract class Level extends Component implements ComponentListener {
       l.addObject(npc);
     }
 
-    l._storeX = int.parse(_properties["store_x"]);
-    l._storeY = int.parse(_properties["store_y"]);
-    l._startX = int.parse(_properties["start_x"]);
-    l._startY = int.parse(_properties["start_y"]);
+    l._storeX = tileWidth * int.parse(_properties["store_x"]);
+    l._storeY = tileHeight * int.parse(_properties["store_y"]);
+    l._startX = tileWidth * int.parse(_properties["start_x"]);
+    l._startY = tileHeight * int.parse(_properties["start_y"]);
     l._beersToWin = int.parse(_properties["beers_to_win"]);
     l._duration = new Duration(seconds: int.parse(_properties["seconds"]));
+
+    window.console.log("set level properties: storeX=${l._storeX}, storeY=${l._storeY}, startX=${l._startX}, startY=${l._startY}, beersToWin=${l._beersToWin}, duration=${l._duration}");
 
     // Load the tilesets into the level
     for (_LevelLayer ll in layers) {

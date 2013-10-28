@@ -70,6 +70,7 @@ class CanvasDrawer implements DrawingInterface {
   }
 
   void moveOffset(int dX, int dY) {
+    window.console.log("moving $dX, $dY");
     this._offsetX += dX;
     this._offsetY += dY;
     if (this._offsetX < 0)  this._offsetX = 0;
@@ -135,7 +136,7 @@ class CanvasDrawer implements DrawingInterface {
     c.drawImageScaledFromSource(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
     //c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
 
-    this.drawRect(x, y, drawWidth, drawHeight);
+    //this.drawRect(x, y, drawWidth, drawHeight);
   }
 
   void drawRect(int x, int y, int width, int height,

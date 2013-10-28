@@ -117,6 +117,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     List<String> levels = [
         //"data/levels/test_level.json",
+        "data/levels/new_sample_level.json",
         "data/levels/level1.json",
         "data/levels/level2.json",
         "data/levels/level5.json"
@@ -140,7 +141,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             c.complete(l);
           })
           .catchError((e) {
-            print("[1] Got error: ${e.error}");
+            print("[1] Got error: ${e}");
             return 42;
           });
         return c.future;
@@ -188,7 +189,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._timer.addListener(this);
 
     // TODO: super hack.  Let's figure out how to script a level, k?
-    if (this._currentLevel.name == 'level1') {
+    if (this._currentLevel.name == 'new test level') {
       Level.setupTutorial(this._currentLevel, this._ui, this._player);
     }
 

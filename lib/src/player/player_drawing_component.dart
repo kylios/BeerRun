@@ -70,9 +70,11 @@ class PlayerDrawingComponent extends DrawingComponent {
     //this._drawer.backgroundColor = "black";
     //this._drawer.drawRect(obj.x, obj.y, obj.tileWidth, obj.tileHeight, 0, 0, true);
 
+    /*
     this.drawer.backgroundColor = "white";
     double row = obj.y / 16;
     double col = obj.x / 16;
     this.drawer.drawText("${col},${row}", obj.x, obj.y, relative: true);
+    */
   }
 }
