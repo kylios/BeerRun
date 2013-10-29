@@ -5,6 +5,7 @@ class StatsManager {
   DivElement _beersElement;
   DivElement _healthElement;
   DivElement _durationElement;
+  DivElement _fpsElement;
 
   // Flagged when a stat has changed so we know to update the dom
   bool _changedBeers = false;
@@ -15,10 +16,12 @@ class StatsManager {
   int _health = 0;
   Duration _duration = new Duration();
 
-  StatsManager(DivElement stats) {
-    this._beersElement = stats.query('div#beers');
-    this._healthElement = stats.query('div#health');
-    this._durationElement = stats.query('div#duration');
+  int _fps = 0;
+
+  StatsManager(DivElement stats, this._fpsElement) {
+    this._beersElement = stats.querySelector('div#beers');
+    this._healthElement = stats.querySelector('div#health');
+    this._durationElement = stats.querySelector('div#duration');
   }
 
   set beers(int b) {
@@ -34,6 +37,10 @@ class StatsManager {
   set duration(Duration d) {
     this._duration = d;
     this._changedDuration = true;
+  }
+
+  set fps(int fps) {
+    this._fps = fps;
   }
 
   void update() {
@@ -74,6 +81,8 @@ class StatsManager {
 
       this._changedHealth = false;
     }
+
+    this._fpsElement.innerHtml = this._fps.toString();
   }
 
   ImageElement _makeHeart() {

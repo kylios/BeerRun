@@ -37,6 +37,10 @@ canvas#game_canvas {
   border: 1px solid black;
 }
 
+div#debug_stats div {
+  display: inline-block;
+}
+
 div#stats {
   background: black;
   color: white;

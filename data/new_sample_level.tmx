@@ -24,6 +24,12 @@
  <tileset firstgid="1554" name="grass" tilewidth="32" tileheight="32">
   <image source="../web/img/grass.png" width="96" height="192"/>
  </tileset>
+ <tileset firstgid="1572" name="cars_horiz" tilewidth="192" tileheight="96">
+  <image source="../web/img/cars_moving_horiz.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="1576" name="cars_vert" tilewidth="96" tileheight="160">
+  <image source="../web/img/cars_moving_vert.png" width="384" height="161"/>
+ </tileset>
  <layer name="grass" width="58" height="57">
   <data encoding="base64" compression="zlib">
    eJzt1lEKgCAQRdG+3IfN/vcYfUjDpAVpQ433gIRR5tNKlwUAAHhZ07kuqX6tl70PrfJUTuf6LDl72hvBI2dveyO8kdPeK0Fz2m9xr9s59ub13s6QMwfNWVs/Z8kZ8T808z4hYk6bKep+KFrO8j7a66Pt+yQdRWer7fv+/H3quZSLnGX9zGpc7LnWM6/6N6rcsf3W+e14ZNWuqKM02vhSTgAAAAAAAAAAAAD/twEpjycT
@@ -62,7 +68,7 @@
  </layer>
  <layer name="doors" width="58" height="57">
   <data encoding="base64" compression="zlib">
-   eJzt2bENwjAQQFGnh21gE7IJ2QQ2gS1IF7aAjvRcE8kltkQswXvSb2z5dL1TAgAAAPiuWzS2XmIFj+jZeokVbLqUtl3rLQAAAAAA4Pf845/KLtpnd1N0rzgvscw4RkN0ia6FMz6R/6kcoj67e0VzxXmJZcYpOhe+BQDqvQEwBRmU
+   eJztzsERQFAMQMH8O93SCV3RCT1ID0ZysDvz7i8CAAAA4FtHdnZPFLiyu3uiwDQi5tF9AQAAAAAA8M6Srd0TBbZs754AgB95AHnTBaA=
   </data>
  </layer>
  <layer name="windows" width="58" height="57">
@@ -70,7 +76,7 @@
    <property name="blocking" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2NdNw0AcgHGzQEjZg7oHJexB3YIWyhaQhLYFSNQtQKIuwPdsyTrfYQlsvk/6vTi6i6X7yw+XZWZmZmZm/6cWJtFGB130AmuucVPiWeyalH3LNoVpzGAWc5gPrHnGS4lnsWtS9i3bAhaxhGX0sVLBvn+tlLmtYylzW8dS5raO36GU6vgdsuKc25+tcW7NzMzMzMzMzH6/ovv5W9zhHg94xBNWsYZ1bGATW5H/WcUeobaxg13sZcX38694wzs+8Ikv7GOAAxziCMeR71DFHqFOcIohRlnx/XxrgnNGGx100cOY385wjgtc4iryHarYI1T+PJs6t/nzbOrc5mvq3JqZmZk1vW/XopNT
+   eJzt2EdOw0AYhmFnDyHlHvRcgxLgGtRbUEK7BRA6l6C3XCL0tueNkkVkyZqCRbD5XumRrLHmjyWPsnAQKKWUUkop9X/Kogc55FFA0bDnFGcWa657fOba1os+9GMAgxgy7KnjwWLNdY/PXNtGMIoxjKOMiRjm/rV8zm0S8zm3Sczn3Cbxf8inJP4Pqeh0bn+2R+dWKaWUUkoppZRSqvNFfZ+/xBWucYNb3GEaM5jFHOax4PibccwwtYglLGMliP4+/4wXvOIN7/hABatYwzo2sOn4DHHMMLWFbeygGkR/n89meM/IIY8Citjl3h72cYBDHDk+QxwzTIXfZ1rPbfh9pvXcNjrHRes6ree20SOeWtfDKLXdu0fNY92l8IxjnDjOsKmL99KdaV5PYqrt3ie+PNZdCs9QSiml1O/0DY3Up0c=
   </data>
  </layer>
  <layer name="roof" width="58" height="57">
@@ -89,4 +95,125 @@
    eJzt2U0OgjAQhmG4A5wBWOJN9CZ6/wVl0cQ0VPvRHyi8T+JmUmUGzCw+mgYAAOQ2tPvP/fpuyHn1N0uZhB5Cz44Z5/ruIeb+KXMfZTY9PiroM9bTzPi6wZxvM+NHmJM9lO783dR+f9zdd9Vd6O6+q+5Cd/epuxAAAAAAAKC0NTPdyth8Waqtx7wbyflexVKz4Jw5Y8kM899zC62fmS9DVespr52S/b/4MlS1vkfJ/NaXoar1lNcGcA6d+fRHNwEAAFChBRMbE0Q=
   </data>
  </layer>
+ <objectgroup name="regions" width="58" height="57">
+  <object name="region1" type="region" x="160" y="1086" width="893" height="64"/>
+  <object name="region2" type="region" x="1215" y="1085" width="399" height="67"/>
+  <object name="region3" type="region" x="163" y="833" width="728" height="52"/>
+  <object name="region4" type="region" x="609" y="771" width="1243" height="111"/>
+  <object name="region5" type="region" x="484" y="295" width="94" height="532"/>
+  <object x="966" y="1105" width="57" height="513"/>
+  <object name="region6" type="region" x="966" y="1105" width="57" height="513"/>
+  <object name="region7" type="region" x="1215" y="1090" width="93" height="564"/>
+  <object name="region9" type="region" x="1631" y="1238" width="215" height="106"/>
+  <object name="region10" type="region" x="1628" y="1234" width="128" height="241"/>
+ </objectgroup>
+ <objectgroup name="paths" width="58" height="57">
+  <object name="path1" type="path" x="1146" y="993" width="709" height="733">
+   <properties>
+    <property name="spawn_at" value="200"/>
+    <property name="x1" value="70"/>
+    <property name="x2" value="36"/>
+    <property name="x3" value="36"/>
+    <property name="x4" value="70"/>
+    <property name="y1" value="52"/>
+    <property name="y2" value="52"/>
+    <property name="y3" value="31"/>
+    <property name="y4" value="31"/>
+   </properties>
+  </object>
+  <object name="path2" type="path" x="85" y="1" width="1768" height="1735">
+   <properties>
+    <property name="spawn_at" value="525"/>
+    <property name="x1" value="70"/>
+    <property name="x2" value="3"/>
+    <property name="x3" value="3"/>
+    <property name="y1" value="51"/>
+    <property name="y2" value="51"/>
+    <property name="y3" value="-10"/>
+   </properties>
+  </object>
+  <object name="path3" type="path" x="2" y="3" width="1851" height="1078">
+   <properties>
+    <property name="spawn_at" value="252"/>
+    <property name="x1" value="0"/>
+    <property name="x2" value="0"/>
+    <property name="x3" value="70"/>
+    <property name="y1" value="-10"/>
+    <property name="y2" value="31"/>
+    <property name="y3" value="31"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="npcs" width="58" height="57">
+  <object name="npc1" type="npc" x="527" y="606" width="9">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region5"/>
+    <property name="speed" value="2"/>
+   </properties>
+  </object>
+  <object name="npc2" type="npc" x="407" y="845">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="region" value="region3"/>
+    <property name="speed" value="3"/>
+   </properties>
+  </object>
+  <object name="npc3" type="npc" x="968" y="823">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="region" value="region4"/>
+    <property name="speed" value="5"/>
+   </properties>
+  </object>
+  <object name="npc5" type="npc" x="1382" y="832">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="region" value="region4"/>
+    <property name="speed" value="4"/>
+   </properties>
+  </object>
+  <object name="npc6" type="npc" x="1779" y="1273">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region9"/>
+    <property name="speed" value="1"/>
+   </properties>
+  </object>
+  <object name="npc7" type="npc" x="1671" y="1418">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="region" value="region10"/>
+    <property name="speed" value="1"/>
+   </properties>
+  </object>
+  <object name="npc8" type="npc" x="1489" y="1112">
+   <properties>
+    <property name="direction" value="left"/>
+    <property name="region" value="region2"/>
+    <property name="speed" value="3"/>
+   </properties>
+  </object>
+  <object name="npc9" type="npc" x="1258" y="1281">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region7"/>
+    <property name="speed" value="3"/>
+   </properties>
+  </object>
+  <object name="npc10" type="npc" x="401" y="1108">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="region" value="region1"/>
+    <property name="speed" value="4"/>
+   </properties>
+  </object>
+  <object name="npc11" type="npc" x="1000" y="1476">
+   <properties>
+    <property name="direction" value="up"/>
+    <property name="region" value="region6"/>
+    <property name="speed" value="6"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

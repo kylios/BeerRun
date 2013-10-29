@@ -47,6 +47,11 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   bool _DEBUG_skipTutorial = false;
   bool _DEBUG_showScoreScreen = false;
 
+  // FPS
+  int _now;
+  double _fps = 0.0;
+  int _lastUpdate = new DateTime.now().millisecondsSinceEpoch;
+
   List<Level> _levels = new List<Level>();
 
   int get tickNo => this._tickNo;
@@ -58,12 +63,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     CanvasElement canvasElement,
       DivElement UIRootElement,
       DivElement DialogElement,
-      DivElement statsElement}) {
+      DivElement statsElement,
+      DivElement fpsElement}) {
 
     if (GameManager._instance == null) {
       GameManager._instance = new GameManager._internal(
           canvasWidth, canvasHeight,
-          canvasElement, UIRootElement, DialogElement, statsElement);
+          canvasElement, UIRootElement, DialogElement, statsElement,
+          fpsElement);
     }
 
     return GameManager._instance;
@@ -73,9 +80,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       CanvasElement canvasElement,
       DivElement UIRootElement,
       DivElement DialogElement,
-      DivElement statsElement) {
+      DivElement statsElement,
+      DivElement fpsElement) {
 
-    this._statsManager = new StatsManager(statsElement);
+    this._statsManager = new StatsManager(statsElement, fpsElement);
 
     this._canvasManager = new CanvasManager(canvasElement);
     this._canvasManager.resize(this._canvasWidth, this._canvasHeight);
@@ -274,7 +282,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   void update() {
 
     if (this._canvasDrawer != null) {
-      this._canvasDrawer.clear();
+      //this._canvasDrawer.clear();
     }
 
     // Can't do anything without a level object
@@ -352,6 +360,15 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._hud.draw();
 
     this._tickNo++;
+
+
+    // Update fps
+    this._now = new DateTime.now().millisecondsSinceEpoch;
+    double thisFrameFps = 1000 / (this._now - this._lastUpdate);
+    this._fps += (thisFrameFps - this._fps) / 50;
+    this._lastUpdate = this._now;
+
+    this._statsManager.fps = this._fps.toInt();
   }
 
   void stop() {

@@ -280,6 +280,7 @@ abstract class Level extends Broadcaster implements ComponentListener {
         if ( ! this._paused) {
           o.update();
         }
+        o.draw();
 
         return ! o.isRemoved;
       }));
@@ -375,155 +376,6 @@ abstract class Level extends Broadcaster implements ComponentListener {
 
     level._tutorial = t;
     return;
-
-
-
-
-/*
-    level.tutorial.onStart((var _) {
-      Completer c = new Completer();
-      window.console.log("starting at (${level.startX}, ${level.startY})");
-
-      int halfWidth = level.canvasManager.width ~/ 2;
-      int halfHeight = level.canvasManager.height ~/ 2;
-
-      level.canvasDrawer.setOffset(
-          level.startX - halfWidth + p.tileWidth,
-          level.startY - halfHeight + p.tileHeight);
-
-      View v = new TutorialDialog(level.tutorial,
-          "What.. who's level drunk idiot who wants to come to OUR party? "
-          "I suppose you can come in.. BUT, we're running low on beer! "
-          "Why don't you stumble on down to the store over there and grab us "
-          "some beers!"
-      );
-
-      ui.showView(v, callback: c.complete);
-
-      return c.future;
-    }).addStep((var _) {
-
-      Completer c = new Completer();
-
-      int halfWidth = level.canvasManager.width ~/ 2;
-      int halfHeight = level.canvasManager.height ~/ 2;
-
-      int tutorialDestX = level.storeX - halfWidth;
-      int tutorialDestY = level.storeY - halfHeight;
-      Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
-
-        int offsetX = level.canvasDrawer.offsetX;
-        int offsetY = level.canvasDrawer.offsetY;
-
-        int moveX;
-        if (tutorialDestX < offsetX) {
-          moveX = max(-5, tutorialDestX - offsetX);
-        } else {
-          moveX = min(5, tutorialDestX - offsetX);
-        }
-        int moveY;
-        if (tutorialDestY < offsetY) {
-          moveY = max(-5, tutorialDestY - offsetY);
-        } else {
-          moveY = min(5, tutorialDestY - offsetY);
-        }
-
-        // Move the viewport closer to the beer store
-        level.canvasDrawer.moveOffset(moveX, moveY);
-
-        level.canvasDrawer.clear();
-        level.draw(level.canvasDrawer);
-
-        window.console.log("X: $offsetX -> $tutorialDestX, Y: $offsetY -> $tutorialDestY");
-        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-          t.cancel();
-          c.complete();
-        }
-      });
-
-      return c.future;
-    })
-    .addStep((var _) {
-      Completer c = new Completer();
-      ui.showView(
-          new TutorialDialog(level.tutorial,
-              "Grab us a ${level.beersToWin} pack and bring it back.  Better "
-              "avoid the bums... they like to steal your beer, and then you'll "
-              "have to go BACK and get MORE!"),
-          callback: c.complete
-      );
-      return c.future;
-    })
-    .addStep((var _) {
-
-      Completer c = new Completer();
-
-      int halfWidth = level.canvasManager.width ~/ 2;
-      int halfHeight = level.canvasManager.height ~/ 2;
-
-      int tutorialDestX = level.startX - halfWidth + p.tileWidth;
-      int tutorialDestY = level.startY - halfHeight + p.tileHeight;
-      Timer _t = new Timer.periodic(new Duration(milliseconds: 5), (Timer t) {
-
-        int offsetX = level.canvasDrawer.offsetX;
-        int offsetY = level.canvasDrawer.offsetY;
-
-        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-          t.cancel();
-          c.complete();
-          return c.future;
-        }
-
-        int moveX;
-        if (tutorialDestX < offsetX) {
-          moveX = max(-5, tutorialDestX - offsetX);
-        } else {
-          moveX = min(5, tutorialDestX - offsetX);
-        }
-        int moveY;
-        if (tutorialDestY < offsetY) {
-          moveY = max(-5, tutorialDestY - offsetY);
-        } else {
-          moveY = min(5, tutorialDestY - offsetY);
-        }
-
-        // Move the viewport closer to the beer store
-        level.canvasDrawer.moveOffset(moveX, moveY);
-
-        level.canvasDrawer.clear();
-        level.draw(level.canvasDrawer);
-      });
-
-      return c.future;
-    })
-    .addStep((var _) {
-      Completer c = new Completer();
-
-      ui.showView(
-          new TutorialDialog(level.tutorial,
-              "Well, what are you waiting for!?  Get moving, and don't sober "
-              "up too much!"),
-          callback: () { c.complete(); }
-      );
-      return c.future;
-    })
-    .addStep((var _) {
-      Completer c = new Completer();
-
-      ui.showView(
-          new TutorialDialog(level.tutorial,
-              "Controls: <br />"
-              "WASD, arrow keys: movement <br />"
-              "SPACEBAR: drink a beer"),
-          callback: () { c.complete(); }
-      );
-      return c.future;
-    })
-    .onFinish((var _) {
-
-      p.setPos(level.startX, level.startY);
-    });
-    */
   }
 
 
@@ -585,19 +437,6 @@ abstract class Level extends Broadcaster implements ComponentListener {
 
     window.console.log("set level properties: storeX=${l._storeX}, storeY=${l._storeY}, startX=${l._startX}, startY=${l._startY}, beersToWin=${l._beersToWin}, duration=${l._duration}");
 
-    for (_LayerNPC n in _npcs) {
-      Direction dir = (n.direction == "down" ? DIR_DOWN :
-                      n.direction == "up" ? DIR_UP :
-                        n.direction == "left" ? DIR_LEFT :
-                          n.direction == "right" ? DIR_RIGHT :
-                            null);
-      NPC npc = new NPC(l, dir, n.x, n.y);
-      npc.speed = n.speed;
-      npc.setDrawingComponent(new DrawingComponent(manager, drawer, false));
-      npc.setControlComponent(new NPCInputComponent(_regions[n.region]));
-      l.addObject(npc);
-    }
-
     for (Map ll in _layers) {
       if (ll["type"] == "tilelayer") {
         layers.add(new _LevelLayer.fromJson(ll));
@@ -632,7 +471,7 @@ abstract class Level extends Broadcaster implements ComponentListener {
             _paths[p.name] = p;
             GamePath path = new GamePath(new List<GamePoint>());
             for (_Point po in p.points) {
-              path.addPoint(new GamePoint(po.x, po.y));
+              path.addPoint(new GamePoint(po.x * l.tileWidth, po.y * l.tileHeight));
             }
             _LevelTileset _tVert = idx.tilesetByName("cars_vert");
             _LevelTileset _tHoriz = idx.tilesetByName("cars_horiz");
@@ -649,6 +488,19 @@ abstract class Level extends Broadcaster implements ComponentListener {
           }
         }
       }
+    }
+
+    for (_LayerNPC n in _npcs) {
+      Direction dir = (n.direction == "down" ? DIR_DOWN :
+                      n.direction == "up" ? DIR_UP :
+                        n.direction == "left" ? DIR_LEFT :
+                          n.direction == "right" ? DIR_RIGHT :
+                            null);
+      NPC npc = new NPC(l, dir, n.x, n.y, n.name);
+      npc.speed = n.speed;
+      npc.setDrawingComponent(new DrawingComponent(manager, drawer, false));
+      npc.setControlComponent(new NPCInputComponent(_regions[n.region]));
+      l.addObject(npc);
     }
 
     // Load the tilesets into the level

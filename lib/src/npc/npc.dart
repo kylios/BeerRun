@@ -7,10 +7,11 @@ class NPC extends GameObject implements ComponentListener {
   bool _damaged = false;
   int _damageInterval = 0;
   int _damagedUntil = 0;
+  String _name; // mainly for debugging
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
-  NPC(Level l, Direction d, int x, int y) : super(d, x, y) {
+  NPC(Level l, Direction d, int x, int y, this._name) : super(d, x, y) {
 
     this.setLevel(l);
 
