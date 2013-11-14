@@ -9,7 +9,7 @@ class Loader {
     HttpRequest.request(url)
       .then((HttpRequest r) {
         String res = r.responseText;
-        Map json = parse(res);
+        Map json = JSON.decode(res);
         c.complete(json);
       });
 

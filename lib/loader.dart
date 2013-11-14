@@ -2,7 +2,7 @@ library loader;
 
 import 'dart:html';
 import 'dart:async';
-import 'dart:json';
+import 'dart:convert';
 
 part 'src/loader/loader.dart';
 part 'src/loader/asset.dart';
