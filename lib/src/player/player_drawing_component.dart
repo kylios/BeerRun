@@ -20,10 +20,10 @@ class PlayerDrawingComponent extends DrawingComponent {
     List<Sprite> walkLeft = new List<Sprite>();
     List<Sprite> walkRight = new List<Sprite>();
     for (int i = 0; i < 9; i++) {
-      walkUp.add(sprites.spriteAt(i * 64, 0 * 64));
-      walkLeft.add(sprites.spriteAt(i * 64, 1 * 64));
-      walkDown.add(sprites.spriteAt(i * 64, 2 * 64));
-      walkRight.add(sprites.spriteAt(i * 64, 3 * 64));
+      walkUp.add(sprites.spriteAtNew(0, i));
+      walkLeft.add(sprites.spriteAtNew(1, i));
+      walkDown.add(sprites.spriteAtNew(2, i));
+      walkRight.add(sprites.spriteAtNew(3, i));
     }
     this._walkSprites = new List<SpriteAnimation>(4);
     this._walkSprites[DIR_UP.direction] = new SpriteAnimation(walkUp);
@@ -35,10 +35,10 @@ class PlayerDrawingComponent extends DrawingComponent {
         "img/player/beer.png",
         64, 64);
 
-    Sprite beerUp = beerSprites.spriteAt(0, 0);
-    Sprite beerLeft = beerSprites.spriteAt(0, 64);
-    Sprite beerDown = beerSprites.spriteAt(0, 128);
-    Sprite beerRight = beerSprites.spriteAt(0, 192);
+    Sprite beerUp = beerSprites.spriteAtNew(0, 0);
+    Sprite beerLeft = beerSprites.spriteAtNew(1, 0);
+    Sprite beerDown = beerSprites.spriteAtNew(2, 0);
+    Sprite beerRight = beerSprites.spriteAtNew(3, 0);
 
     this._beerSprites = new List<Sprite>(4);
     this._beerSprites[DIR_UP.direction] = beerUp;

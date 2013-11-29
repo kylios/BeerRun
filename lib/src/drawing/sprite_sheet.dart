@@ -12,17 +12,6 @@ class SpriteSheet {
     this._image.src = imgPath;
   }
 
-  Sprite spriteAt(int x, int y, [int width, int height]) {
-
-    if (null == width) {
-      width = this._spriteWidth;
-    }
-    if (null == height) {
-      height = this._spriteHeight;
-    }
-    return new Sprite(this._image, x, y, width, height);
-  }
-
   Sprite spriteAtNew(int row, int col) {
 
     return new Sprite(this._image,

@@ -20,10 +20,10 @@ class Bullet extends GameObject {
         "img/Muzzleflashes-Shots.png",
         32, 32);
 
-    this._moveSprites[DIR_DOWN.direction] = sprites.spriteAt(0, 32, 32, 32);
-    this._moveSprites[DIR_RIGHT.direction] = sprites.spriteAt(32, 32, 32, 32);
-    this._moveSprites[DIR_UP.direction] = sprites.spriteAt(64, 32, 32, 32);
-    this._moveSprites[DIR_LEFT.direction] = sprites.spriteAt(96, 32, 32, 32);
+    this._moveSprites[DIR_DOWN.direction] = sprites.spriteAtNew(1, 0);
+    this._moveSprites[DIR_RIGHT.direction] = sprites.spriteAtNew(1, 1);
+    this._moveSprites[DIR_UP.direction] = sprites.spriteAtNew(1, 2);
+    this._moveSprites[DIR_LEFT.direction] = sprites.spriteAtNew(1, 3);
   }
 
   void takeHit() {

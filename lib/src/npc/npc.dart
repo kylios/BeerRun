@@ -17,17 +17,17 @@ class NPC extends GameObject implements ComponentListener {
 
     SpriteSheet sprites = new SpriteSheet(
         "img/sprites/bum.png",
-        this.tileWidth, this.tileHeight);
+        64, 64);
 
     List<Sprite> walkUp = new List<Sprite>();
     List<Sprite> walkDown = new List<Sprite>();
     List<Sprite> walkLeft = new List<Sprite>();
     List<Sprite> walkRight = new List<Sprite>();
     for (int i = 0; i < 9; i++) {
-      walkUp.add(sprites.spriteAt(i * this.tileHeight, 0 * this.tileWidth));
-      walkLeft.add(sprites.spriteAt(i * this.tileHeight, 1 * this.tileWidth));
-      walkDown.add(sprites.spriteAt(i * this.tileHeight, 2 * this.tileWidth));
-      walkRight.add(sprites.spriteAt(i * this.tileHeight, 3 * this.tileWidth));
+      walkUp.add(sprites.spriteAtNew(0, i));
+      walkLeft.add(sprites.spriteAtNew(1, i));
+      walkDown.add(sprites.spriteAtNew(2, i));
+      walkRight.add(sprites.spriteAtNew(3, i));
     }
     this._walkSprites[DIR_UP.direction] = new SpriteAnimation(walkUp);
     this._walkSprites[DIR_DOWN.direction] = new SpriteAnimation(walkDown);

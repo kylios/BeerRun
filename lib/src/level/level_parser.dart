@@ -47,7 +47,7 @@ class _LevelTileset {
     int x = c * this.tilewidth;
     int y = r * this.tileheight;
 
-    return this.sprites.spriteAt(x, y);
+    return this.sprites.spriteAtNew(y ~/ this.tileheight, x ~/ this.tilewidth);
   }
 
   factory _LevelTileset.fromJson(Map json) {

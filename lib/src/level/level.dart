@@ -327,30 +327,8 @@ abstract class Level extends Broadcaster implements ComponentListener {
     }
   }
 
-  static Map<String, Sprite> parseSpriteSheet(
-      SpriteSheet sheet, Map<String, List<int>> data)
-  {
-
-    Map<String, Sprite> sprites = new Map<String, Sprite>();
-
-    for (String sName in data.keys) {
-      int x = data[sName][0];
-      int y = data[sName][1];
-      sprites[sName] = sheet.spriteAt(x, y);
-    }
-
-    return sprites;
-  }
-
   Sprite getStaticSprite() {}
   Sprite getMoveSprite() {}
-
-
-
-
-
-
-
 
   // TODO: temporary until I figure out how to script tutorials
   static void setupTutorial(Level level) {
