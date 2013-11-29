@@ -216,4 +216,16 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="triggers" width="58" height="57">
+  <object name="party1" type="trigger" x="384" y="608" width="64" height="32">
+   <properties>
+    <property name="type" value="party_arrival"/>
+   </properties>
+  </object>
+  <object name="store1" type="trigger" x="1376" y="1504" width="32" height="64">
+   <properties>
+    <property name="type" value="beer_store"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

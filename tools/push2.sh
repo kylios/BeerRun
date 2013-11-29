@@ -21,7 +21,7 @@ BACKUP_CMD="mv /opt/www/$SERVER_HOST/app /opt/www/$SERVER_HOST/archive/app.$DATE
 MKDIR_CMD="mkdir -p /opt/www/$SERVER_HOST/app/web/BeerRun"
 COPY_CMD="mv $UPLOAD_DIR/* /opt/www/$SERVER_HOST/app/web/BeerRun"
 
-rsync --exclude=audio -arv ../deploy/* $UPLOAD_USER@$SERVER_HOST:$UPLOAD_DIR
+rsync --exclude=audio -arv ../build/* $UPLOAD_USER@$SERVER_HOST:$UPLOAD_DIR
 ssh $UPLOAD_USER@$SERVER_HOST "$BACKUP_CMD ; $MKDIR_CMD && $COPY_CMD"
 
 

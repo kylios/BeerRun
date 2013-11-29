@@ -357,21 +357,23 @@ abstract class Level extends Broadcaster implements ComponentListener {
 
     Tutorial t = new Tutorial(level);
 
-    t.onStart(level.startY, level.startX, "What.. who's level drunk idiot who wants to come to OUR party? "
-    "I suppose you can come in.. BUT, we're running low on beer! "
-    "Why don't you stumble on down to the store over there and grab us "
-    "some beers!")
-    .addPan(level.storeY, level.storeX, 5)
-    .addDialog("Grab us a ${level.beersToWin} pack and bring it back.  Better "
-    "avoid the bums... they like to steal your beer, and then you'll "
-    "have to go BACK and get MORE!")
-    .addPan(level.startY, level.startX, 10)
-    .addDialog("Well, what are you waiting for!?  Get moving, and don't sober "
-              "up too much!")
-    .addDialog("Controls: <br />"
-              "WASD, arrow keys: movement <br />"
-              "SPACEBAR: drink a beer")
-    .onStop(level.startY, level.startX);
+    t
+      .onStart(level.startY, level.startX)
+      .addDialog("What.. who's that drunk idiot who wants to come to OUR party? "
+      "I suppose you can come in.. BUT, we're running low on beer! "
+      "Why don't you stumble on down to the store over there and grab us "
+      "some beers!")
+      .addPan(level.storeY, level.storeX, 5)
+      .addDialog("Grab us a ${level.beersToWin} pack and bring it back.  Better "
+      "avoid the bums... they like to steal your beer, and then you'll "
+      "have to go BACK and get MORE!")
+      .addPan(level.startY, level.startX, 10)
+      .addDialog("Well, what are you waiting for!?  Get moving, and don't sober "
+                "up too much!")
+      .addDialog("Controls: <br />"
+                "WASD, arrow keys: movement <br />"
+                "SPACEBAR: drink a beer")
+      .onStop(level.startY, level.startX);
 
 
     level._tutorial = t;

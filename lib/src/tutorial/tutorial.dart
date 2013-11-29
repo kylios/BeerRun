@@ -20,7 +20,7 @@ class Tutorial {
     this._steps.add(t);
   }
 
-  Tutorial onStart(int row, int col, String message) {
+  Tutorial onStart(int row, int col) {
 
     tutorialStep fn = (var _) {
       Completer c = new Completer();
@@ -37,18 +37,13 @@ class Tutorial {
           col * this._level.tileWidth - halfWidth + this._level.player.tileWidth,
           row * this._level.tileHeight - halfHeight + this._level.player.tileHeight);
 
-      View v = new TutorialDialog(this._level.tutorial,
-          message
-      );
-
-      GameManager mgr = new GameManager();
-      mgr.showView(v, callback: c.complete);
+      Timer.run(() => c.complete());
 
       return c.future;
     };
 
     this._onStart = fn;
-     return this;
+    return this;
   }
   Tutorial onStop(int row, int col) {
 
