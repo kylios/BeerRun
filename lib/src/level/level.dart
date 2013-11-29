@@ -455,26 +455,34 @@ abstract class Level extends Broadcaster implements ComponentListener {
           String type = object["type"];
           if (type == "trigger") {
             if (object["properties"]["type"] == "beer_store") {
+
               GameEvent beerStoreEvent = new GameEvent();
               beerStoreEvent.type = GameEvent.BEER_STORE_EVENT;
               beerStoreEvent.value = 24;
               l.addTrigger(new Trigger(beerStoreEvent, row, col));
+
             } else if (object["properties"]["type"] == "party_arrival") {
+
               GameEvent partyArrivalEvent = new GameEvent();
               partyArrivalEvent.type = GameEvent.PARTY_ARRIVAL_EVENT;
               l.addTrigger(new Trigger(partyArrivalEvent, row, col));
             }
           } else if (type == "region") {
+
             _LayerRegion r = new _LayerRegion.fromJson(object);
             Region reg = new Region(r.x, r.x + r.width, r.y, r.y + r.height);
             _regions[r.name] = reg;
+
           } else if (type == "path") {
+
             _LayerPath p = new _LayerPath.fromJson(object);
             _paths[p.name] = p;
             GamePath path = new GamePath(new List<GamePoint>());
+
             for (_Point po in p.points) {
               path.addPoint(new GamePoint(po.x * l.tileWidth, po.y * l.tileHeight));
             }
+
             _LevelTileset _tVert = idx.tilesetByName("cars_vert");
             _LevelTileset _tHoriz = idx.tilesetByName("cars_horiz");
             window.console.log("vert tset: ${_tVert}");
@@ -484,7 +492,9 @@ abstract class Level extends Broadcaster implements ComponentListener {
             CarFactory f = new CarFactory(l, vert, horiz);
             f.setGenerator(new CarGeneratorComponent(path, p.spawnAt));
             l.addCarFactory(f);
+
           } else if (type == "npc") {
+
             _LayerNPC n = new _LayerNPC.fromJson(object);
             _npcs.add(n);
           }

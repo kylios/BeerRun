@@ -48,17 +48,13 @@ class Car extends GameObject {
   Sprite getMoveSprite() {
     int t = this._type;
     if (this.dir == DIR_UP) {
-      return this._vert.spriteAt(96 * (t + 1), 0, 96, 160);
-      //return Data._carSpriteSheetData["car${t}Up"];
+      return this._vert.spriteAtNew(0, t * 2 + 1);
     } else if (this.dir == DIR_RIGHT) {
-      return this._horiz.spriteAt(160, 96 * t, 160, 96);
-      //return Data._carSpriteSheetData["car${t}Right"];
+      return this._horiz.spriteAtNew(t, 1);
     } else if (this.dir == DIR_DOWN) {
-      return this._vert.spriteAt(96 * (t * 3), 0, 96, 160);
-      //return Data._carSpriteSheetData["car${t}Down"];
-    } else {
-      return this._horiz.spriteAt(0, 96 * t, 160, 96);
-      //return Data._carSpriteSheetData["car${t}Left"];
+      return this._vert.spriteAtNew(0, t * 2);
+    } else { // if (this.dir == DIR_LEFT) {
+      return this._horiz.spriteAtNew(t, 0);
     }
   }
   Sprite getStaticSprite() {

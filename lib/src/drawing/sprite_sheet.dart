@@ -22,4 +22,11 @@ class SpriteSheet {
     }
     return new Sprite(this._image, x, y, width, height);
   }
+
+  Sprite spriteAtNew(int row, int col) {
+
+    return new Sprite(this._image,
+        this._spriteWidth * col, this._spriteHeight * row,
+        this._spriteWidth, this._spriteHeight);
+  }
 }
