@@ -6,42 +6,33 @@ class Button extends View {
   bool _enabled = true;
   var _clickFn = null;
 
-  DivElement _rootEl = null;
+  Button(UIInterface ui, this._text, this._clickFn, [this._enabled = true]) :
+    super(ui) {
 
-  Button(this._text, this._clickFn, [this._enabled = true]);
-
-  DivElement get rootElement => this._rootEl;
-
-  void onDraw(Element root) {
-    DivElement el = new DivElement();
-    el.text = this._text;
-    el.classes.add("ui2");
-    el.classes.add("button");
+    this._root.text = this._text;
+    this._root.classes.add("ui2");
+    this._root.classes.add("button");
     if (! this._enabled) {
-      el.classes.add('disabled');
+      this._root.classes.add('disabled');
     }
 
-    el.onClick.listen((MouseEvent e) {
+    this._root.onClick.listen((MouseEvent e) {
 
       if (this._enabled && this._clickFn != null) {
         this._clickFn();
       }
     });
-
-    this._rootEl = el;
-    root.append(el);
   }
 
   void enable() {
     this._enabled = true;
-    this._rootEl.classes.remove('disabled');
+    this._root.classes.remove('disabled');
   }
   void disable() {
     if (this._enabled) {
       this._enabled = false;
-      this._rootEl.classes.add('disabled');
+      this._root.classes.add('disabled');
     }
   }
-
 }
 

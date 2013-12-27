@@ -227,8 +227,7 @@ class Tutorial {
 
       GameManager mgr = new GameManager();
       mgr.showView(
-          new TutorialDialog(this,
-              message),
+          new TutorialDialog(mgr.ui, this, message),
           callback: () { c.complete(); }
       );
       return c.future;

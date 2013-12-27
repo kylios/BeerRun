@@ -100,7 +100,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._player = new Player(this._statsManager);
     this._player.setControlComponent(playerInput);
 
-    this._ui = new UI(UIRootElement);
+    this._ui = new UI(UIRootElement, this._canvasWidth, this._canvasHeight);
     this._ui.addListener(this);
 
     this._hud = new BeerRunHUD(this._canvasDrawer, this._player);
@@ -113,7 +113,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     return this._setupLevels();
   }
 
-
+  UIInterface get ui => this._ui;
 
   /**
    * Prereqs:
@@ -176,6 +176,19 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
   bool get continueLoop => this._continueLoop;
 
+  void _runInternal(var _) {
+    if (this._continueLoop) {
+      this.update();
+    }
+    window.requestAnimationFrame(this._runInternal);
+  }
+
+  void run() {
+    this.start();
+
+    this._runInternal(Null);
+  }
+
   void start() {
     this.startNextLevel();
     this._continueLoop = true;
@@ -205,6 +218,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         12, 600, 980,
         new Duration(minutes: 1, seconds: 30), new Duration(seconds: 20));*/
     View screen = new LevelRequirementsScreen(
+        this.ui,
         "Level ${this._currentLevelIdx}",
         this._currentLevel.beersToWin,
         this._currentLevel.duration);
@@ -234,6 +248,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     this._ui.showView(
         new ScoreScreen(
+          this.ui,
           this._wonLevel,
           this._score,
           converted,
@@ -312,12 +327,13 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     }
     */
 
+    // TODO: need a better notification system
     // Notify player
     if (this._notifyCar && this._player.wasHitByCar) {
 
       this._notifyCar = false;
       this._pause = true;
-      this._ui.showView(new Dialog("Fuck.  Watch where you're going!"),
+      this._ui.showView(new Dialog.text(this._ui, "Fuck.  Watch where you're going!"),
           seconds: 5);
 
     } else if (this._notifyTheft && this._player.wasBeerStolen) {
@@ -325,27 +341,26 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       this._notifyTheft = false;
       this._pause = true;
       this._ui.showView(
-          new Message("Ohhh, the bum stole a beer!  One less for you!"),
+          new Message(this.ui, "Ohhh, the bum stole a beer!  One less for you!"),
           seconds: 5);
     } else if (this._notifyBored && this._player.boredNotify) {
       this._notifyBored = false;
       this._pause = true;
       this._ui.showView(
-          new Message(
+          new Message(this.ui,
               "Your buzz is wearing off!  Drink a beer before things get too boring."),
           seconds: 5);
     } else if (this._notifyDrunk && this._player.drunkNotify) {
       this._notifyDrunk = false;
       this._ui.showView(
-          new Message("Be careful, don't get too drunk!"), seconds: 5);
+          new Message(this.ui, "Be careful, don't get too drunk!"), seconds: 5);
     }
 
     if (this._player.drunkenness <= 0) {
       this._setGameOver(true, "You're too sober.  You got bored and go home.  GAME OVER!");
     } else if (this._player.drunkenness >= 10) {
       this._setGameOver(true, "You black out like a dumbass, before you even get to the party!");
-    }
-    if (this._player.health == 0) {
+    } else if (this._player.health == 0) {
       this._setGameOver(true, "Oops, you are dead!");
       this._currentLevel.removeObject(this._player);
     }
@@ -394,7 +409,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._gameOver = true;
 
     this._ui.showView(
-        new GameOverScreen(text),
+        new GameOverScreen(this.ui, text),
         callback: () => this._endTutorial());
   }
 
@@ -406,7 +421,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     if (this._gameOverDialog) {
       this._pause = true;
       this._ui.showView(
-        new Dialog(this._gameOverText),
+        new Dialog.text(this._ui, this._gameOverText),
         callback: () {
           this._pause = true;
           this._player.level.pause();

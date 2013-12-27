@@ -1,28 +1,64 @@
 part of ui;
 
-abstract class View {
+class View {
 
-  UIInterface _container = null;
+  Element _root;
+  UIInterface _ui;
 
-  View();
+  View(this._ui, {Element root: null}) {
+    window.console.log("creating new root element");
 
-  DivElement get rootElement;
-  UIInterface get container => this._container;
+    if (root == null) {
+      this._root = new DivElement();
+    } else {
+      this._root = root;
+    }
+  }
+
+  void show() {
+    window.console.log("showing: ${this._root.id}");
+    this._root.style.display = "block";
+  }
 
   void close() {
-    this._container.closeWindow();
+    this._ui.closeWindow();
   }
 
-  void draw(Element root) {
-    this.onDraw(root);
+  void hide() {
+    this._root.style.display = "none";
   }
 
-  void onDraw(Element root);
-
-  void attachCloseButton(Element el) {
-    el.onClick.listen((MouseEvent e) {
-      this._container.closeWindow();
+  void clear() {
+    List<Element> toRemove = new List<Element>();
+    this._root.children.forEach((Element e) {
+      if (null != e) {
+        toRemove.add(e);
+      }
     });
+    for (Element e in toRemove) {
+      e.remove();
+    }
   }
+
+  void addView(View v) {
+    this._root.append(v._root);
+  }
+
+  void floatElements() {
+    for (Element e in this._root.children) {
+      e.style.float = "left";
+    }
+
+    this.addView(new ClearView(this._ui));
+  }
+
+  DivElement _render() {
+    return this._root;
+  }
+
+
+  // Expose some inner html functions
+  // TODO: maybe encapsulate this stuff better?
+  CssStyleDeclaration get style => this._root.style;
 }
 

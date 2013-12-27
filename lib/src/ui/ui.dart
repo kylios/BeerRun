@@ -1,5 +1,32 @@
 part of ui;
 
+/*
+ * Requirements of a UI system for Beer Run:
+ *
+ * - One window at a time.
+ * - Needs up to two buttons
+ * - Buttons should either close window or invoke a callback
+ * - Fill views with other graphics/text
+ * -
+ *
+ * View
+ * - addView
+ *
+ *
+ * DialogView
+ *   TextView
+ *   View
+ *     NextButton
+ *     CloseButton
+ *
+ *
+ * d = new Dialog();
+ * d.addButton("next");
+ * d.addButton("skip");
+ *
+ * window.addView(d);
+ */
+
 class UI implements UIInterface {
 
   WindowView _rootView;
@@ -10,7 +37,7 @@ class UI implements UIInterface {
   // This is to hold onto the player's input component while UI is showing
   Component _tmpInputComponent = null;
 
-  UI(DivElement rootEl) {
+  UI(DivElement rootEl, int width, int height) {
 
     this._rootView = new WindowView(this, rootEl);
   }
@@ -25,7 +52,8 @@ class UI implements UIInterface {
     if (this._listeners.length > 0) {
         this._listeners.forEach((UIListener l) => l.onWindowClose(this));
     }
-    this._rootView.onClose();
+    this._rootView.hide();
+    this._rootView.clear();
     this._opened = false;
 
     if (this._callback != null) {
@@ -45,24 +73,18 @@ class UI implements UIInterface {
       seconds = 0;
     }
 
-    if (seconds > 0) {
-      this._rootView.hideX();
-    }
-
     this._callback = callback;
-    v._container = this;
-    v.draw(this._rootView.rootElement);
+    this._rootView.addView(v);
     this._rootView.show();
 
     if (seconds != 0) {
       new Future.delayed(new Duration(seconds: seconds), () {
         this.closeWindow();
-        this._rootView.showX();
       });
-    }
-    else {
+    } else {
       // Pause gameplay too
     }
+
     this._opened = true;
   }
 }

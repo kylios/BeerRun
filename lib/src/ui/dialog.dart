@@ -2,39 +2,30 @@ part of ui;
 
 class Dialog extends View {
 
-  String _text;
-  DivElement _rootEl = null;
-  Button closeButton = null;
+  DivElement _rootElement = null;
 
-  Dialog(this._text) {
-    this.closeButton = new Button("Close", this.close);
+  View _buttons;
+
+  /**
+   * Instantiate a dialog with another view in the body.
+   */
+  Dialog(UIInterface ui, View v) : this._internal(ui, v);
+
+  /**
+   * Instantiate a dialog with a string of text in the body.
+   */
+  Dialog.text(UIInterface ui, String text) :
+    this._internal(ui, new TextView(ui, text));
+
+  /**
+   * Internal constructor of class Dialog.
+   */
+  Dialog._internal(UIInterface ui, View v) : super(ui) {
+
+    this._buttons = new View(ui);
+    this.addView(v);
+    this.addView(this._buttons);
   }
 
-  void setText(String text) {
-    this._text = text;
-  }
-  String getText() {
-    return this._text;
-  }
-
-  DivElement get rootElement => this._rootEl;
-
-  void draw(Element root) {
-    this.onDraw(root);
-    this.closeButton.draw(this._rootEl);
-  }
-  void onDraw(Element root) {
-
-    DivElement el = new DivElement();
-    el.innerHtml = this._text;
-    el.classes.add("ui");
-    el.classes.add("text");
-    el.append(new BRElement());
-    root.append(
-      el
-    );
-
-    this._rootEl = el;
-  }
-
+  void addButton(Button b) => this._buttons.addView(b);
 }

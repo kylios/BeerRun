@@ -6,7 +6,7 @@ class Message extends View {
   DivElement _rootEl = null;
   Button closeButton = null;
 
-  Message(this._text);
+  Message(UIInterface ui, this._text) : super(ui);
 
   DivElement get rootElement => this._rootEl;
 

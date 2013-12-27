@@ -224,8 +224,10 @@ class Player extends GameObject implements ComponentListener {
                            g
                           ]);
       } else {
+
+        // TODO: pass a message to the game manager to show this
         g.showView(
-            new Message("Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
+            new Message(g.ui, "Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
       }
     }
 

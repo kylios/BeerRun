@@ -7,15 +7,6 @@ final int CANVAS_HEIGHT = 480;
 
 GameManager game;
 
-void _loop(var _) {
-
-  if (game.continueLoop) {
-    game.update();
-  }
-
-  window.requestAnimationFrame(_loop);
-}
-
 void main() {
 
   game = new GameManager(
@@ -26,9 +17,9 @@ void main() {
       statsElement: querySelector('div#stats'),
       fpsElement: querySelector('div#fps'));
 
-  game.init().then((var _) => game.start());
+  game.init().then((var _) => game.run()); //game.start());
 
 
 
-  _loop(0);
+  //_loop(0);
 }
