@@ -11,7 +11,8 @@ class Song {
     this._source.noteOn(0);
   }
 
-  void loop() {
-    this.play();
+  void loop([int num]) {
+    this._source.loop = true;
+    this._source.noteOn(0);
   }
 }
