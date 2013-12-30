@@ -8,6 +8,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   StatsManager _statsManager;
   CanvasManager _canvasManager;
   CanvasDrawer _canvasDrawer;
+  AudioManager _audio;
 
   final int _canvasWidth;
   final int _canvasHeight;
@@ -107,10 +108,13 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     this._BACMeter = new Meter(10, 52, 10, 116, 22);
     this._HPMeter = new Meter(3, 52, 36, 116, 22);
+
+    this._audio = new AudioManager();
   }
 
   Future init() {
-    return this._setupLevels();
+    return this._setupLevels()
+        .then(this._setupAudio);
   }
 
   UIInterface get ui => this._ui;
@@ -174,6 +178,12 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     return f;
   }
 
+  Future _setupAudio(var _) {
+
+    this._audio.addSound('theme', 'audio/theme.wav');
+    return this._audio.loadAndDecode();
+  }
+
   bool get continueLoop => this._continueLoop;
 
   void _runInternal(var _) {
@@ -190,6 +200,12 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   }
 
   void start() {
+
+    // Start audio - TODO: make it easier to stop it
+    Song s = this._audio.getSong('theme');
+    window.console.log("song: $s");
+    s.loop();
+
     this.startNextLevel();
     this._continueLoop = true;
   }
