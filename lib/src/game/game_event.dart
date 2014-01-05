@@ -10,6 +10,7 @@ class GameEvent {
   static final int GAME_WON_EVENT = 6;
   static final int GAME_LOST_EVENT = 7;
   static final int ADD_SCORE_EVENT = 8;
+  static final int NOTIFICATION_EVENT = 9;
 
   int type;
   int value;

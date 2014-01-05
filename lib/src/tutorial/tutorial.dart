@@ -226,7 +226,8 @@ class Tutorial {
       Completer c = new Completer();
 
       GameManager mgr = new GameManager();
-      mgr.showView(
+
+      mgr.ui.showView(
           new TutorialDialog(mgr.ui, this, message),
           callback: () { c.complete(); }
       );

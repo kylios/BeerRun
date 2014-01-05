@@ -24,4 +24,5 @@ part 'src/game/game_timer.dart';
 part 'src/game/game_timer_listener.dart';
 part 'src/game/game_manager.dart';
 part 'src/game/broadcaster.dart';
+part 'src/game/game_notification.dart';
 

@@ -29,9 +29,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   Level _currentLevel;
   int _currentLevelIdx = 0;
 
-  bool _notifyCar = true;
-  bool _notifyTheft = true;
-  bool _notifyBored = true;
   bool _notifyDrunk = true;
 
   bool _continueLoop = false;
@@ -331,15 +328,16 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     } else if (e.type == GameEvent.ADD_SCORE_EVENT) {
       int scoreDelta = e.value;
       this._score += scoreDelta;
+    } else if (e.type == GameEvent.NOTIFICATION_EVENT) {
+        String message = e.data['message'];
+        int seconds = e.data['seconds'];
+
+        TextView v = new TextView(this._notifications, message);
+        this._notifications.showView(v, seconds: seconds);
     }
 
     return;
   }
-
-  void showView(View v, {int seconds, var callback}) {
-    this._ui.showView(v, seconds: seconds, callback: callback);
-  }
-
 
   // This is the main update loop
   void update() {
@@ -374,35 +372,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       }
     }
     */
-
-    // TODO: need a better notification system
-    // Notify player
-    if (this._notifyCar && this._player.wasHitByCar) {
-
-      this._notifyCar = false;
-      this._pause = true;
-      this._ui.showView(new Dialog.text(this._ui, "Fuck.  Watch where you're going!"),
-          seconds: 5);
-
-    } else if (this._notifyTheft && this._player.wasBeerStolen) {
-
-      this._notifyTheft = false;
-      this._pause = true;
-      this._notifications.showView(
-          new TextView(this._notifications, "Ohhh, the bum stole a beer!  One less for you!"),
-          seconds: 5);
-    } else if (this._notifyBored && this._player.boredNotify) {
-      this._notifyBored = false;
-      this._pause = true;
-      this._notifications.showView(
-          new TextView(this._notifications,
-              "Your buzz is wearing off!  Drink a beer before things get too boring."),
-          seconds: 5);
-    } else if (this._notifyDrunk && this._player.drunkNotify) {
-      this._notifyDrunk = false;
-      this._notifications.showView(
-          new TextView(this._notifications, "Be careful, don't get too drunk!"), seconds: 5);
-    }
 
     if (this._player.drunkenness <= 0) {
       this._setGameOver(true, "You're too sober.  You got bored and go home.  GAME OVER!");

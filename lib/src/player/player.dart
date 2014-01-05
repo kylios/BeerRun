@@ -110,49 +110,53 @@ class Player extends GameObject implements ComponentListener {
   }
 
   void update() {
-    DateTime now = new DateTime.now();
-    if ( ! this.isRemoved) {
 
-      if (this._buzzDecreaseTime == 0) {
-        this.updateBuzzTime();
+      GameManager g = new GameManager();
+      DateTime now = new DateTime.now();
+      if ( ! this.isRemoved) {
+
+          if (this._buzzDecreaseTime == 0) {
+            this.updateBuzzTime();
+          }
+
+          // Reset some single-frame state variables
+          this._wasHitByCar = false;
+          this._wasBeerStolen = false;
+
+          // Update super
+          super.update();
+
+          // Make him blink when hit
+          if (this._damaged) {
+            this._blink(now);
+          }
+
+          if (this._beerStolenUntil <= new DateTime.now().millisecondsSinceEpoch) {
+            this._beerStolenUntil = 0;
+          }
+
+          if (this._buzzDecreaseTime > 0 &&
+              this._buzzDecreaseTime <= now.millisecondsSinceEpoch) {
+            this._buzz--;
+            this._buzzDecreaseTime = now.millisecondsSinceEpoch + Player.BUZZ_TIME;
+            if (this._buzz <= 3 && !this._boredNotify) {
+              this.level.addAnimation(new TextAnimation(
+                 "*YAWN*",
+                 this.x, this.y, 3
+              ));
+
+              GameNotification n = new GameNotification("Your buzz is wearing off!  Drink a beer before things get too boring.");
+              this.broadcast(n, [ g ]);
+            }
+          }
       }
-
-      // Reset some single-frame state variables
-      this._wasHitByCar = false;
-      this._wasBeerStolen = false;
-
-      // Update super
-      super.update();
-
-      // Make him blink when hit
-      if (this._damaged) {
-        this._blink(now);
-      }
-
-      if (this._beerStolenUntil <= new DateTime.now().millisecondsSinceEpoch) {
-        this._beerStolenUntil = 0;
-      }
-
-      if (this._buzzDecreaseTime > 0 &&
-          this._buzzDecreaseTime <= now.millisecondsSinceEpoch) {
-        this._buzz--;
-        this._buzzDecreaseTime = now.millisecondsSinceEpoch + Player.BUZZ_TIME;
-        if (this._buzz <= 3) {
-          this._boredNotify = true;
-          this.level.addAnimation(new TextAnimation(
-             "*YAWN*",
-             this.x, this.y, 3
-          ));
-        }
-      }
-    }
   }
 
   void listen(GameEvent e) {
+    GameManager g = new GameManager();
     if (e.type == GameEvent.TAKE_HIT_EVENT) {
       if ( ! this._damaged) {
         int damage = e.value;
-        this._wasHitByCar = true;
         this._health -= damage;
         this._damaged = true;
         DateTime now = new DateTime.now();
@@ -163,6 +167,12 @@ class Player extends GameObject implements ComponentListener {
             new TextAnimation("OUCH!", this.x, this.y, 2));
 
         this._stats.health = this._health;
+
+        if (!this._wasHitByCar) {
+            GameNotification n = new GameNotification("Fuck.  Watch where you're going!");
+            this.broadcast(n, [ g ]);
+            this._wasHitByCar = true;
+        }
       }
       if (this._health <= 0) {
         this.level.addAnimation(
@@ -172,67 +182,70 @@ class Player extends GameObject implements ComponentListener {
       }
     } else if (e.type == GameEvent.BEER_STOLEN_EVENT) {
       if (this._beerStolenUntil == 0 && this._beers > 0) {
-        this._wasBeerStolen = true;
         this._beerStolenUntil = new DateTime.now().millisecondsSinceEpoch + 1000;
         this._beers -= e.value;
         this.level.addAnimation(
             new TextAnimation("-1 BEER!", this.x, this.y, 2));
 
         this._stats.beers = this._beers;
+
+        if (!this._wasBeerStolen) {
+            GameNotification n = new GameNotification("Ohhh, the bum stole a beer!  One less for you!");
+            this.broadcast(n, [ g ]);
+            this._wasBeerStolen = true;
+        }
       }
     } else if (e.type == GameEvent.BEER_STORE_EVENT) {
-      if (this._beers < 24) {
-        int diff = 24 - this._beers;
-        this.level.addAnimation(
-            new TextAnimation("+${diff} BEERS!", this.x, this.y, 2));
-      }
-      this._beers = 24;
-      this._beenToStore = true;
+        if (this._beers < 24) {
+            int diff = 24 - this._beers;
+            this.level.addAnimation(
+                new TextAnimation("+${diff} BEERS!", this.x, this.y, 2));
+        }
+        this._beers = 24;
+        this._beenToStore = true;
 
-      this._stats.beers = this._beers;
-    } else if (e.type == GameEvent.PARTY_ARRIVAL_EVENT && this._beenToStore) {
-      // Only trigger if you've gone to the store at least once
+        this._stats.beers = this._beers;
+    } else if (e.type == GameEvent.PARTY_ARRIVAL_EVENT) {
+        if (this._beenToStore && this._beers > 0) {
 
-      // TODO stats.score <- update
-      //this._score += this._player.beersDelivered;
+            // Only trigger if you've gone to the store at least once
 
+            // Gain score
+            this._beersDelivered += this._beers;
 
+            this._beers = 0;
+            this.level.addAnimation(
+                    new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
 
-      // Gain score
-      //this._stats.beers += this._beers;
-      this._beersDelivered += this._beers;
+            GameManager g = new GameManager();
 
-      this._beers = 0;
-      this.level.addAnimation(
-          new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
+            GameEvent addScoreEvent = new GameEvent();
+            addScoreEvent.type = GameEvent.ADD_SCORE_EVENT;
+            addScoreEvent.value = this._beers;
+            this.broadcast(addScoreEvent, [ g ]);
 
-      GameManager g = new GameManager();
+            if (this._beersDelivered >= this.level.beersToWin) {
+                // send event to the game
 
-      GameEvent addScoreEvent = new GameEvent();
-      addScoreEvent.type = GameEvent.ADD_SCORE_EVENT;
-      addScoreEvent.value = this._beers;
-      this.broadcast(addScoreEvent, [ g ]);
-
-      if (this._beersDelivered >= this.level.beersToWin) {
-        // send event to the game
-
-        GameEvent e = new GameEvent();
-        e.type = GameEvent.GAME_WON_EVENT;
-        e.creator = this;
-        e.value = 0;
-        this.broadcast(e, [
-                           g
-                          ]);
-      } else {
-
-        // TODO: pass a message to the game manager to show this
-        g.showView(
-            new Message(g.ui, "Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
-      }
+                GameEvent e = new GameEvent();
+                e.type = GameEvent.GAME_WON_EVENT;
+                e.creator = this;
+                e.value = 0;
+                this.broadcast(e, [
+                                   g
+                                   ]);
+            } else {
+                this.broadcast(
+                        new GameNotification("Sick dude, beers! We'll need you to bring us more though.  "
+                        "Go back and bring us more beer!"),
+                        [ g ]);
+            }
+        }
     }
   }
 
   void drinkBeer() {
+    GameManager g = new GameManager();
     if (this._beers <= 0) {
       return;
     }
@@ -246,7 +259,9 @@ class Player extends GameObject implements ComponentListener {
     this.level.addAnimation(new TextAnimation(
         "-1 BEER", this.x, this.y + 8, 3));
 
-    if (this._buzz >= 8) {
+    if (this._buzz >= 8 && !this._drunkNotify) {
+      GameNotification n = new GameNotification("Be careful, don't get too drunk!");
+      this.broadcast(n, [ g ]);
       this._drunkNotify = true;
     }
 
@@ -275,11 +290,7 @@ class Player extends GameObject implements ComponentListener {
         [ this.level ]);
   }
 
-  bool get wasHitByCar => this._wasHitByCar;
-  bool get wasBeerStolen => this._wasBeerStolen;
   int get beersDelivered => this._beersDelivered;
-  bool get boredNotify => this._boredNotify;
-  bool get drunkNotify => this._drunkNotify;
 
   int get tileWidth => 64;
   int get tileHeight => 64;
