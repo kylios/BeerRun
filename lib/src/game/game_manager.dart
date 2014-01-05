@@ -21,6 +21,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   bool _wonLevel = false;
 
   UI _ui;
+  UI _notifications;
   BeerRunHUD _hud;
   Player _player;
 
@@ -66,6 +67,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   factory GameManager({canvasWidth, canvasHeight,
     CanvasElement canvasElement,
       DivElement UIRootElement,
+      DivElement NotificationsRootElement,
       DivElement DialogElement,
       DivElement statsElement,
       DivElement fpsElement,
@@ -77,7 +79,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     if (GameManager._instance == null) {
       GameManager._instance = new GameManager._internal(
           canvasWidth, canvasHeight,
-          canvasElement, UIRootElement, DialogElement, statsElement,
+          canvasElement,
+          UIRootElement, NotificationsRootElement,
+          DialogElement, statsElement,
           fpsElement,
           musicOnElement, musicOffElement, soundOnElement, soundOffElement);
     }
@@ -88,6 +92,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   GameManager._internal(this._canvasWidth, this._canvasHeight,
       CanvasElement canvasElement,
       DivElement UIRootElement,
+      DivElement NotificationsRootElement,
       DivElement DialogElement,
       DivElement statsElement,
       DivElement fpsElement,
@@ -115,6 +120,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     this._ui = new UI(UIRootElement, this._canvasWidth, this._canvasHeight);
     this._ui.addListener(this);
+
+    this._notifications = new UI(NotificationsRootElement, this._canvasWidth, this._canvasHeight);
 
     this._hud = new BeerRunHUD(this._canvasDrawer, this._player);
 
@@ -381,20 +388,20 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
       this._notifyTheft = false;
       this._pause = true;
-      this._ui.showView(
-          new Message(this.ui, "Ohhh, the bum stole a beer!  One less for you!"),
+      this._notifications.showView(
+          new TextView(this._notifications, "Ohhh, the bum stole a beer!  One less for you!"),
           seconds: 5);
     } else if (this._notifyBored && this._player.boredNotify) {
       this._notifyBored = false;
       this._pause = true;
-      this._ui.showView(
-          new Message(this.ui,
+      this._notifications.showView(
+          new TextView(this._notifications,
               "Your buzz is wearing off!  Drink a beer before things get too boring."),
           seconds: 5);
     } else if (this._notifyDrunk && this._player.drunkNotify) {
       this._notifyDrunk = false;
-      this._ui.showView(
-          new Message(this.ui, "Be careful, don't get too drunk!"), seconds: 5);
+      this._notifications.showView(
+          new TextView(this._notifications, "Be careful, don't get too drunk!"), seconds: 5);
     }
 
     if (this._player.drunkenness <= 0) {

@@ -6,8 +6,6 @@ class WindowView extends View {
 
     this._root = rootElement;
     window.console.log("creating new WindowView: ${this._root.id}");
-    this._root.classes.add("root");
-    this._root.classes.add("ui2");
   }
 }
 

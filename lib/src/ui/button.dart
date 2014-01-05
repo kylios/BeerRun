@@ -10,7 +10,6 @@ class Button extends View {
     super(ui) {
 
     this._root.text = this._text;
-    this._root.classes.add("ui2");
     this._root.classes.add("button");
     if (! this._enabled) {
       this._root.classes.add('disabled');

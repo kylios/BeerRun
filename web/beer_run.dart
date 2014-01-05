@@ -13,6 +13,7 @@ void main() {
       canvasWidth: CANVAS_WIDTH, canvasHeight: CANVAS_HEIGHT,
       canvasElement: querySelector('canvas#game_canvas'),
       UIRootElement: querySelector('div#root_pane'),
+      NotificationsRootElement: querySelector('div#notifications_root'),
       DialogElement: querySelector('div#dialog'),
       statsElement: querySelector('div#stats'),
       fpsElement: querySelector('div#fps'),
@@ -21,9 +22,5 @@ void main() {
       soundOnElement: querySelector('input#sound_toggle_on'),
       soundOffElement: querySelector('input#sound_toggle_off'));
 
-  game.init().then((var _) => game.run()); //game.start());
-
-
-
-  //_loop(0);
+  game.init().then((var _) => game.run());
 }

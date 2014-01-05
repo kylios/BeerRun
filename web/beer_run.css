@@ -92,25 +92,15 @@ div#dialog {
   clear: both;
 }
 
-.ui2.window {
+.ui {
   background: black;
   border: 2% solid white;
   padding: 4%;
   
   opacity: 0.8;
   color: white;
-  
-  
-  width: 92%;
-  display: none;
-  position: absolute;
-  top: 57%;
-  height: 32%;
 }
-.ui2.title {
-  display: none;
-}
-.ui2.button {
+.ui .button {
   float: right;
   display: inline-block;
   margin: 5px;
@@ -123,17 +113,22 @@ div#dialog {
   font-weight: bold;
   font-size: 16px;
 }
-.ui2.button:hover {
+.ui2 .button:hover {
   background: white;
   color: black;
 }
-.ui2.x {
+
+.window {
+  width: 92%;
   display: none;
+  position: absolute;
+  top: 57%;
+  height: 32%;
 }
-.ui2.body {
-}
-.ui2.root {
-}
-.ui2.text {
-  font-size: 14pt;
+.notifications {
+  width: 92%;
+  display: none;
+  position: absolute;
+  top: 10%;
+  height: 8%;
 }

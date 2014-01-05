@@ -230,18 +230,7 @@ class Player extends GameObject implements ComponentListener {
             new Message(g.ui, "Sick dude, beers! We'll need you to bring us more though.  Go back and bring us more beer!"));
       }
     }
-
   }
-
-  /*
-  void beerStolen() {
-    if (this._beers <= 0) {
-      return;
-    }
-    this._beers--;
-    this._wasBeerStolen = true;
-  }
-  */
 
   void drinkBeer() {
     if (this._beers <= 0) {
