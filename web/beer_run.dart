@@ -15,7 +15,11 @@ void main() {
       UIRootElement: querySelector('div#root_pane'),
       DialogElement: querySelector('div#dialog'),
       statsElement: querySelector('div#stats'),
-      fpsElement: querySelector('div#fps'));
+      fpsElement: querySelector('div#fps'),
+      musicOnElement: querySelector('input#music_toggle_on'),
+      musicOffElement: querySelector('input#music_toggle_off'),
+      soundOnElement: querySelector('input#sound_toggle_on'),
+      soundOffElement: querySelector('input#sound_toggle_off'));
 
   game.init().then((var _) => game.run()); //game.start());
 

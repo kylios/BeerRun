@@ -10,6 +10,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   CanvasDrawer _canvasDrawer;
   AudioManager _audio;
 
+  AudioToggle _musicToggle;
+  AudioToggle _soundToggle;
+
   final int _canvasWidth;
   final int _canvasHeight;
 
@@ -65,13 +68,18 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       DivElement UIRootElement,
       DivElement DialogElement,
       DivElement statsElement,
-      DivElement fpsElement}) {
+      DivElement fpsElement,
+      InputElement musicOnElement,
+      InputElement musicOffElement,
+      InputElement soundOnElement,
+      InputElement soundOffElement}) {
 
     if (GameManager._instance == null) {
       GameManager._instance = new GameManager._internal(
           canvasWidth, canvasHeight,
           canvasElement, UIRootElement, DialogElement, statsElement,
-          fpsElement);
+          fpsElement,
+          musicOnElement, musicOffElement, soundOnElement, soundOffElement);
     }
 
     return GameManager._instance;
@@ -82,7 +90,11 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       DivElement UIRootElement,
       DivElement DialogElement,
       DivElement statsElement,
-      DivElement fpsElement) {
+      DivElement fpsElement,
+      InputElement musicOnElement,
+      InputElement musicOffElement,
+      InputElement soundOnElement,
+      InputElement soundOffElement) {
 
     this._statsManager = new StatsManager(statsElement, fpsElement);
 
@@ -110,6 +122,12 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._HPMeter = new Meter(3, 52, 36, 116, 22);
 
     this._audio = new AudioManager();
+
+    this._musicToggle = new AudioToggle(true, musicOnElement, musicOffElement);
+    this._soundToggle = new AudioToggle(false, soundOnElement, soundOffElement);
+
+    this._musicToggle.addListener(this._audio);
+    this._soundToggle.addListener(this._audio);
   }
 
   Future init() {
@@ -180,8 +198,15 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
   Future _setupAudio(var _) {
 
-    this._audio.addSound('theme', 'audio/theme.wav');
-    return this._audio.loadAndDecode();
+    Completer c = new Completer();
+
+    this._audio.addMusic('theme', 'audio/theme.wav');
+    this._audio.loadAndDecode().then((var _) {
+      this._musicToggle.toggleOff();
+      this._soundToggle.toggleOff();
+      c.complete();
+    });
+    return c.future;
   }
 
   bool get continueLoop => this._continueLoop;
