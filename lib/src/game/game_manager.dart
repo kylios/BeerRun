@@ -112,7 +112,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._canvasManager.addKeyboardListener(playerInput);
     this._canvasManager.addKeyboardListener(this);
 
-    this._player = new Player(this._statsManager);
+    this._player = new Player(this, this._statsManager);
     this._player.setControlComponent(playerInput);
 
     this._ui = new UI(UIRootElement, this._canvasWidth, this._canvasHeight);
@@ -342,10 +342,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   // This is the main update loop
   void update() {
 
-    if (this._canvasDrawer != null) {
-      //this._canvasDrawer.clear();
-    }
-
     // Can't do anything without a level object
     if (this._currentLevel == null) {
       return;
@@ -356,22 +352,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._currentLevel.update();
     this._statsManager.update();
 
+    // By exiting here on game over, we let the level objects continue updating
+    // while the player is reading the game over summary
     if (this._gameOver) {
       return;
     }
 
     this._player.update();
     this._player.draw();
-
-    /*
-    if (this._currentLevel.tutorial.isComplete && ! this._wonLevel) {
-
-      if (this._score >= this._currentLevel.beersToWin) {
-        this._wonLevel = true;
-        this._gameOver = true;
-      }
-    }
-    */
 
     if (this._player.drunkenness <= 0) {
       this._setGameOver(true, "You're too sober.  You got bored and go home.  GAME OVER!");
@@ -382,7 +370,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       this._currentLevel.removeObject(this._player);
     }
 
-
     // Draw HUD
     if (this._player.drunkenness == 1 || this._player.drunkenness >= 8) {
       this._hud.startFlashing();
@@ -392,7 +379,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._hud.draw();
 
     this._tickNo++;
-
 
     // Update fps
     this._now = new DateTime.now().millisecondsSinceEpoch;

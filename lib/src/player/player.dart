@@ -8,6 +8,7 @@ class Player extends GameObject implements ComponentListener {
   static final int DAMAGE_INTERVAL = 50;
   static final int BUZZ_TIME = 35000;
 
+  GameManager _mgr;
   StatsManager _stats;
 
   bool _damaged = false;
@@ -36,7 +37,7 @@ class Player extends GameObject implements ComponentListener {
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
-  Player(this._stats) : super(DIR_DOWN, 0, 0) {
+  Player(this._mgr, this._stats) : super(DIR_DOWN, 0, 0) {
 
     this.speed = 6;
 
@@ -111,7 +112,6 @@ class Player extends GameObject implements ComponentListener {
 
   void update() {
 
-      GameManager g = new GameManager();
       DateTime now = new DateTime.now();
       if ( ! this.isRemoved) {
 
@@ -146,14 +146,14 @@ class Player extends GameObject implements ComponentListener {
               ));
 
               GameNotification n = new GameNotification("Your buzz is wearing off!  Drink a beer before things get too boring.");
-              this.broadcast(n, [ g ]);
+              this.broadcast(n, [ this._mgr ]);
             }
           }
       }
   }
 
   void listen(GameEvent e) {
-    GameManager g = new GameManager();
+
     if (e.type == GameEvent.TAKE_HIT_EVENT) {
       if ( ! this._damaged) {
         int damage = e.value;
@@ -170,7 +170,7 @@ class Player extends GameObject implements ComponentListener {
 
         if (!this._wasHitByCar) {
             GameNotification n = new GameNotification("Fuck.  Watch where you're going!");
-            this.broadcast(n, [ g ]);
+            this.broadcast(n, [ this._mgr ]);
             this._wasHitByCar = true;
         }
       }
@@ -191,7 +191,7 @@ class Player extends GameObject implements ComponentListener {
 
         if (!this._wasBeerStolen) {
             GameNotification n = new GameNotification("Ohhh, the bum stole a beer!  One less for you!");
-            this.broadcast(n, [ g ]);
+            this.broadcast(n, [ this._mgr ]);
             this._wasBeerStolen = true;
         }
       }
@@ -222,7 +222,7 @@ class Player extends GameObject implements ComponentListener {
             GameEvent addScoreEvent = new GameEvent();
             addScoreEvent.type = GameEvent.ADD_SCORE_EVENT;
             addScoreEvent.value = this._beers;
-            this.broadcast(addScoreEvent, [ g ]);
+            this.broadcast(addScoreEvent, [ this._mgr ]);
 
             if (this._beersDelivered >= this.level.beersToWin) {
                 // send event to the game
@@ -231,21 +231,19 @@ class Player extends GameObject implements ComponentListener {
                 e.type = GameEvent.GAME_WON_EVENT;
                 e.creator = this;
                 e.value = 0;
-                this.broadcast(e, [
-                                   g
-                                   ]);
+                this.broadcast(e, [ this._mgr ]);
             } else {
                 this.broadcast(
                         new GameNotification("Sick dude, beers! We'll need you to bring us more though.  "
                         "Go back and bring us more beer!"),
-                        [ g ]);
+                        [ this._mgr ]);
             }
         }
     }
   }
 
   void drinkBeer() {
-    GameManager g = new GameManager();
+
     if (this._beers <= 0) {
       return;
     }
@@ -261,7 +259,7 @@ class Player extends GameObject implements ComponentListener {
 
     if (this._buzz >= 8 && !this._drunkNotify) {
       GameNotification n = new GameNotification("Be careful, don't get too drunk!");
-      this.broadcast(n, [ g ]);
+      this.broadcast(n, [ this._mgr ]);
       this._drunkNotify = true;
     }
 
