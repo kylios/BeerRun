@@ -11,8 +11,8 @@ class AudioManager implements AudioEventListener {
   GainNode _soundGain;
 
   AudioManager() {
-    this._musicGain = this._ctx.createGainNode();
-    this._soundGain = this._ctx.createGainNode();
+    this._musicGain = this._ctx.createGain();
+    this._soundGain = this._ctx.createGain();
   }
 
   void addMusic(String id, String url) {
