@@ -55,6 +55,8 @@ class GameTimer {
     for (GameTimerListener l in this._listeners) {
       l.onTimeOut(this);
     }
+    this._timer = null;
+    this._ticker = null;
   }
 
   void addListener(GameTimerListener l) {

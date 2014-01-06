@@ -20,7 +20,7 @@ class GameOverScreen extends Dialog {
 
     GameOverScreen screen =
         new GameOverScreen._internal(ui, contents);
-    screen.addButton(new Button(ui, "Fine!", () { screen.close(); }));
+    screen.addButton(new Button(ui, "Try again?", () { screen.close(null); }));
 
     return screen;
   }

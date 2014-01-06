@@ -20,8 +20,8 @@ class View {
     this._root.style.display = "block";
   }
 
-  void close() {
-    this._ui.closeWindow();
+  void close(var data) {
+    this._ui.closeWindow(data);
   }
 
   void hide() {

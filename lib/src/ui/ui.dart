@@ -31,7 +31,7 @@ class UI implements UIInterface {
 
   WindowView _rootView;
   bool _opened = false;
-  var _callback = null;
+  uiCallback _callback = null;
   List<UIListener> _listeners = new List<UIListener>();
 
   // This is to hold onto the player's input component while UI is showing
@@ -46,7 +46,7 @@ class UI implements UIInterface {
     this._listeners.add(listener);
   }
 
-  void closeWindow() {
+  void closeWindow(var data) {
 
     window.console.log("close window called");
     if (this._listeners.length > 0) {
@@ -57,16 +57,16 @@ class UI implements UIInterface {
     this._opened = false;
 
     if (this._callback != null) {
-      this._callback();
+      this._callback(data);
     }
   }
 
   void showView(View v, {
                 int seconds: null,
-                var callback: null}) {
+                uiCallback callback: null}) {
 
     if (this._opened) {
-      this.closeWindow();
+      this.closeWindow(null);
     }
 
     if (seconds == null) {
@@ -79,7 +79,7 @@ class UI implements UIInterface {
 
     if (seconds != 0) {
       new Future.delayed(new Duration(seconds: seconds), () {
-        this.closeWindow();
+        this.closeWindow(null);
       });
     } else {
       // Pause gameplay too

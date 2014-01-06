@@ -1,7 +1,7 @@
 part of drawing;
 
 class DrawingComponent extends Component
-  implements ComponentListener
+  implements GameEventListener
 {
 
   static final DIRECTION_CHANGE_EVENT = 1;

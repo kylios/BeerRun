@@ -4,7 +4,7 @@ part of level;
 // functions that exist in both that can be condensed into a single class,
 // and there are functions that don't need to be in these classes that can be
 // part of more specific derived classes.
-abstract class Level extends Broadcaster implements ComponentListener {
+abstract class Level extends Broadcaster implements GameEventListener {
 
   String _name;
 
@@ -356,6 +356,16 @@ abstract class Level extends Broadcaster implements ComponentListener {
 
     level._tutorial = t;
     return;
+  }
+
+  Future runTutorial() {
+      if (this._tutorial != null) {
+          return this._tutorial.run();
+      } else {
+          Completer c = new Completer();
+          Timer.run(() => c.complete());
+          return c.future;
+      }
   }
 
 

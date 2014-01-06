@@ -1,6 +1,6 @@
 part of npc;
 
-class NPC extends GameObject implements ComponentListener {
+class NPC extends GameObject implements GameEventListener {
 
   int _health = 3;
 

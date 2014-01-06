@@ -1,6 +1,6 @@
 part of game;
 
-abstract class GameObject extends Broadcaster implements ComponentListener {
+abstract class GameObject extends Broadcaster implements GameEventListener {
 
   int speed = 5;
 

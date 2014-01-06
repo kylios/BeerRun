@@ -9,7 +9,6 @@ class Tutorial {
   tutorialStep _onStop = null;
   bool _isStarted = false;
   bool _isComplete = false;
-  bool _isSkipped = false;
   Future _cur = null;
 
   Tutorial(this._level);
@@ -37,7 +36,7 @@ class Tutorial {
           col * this._level.tileWidth - halfWidth + this._level.player.tileWidth,
           row * this._level.tileHeight - halfHeight + this._level.player.tileHeight);
 
-      Timer.run(() => c.complete());
+      Timer.run(() => c.complete(false));
 
       return c.future;
     };
@@ -72,21 +71,20 @@ class Tutorial {
    */
   Future run() {
 
-    Completer c = new Completer();
+    Completer<bool> c = new Completer<bool>();
 
     if (this._onStart == null &&
-        this._onStop == null &&
-        this._steps.length == 0) {
+        this._onStop == null) {
       this._isStarted = true;
       Timer.run(() {
         this._isComplete = true;
-        c.complete(null);
+        c.complete(false);
       });
       return c.future;
     }
 
     if (this._isComplete) {
-      c.complete();
+      Timer.run(() => c.complete(false));
       return c.future;
     }
 
@@ -103,9 +101,9 @@ class Tutorial {
       if (null == f) {
         f = fn(null);
       } else {
-        f = f.then((var _) {
-          if (! this._isSkipped) {
-            this._cur = fn(null);
+        f = f.then((bool skipped) {
+          if (! skipped) {
+            this._cur = fn(skipped);
           }
           return this._cur;
         });
@@ -132,12 +130,10 @@ class Tutorial {
 
     if (f != null) {
       f.then((var _) {
-        this._isSkipped = false;
-        c.complete();
+        c.complete(false);
       });
     } else {
-      this._isSkipped = false;
-      c.complete();
+      c.complete(false);
       f = c.future;
     }
 
@@ -152,10 +148,10 @@ class Tutorial {
    */
   Future end(var v) {
 
-    Completer c = new Completer();
+    Completer<bool> c = new Completer<bool>();
 
     if (this._isComplete) {
-      c.complete();
+      c.complete(false);
       return c.future;
     }
 
@@ -165,18 +161,16 @@ class Tutorial {
       c.future.then(this._onStop);
     }
 
-    return c.future;
-  }
+    this._isStarted = false;
+    this._isComplete = false;
 
-  Tutorial skip() {
-    this._isSkipped = true;
-    return this;
+    return c.future;
   }
 
   // Some useful scripting functions maybe?
   Tutorial addPan(int targetRow, int targetCol, int speed) {
     tutorialStep fn = (var _) {
-      Completer c = new Completer();
+      Completer<bool> c = new Completer<bool>();
       int halfWidth = this._level.canvasManager.width ~/ 2;
       int halfHeight = this._level.canvasManager.height ~/ 2;
 
@@ -209,7 +203,7 @@ class Tutorial {
         window.console.log("X: $offsetX -> $tutorialDestX, Y: $offsetY -> $tutorialDestY");
         if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
           t.cancel();
-          c.complete();
+          c.complete(false);
         }
       });
 
@@ -223,13 +217,13 @@ class Tutorial {
 
   Tutorial addDialog(String message) {
     tutorialStep fn = (var _) {
-      Completer c = new Completer();
+      Completer<bool> c = new Completer<bool>();
 
       GameManager mgr = new GameManager();
 
       mgr.ui.showView(
           new TutorialDialog(mgr.ui, this, message),
-          callback: () { c.complete(); }
+          callback: (var skipped) { c.complete(skipped); }
       );
       return c.future;
     };

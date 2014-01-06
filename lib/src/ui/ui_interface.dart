@@ -4,9 +4,9 @@ abstract class UIInterface {
 
   void addListener(UIListener listener);
 
-  void closeWindow();
+  void closeWindow(var data);
 
   void showView(View v, {
     int seconds: null,
-    var callback: null});
+    uiCallback callback: null});
 }

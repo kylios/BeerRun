@@ -19,3 +19,5 @@ part 'src/ui/image_view.dart';
 part 'src/ui/clear_view.dart';
 part 'src/ui/level_requirements_screen.dart';
 part 'src/ui/game_over_screen.dart';
+
+typedef void uiCallback(var _);

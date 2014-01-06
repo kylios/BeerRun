@@ -1,6 +1,6 @@
 part of player;
 
-class Player extends GameObject implements ComponentListener {
+class Player extends GameObject implements GameEventListener {
 
   static final int BUZZ_PER_BEER = 1;
   static final int MAX_DRUNKENNESS = 10;
@@ -26,7 +26,7 @@ class Player extends GameObject implements ComponentListener {
 
   int _health = 0;
   int _beers = 0;
-  int _buzz = 3;  // out of 10;
+  int _buzz = 0;  // out of 10;
   int _buzzDecreaseTime = -1;
 
   int _nextBuzzDecreaseTS = new DateTime.now().millisecondsSinceEpoch ~/ 1000 + 35;
@@ -38,8 +38,6 @@ class Player extends GameObject implements ComponentListener {
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
   Player(this._mgr, this._stats) : super(DIR_DOWN, 0, 0) {
-
-    this.speed = 6;
 
     SpriteSheet sprites = new SpriteSheet(
         "img/player/player.png",
@@ -73,12 +71,19 @@ class Player extends GameObject implements ComponentListener {
     this.resetBeersDelivered();
 
     this.setHealth(3);
-    this.addBeers(300);
+    this.setBeers(300);
+
+    this._buzz = 3;
   }
 
   void setHealth(int health) {
     this._health = health;
     this._stats.health = health;
+  }
+
+  void setBeers(int beers) {
+      this._beers = beers;
+      this._stats.beers = beers;
   }
 
   void addBeers(int beers) {
@@ -118,10 +123,6 @@ class Player extends GameObject implements ComponentListener {
           if (this._buzzDecreaseTime == 0) {
             this.updateBuzzTime();
           }
-
-          // Reset some single-frame state variables
-          this._wasHitByCar = false;
-          this._wasBeerStolen = false;
 
           // Update super
           super.update();
@@ -217,10 +218,8 @@ class Player extends GameObject implements ComponentListener {
             this.level.addAnimation(
                     new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
 
-            GameManager g = new GameManager();
-
             GameEvent addScoreEvent = new GameEvent();
-            addScoreEvent.type = GameEvent.ADD_SCORE_EVENT;
+            addScoreEvent.type = GameEvent.ADD_BEERS_DELIVERED_EVENT;
             addScoreEvent.value = this._beers;
             this.broadcast(addScoreEvent, [ this._mgr ]);
 

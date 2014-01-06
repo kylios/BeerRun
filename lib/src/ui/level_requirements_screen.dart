@@ -75,7 +75,7 @@ class LevelRequirementsScreen extends Dialog {
 
     LevelRequirementsScreen screen =
         new LevelRequirementsScreen._internal(ui, contents);
-    screen.addButton(new Button(ui, "Start!", () { screen.close(); }));
+    screen.addButton(new Button(ui, "Start!", () { screen.close(null); }));
 
     return screen;
   }
