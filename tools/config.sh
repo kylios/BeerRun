@@ -1,0 +1,5 @@
+
+PROJECT_ROOT=$(readlink -e ./..)
+BUILDDIR=$PROJECT_ROOT/build
+RUNDIR=$PROJECT_ROOT/run
+AWSDIR=$HOME/.aws
