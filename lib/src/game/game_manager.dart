@@ -9,6 +9,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   CanvasManager _canvasManager;
   CanvasDrawer _canvasDrawer;
   AudioManager _audio;
+  Loader _loader;
+  GameConfig _config;
 
   AudioToggle _musicToggle;
   AudioToggle _soundToggle;
@@ -133,18 +135,46 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   }
 
   Future init() {
-    return this._setupLevels()
+    return this._setupConfig(null)
+        .then((GameConfig config) {
+          this._parseConfig(config);
+        })
+        .then(this._setupLevels)
         .then(this._setupAudio);
   }
 
   UIInterface get ui => this._ui;
+
+  Future _setupConfig(var _) {
+
+    Completer c = new Completer();
+
+    this._config = new GameConfig();
+    this._config.load().then((GameConfig config) {
+      this._parseConfig(config);
+      c.complete();
+    });
+
+    return c.future;
+  }
+
+  void _parseConfig(GameConfig config) {
+
+    List<String> cdnHosts = config.get('cdn_hosts');
+    Random r = new Random();
+    String cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
+    String assetsPath = config.get('assets_path');
+    int version = config.get('assets_version');
+    String url = "https://${cdnHost}${assetsPath}${version}";
+    this._loader = new Loader(url);
+  }
 
   /**
    * Prereqs:
    * - this._canvasManager
    * - this._canvasDrawer
    */
-  Future _setupLevels() {
+  Future _setupLevels(var _) {
 
     List<String> levels = [
         //"data/levels/test_level.json",
@@ -154,14 +184,12 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         "data/levels/level5.json"
                            ];
 
-    Loader l = new Loader();
-
     Future f = null;
     for (String levelPath in levels) {
 
       var fn = (String url) {
         Completer<Level> c = new Completer<Level>();
-        l.load(url)
+        this._loader.load(url)
           .then((Map levelData) {
             return new Level.fromJson(
                 levelData, this._canvasDrawer,

@@ -2,6 +2,7 @@ library game;
 
 import 'dart:html';
 import 'dart:async';
+import 'dart:math';
 
 import 'package:beer_run/canvas_manager.dart';
 import 'package:beer_run/drawing.dart';
@@ -26,5 +27,6 @@ part 'src/game/game_manager.dart';
 part 'src/game/broadcaster.dart';
 part 'src/game/game_notification.dart';
 part 'src/game/game_event_listener.dart';
+part 'src/game/game_config.dart';
 
 

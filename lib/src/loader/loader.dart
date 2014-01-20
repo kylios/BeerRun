@@ -2,11 +2,22 @@ part of loader;
 
 class Loader {
 
+  String _prefix;
+
+  Loader([this._prefix = null]);
+
   Future<Map> load(String url) {
 
     Completer<Map> c = new Completer<Map>();
 
-    HttpRequest.request(url)
+    if (null != this._prefix) {
+        url = "${this._prefix}/$url";
+    }
+    window.console.log("Loading $url");
+    HttpRequest.request(url,
+            method: 'GET',
+            withCredentials: false,
+            responseType: 'application/json')
       .then((HttpRequest r) {
         String res = r.responseText;
         Map json = JSON.decode(res);

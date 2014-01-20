@@ -3,3 +3,6 @@ PROJECT_ROOT=$(readlink -e ./..)
 BUILDDIR=$PROJECT_ROOT/build
 RUNDIR=$PROJECT_ROOT/run
 AWSDIR=$HOME/.aws
+KEYPAIRS_DIR=$AWSDIR/keypairs
+SSH_USER=ubuntu
+BEERRUN_BUCKET_URL="s3://beerrun"

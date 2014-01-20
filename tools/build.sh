@@ -5,28 +5,45 @@
 
 check_command dart2js
 
+BUILDDIR=$PROJECT_ROOT/build
 
 rm -rf $BUILDDIR
 mkdir "$BUILDDIR" >/dev/null 2>&1
+mkdir "$BUILDDIR/web" >/dev/null 2>&1
+mkdir "$BUILDDIR/server" >/dev/null 2>&1
 
 OUTFILE=beer_run.dart.js
 INDIR=$PROJECT_ROOT/web
 INFILE=beer_run.dart
 DEBUG=1
 
+cd $INDIR
 COMMAND="dart2js --out=$OUTFILE"
 
-cd "$BUILDDIR"
 if [ $DEBUG ]; then
 	COMMAND="$COMMAND --checked"
 else
 	COMMAND="$COMMAND --minify"
 fi
 
-COMMAND="$COMMAND $INDIR/$INFILE"
-
-COPY_COMMAND="rsync -arv $INDIR/ $BUILDDIR"
-$COPY_COMMAND
-
+COMMAND="$COMMAND $INFILE"
+echo "$COMMAND"
 $COMMAND
+
+WEBDIR="$PROJECT_ROOT/web"
+SERVERDIR="$PROJECT_ROOT/server"
+rsync -arv $WEBDIR $BUILDDIR
+rsync -arv $SERVERDIR $BUILDDIR
+
+# Ugly hack to keep the dart.js file even though all
+# packages dissappear from the final build
+cd $BUILDDIR/web
+# Kill all symbolic links
+find -P . -type l -print0 | xargs -0 rm
+mkdir browser
+cp $WEBDIR/packages/browser/* ./browser
+rm packages >/dev/null 2>&1
+mkdir -p packages
+mv ./browser packages/
+
 

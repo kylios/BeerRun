@@ -4,3 +4,6 @@ packages
 */beer_run.dart.js
 */beer_run.dart.js.map
 */beer_run.dart.js.deps
+build
+sftp-config.json
+web/beer_run.dart.precompiled.js
