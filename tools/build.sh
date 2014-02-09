@@ -35,15 +35,24 @@ SERVERDIR="$PROJECT_ROOT/server"
 rsync -arv $WEBDIR $BUILDDIR
 rsync -arv $SERVERDIR $BUILDDIR
 
+set -x
+
 # Ugly hack to keep the dart.js file even though all
 # packages dissappear from the final build
 cd $BUILDDIR/web
 # Kill all symbolic links
 find -P . -type l -print0 | xargs -0 rm
-mkdir browser
-cp $WEBDIR/packages/browser/* ./browser
-rm packages >/dev/null 2>&1
-mkdir -p packages
-mv ./browser packages/
 
+function copy_package() {
+	package=$1
+		
+	mkdir $package
+	cp $WEBDIR/packages/$package/* ./$package
+	rm packages >/dev/null 2>&1
+	mkdir -p packages
+	mv ./$package packages/
+}
 
+copy_package browser
+
+set +x

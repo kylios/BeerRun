@@ -11,15 +11,15 @@ class Loader {
     Completer<Map> c = new Completer<Map>();
 
     if (null != this._prefix) {
-        url = "${this._prefix}/$url";
+        url = "${this._prefix}$url";
     }
     window.console.log("Loading $url");
-    HttpRequest.request(url,
-            method: 'GET',
+    HttpRequest.requestCrossOrigin(url,
+            method: 'GET'/*,
             withCredentials: false,
-            responseType: 'application/json')
-      .then((HttpRequest r) {
-        String res = r.responseText;
+            responseType: 'application/json'*/)
+      .then((String res /*HttpRequest r*/) {
+        //String res = r.responseText;
         Map json = JSON.decode(res);
         c.complete(json);
       });

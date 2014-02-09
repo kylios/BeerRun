@@ -2,14 +2,14 @@ part of game;
 
 class GameConfig {
 
-    String _server = 'http://beerrungame.net';
+    String _server = ''; //'https://beerrungame.net'; //'http://beerrungame.net';
 	Map _config;
 
 	Future<GameConfig> load() {
 
 		Completer<GameConfig> c = new Completer<GameConfig>();
 		Loader loader = new Loader(this._server);
-		loader.load('get_config.php').then((Map data) {
+		loader.load('/get_config.php').then((Map data) {
 			this._config = data;
 			c.complete(this);
 		});

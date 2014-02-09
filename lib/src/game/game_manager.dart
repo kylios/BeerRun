@@ -140,7 +140,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
           this._parseConfig(config);
         })
         .then(this._setupLevels)
-        .then(this._setupAudio);
+        .then(this._setupAudio)
+        ;
   }
 
   UIInterface get ui => this._ui;
@@ -152,7 +153,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._config = new GameConfig();
     this._config.load().then((GameConfig config) {
       this._parseConfig(config);
-      c.complete();
+      c.complete(config);
     });
 
     return c.future;
@@ -162,10 +163,19 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     List<String> cdnHosts = config.get('cdn_hosts');
     Random r = new Random();
-    String cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
+    String cdnHost = '';
+    if (cdnHosts.length > 0) {
+      cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
+    }
     String assetsPath = config.get('assets_path');
     int version = config.get('assets_version');
-    String url = "https://${cdnHost}${assetsPath}${version}";
+    bool useCdn = config.get('use_cdn');
+
+    String url = '';
+    if (useCdn) {
+      url = "https://${cdnHost}${assetsPath}${version}/";
+    }
+    
     this._loader = new Loader(url);
   }
 
@@ -176,6 +186,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
    */
   Future _setupLevels(var _) {
 
+    /*
     List<String> levels = [
         //"data/levels/test_level.json",
         "data/levels/new_sample_level.json",
@@ -183,6 +194,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         "data/levels/level2.json",
         "data/levels/level5.json"
                            ];
+
 
     Future f = null;
     for (String levelPath in levels) {
@@ -222,8 +234,34 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
 
     }
+    */
 
-    return f;
+    Completer c = new Completer();
+    this._loader.load("/data/level_config.json").then((Map config) {
+      List<Map> levels = config['levels'];
+
+      MultiLoader l = new MultiLoader(this._loader);
+      l.wait().then((Map<String, Map> levelData) {
+
+        for (Map levelConfig in levels) {
+          this._levels.add(new Level.fromJson(
+            levelData[levelConfig['path']], this._canvasDrawer,
+            this._canvasManager, this._player
+          ));
+        }
+
+        c.complete();
+      });
+
+      for (Map levelConfig in levels) {
+        String levelPath = levelConfig['path'];
+        l.load(levelPath);
+      }
+    });
+
+
+
+    return c.future;
   }
 
   Future _setupAudio(var _) {

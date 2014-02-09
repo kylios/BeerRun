@@ -4,6 +4,8 @@ include '../server/init.php';
 
 function cdnHost() {
 	$cdnHosts = Config::get('cdn_hosts');
+  if (empty($cdnHosts))
+    return NULL;
 	return $cdnHosts[array_rand($cdnHosts)];
 }
 
@@ -13,9 +15,13 @@ function assetsVersion() {
 
 function assetPath() {
 	$cdnHost = cdnHost();
+  if (NULL === $cdnHost)
+    return '';
 	$assetsPath = Config::get('assets_path').assetsVersion().'/';
 	return 'https://'.$cdnHost.$assetsPath;
 }
+
+Config::exportVars();
 
 ?>
 
@@ -25,7 +31,7 @@ function assetPath() {
 <head>
 <meta charset="utf-8">
 <title>BeerRun</title>
-<link rel="stylesheet" type="text/css" href="beer_run.css"></link>
+<link rel="stylesheet" type="text/css" href="<?=assetPath();?>beer_run.css"></link>
 </head>
 <body>
   <div class="container">
@@ -106,6 +112,10 @@ function assetPath() {
   </div>
 
   <div class="clear"></div>
+
+  <div id="config">
+    <?=Config::asJsonString();?>
+  </div>
 
   <script type="application/dart" src="<?=assetPath();?>beer_run.dart"></script>
   <script src="<?=assetPath();?>packages/browser/dart.js"></script>
