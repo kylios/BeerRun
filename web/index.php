@@ -43,10 +43,11 @@ Config::exportVars();
       <h3>CREDITS</h3>
       <ul>
         <li>music by Mark Racette</li>
+        <li>social media: Amber Larkins</li>
         <li>Select art taken from <a href="http://opengameart.org">Open
             Game Art</a> and licensed under CC-BY-SA 3.0
         </li>
-        <li>Testers: Scott Racette, Mark Racette</li>
+        <li>Testers: Scott Racette, Mark Racette, Amber Larkins</li>
       </ul>
       <p>
         Complete source code: <a

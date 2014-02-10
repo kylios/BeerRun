@@ -12,6 +12,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   Loader _loader;
   GameConfig _config;
   PageStats _pageStats;
+  LoadingScreen _loadingScreen;
 
   AudioToggle _musicToggle;
   AudioToggle _soundToggle;
@@ -100,14 +101,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     this._statsManager = new StatsManager(statsElement);
 
+    this._pageStats = new PageStats(debugStatsElement);
+
     this._canvasManager = new CanvasManager(canvasElement);
     this._canvasManager.resize(this._canvasWidth, this._canvasHeight);
 
-    this._canvasDrawer = new CanvasDrawer(this._canvasManager);
+    this._canvasDrawer = new CanvasDrawer(this._canvasManager, this._pageStats);
     this._canvasDrawer.setOffset(0, 0);
     this._canvasDrawer.backgroundColor = 'black';
-
-    this._pageStats = new PageStats(debugStatsElement);
 
     PlayerInputComponent playerInput =
         new PlayerInputComponent();
@@ -134,21 +135,37 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     this._musicToggle.addListener(this._audio);
     this._soundToggle.addListener(this._audio);
-  }
 
-  Future init() {
-    this._pageStats.startTimer("game_manager_init");
-    return this._setupConfig(null)
-        .then((GameConfig config) {
-          this._parseConfig(config);
-        })
-        .then(this._setupLevels)
-        .then(this._setupAudio)
-        .then((var _) => this._pageStats.stopTimer("game_manager_init"))
-        ;
+    this._loadingScreen = new LoadingScreen(this._ui);
   }
 
   UIInterface get ui => this._ui;
+
+  Future init() {
+    this._setupPageStats();
+
+    this._loadingScreen.addTask();  // setupConfig
+    this._loadingScreen.addTask();  // Level manifest file
+
+    this._ui.showView(this._loadingScreen);
+
+    return this._setupConfig(null)
+        .then(this._parseConfig)
+        .then(this._setupLevels)
+        .then(this._setupAudio)
+        .then((var _) {
+          this._pageStats.stopTimer("game_manager_init");
+          this._ui.closeWindow(null);
+        })
+        ;
+  }
+
+  void _setupPageStats() {
+
+    this._pageStats.startMovingAverage('fps');
+    this._pageStats.startTimer("game_manager_init");
+
+  }
 
   Future _setupConfig(var _) {
 
@@ -157,6 +174,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._config = new GameConfig();
     this._config.load().then((GameConfig config) {
       this._parseConfig(config);
+      this._loadingScreen.completeTask();
       c.complete(config);
     });
 
@@ -194,22 +212,32 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     Completer c = new Completer();
     this._loader.load("/data/level_config.json").then((Map config) {
+
       List<Map> levels = config['levels'];
+      this._loadingScreen.completeTask();
 
       MultiLoader l = new MultiLoader(this._loader);
+      l.onSingleLoad((var _) => this._loadingScreen.completeTask());
       l.wait().then((Map<String, Map> levelData) {
 
         for (Map levelConfig in levels) {
+          this._pageStats.startTimer("new_level_from_json");
           this._levels.add(new Level.fromJson(
             levelData[levelConfig['path']], this._canvasDrawer,
             this._canvasManager, this._player
           ));
+          this._pageStats.stopTimer("new_level_from_json");
+          this._pageStats.writeStat("new_level_from_json");
+          this._loadingScreen.completeTask();
         }
 
         c.complete();
       });
 
       for (Map levelConfig in levels) {
+
+        this._loadingScreen.addTask();  // One task to load the level
+        this._loadingScreen.addTask();  // One task to parse the level
         String levelPath = levelConfig['path'];
         l.load(levelPath);
       }
@@ -375,7 +403,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     this._currentLevel.update();
     this._statsManager.update();
 
-    this._pageStats.setStat('fps', this._fps);
+   // this._pageStats.setStat('fps', this._fps);
 
     // By exiting here on game over, we let the level objects continue updating
     // while the player is reading the game over summary
@@ -410,6 +438,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     double thisFrameFps = 1000 / (this._now - this._lastUpdate);
     this._fps += (thisFrameFps - this._fps) / 50;
     this._lastUpdate = this._now;
+
+    this._pageStats.setStat('fps', thisFrameFps);
   }
 
   void stop() {
@@ -446,7 +476,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     if (this._tmpInputComponent != null) {
       this._player.setControlComponent(this._tmpInputComponent);
     }
-    this._player.level.unPause();
+    if (this._player.level != null) {
+      this._player.level.unPause();
+    }
   }
 
   void onTimeOut(GameTimer t) {

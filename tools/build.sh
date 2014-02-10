@@ -15,12 +15,12 @@ mkdir "$BUILDDIR/server" >/dev/null 2>&1
 OUTFILE=beer_run.dart.js
 INDIR=$PROJECT_ROOT/web
 INFILE=beer_run.dart
-DEBUG=0 #1
+DEBUG=1
 
 cd $INDIR
 COMMAND="dart2js --out=$OUTFILE"
 
-if [ $DEBUG ]; then
+if [ $DEBUG -eq 1 ]; then
 	COMMAND="$COMMAND --checked"
 else
 	COMMAND="$COMMAND --minify"

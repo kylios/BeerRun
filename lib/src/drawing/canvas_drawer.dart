@@ -12,6 +12,7 @@ part of drawing;
 class CanvasDrawer implements DrawingInterface {
 
   CanvasManager _canvasManager;
+  PageStats _pageStats;
 
   // These variables help do the canvas scrolling thing as the player moves
   int _offsetX = 0;
@@ -25,7 +26,7 @@ class CanvasDrawer implements DrawingInterface {
   /**
    * Give us a manager so we can access the canvas' properties.
    */
-  CanvasDrawer(this._canvasManager) {
+  CanvasDrawer(this._canvasManager, this._pageStats) {
 
     if (_globalContext == null) {
       _globalContext = this._canvasManager.canvas.getContext("2d");
@@ -35,14 +36,14 @@ class CanvasDrawer implements DrawingInterface {
   String get backgroundColor => this._backgroundColor;
   set backgroundColor(String color) {
     this._backgroundColor = color;
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
     c.fillStyle = this._backgroundColor;
   }
 
   String get font => this._font;
   set font(String font) {
     this._font = font;
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
     c.font = this._font;
   }
 
@@ -50,8 +51,12 @@ class CanvasDrawer implements DrawingInterface {
   int get offsetY => this._offsetY;
 
   CanvasManager get canvas => this._canvasManager;
-  CanvasRenderingContext2D get context =>
-      this._canvasManager.canvas.getContext("2d");
+  CanvasRenderingContext2D get context {
+    this._pageStats.startTimer('get_2d_rendering_context');
+    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext('2d');
+    this._pageStats.stopTimer('get_2d_rendering_context');
+    return c;
+  }
 
   /**
    * Sets the draw offset.  Contsrains those offsets to certain boundaries so
@@ -89,14 +94,14 @@ class CanvasDrawer implements DrawingInterface {
 
   // DRAWING FUNCTIONS
   void clear() {
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
     c.fillStyle = this.backgroundColor;
     c.fillRect(0, 0, this._canvasManager.width, this._canvasManager.height);
   }
 
   void drawImage(ImageElement i, int x, int y, [int width, int height]) {
 
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
     if (null != width && null != height)
     {
       //Rect destinationRect = new Rect(x, y, width, height);
@@ -131,7 +136,7 @@ class CanvasDrawer implements DrawingInterface {
     x = x - this._offsetX;
     y = y - this._offsetY;
 
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
 
     c.drawImageScaledFromSource(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
     //c.drawImage(s.image, s.x, s.y, s.width, s.height, x, y, width, height);
@@ -148,7 +153,7 @@ class CanvasDrawer implements DrawingInterface {
     if (null == radiusY) {
       radiusY = 0;
     }
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
 
     c.fillStyle = this.backgroundColor;
     c.beginPath();
@@ -175,7 +180,7 @@ class CanvasDrawer implements DrawingInterface {
     if (null == radiusY) {
       radiusY = 0;
     }
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
 
     c.fillStyle = this.backgroundColor;
     c.beginPath();
@@ -195,7 +200,7 @@ class CanvasDrawer implements DrawingInterface {
 
   void drawText(String text, int x, int y, {relative: false}) {
 
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
     c.font = this.font;
     c.fillStyle = this.backgroundColor;
 
@@ -208,11 +213,11 @@ class CanvasDrawer implements DrawingInterface {
   }
 
   TextMetrics measureText(String text) {
-    CanvasRenderingContext2D c = this._canvasManager.canvas.getContext("2d");
+    CanvasRenderingContext2D c = this.context;
     return c.measureText(text);
   }
 
   DrawingPath getPath() {
-    return new DrawingPath(this._canvasManager.canvas.getContext("2d"));
+    return new DrawingPath(this.context);
   }
 }
