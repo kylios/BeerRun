@@ -15,7 +15,7 @@ mkdir "$BUILDDIR/server" >/dev/null 2>&1
 OUTFILE=beer_run.dart.js
 INDIR=$PROJECT_ROOT/web
 INFILE=beer_run.dart
-DEBUG=1
+DEBUG=0 #1
 
 cd $INDIR
 COMMAND="dart2js --out=$OUTFILE"

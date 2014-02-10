@@ -2,7 +2,7 @@ part of game;
 
 class GameConfig {
 
-    String _server = ''; //'https://beerrungame.net'; //'http://beerrungame.net';
+    String _server = 'http://localhost:8080'; //'https://beerrungame.net'; //'http://beerrungame.net';
 	Map _config;
 
 	Future<GameConfig> load() {

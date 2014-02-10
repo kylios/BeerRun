@@ -544,7 +544,7 @@
     {
      "beers_to_win":"16",
      "name":"new test level",
-     "seconds":"6",
+     "seconds":"600",
      "start_x":"12",
      "start_y":"20",
      "store_x":"43",

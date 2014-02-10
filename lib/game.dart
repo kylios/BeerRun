@@ -15,6 +15,7 @@ import 'package:beer_run/tutorial.dart';
 import 'package:beer_run/loader.dart';
 import 'package:beer_run/component.dart';
 import 'package:beer_run/audio.dart';
+import 'package:beer_run/page.dart';
 
 part 'src/game/game_point.dart';
 part 'src/game/game_curve.dart';

@@ -7,7 +7,7 @@ class Config {
 		'assets_version' => 1,
 	
 		'assets_host' => '',//'https://s3-us-west-1.amazon.aws.com',
-		'assets_path' => '',//'/beerrun/assets/',
+		'assets_path' => '', //'/beer_run/web',//'/beerrun/assets/',
 	
 		'use_cdn' => false,
 		'cdn_hosts' => array(

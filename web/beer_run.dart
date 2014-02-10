@@ -16,7 +16,7 @@ void main() {
       NotificationsRootElement: querySelector('div#notifications_root'),
       DialogElement: querySelector('div#dialog'),
       statsElement: querySelector('div#stats'),
-      fpsElement: querySelector('div#fps'),
+      debugStatsElement: querySelector('div#debug_stats'),
       musicOnElement: querySelector('input#music_toggle_on'),
       musicOffElement: querySelector('input#music_toggle_off'),
       soundOnElement: querySelector('input#sound_toggle_on'),

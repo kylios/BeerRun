@@ -62,8 +62,6 @@ Config::exportVars();
 
   <div class="container left padded">
     <div id="debug_stats">
-      <div>FPS:</div>
-      <div id="fps"></div>
     </div>
     <div id="stats">
       <div id="duration"></div>
