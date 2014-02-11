@@ -3,152 +3,162 @@ part of game;
 class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     GameEventListener {
 
-  int _tickNo = 0;
+    int _tickNo = 0;
 
-  StatsManager _statsManager;
-  CanvasManager _canvasManager;
-  CanvasDrawer _canvasDrawer;
-  AudioManager _audio;
-  Loader _loader;
-  GameConfig _config;
-  PageStats _pageStats;
-  LoadingScreen _loadingScreen;
+    StatsManager _statsManager;
+    CanvasManager _canvasManager;
+    CanvasDrawer _canvasDrawer;
+    AudioManager _audio;
+    Loader _loader;
+    GameConfig _config;
+    PageStats _pageStats;
+    LoadingScreen _loadingScreen;
 
-  AudioToggle _musicToggle;
-  AudioToggle _soundToggle;
+    AudioToggle _musicToggle;
+    AudioToggle _soundToggle;
 
-  final int _canvasWidth;
-  final int _canvasHeight;
+    final int _canvasWidth;
+    final int _canvasHeight;
 
-  int _beersDelivered = 0;
-  int _totalScore = 0;
-  bool _wonLevel = false;
+    int _beersDelivered = 0;
+    int _totalScore = 0;
+    bool _wonLevel = false;
 
-  UI _ui;
-  UI _notifications;
-  BeerRunHUD _hud;
-  Player _player;
+    UI _ui;
+    UI _notifications;
+    BeerRunHUD _hud;
+    Player _player;
 
-  GameTimer _timer;
-  Level _currentLevel;
-  int _currentLevelIdx = 0;
+    GameTimer _timer;
+    Level _currentLevel;
+    int _currentLevelIdx = 0;
 
-  bool _notifyDrunk = true;
+    bool _notifyDrunk = true;
 
-  bool _continueLoop = false;
-  bool _showHUD = false;
-  bool _gameOver = true;
-  String _gameOverText = '';
+    bool _continueLoop = false;
+    bool _showHUD = false;
+    bool _gameOver = true;
+    String _gameOverText = '';
 
-  int _tutorialDestX = 0;
-  int _tutorialDestY = 0;
+    int _tutorialDestX = 0;
+    int _tutorialDestY = 0;
 
-  // HUD
-  Meter _BACMeter;
-  Meter _HPMeter;
+    // HUD
+    Meter _BACMeter;
+    Meter _HPMeter;
 
-  // Debug settings
-  bool _DEBUG_skipTutorial = false;
-  bool _DEBUG_showScoreScreen = false;
+    // Debug settings
+    bool _DEBUG_skipTutorial = false;
+    bool _DEBUG_showScoreScreen = false;
 
-  // FPS
-  int _now;
-  double _fps = 0.0;
-  int _lastUpdate = new DateTime.now().millisecondsSinceEpoch;
+    // FPS
+    int _now;
+    double _fps = 0.0;
+    int _lastUpdate = new DateTime.now().millisecondsSinceEpoch;
 
-  List<Level> _levels = new List<Level>();
+    List<Level> _levels = new List<Level>();
 
-  int get tickNo => this._tickNo;
+    int get tickNo => this._tickNo;
 
-  PlayerInputComponent _tmpInputComponent = null;
+    PlayerInputComponent _tmpInputComponent = null;
 
-  static GameManager _instance = null;
-  factory GameManager({canvasWidth, canvasHeight,
-    CanvasElement canvasElement,
-      DivElement UIRootElement,
-      DivElement NotificationsRootElement,
-      DivElement DialogElement,
-      DivElement statsElement,
-      DivElement debugStatsElement,
-      InputElement musicOnElement,
-      InputElement musicOffElement,
-      InputElement soundOnElement,
-      InputElement soundOffElement}) {
+    static GameManager _instance = null;
+    factory GameManager({canvasWidth, canvasHeight,
+        CanvasElement canvasElement,
+        DivElement UIRootElement,
+        DivElement NotificationsRootElement,
+        DivElement DialogElement,
+        DivElement statsElement,
+        DivElement debugStatsElement,
+        InputElement musicOnElement,
+        InputElement musicOffElement,
+        InputElement soundOnElement,
+        InputElement soundOffElement}) {
 
-    if (GameManager._instance == null) {
-      GameManager._instance = new GameManager._internal(
-          canvasWidth, canvasHeight,
-          canvasElement,
-          UIRootElement, NotificationsRootElement,
-          DialogElement, statsElement, debugStatsElement,
-          musicOnElement, musicOffElement, soundOnElement, soundOffElement);
+        if (GameManager._instance == null) {
+            GameManager._instance = new GameManager._internal(
+                canvasWidth, canvasHeight,
+                canvasElement,
+                UIRootElement, NotificationsRootElement,
+                DialogElement, statsElement, debugStatsElement,
+                musicOnElement, musicOffElement, soundOnElement, soundOffElement);
+        }
+
+        return GameManager._instance;
     }
 
-    return GameManager._instance;
-  }
+    GameManager._internal(this._canvasWidth, this._canvasHeight,
+            CanvasElement canvasElement,
+            DivElement UIRootElement,
+            DivElement NotificationsRootElement,
+            DivElement DialogElement,
+            DivElement statsElement,
+            DivElement debugStatsElement,
+            InputElement musicOnElement,
+            InputElement musicOffElement,
+            InputElement soundOnElement,
+            InputElement soundOffElement) {
 
-  GameManager._internal(this._canvasWidth, this._canvasHeight,
-      CanvasElement canvasElement,
-      DivElement UIRootElement,
-      DivElement NotificationsRootElement,
-      DivElement DialogElement,
-      DivElement statsElement,
-      DivElement debugStatsElement,
-      InputElement musicOnElement,
-      InputElement musicOffElement,
-      InputElement soundOnElement,
-      InputElement soundOffElement) {
+        this._statsManager = new StatsManager(statsElement);
 
-    this._statsManager = new StatsManager(statsElement);
+        this._pageStats = new PageStats(debugStatsElement);
 
-    this._pageStats = new PageStats(debugStatsElement);
+        this._canvasManager = new CanvasManager(canvasElement);
+        this._canvasManager.resize(this._canvasWidth, this._canvasHeight);
 
-    this._canvasManager = new CanvasManager(canvasElement);
-    this._canvasManager.resize(this._canvasWidth, this._canvasHeight);
+        this._canvasDrawer = new CanvasDrawer(this._canvasManager, this._pageStats);
+        this._canvasDrawer.setOffset(0, 0);
+        this._canvasDrawer.backgroundColor = 'black';
 
-    this._canvasDrawer = new CanvasDrawer(this._canvasManager, this._pageStats);
-    this._canvasDrawer.setOffset(0, 0);
-    this._canvasDrawer.backgroundColor = 'black';
+        PlayerInputComponent playerInput =
+            new PlayerInputComponent();
+        this._canvasManager.addKeyboardListener(playerInput);
+        this._canvasManager.addKeyboardListener(this);
 
-    PlayerInputComponent playerInput =
-        new PlayerInputComponent();
-    this._canvasManager.addKeyboardListener(playerInput);
-    this._canvasManager.addKeyboardListener(this);
+        this._player = new Player(this, this._statsManager);
+        this._player.setControlComponent(playerInput);
 
-    this._player = new Player(this, this._statsManager);
-    this._player.setControlComponent(playerInput);
+        this._ui = new UI(UIRootElement, this._canvasWidth, this._canvasHeight);
+        this._ui.addListener(this);
 
-    this._ui = new UI(UIRootElement, this._canvasWidth, this._canvasHeight);
-    this._ui.addListener(this);
+        this._notifications = new UI(NotificationsRootElement, this._canvasWidth, this._canvasHeight);
 
-    this._notifications = new UI(NotificationsRootElement, this._canvasWidth, this._canvasHeight);
+        this._hud = new BeerRunHUD(this._canvasDrawer, this._player);
 
-    this._hud = new BeerRunHUD(this._canvasDrawer, this._player);
+        this._BACMeter = new Meter(10, 52, 10, 116, 22);
+        this._HPMeter = new Meter(3, 52, 36, 116, 22);
 
-    this._BACMeter = new Meter(10, 52, 10, 116, 22);
-    this._HPMeter = new Meter(3, 52, 36, 116, 22);
+        this._audio = new AudioManager();
 
-    this._audio = new AudioManager();
+        this._musicToggle = new AudioToggle(true, musicOnElement, musicOffElement);
+        this._soundToggle = new AudioToggle(false, soundOnElement, soundOffElement);
 
-    this._musicToggle = new AudioToggle(true, musicOnElement, musicOffElement);
-    this._soundToggle = new AudioToggle(false, soundOnElement, soundOffElement);
+        this._musicToggle.addListener(this._audio);
+        this._soundToggle.addListener(this._audio);
 
-    this._musicToggle.addListener(this._audio);
-    this._soundToggle.addListener(this._audio);
+        this._loadingScreen = new LoadingScreen(this._ui);
+    }
 
-    this._loadingScreen = new LoadingScreen(this._ui);
-  }
+    UIInterface get ui => this._ui;
 
-  UIInterface get ui => this._ui;
+    Future init() {
+        this._setupPageStats();
 
-  Future init() {
-    this._setupPageStats();
+        this._ui.showView(this._loadingScreen);
 
-    this._loadingScreen.addTask();  // setupConfig
-    this._loadingScreen.addTask();  // Level manifest file
+        GameLoader gl = new GameLoader();
+        gl.addStep(new GameLoaderStep.fromFunction("_setupConfig", this, this._setupConfig, null));
+        gl.addStep(new GameLoaderStep.fromFunction("_loadLevels", this, this._loadLevels, "/data/level_config.json"));
+        gl.addStep(new GameLoaderStep.fromFunction("_setupAudio", this, this._setupAudio, null));
+        return gl
+                .run()
+                .then((var _) {
+            this._pageStats.stopTimer("game_manager_init");
+            this._ui.closeWindow(null);
+        });
 
-    this._ui.showView(this._loadingScreen);
 
+/*
     return this._setupConfig(null)
         .then(this._parseConfig)
         .then(this._setupLevels)
@@ -158,86 +168,117 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
           this._ui.closeWindow(null);
         })
         ;
-  }
+        */
 
-  void _setupPageStats() {
-
-    this._pageStats.startMovingAverage('fps');
-    this._pageStats.startTimer("game_manager_init");
-
-  }
-
-  Future _setupConfig(var _) {
-
-    Completer c = new Completer();
-
-    this._config = new GameConfig();
-    this._config.load().then((GameConfig config) {
-      this._parseConfig(config);
-      this._loadingScreen.completeTask();
-      c.complete(config);
-    });
-
-    return c.future;
-  }
-
-  void _parseConfig(GameConfig config) {
-
-    List<String> cdnHosts = config.get('cdn_hosts');
-    Random r = new Random();
-    String cdnHost = '';
-    if (cdnHosts.length > 0) {
-      cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
-    }
-    String assetsPath = config.get('assets_path');
-    int version = config.get('assets_version');
-    bool useCdn = config.get('use_cdn');
-
-    String url = '';
-    if (useCdn) {
-      url = "https://${cdnHost}${assetsPath}${version}/";
-    } else {
-        url = assetsPath;
     }
 
-    this._loader = new Loader(url);
-  }
+    void _setupPageStats() {
+
+        this._pageStats.startMovingAverage('fps');
+        this._pageStats.startTimer("game_manager_init");
+
+    }
+
+    Future _setupConfig(GameLoaderStep step, var __) {
+
+        Completer c = new Completer();
+
+        GameConfig config = new GameConfig();
+        config.load().then((loadedConfig) {
+            this._config = loadedConfig;
+            this._parseConfig(loadedConfig);
+            c.complete(loadedConfig);
+        });
+
+        return c.future;
+    }
+
+    void _parseConfig(GameConfig config) {
+
+        List<String> cdnHosts = config.get('cdn_hosts');
+        Random r = new Random();
+        String cdnHost = '';
+        if (cdnHosts.length > 0) {
+            cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
+        }
+        String assetsPath = config.get('assets_path');
+        int version = config.get('assets_version');
+        bool useCdn = config.get('use_cdn');
+
+        String url = '';
+        if (useCdn) {
+          url = "https://${cdnHost}${assetsPath}${version}/";
+        } else {
+            url = assetsPath;
+        }
+
+        this._loader = new Loader(url);
+    }
+
+    Future _loadLevels(GameLoaderStep step, String levelConfigPath) {
+        return this._loader.load(levelConfigPath).then((Map config) {
+            config['levels'].forEach((Map levelConfig) {
+                GameLoaderJob loadLevel = new GameLoaderJob("Loading levels", this._loadLevel, levelConfig);
+                step.addJob(loadLevel);
+            });
+        });
+    }
+
+    Future _loadLevel(GameLoaderStep step, Map levelConfig) {
+
+        return this._loader.load(levelConfig['path']).then((Map levelData) {
+            step.addJob(new GameLoaderJob("Loading level ${levelConfig['name']}", this._parseLevel, levelData));
+        });
+    }
+
+    Future _parseLevel(GameLoaderStep step, Map levelData) {
+
+        Completer c = new Completer();
+
+        Timer.run(() {
+            this._pageStats.startTimer("new_level_from_json");
+            Level l = new Level.fromJson(
+              levelData, this._canvasDrawer,
+              this._canvasManager, this._player);
+            this._levels.add(l);
+
+            this._pageStats.stopTimer("new_level_from_json");
+            this._pageStats.writeStat("new_level_from_json");
+
+        c.complete();
+        });
+
+        return c.future;
+    }
 
   /**
    * Prereqs:
    * - this._canvasManager
    * - this._canvasDrawer
    */
-  Future _setupLevels(var _) {
+  Future _setupLevels(GameLoaderStep step, var _) {
 
     Completer c = new Completer();
     this._loader.load("/data/level_config.json").then((Map config) {
 
       List<Map> levels = config['levels'];
-      this._loadingScreen.completeTask();
+
+
+
 
       MultiLoader l = new MultiLoader(this._loader);
       l.onSingleLoad((var _) => this._loadingScreen.completeTask());
       l.wait().then((Map<String, Map> levelData) {
 
         for (Map levelConfig in levels) {
-          this._pageStats.startTimer("new_level_from_json");
-          this._levels.add(new Level.fromJson(
-            levelData[levelConfig['path']], this._canvasDrawer,
-            this._canvasManager, this._player
-          ));
-          this._pageStats.stopTimer("new_level_from_json");
-          this._pageStats.writeStat("new_level_from_json");
-          this._loadingScreen.completeTask();
+
+
         }
 
         c.complete();
       });
 
       for (Map levelConfig in levels) {
-
-        this._loadingScreen.addTask();  // One task to load the level
-        this._loadingScreen.addTask();  // One task to parse the level
         String levelPath = levelConfig['path'];
         l.load(levelPath);
       }
@@ -248,7 +289,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     return c.future;
   }
 
-  Future _setupAudio(var _) {
+  Future _setupAudio(GameLoaderStep step, var _) {
 
     Completer c = new Completer();
 

@@ -29,5 +29,11 @@ part 'src/game/broadcaster.dart';
 part 'src/game/game_notification.dart';
 part 'src/game/game_event_listener.dart';
 part 'src/game/game_config.dart';
+part 'src/game/game_loader.dart';
+part 'src/game/game_loader_step.dart';
+part 'src/game/game_loader_job.dart';
+part 'src/game/game_loadable.dart';
 
+
+typedef Future gameLoaderJobFunc(GameLoaderStep step, var data);
 

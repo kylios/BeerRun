@@ -4,12 +4,13 @@ class LoadingScreen extends Dialog {
 	
 	int _numTasks = 0;
 	int _completedTasks = 0;
+	int _oldCompletedTasks = 0;
 
 	int _currentProgress = 0;
 	int _targetProgress = 0;
-	Timer _updateTimer = null;
 
 	View _progressView;
+	Timer _updateTimer;
 
 	DivElement get rootElement => null;
 	
@@ -23,14 +24,30 @@ class LoadingScreen extends Dialog {
 
 	    View progress = LoadingScreen._createProgressView(ui, contents);
 
-	    return new LoadingScreen._internal(ui, contents, progress);
+	    window.console.log("Creating timer: current_progress: ${this._currentProgress}, target_progress: ${this._targetProgress}");
+		Timer updateTimer = new Timer.periodic(new Duration(milliseconds: 10), (Timer t) {
+			window.console.log("timer: currentProgress=${this._currentProgress}, targetProgress=${this._targetProgress}");
+			if (this._currentProgress > this._targetProgress) {
+				this._currentProgress -= 2;
+			} else if (this._currentProgress < this._targetProgress) {
+				this._currentProgress += 4;
+			}
+			window.console.log("Progress: ${this._currentProgress}%");
+			this._progressView.style.width = "${this._currentProgress}%";
+		});  
+
+	    return new LoadingScreen._internal(ui, contents, progress, updateTimer);
 	}
 
 	/**
 	 * Internal constructor just identical to Dialog's constructor.
      */
- 	LoadingScreen._internal(UIInterface ui, View contents, this._progressView) :
+ 	LoadingScreen._internal(UIInterface ui, View contents, this._progressView, this._updateTimer) :
     	super(ui, contents);
+
+    void _onClose() {
+    	this._updateTimer.cancel();
+    }
 
     static View _createProgressView(UIInterface ui, View container) {
     	View v = new View(ui);
@@ -57,21 +74,12 @@ class LoadingScreen extends Dialog {
 
     	this._targetProgress = widthPercent;
 
-    	if (this._updateTimer == null) {
-    		this._updateTimer = new Timer.periodic(new Duration(milliseconds: 100), (Timer t) {
-    			if (this._currentProgress > this._targetProgress) {
-    				this._currentProgress -= 2;
-    			} else if (this._currentProgress < this._targetProgress) {
-    				this._currentProgress++;
-    			} else {
-    				this._updateTimer.cancel();
-    				this._updateTimer = null;
-    			}
-    			window.console.log("Progress: ${this._currentProgress}%");
-    			this._progressView.style.width = "${this._currentProgress}%";
-    		});
+       	if (this._oldCompletedTasks != this._completedTasks) {
+    		this._currentProgress = this._targetProgress;
     	}
-    }
+
+    	this._oldCompletedTasks = this._completedTasks;  
+	}
 
    	void addTask() {
    		this._numTasks++;

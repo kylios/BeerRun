@@ -15,6 +15,8 @@ class View {
     }
   }
 
+  void _onClose() {} // Override this
+
   void show() {
     window.console.log("showing: ${this._root.id}");
     this._root.style.display = "block";
@@ -22,6 +24,8 @@ class View {
 
   void close(var data) {
     this._ui.closeWindow(data);
+
+    this._onClose();
   }
 
   void hide() {
