@@ -52,9 +52,7 @@ class CanvasDrawer implements DrawingInterface {
 
   CanvasManager get canvas => this._canvasManager;
   CanvasRenderingContext2D get context {
-    this._pageStats.startTimer('get_2d_rendering_context');
     CanvasRenderingContext2D c = this._canvasManager.canvas.getContext('2d');
-    this._pageStats.stopTimer('get_2d_rendering_context');
     return c;
   }
 

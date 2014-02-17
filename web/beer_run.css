@@ -21,6 +21,10 @@ div.padded {
   padding: 8px;
 }
 
+div.bold {
+  font-weight: bold;
+}
+
 div.no_padding {
   padding: 0px;
 }
@@ -29,7 +33,6 @@ div.container {
   border: 1px solid #ccc;
   background-color: #fff;
   margin: 6px;
-  max-width: 768px;
   position: relative;
 }
 
@@ -98,8 +101,7 @@ div#dialog {
 
 .ui {
   background: black;
-  border: 2% solid white;
-  padding: 4%;
+  padding: 20px;
   opacity: 0.8;
   color: white;
 }
@@ -124,11 +126,11 @@ div#dialog {
 }
 
 .window {
-  width: 92%;
+  width: 600px;
   display: none;
   position: absolute;
-  top: 57%;
-  height: 32%;
+  top: 300px;
+  height: 200px;
 }
 
 .notifications {

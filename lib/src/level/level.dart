@@ -309,6 +309,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
       int row = 0;
       int col = 0;
       for (Sprite s in layer) {
+        //window.console.log("sprite: $s");
         if (s != null) {
           d.drawSprite(s, col * this._tileWidth, row * this._tileHeight,
               this._tileWidth, this._tileHeight);
@@ -359,6 +360,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   }
 
   Future runTutorial() {
+      this.draw(this._drawer);
       if (this._tutorial != null) {
           return this._tutorial.run();
       } else {
@@ -526,7 +528,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
       }
     }
 
-    if (l.name == "new test level") {
+    if (l.name == "test_level") {
       Level.setupTutorial(l);
     }
 

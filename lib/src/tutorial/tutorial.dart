@@ -32,6 +32,8 @@ class Tutorial {
       int halfWidth = this._level.canvasManager.width ~/ 2;
       int halfHeight = this._level.canvasManager.height ~/ 2;
 
+      window.console.log("Tutorial:start (setting offset): col=$col, row=$row, tileWidth=${this._level.tileWidth}, tileHeight=${this._level.tileHeight}, halfWidth=${halfWidth}, halfHeight=${halfHeight}, playerTileWidth=${this._level.player.tileWidth}, playerTileHeight=${this._level.player.tileHeight}");
+
       this._level.canvasDrawer.setOffset(
           col * this._level.tileWidth - halfWidth + this._level.player.tileWidth,
           row * this._level.tileHeight - halfHeight + this._level.player.tileHeight);
@@ -61,6 +63,10 @@ class Tutorial {
     return this;
   }
 
+  void _onStartInternal() {
+    this._level.draw(this._level.canvasDrawer);
+  }
+
   /**
    * Run through every stage of the tutorial synchronously.  First, the
    * _startStep is called if it has been defined.  Then each tutorial function
@@ -72,6 +78,8 @@ class Tutorial {
   Future run() {
 
     Completer<bool> c = new Completer<bool>();
+
+    this._onStartInternal();
 
     if (this._onStart == null &&
         this._onStop == null) {

@@ -543,7 +543,7 @@
  "properties":
     {
      "beers_to_win":"16",
-     "name":"new test level",
+     "name":"test_level",
      "seconds":"600",
      "start_x":"12",
      "start_y":"20",

@@ -1,6 +1,6 @@
 part of ui;
 
-class LoadingScreen extends Dialog {
+class LoadingScreen extends Dialog implements UIListener {
 	
 	int _numTasks = 0;
 	int _completedTasks = 0;
@@ -24,30 +24,17 @@ class LoadingScreen extends Dialog {
 
 	    View progress = LoadingScreen._createProgressView(ui, contents);
 
-	    window.console.log("Creating timer: current_progress: ${this._currentProgress}, target_progress: ${this._targetProgress}");
-		Timer updateTimer = new Timer.periodic(new Duration(milliseconds: 10), (Timer t) {
-			window.console.log("timer: currentProgress=${this._currentProgress}, targetProgress=${this._targetProgress}");
-			if (this._currentProgress > this._targetProgress) {
-				this._currentProgress -= 2;
-			} else if (this._currentProgress < this._targetProgress) {
-				this._currentProgress += 4;
-			}
-			window.console.log("Progress: ${this._currentProgress}%");
-			this._progressView.style.width = "${this._currentProgress}%";
-		});  
-
-	    return new LoadingScreen._internal(ui, contents, progress, updateTimer);
+	    return new LoadingScreen._internal(ui, contents, progress);
 	}
 
 	/**
 	 * Internal constructor just identical to Dialog's constructor.
      */
- 	LoadingScreen._internal(UIInterface ui, View contents, this._progressView, this._updateTimer) :
-    	super(ui, contents);
+ 	LoadingScreen._internal(UIInterface ui, View contents, this._progressView) :
+    		super(ui, contents) {
 
-    void _onClose() {
-    	this._updateTimer.cancel();
-    }
+		ui.addListener(this);
+	}
 
     static View _createProgressView(UIInterface ui, View container) {
     	View v = new View(ui);
@@ -78,6 +65,9 @@ class LoadingScreen extends Dialog {
     		this._currentProgress = this._targetProgress;
     	}
 
+
+		this._progressView.style.width = "${this._currentProgress}%";
+
     	this._oldCompletedTasks = this._completedTasks;  
 	}
 
@@ -88,4 +78,15 @@ class LoadingScreen extends Dialog {
    		this._completedTasks++;
    		this._updateProgress();
    	}
+
+	void onWindowOpen(uiFunction) {
+	}
+
+	void onWindowClose(uiFunction) {
+		window.console.log("LoadingScreen::onWindowClose");
+		if (this._updateTimer != null) {
+			this._updateTimer.cancel();
+			this._updateTimer = null;
+		}
+	}
 }
