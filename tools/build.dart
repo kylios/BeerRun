@@ -1,9 +1,12 @@
+#!/usr/bin/env dart
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'package:args/args.dart';
 import 'package:path/path.dart';
 
+const SKIP_COMPILE = 'skip-compile';
 
 class AsyncCounter<T> {
 
@@ -32,9 +35,9 @@ class AsyncCounter<T> {
 
 
 
-Map loadEnv(String envName) {
+Future<Map> loadEnv(String envName) {
 
-	String fileName = "config/${envName}.json";
+	String fileName = "../config/${envName}.json";
 	print("Loading config $envName at $fileName");
 
 	Stream<List<int>> fileStream = new File(fileName).openRead();
@@ -57,19 +60,27 @@ Map loadEnv(String envName) {
 }
 
 void main(List<String> arguments) {
-	final parser = new ArgParser();
+	final parser = new ArgParser()
+      ..addFlag(SKIP_COMPILE, negatable: false, abbr: 's');
 
 	if (arguments.length < 1) {
 		throw new Exception("Not enough arguments supplied!");
 	}
 
-	String envName = arguments[0];
-	loadEnv(envName)
+	argResults results = parser.parse(arguments);
+
+	bool skipCompile = results[SKIP_COMPILE];
+
+	String envName = arguments[arguments.length - 1];
+	Future f = loadEnv(envName)
 		.then(prepBuildTarget)
 		.then(copyWebFiles)
 		.then(copyServerFiles)
-		//.then(build)
-		.catchError((Exception e) {
+		.then(copyConfigFiles);
+	if ( ! skipCompile) {
+		f = f.then(build);
+	}
+	f = f.catchError((Exception e) {
 			print(e);
 		})
 		;
@@ -96,10 +107,10 @@ Future<Map> prepBuildTarget(Map config) {
 			return new Future.value();
 		})
 		.then((var _) => Process.run("rm", [ '-rf', targetDir ]))
-		.then((int code) => Process.run('mkdir', [ '-p', targetDir ]))
-		.then((int code) => Process.run('mkdir', [ '-p', "$targetDir/web" ]))
-		.then((int code) => Process.run('mkdir', [ '-p', "$targetDir/server" ]))
-		.then((int code) => completer.complete(config))
+		.then((ProcessResult result) => Process.run('mkdir', [ '-p', targetDir ]))
+		.then((ProcessResult result) => Process.run('mkdir', [ '-p', "$targetDir/web" ]))
+		.then((ProcessResult result) => Process.run('mkdir', [ '-p', "$targetDir/server" ]))
+		.then((ProcessResult result) => completer.complete(config))
 		;
 
 	return completer.future;
@@ -165,7 +176,9 @@ Future copyWebFiles(Map config) {
 		.then((ProcessResult result) => killSymlinks("$targetDir/web"))
 
 		// Copy packages over as real directories
-		.then((ProcessResult result) => copyPackage('browser', '../web/packages', "$targetDir/web/packages"))
+		.then((var _) => copyPackage('browser', '../web/packages', "$targetDir/web/packages"))
+		.then((var _) => copyPackage('beer_run', '../web/packages', "$targetDir/web/packages"))
+		.then((var _) => copyPackage('intl', '../web/packages', "$targetDir/web/packages"))
 
 		// Return the config
 		.then((var _) => new Future.value(config));
@@ -180,35 +193,46 @@ Future killSymlinks(String dir) =>
 				return xargs.exitCode.then((var _) => new Future.value());
 			}));
 
+Future _copyDir(Directory src, Directory dest, AsyncCounter counter) {
+	counter.up();
+	return src.list()
+		.listen((FileSystemEntity obj) {
+			counter.up();
+			FileSystemEntity.type(obj.path)
+				.then((FileSystemEntityType type) {
+					String fileName = basename(obj.path);
+					if (type == FileSystemEntityType.FILE) {
+						counter.up();
+						obj.copy("${dest.path}/${fileName}")
+							.then((var _) {
+								counter.down();
+							});
+					} else if (type == FileSystemEntityType.DIRECTORY) {
+						Directory d = new Directory("${dest.path}/${fileName}");
+						counter.up();
+						d.create(recursive: true).then((Directory d) { 
+							_copyDir(obj, d, counter);
+							counter.down();
+						});
+					}
+					counter.down();
+				});
+			},
+			onDone: counter.down
+		);
+}
+		
+
 // Copies a dart package to the target directory.  No symbolic links will be created.
 Future copyPackage(String packageName, String packagesDir, String targetDir) {
 
 	AsyncCounter counter = new AsyncCounter();
 	Directory src = new Directory("$packagesDir/$packageName");
 	Directory dest = new Directory("$targetDir/$packageName");
-	dest.create(recursive: true).then((var _) => src.list()
-		.listen((FileSystemEntity obj) {
-			FileSystemEntity.type(obj.path)
-				.then((FileSystemEntityType type) {
-					if (type == FileSystemEntityType.FILE) {
-						counter.up();
-						String fileName = basename(obj.path);
-						obj.copy("$targetDir/$packageName/$fileName")
-							.then((var _) {
-								counter.down();
-							});
-					}
-				});
-		}));
+	dest.create(recursive: true).then((var _) => _copyDir(src, dest, counter));
 
 	return counter.future;
 }
-/*
-	new Directory("$targetDir/$packageName")
-		.create(recursive: true)
-		.then((Directory dir) => 
-			Process.run('cp', [ '-R', "$packagesDir/$packageName/", "$targetDir/$packageName" ]));
-*/
 
 // Copies the server build into the target directory
 Future copyServerFiles(Map config) {
@@ -219,5 +243,17 @@ Future copyServerFiles(Map config) {
 	String targetDir = "$buildDir/$envName";
 
 	return Process.run('rsync', [ '-arv', '../server', targetDir ])
+		.then((var _) => new Future.value(config));
+}
+
+// Copies the config files into the target directory
+Future copyConfigFiles(Map config) {
+	print("Copying config files...");
+
+	String buildDir = config['compile']['build_dir'];
+	String envName = config['env']['name'];
+	String targetDir = "$buildDir/$envName";
+
+	return Process.run('rsync', [ '-arv', '../config', targetDir ])
 		.then((var _) => new Future.value(config));
 }

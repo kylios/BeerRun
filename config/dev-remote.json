@@ -1,0 +1,44 @@
+{
+	"compile": {
+		"build_dir": "build",
+		
+		"in_file": "../web/beer_run.dart",
+		"out_file": "web/beer_run.dart.js",
+
+		"checked": false,
+		"minify": false
+	},
+
+	"deploy": {
+		"verbose": true,
+		
+		"ssh": {
+			"host": "beerrungame.net",
+			"user": "ubuntu",
+			"key_file": "/home/kyle/.aws/keypairs/webserver.pem"
+		},
+
+		"local_dir": "build",
+		"files_to_copy": [
+			"web",
+			"server",
+			"config"
+		],
+
+		"remote_dir": "/home/ubuntu/releases/latest"
+	},
+
+	"application": {
+
+		"assets": {
+
+			"cdn_hosts": [
+
+			],
+			"path": "",
+			"version": 1
+		}
+
+
+	}
+}

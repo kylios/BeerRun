@@ -56,7 +56,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     double _fps = 0.0;
     int _lastUpdate = new DateTime.now().millisecondsSinceEpoch;
 
-    List<Level> _levels = new List<Level>();
+    Map<String, Level> _levels = new Map<String, Level>();
+    List<String> _levelIdxs = new List<String>();
 
     int get tickNo => this._tickNo;
 
@@ -156,27 +157,12 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             this._pageStats.stopTimer("game_manager_init");
             this._ui.closeWindow(null);
         });
-
-
-/*
-    return this._setupConfig(null)
-        .then(this._parseConfig)
-        .then(this._setupLevels)
-        .then(this._setupAudio)
-        .then((var _) {
-          this._pageStats.stopTimer("game_manager_init");
-          this._ui.closeWindow(null);
-        })
-        ;
-        */
-
     }
 
     void _setupPageStats() {
 
         this._pageStats.startMovingAverage('fps');
         this._pageStats.startTimer("game_manager_init");
-
     }
 
     Future _setupConfig(GameLoaderStep step, var __) {
@@ -195,15 +181,16 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     void _parseConfig(GameConfig config) {
 
-        List<String> cdnHosts = config.get('cdn_hosts');
+        Map<String, dynamic> cfg = config.get();
+        List<String> cdnHosts = cfg['application']['assets']['cdn_hosts'];
         Random r = new Random();
         String cdnHost = '';
         if (cdnHosts.length > 0) {
             cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
         }
-        String assetsPath = config.get('assets_path');
-        int version = config.get('assets_version');
-        bool useCdn = config.get('use_cdn');
+        String assetsPath = cfg['application']['assets']['path'];
+        int version = cfg['application']['assets']['version'];
+        bool useCdn = (cdnHosts.length > 0);
 
         String url = '';
         if (useCdn) {
@@ -218,7 +205,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     Future _loadLevels(GameLoaderStep step, String levelConfigPath) {
         return this._loader.load(levelConfigPath).then((Map config) {
             config['levels'].forEach((Map levelConfig) {
-                GameLoaderJob loadLevel = new GameLoaderJob("Loading levels", this._loadLevel, levelConfig);
+                this._levelIdxs.add(levelConfig['name']);
+                GameLoaderJob loadLevel = new GameLoaderJob("Loading level ${levelConfig['name']}", this._loadLevel, levelConfig);
                 step.addJob(loadLevel);
             });
         });
@@ -227,67 +215,33 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     Future _loadLevel(GameLoaderStep step, Map levelConfig) {
 
         return this._loader.load(levelConfig['path']).then((Map levelData) {
-            step.addJob(new GameLoaderJob("Loading level ${levelConfig['name']}", this._parseLevel, levelData));
+            step.addJob(new GameLoaderJob("Parsing level ${levelConfig['name']}", this._parseLevel, [levelConfig, levelData]));
         });
     }
 
-    Future _parseLevel(GameLoaderStep step, Map levelData) {
+    Future _parseLevel(GameLoaderStep step, List<Map> levelInfo) {
+
+        Map levelConfig = levelInfo[0];
+        Map levelData = levelInfo[1];
 
         Completer c = new Completer();
 
         Timer.run(() {
+            window.console.log("_parseLevel(${levelConfig['name']})");
             this._pageStats.startTimer("new_level_from_json");
             Level l = new Level.fromJson(
               levelData, this._canvasDrawer,
               this._canvasManager, this._player);
-            this._levels.add(l);
+            this._levels[levelConfig['name']] = l;
 
             this._pageStats.stopTimer("new_level_from_json");
             this._pageStats.writeStat("new_level_from_json");
 
-        c.complete();
+            c.complete();
         });
 
         return c.future;
     }
-
-  /**
-   * Prereqs:
-   * - this._canvasManager
-   * - this._canvasDrawer
-   */
-  Future _setupLevels(GameLoaderStep step, var _) {
-
-    Completer c = new Completer();
-    this._loader.load("/data/level_config.json").then((Map config) {
-
-      List<Map> levels = config['levels'];
-
-
-
-
-      MultiLoader l = new MultiLoader(this._loader);
-      l.onSingleLoad((var _) => this._loadingScreen.completeTask());
-      l.wait().then((Map<String, Map> levelData) {
-
-        for (Map levelConfig in levels) {
-
-
-        }
-
-        c.complete();
-      });
-
-      for (Map levelConfig in levels) {
-        String levelPath = levelConfig['path'];
-        l.load(levelPath);
-      }
-    });
-
-
-
-    return c.future;
-  }
 
   Future _setupAudio(GameLoaderStep step, var _) {
 
@@ -429,76 +383,77 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     return;
   }
 
-  // This is the main update loop
-  void update() {
+    // This is the main update loop
+    void update() {
 
-    this._pageStats.writeAll();
+        this._pageStats.writeAll();
 
-    // Can't do anything without a level object
-    if (this._currentLevel == null) {
-      return;
+        // Can't do anything without a level object
+        if (this._currentLevel == null) {
+            return;
+        }
+
+        // this._statsManager.duration = this._timer.duration;
+
+        this._currentLevel.update();
+        this._statsManager.update();
+
+        // this._pageStats.setStat('fps', this._fps);
+
+        // By exiting here on game over, we let the level objects continue updating
+        // while the player is reading the game over summary
+        if (this._gameOver) {
+            return;
+        }
+
+        this._player.update();
+        this._player.draw();
+
+        if (this._player.drunkenness <= 0) {
+            this._setGameOver("You're too sober.  You got bored and go home.  GAME OVER!");
+        } else if (this._player.drunkenness >= 10) {
+            this._setGameOver("You black out like a dumbass, before you even get to the party!");
+        } else if (this._player.health == 0) {
+            this._setGameOver("Oops, you are dead!");
+            this._currentLevel.removeObject(this._player);
+        }
+
+        // Draw HUD
+        if (this._player.drunkenness == 1 || this._player.drunkenness >= 8) {
+            this._hud.startFlashing();
+        } else {
+            this._hud.stopFlashing();
+        }
+        this._hud.draw();
+
+        this._tickNo++;
+
+        // Update fps
+        this._now = new DateTime.now().millisecondsSinceEpoch;
+        double thisFrameFps = 1000 / (this._now - this._lastUpdate);
+        this._fps += (thisFrameFps - this._fps) / 50;
+        this._lastUpdate = this._now;
+
+        this._pageStats.setStat('fps', thisFrameFps);
     }
 
-   // this._statsManager.duration = this._timer.duration;
-
-    this._currentLevel.update();
-    this._statsManager.update();
-
-   // this._pageStats.setStat('fps', this._fps);
-
-    // By exiting here on game over, we let the level objects continue updating
-    // while the player is reading the game over summary
-    if (this._gameOver) {
-      return;
+    void stop() {
+        this._continueLoop = false;
     }
 
-    this._player.update();
-    this._player.draw();
+    Level _getNextLevel() {
 
-    if (this._player.drunkenness <= 0) {
-      this._setGameOver("You're too sober.  You got bored and go home.  GAME OVER!");
-    } else if (this._player.drunkenness >= 10) {
-      this._setGameOver("You black out like a dumbass, before you even get to the party!");
-    } else if (this._player.health == 0) {
-      this._setGameOver("Oops, you are dead!");
-      this._currentLevel.removeObject(this._player);
+        window.console.log("levelIdxs: ${this._levelIdxs}");
+        window.console.log("levels: ${this._levels}");
+
+        if (window.location.hash != '') {
+            window.console.log("Hash: ${window.location.hash}");
+            return this._levels[window.location.hash.substring(1)];
+        } else {
+            window.console.log("Idx: ${this._currentLevelIdx}, name: ${this._levelIdxs[this._currentLevelIdx]}");
+            return this._levels[this._levelIdxs[this._currentLevelIdx++]];
+        }
     }
-
-    // Draw HUD
-    if (this._player.drunkenness == 1 || this._player.drunkenness >= 8) {
-      this._hud.startFlashing();
-    } else {
-      this._hud.stopFlashing();
-    }
-    this._hud.draw();
-
-    this._tickNo++;
-
-    // Update fps
-    this._now = new DateTime.now().millisecondsSinceEpoch;
-    double thisFrameFps = 1000 / (this._now - this._lastUpdate);
-    this._fps += (thisFrameFps - this._fps) / 50;
-    this._lastUpdate = this._now;
-
-    this._pageStats.setStat('fps', thisFrameFps);
-  }
-
-  void stop() {
-    this._continueLoop = false;
-  }
-
-  Level _getNextLevel() {
-    window.console.log(window.location.hash);
-    if (window.location.hash == '#level1') {
-      return this._levels[0];
-    } else if (window.location.hash == '#level2') {
-      return this._levels[1];
-    } else if (window.location.hash == '#level5') {
-      return this._levels[2];
-    } else {
-      return this._levels[this._currentLevelIdx++];
-    }
-  }
 
   void _setGameOver(String text) {
     this._gameOverText = text;
