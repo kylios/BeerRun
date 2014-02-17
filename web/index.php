@@ -111,6 +111,7 @@ $config->exportVars();
         </div>
         <div class="padded">
           <div class="bold">Testers</div>
+          <div>Ryan Scott</div>
           <div>Scott Racette</div>
           <div>Mark Racette</div>
           <div>Amber Larkins</div>
@@ -125,12 +126,17 @@ $config->exportVars();
       <div>
         <div class="padded">
           <div>Twitter</div>
-          <a href="https://twitter.com/beerrungame">@beerrungame</a>
+          <div><a href="https://twitter.com/beerrungame">@beerrungame</a></div>
         </div>
         <div class="padded">
           <div>Facebook</div>
           <div>coming soon</div>
         </div>
+      </div>
+      <div class="bold">Contact</div>
+      <div>
+        <div class="padded">
+          <div>beerungame (at) gmail (dot) com</div>
       </div>
     </div>
   </div>
