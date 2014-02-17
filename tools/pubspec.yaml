@@ -1,10 +1,9 @@
-name: beer_run
+name: beer_run_build_system
 version: 0.0.0
 author: Kyle Racette <kracette@gmail.com>
-description: A top down arcade game
+description: A sample application
 dependencies:
-  browser: any
-  intl: any
-
+  args: any
+  path: any
 #  js: any
 #  unittest: any
