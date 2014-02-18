@@ -52,9 +52,9 @@ div#stats {
   background: black;
   color: white;
   font-weight: bold;
-  height: 16px;
+  /*height: 16px;
   font-size: 22px;
-  padding: 8px;
+  padding: 8px;*/
 }
 
 div#stats div {
@@ -62,19 +62,19 @@ div#stats div {
 }
 
 div#beers_stats {
-  float: left;
   margin-right: 172px;
   margin-top: auto;
   margin-bottom: auto;
+  float: right;
 }
 
 div#health_stats {
   width: 128px;
+  float: right;
 }
 
 div#duration {
   margin: auto 10px;
-  float: right;
 }
 
 div#dialog {

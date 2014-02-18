@@ -100,6 +100,10 @@ $config->exportVars();
           <div>Mark Racette</div>
         </div>
         <div class="padded">
+          <div class="bold">SFX</div>
+          <div><a href="http://freesound.org">freesound.org</a>!</div>
+        </div>
+        <div class="padded">
           <div class="bold">Art</div>
           <div>Kyle Racette</div>
           <div>Kind contributors from <a href="http://opengameart.org">Open Game Art</a></div>
