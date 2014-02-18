@@ -14,8 +14,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     PageStats _pageStats;
     LoadingScreen _loadingScreen;
 
-    AudioToggle _musicToggle;
-    AudioToggle _soundToggle;
+    AudioControl _musicToggle;
+    AudioControl _sfxToggle;
+
+    Song _theme;
 
     final int _canvasWidth;
     final int _canvasHeight;
@@ -129,13 +131,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         this._BACMeter = new Meter(10, 52, 10, 116, 22);
         this._HPMeter = new Meter(3, 52, 36, 116, 22);
 
-        this._audio = new AudioManager();
-
-        this._musicToggle = new AudioToggle(true, musicOnElement, musicOffElement);
-        this._soundToggle = new AudioToggle(false, soundOnElement, soundOffElement);
-
-        this._musicToggle.addListener(this._audio);
-        this._soundToggle.addListener(this._audio);
+        this._musicToggle = new AudioControl(musicOnElement, musicOffElement);
+        this._sfxToggle = new AudioControl(soundOnElement, soundOffElement);
 
         this._loadingScreen = new LoadingScreen(this._ui);
     }
@@ -200,6 +197,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         }
 
         this._loader = new Loader(url);
+
+        this._audio = new AudioManager.fromConfig(this._loader, cfg['data']['audio']);
     }
 
     Future _loadLevels(GameLoaderStep step, String levelConfigPath) {
@@ -247,10 +246,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     Completer c = new Completer();
 
-    this._audio.addMusic('theme', 'audio/theme.wav');
     this._audio.loadAndDecode().then((var _) {
-      this._musicToggle.toggleOff();
-      this._soundToggle.toggleOff();
+      this._theme = this._audio.getSong('theme');
+      this._musicToggle.setTrack(this._audio.getTrack('music'));
+      this._sfxToggle.setTrack(this._audio.getTrack('sfx'));
+
+      this._musicToggle.toggleOn();
+      this._sfxToggle.toggleOn();
+
       c.complete();
     });
     return c.future;
@@ -273,10 +276,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
   void start() {
 
-    // Start audio - TODO: make it easier to stop it
-    Song s = this._audio.getSong('theme');
-    window.console.log("song: $s");
-    s.loop();
+    this._theme.loop();
 
     this._currentLevelIdx = 0;
     this._currentLevel = null;

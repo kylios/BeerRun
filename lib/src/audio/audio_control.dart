@@ -1,21 +1,35 @@
 part of audio;
 
-abstract class AudioControl {
+class AudioControl {
 
-  List<AudioEventListener> _listeners = new List<AudioEventListener>();
+  AudioTrack _track;
+  InputElement _toggleOn;
+  InputElement _toggleOff;
 
-  void addListener(AudioEventListener l) {
-    this._listeners.add(l);
+  AudioControl(this._toggleOn, this._toggleOff) {
+
+    var self = this;
+    this._toggleOn.onClick.listen(this.onClick);
+    this._toggleOff.onClick.listen(this.onClick);
   }
 
-  void changeMusicVolume(double vol) {
-    for (AudioEventListener l in this._listeners) {
-      l.onMusicVolumeChange(vol);
-    }
+  void setTrack(AudioTrack track) {
+    this._track = track;
   }
-  void changeSoundVolume(double vol) {
-    for (AudioEventListener l in this._listeners) {
-      l.onSoundVolumeChange(vol);
-    }
+
+  void toggleOn() {
+    this._toggleOn.click();
+  }
+  void toggleOff() {
+    this._toggleOff.click();
+  }
+
+  void onClick(Event e) {
+    InputElement clicked = e.target;
+    double vol = int.parse(clicked.value) / 100;
+
+    window.console.log("Element clicked: $vol");
+
+    this._track.setVolume(vol);
   }
 }

@@ -5,10 +5,13 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 
+import 'package:beer_run/loader.dart';
+
 part 'src/audio/song.dart';
 part 'src/audio/audio_manager.dart';
-part 'src/audio/audio_event_listener.dart';
 part 'src/audio/audio_control.dart';
-part 'src/audio/audio_toggle.dart';
+part 'src/audio/audio_track.dart';
+part 'src/audio/audio_state.dart';
 
-typedef void audioCallback(Event e);
+const AudioState off = const AudioState('off');
+const AudioState on = const AudioState('on');

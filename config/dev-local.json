@@ -30,5 +30,19 @@
 		}
 
 
+	},
+
+	"data": {
+
+		"audio": {
+			"music": [
+				{
+					"name": "theme",
+					"path": "audio/theme.wav"
+				}
+			],
+			"sfx": [
+			]
+		}
 	}
 }
