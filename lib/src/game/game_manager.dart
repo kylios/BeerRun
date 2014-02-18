@@ -17,6 +17,11 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     AudioControl _musicToggle;
     AudioControl _sfxToggle;
 
+    InputElement _musicOnElement;
+    InputElement _musicOffElement;
+    InputElement _sfxOnElement;
+    InputElement _sfxOffElement;
+
     Song _theme;
 
     final int _canvasWidth;
@@ -75,8 +80,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         DivElement debugStatsElement,
         InputElement musicOnElement,
         InputElement musicOffElement,
-        InputElement soundOnElement,
-        InputElement soundOffElement}) {
+        InputElement sfxOnElement,
+        InputElement sfxOffElement}) {
 
         if (GameManager._instance == null) {
             GameManager._instance = new GameManager._internal(
@@ -84,7 +89,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
                 canvasElement,
                 UIRootElement, NotificationsRootElement,
                 DialogElement, statsElement, debugStatsElement,
-                musicOnElement, musicOffElement, soundOnElement, soundOffElement);
+                musicOnElement, musicOffElement, 
+                sfxOnElement, sfxOffElement);
         }
 
         return GameManager._instance;
@@ -97,10 +103,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             DivElement DialogElement,
             DivElement statsElement,
             DivElement debugStatsElement,
-            InputElement musicOnElement,
-            InputElement musicOffElement,
-            InputElement soundOnElement,
-            InputElement soundOffElement) {
+            this._musicOnElement,
+            this._musicOffElement,
+            this._sfxOnElement,
+            this._sfxOffElement) {
 
         this._statsManager = new StatsManager(statsElement);
 
@@ -130,9 +136,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
         this._BACMeter = new Meter(10, 52, 10, 116, 22);
         this._HPMeter = new Meter(3, 52, 36, 116, 22);
-
-        this._musicToggle = new AudioControl(musicOnElement, musicOffElement);
-        this._sfxToggle = new AudioControl(soundOnElement, soundOffElement);
 
         this._loadingScreen = new LoadingScreen(this._ui);
     }
@@ -248,11 +251,21 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     this._audio.loadAndDecode().then((var _) {
       this._theme = this._audio.getSong('theme');
-      this._musicToggle.setTrack(this._audio.getTrack('music'));
-      this._sfxToggle.setTrack(this._audio.getTrack('sfx'));
 
-      this._musicToggle.toggleOn();
-      this._sfxToggle.toggleOn();
+      Song drinkBeer = this._audio.getSong('drink_beer');
+      this._player.drinkBeerSfx = drinkBeer;
+
+      this._musicOnElement.onClick.listen((Event e) {
+        this._audio.getTrack('music').state = on;
+        this._theme.loop();
+      });
+      this._musicOffElement.onClick.listen((Event e) => this._audio.getTrack('music').state = off);
+
+      this._sfxOnElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = on);
+      this._sfxOffElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = off);
+
+      this._musicOnElement.click();
+      this._sfxOnElement.click();
 
       c.complete();
     });
@@ -275,8 +288,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   }
 
   void start() {
-
-    this._theme.loop();
 
     this._currentLevelIdx = 0;
     this._currentLevel = null;

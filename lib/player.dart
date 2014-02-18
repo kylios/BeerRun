@@ -14,6 +14,7 @@ import 'package:beer_run/canvas_manager.dart';
 import 'package:beer_run/animation.dart';
 import 'package:beer_run/beer_run.dart';
 import 'package:beer_run/ui.dart';
+import 'package:beer_run/audio.dart';
 
 part 'src/player/player_input_component.dart';
 part 'src/player/player_drawing_component.dart';

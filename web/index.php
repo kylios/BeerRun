@@ -66,12 +66,12 @@ $config->exportVars();
         <div style="display: inline-block">
           <div style="font-weight: bold">SFX</div>
           <div>
-            on <input id="sound_toggle_on" type="radio"
-              name="sound_toggle" value="100" />
+            on <input id="sfx_toggle_on" type="radio"
+              name="sfx_toggle" value="100" />
           </div>
           <div>
-            off <input id="sound_toggle_off" type="radio"
-              name="sound_toggle" value="0" />
+            off <input id="sfx_toggle_off" type="radio"
+              name="sfx_toggle" value="0" />
           </div>
         </div>
       </div>

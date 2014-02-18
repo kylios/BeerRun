@@ -19,8 +19,8 @@ void main() {
       debugStatsElement: querySelector('div#debug_stats'),
       musicOnElement: querySelector('input#music_toggle_on'),
       musicOffElement: querySelector('input#music_toggle_off'),
-      soundOnElement: querySelector('input#sound_toggle_on'),
-      soundOffElement: querySelector('input#sound_toggle_off'));
+      sfxOnElement: querySelector('input#sfx_toggle_on'),
+      sfxOffElement: querySelector('input#sfx_toggle_off'));
 
   game.init().then((var _) => game.run());
 }

@@ -11,6 +11,8 @@ class Player extends GameObject implements GameEventListener {
   GameManager _mgr;
   StatsManager _stats;
 
+  Song drinkBeerSfx;
+
   bool _damaged = false;
   int _damageInterval = 0;
   int _blinkInterval = 0;
@@ -260,6 +262,10 @@ class Player extends GameObject implements GameEventListener {
       GameNotification n = new GameNotification("Be careful, don't get too drunk!");
       this.broadcast(n, [ this._mgr ]);
       this._drunkNotify = true;
+    }
+
+    if (this.drinkBeerSfx != null) {
+      this.drinkBeerSfx.play();
     }
 
     this._stats.beers = this._beers;

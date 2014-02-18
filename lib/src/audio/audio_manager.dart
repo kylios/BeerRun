@@ -24,7 +24,8 @@ class AudioManager {
 
       if (this._tracks[trackName] == null) {
         GainNode gain = this._ctx.createGain();
-        AudioTrack track = new AudioTrack(trackName, gain, off);
+        AudioTrack track = new AudioTrack(trackName, this._ctx, gain, on);
+        track.setVolume(1.0);
         this._tracks[trackName] = track;
 
 
@@ -43,13 +44,11 @@ class AudioManager {
             AudioBufferSourceNode source;
             this._ctx.decodeAudioData(data)
               .then((AudioBuffer buffer) {
-                source = this._ctx.createBufferSource();
-                source.connectNode(gain, 0, 0);
-                gain.connectNode(this._ctx.destination, 0, 0);
-                source.buffer = buffer;
 
-
-                Song s = new Song.fromSource(this, source, track);
+                window.console.log("decoded $songName");
+                Song s = new Song.fromSource(buffer, track);
+                track.addSong(s);
+                window.console.log("created song $songName");
 
                 this._sfx[songName] = s;
 

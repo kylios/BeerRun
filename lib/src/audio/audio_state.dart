@@ -8,4 +8,7 @@ class AudioState {
 	operator ==(AudioState state) => state.state == this.state;
 
 	int get hashCode => this.state.hashCode;
+
+	String toString() => "state:${this.state}";
+	
 }

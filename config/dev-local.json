@@ -42,6 +42,10 @@
 				}
 			],
 			"sfx": [
+				{
+					"name": "drink_beer",
+					"path": "audio/drink_beer.wav"
+				}
 			]
 		}
 	}
