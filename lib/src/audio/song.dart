@@ -7,20 +7,23 @@ class Song {
   AudioTrack _track;
   bool _started;
 
-  Song.fromSource(this._buffer, this._track) : this._started = false {
-      this._source = this._track.getAudioSource(this._buffer);
-  }
+  Song.fromSource(this._buffer, this._track) : this._started = false;
 
   void play([int n = 0]) {
+
+    this._source = this._track.getAudioSource(this._buffer);
+
     // check state
     if (this._track.state == on) {
       this._source.loop = false;
       this._source.start(n);
-      this._started = true;
+      //this._started = true;
     }
   }
 
   void loop([int n = 0]) {
+    this._source = this._track.getAudioSource(this._buffer);
+
     if (this._track.state == on) {
       this._source.loop = true;
       this._source.start(n);
