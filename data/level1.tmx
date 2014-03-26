@@ -4,6 +4,7 @@
   <property name="beers_to_win" value="12"/>
   <property name="name" value="level1"/>
   <property name="seconds" value="90"/>
+  <property name="start_beers" value="2"/>
   <property name="start_x" value="1136"/>
   <property name="start_y" value="192"/>
   <property name="store_x" value="0"/>
@@ -79,7 +80,7 @@
    eJxjYBgYUMbEwNAExM1ouAdKtwBxBdMAOQ4I6oF2N6DhDiBuBeIuKL9xAN0XBLQ7GA3XI7kLxA8ZQPdFA+2OwYJBAMaOHUD3pQDtTsWCQQDGThtA942CkQvEgOlOHIglBlH6Q3aTDBDLArHcIHIfspuUgFgZiFUGkfsGo5tGAe0BABojF0M=
   </data>
  </layer>
- <layer name="house2" width="40" height="15" visible="0">
+ <layer name="house2" width="40" height="15">
   <properties>
    <property name="blocking" value="true"/>
   </properties>

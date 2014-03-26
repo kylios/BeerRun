@@ -25,9 +25,11 @@ class Tutorial {
       Completer c = new Completer();
       window.console.log("starting at (${this._level.startX}, ${this._level.startY})");
 
+      /*
       this._level.player.setPos(
           col * this._level.tileWidth,
           row * this._level.tileHeight);
+      */
 
       int halfWidth = this._level.canvasManager.width ~/ 2;
       int halfHeight = this._level.canvasManager.height ~/ 2;

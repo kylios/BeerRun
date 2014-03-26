@@ -2,20 +2,12 @@
 	"levels": 
 	[
 		{
-			"name": "test_level",
-			"path": "/data/levels/new_sample_level.json"
-		},
-		{
 			"name": "level1",
 			"path": "/data/levels/level1.json"
 		},
 		{
-			"name": "level2",
-			"path": "/data/levels/level2.json"
-		},
-		{
-			"name": "level5",
-			"path": "/data/levels/level5.json"
+			"name": "test_level",
+			"path": "/data/levels/new_sample_level.json"
 		}
 	]
 }

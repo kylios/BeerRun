@@ -20,7 +20,7 @@ packages:
   intl:
     description: intl
     source: hosted
-    version: "0.9.4"
+    version: "0.9.5"
   logging:
     description: logging
     source: hosted

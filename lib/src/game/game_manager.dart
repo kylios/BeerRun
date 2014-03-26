@@ -143,7 +143,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     UIInterface get ui => this._ui;
 
     Future init() {
-        this._setupPageStats();
+        this._startPageStats();
 
         this._ui.showView(this._loadingScreen);
 
@@ -154,15 +154,19 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         return gl
                 .run()
                 .then((var _) {
-            this._pageStats.stopTimer("game_manager_init");
+            this._stopPageStats();
             this._ui.closeWindow(null);
         });
     }
 
-    void _setupPageStats() {
+    void _startPageStats() {
 
         this._pageStats.startMovingAverage('fps');
         this._pageStats.startTimer("game_manager_init");
+    }
+
+    void _stopPageStats() {
+        this._pageStats.stopTimer("game_manager_init");
     }
 
     Future _setupConfig(GameLoaderStep step, var __) {
@@ -264,7 +268,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
       this._sfxOnElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = on);
       this._sfxOffElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = off);
 
-      this._musicOnElement.click();
+      this._musicOffElement.click();
       this._sfxOnElement.click();
 
       c.complete();
@@ -421,7 +425,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         this._player.draw();
 
         if (this._player.drunkenness <= 0) {
-            this._setGameOver("You're too sober.  You got bored and go home.  GAME OVER!");
+            this._setGameOver("You're too sober.  You got bored and go home.");
         } else if (this._player.drunkenness >= 10) {
             this._setGameOver("You black out like a dumbass, before you even get to the party!");
         } else if (this._player.health == 0) {

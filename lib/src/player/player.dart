@@ -68,7 +68,7 @@ class Player extends GameObject implements GameEventListener {
 
   void startInLevel(Level l) {
     this.setLevel(l);
-    this.setPos(l.startX, l.startY);
+    this.setPos(l.startX * l.tileWidth, l.startY * l.tileHeight);
     this.dir = DIR_UP;
     this.resetBeersDelivered();
 

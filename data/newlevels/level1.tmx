@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="20" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="beers_to_win" value="6"/>
+  <property name="name" value="level1"/>
+  <property name="seconds" value="120"/>
+  <property name="start_beers" value="3"/>
+  <property name="start_x" value="47"/>
+  <property name="start_y" value="7"/>
+  <property name="store_x" value="2"/>
+  <property name="store_y" value="13"/>
+ </properties>
+ <tileset firstgid="1" name="grass" tilewidth="32" tileheight="32">
+  <image source="../../web/img/grass.png" width="96" height="192"/>
+ </tileset>
+ <tileset firstgid="19" name="street" tilewidth="32" tileheight="32">
+  <image source="../../web/img/street.png" width="800" height="608"/>
+ </tileset>
+ <tileset firstgid="494" name="building" tilewidth="32" tileheight="32">
+  <image source="../../web/img/sprites/building.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="1518" name="sidewalk" tilewidth="32" tileheight="32">
+  <image source="../../web/img/sprites/sidewalk.png" width="224" height="192"/>
+ </tileset>
+ <tileset firstgid="1560" name="fence" tilewidth="32" tileheight="32">
+  <image source="../../web/img/fence.png" width="96" height="128"/>
+ </tileset>
+ <tileset firstgid="1572" name="cars_moving_horiz" tilewidth="192" tileheight="96">
+  <image source="../../web/img/cars_moving_horiz.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="1576" name="cars_moving_vert" tilewidth="96" tileheight="160">
+  <image source="../../web/img/cars_moving_vert.png" width="384" height="161"/>
+ </tileset>
+ <tileset firstgid="1580" name="trees" tilewidth="32" tileheight="32">
+  <image source="../../web/img/trees.png" width="192" height="320"/>
+ </tileset>
+ <layer name="grass" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJytllEOwyAMQzkCcP/Dbh+bhNxnByo+kLoUQhzbWWdrbXzX/K2x/N6JT4nrnr6sUeSZyxmK63vKu7tSfsJG8W72Ud9689g1NuCcxk+xulqVt1uLMPz5cppxZwk77X3LcaUz5U3r0r3uvNM/7UuYd2p2OAhTwuV4TbGk5xu8JF2Q7tWrazx5o9LZLX/oSvNS7+0QqzjZwbF6de2R9tHV53DRXsKqdzif6FytvJB8o/m1XodROXBYdmYX6fQUg+q54oW872o98cbbmZV86e4Zjfvg/LH73eB8R/W6uOtVl+fKn4pH/XmCyWkn+cjpSPvpvJqwrP05/aZzvBIfoz17pZpL88V5g/pTfbtVfFc40jmaZclL1UwiP6VzbnY6D6gXyBezPTVDHBHXU56dfkjXxK3GVFPp/5t0Qh6o+KRepV643ISjyqW9pTmo75N2qQ7HDd2n+Nw3L8028kh1v9Nyml0pl9P6B+TeQ54=
+  </data>
+ </layer>
+ <layer name="sidewalk1" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztVWELgjAQndBWUUZo9f//Yd+qL1YPFJS13SXunI49eLjj5HGPt1Ol3DBGqY3xNCdiC909oc31x0DSxwm6Z0Kb64+BtI8U8uDmXFMe1Jw5j1/k/eDB+UgtDzsXrnYh9v/jAJbdswBfuq8fOD8H9ZHQirnnd8x4Q39H8IN3Gt2e39qvFfNehdSImcc/WIIPiTwK4+Zwx0IjxHfV9uHaoQqswQt4FfIx172SxJz7IYlU8sg+/Bpfc5gPzg==
+  </data>
+ </layer>
+ <layer name="street1" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzVVokJwzAM9A59pmicKdqOlGSLtiOVDlYVKhBGiuXIXwRHQkSMzmfJ51zZuAAmwBkwAHyQG4RciTgAjhvx+fP41bkwPKRcicB9s6AHPbQ8xshT4sHlWvKQoOmPqVMeD8AT8Ar49KTHSEDPN/3ug39jeswNeGhAeeBMCmuluV77I1WPvZyrvc4rTg+pz3u7P2L9wemxkNzb6TzCKROPnPOK3i04C7j7B98t/iXHuZL0wBpjXkDyBLV5rPUHt+/cN2sfXQG3RNxJrbQH/IZ1qSeoMQ+4yDGTavuwtRqwhy08Wush+d2UNWbjGtbI4aE0enwBAVFa+A==
+  </data>
+ </layer>
+ <layer name="fence1" width="50" height="20">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt17sNACAIRVEqZ/BT6f5DuoCighhi3kkoIbmxkogXA1ESTg6L4wNVsLOjGN2dQQcPHTIeOyS76OChAx0WXne0TzqsoMNXhwY67nv9//DI03tooONcBwdaCQo=
+  </data>
+ </layer>
+ <layer name="buildings1" width="50" height="20">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1EtOwlAUxvF6O9AdgBbH4ApAKYlTVoAIVffBcx/y2oeI7oOX++Ah/0YIl2IHHRAO5H7JL7f5RuckJ3Vsy0oE3EJCsszhBuTs/f6/btNLSIk5ygGevd970vdQzAkPL3jFG2YXljXHHd+XuFKy96gwXxU11NFAEw4SyCOJlPA93pmvhTY66KLnzwwXubVHFX6DEhJjvjiutfdGbXu9+0AfnxjgC9/q2Bv8Jc0cGdxr74Pa7TfdECOMMcEUP0L2KDDHE4ra+6y2vd7NMMcCS/z6Owi5qyiRfFdRIvmuouRc7irsn3BqCfsnmJiYmJgcJivPVkVh
+  </data>
+ </layer>
+ <layer name="stairs1" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztzqENACAQBLDLMwTsvyRINI4EgWknaAIAd2Ylq34v3vWWjPZ7AQBw2jPmAik=
+  </data>
+ </layer>
+ <layer name="door1" width="50" height="20">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIKBB9uZGBh2MA20K8gHikC3KwHxdSC+AcQHgfjQEPSPI9DNTkjufghkPxqC/hgFQx8wAtMd0xBOe7AyAQYWAtmLhqB/0MuEUTAKRsEoGAW0BQC0iglf
+  </data>
+ </layer>
+ <layer name="entrance1" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzt00ENACAMBMGmTsEJuAIn4ARe1AMJNM2OgtvHiQCAX01Fuv5ecW9YwwzQsaxhB+gAXkn2lxzgM8UaaoAOAPDuAIpaBvQ=
+  </data>
+ </layer>
+ <layer name="cars1_static" width="50" height="20">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJzt1DkBADAIwEAmnFD/EmuCZ7lTkCkRADCj8roAoMfzM2DBB19WAFg=
+  </data>
+ </layer>
+ <layer name="objects1" width="50" height="20">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMAowwVdW3HKf8cgNNvAHj1t/4ZFjZoPgwQhIcRcXGwQPRjBY3TUKRsEoGAVDGYQBy9ZwII4gsoxFVouul1I+JSAGaEYsEMcRaRayWnS9lPKJBeFY1CcBxZKBOIVIswAHxhTY
+  </data>
+ </layer>
+ <layer name="objects2" width="50" height="20">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztkTkOhTAQQ1PNadiXz14ABVAABXD/q+Ai1a9GJKWf5MLSG0tRjCGEEEIIIYSQb8RiTIKkovMneLN1R/HbXSix8UMq5dYKb7PuIn67hgBuiER/Nx16jwzKrQPead1d/HYNGdwcKRz/8Mb9Yzcu8ds11HAbpHV8xwspbBmm
+  </data>
+ </layer>
+</map>

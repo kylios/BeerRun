@@ -2,7 +2,9 @@
 <map version="1.0" orientation="orthogonal" width="40" height="15" tilewidth="32" tileheight="32">
  <properties>
   <property name="beers_to_win" value="12"/>
+  <property name="name" value="level 2"/>
   <property name="seconds" value="90"/>
+  <property name="start_beers" value="1"/>
   <property name="start_x" value="1138"/>
   <property name="start_y" value="128"/>
   <property name="store_x" value="0"/>
@@ -51,7 +53,7 @@
    eJxjYMAP5IHYA4hNgNgYiL3wiOHTg86nFhh136j7qOk+XqbB7T6xQe4+eTxy9HSfGhArY8HqaPyBch+p4TTY3afAzMCgxDx43acBdJvWIHQfLB1qA7EOA2Z61Rpg94ngwaJ43EIv90lAsRISWw6IpYBYchC4DwCNaUdt
   </data>
  </layer>
- <layer name="fence" width="40" height="15" visible="0">
+ <layer name="fence" width="40" height="15">
   <properties>
    <property name="blocking" value="true"/>
   </properties>

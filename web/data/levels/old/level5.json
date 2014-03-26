@@ -102,6 +102,7 @@
                      "type":"party_arrival"
                     },
                  "type":"trigger",
+                 "visible":true,
                  "width":32,
                  "x":1152,
                  "y":128
@@ -114,6 +115,7 @@
                      "type":"beer_store"
                     },
                  "type":"trigger",
+                 "visible":true,
                  "width":32,
                  "x":96,
                  "y":832
@@ -126,6 +128,7 @@
                      "type":"beer_store"
                     },
                  "type":"trigger",
+                 "visible":true,
                  "width":32,
                  "x":128,
                  "y":832
@@ -149,6 +152,7 @@
 
                     },
                  "type":"region",
+                 "visible":true,
                  "width":320,
                  "x":0,
                  "y":320
@@ -161,6 +165,7 @@
 
                     },
                  "type":"region",
+                 "visible":true,
                  "width":96,
                  "x":544,
                  "y":0
@@ -173,6 +178,7 @@
 
                     },
                  "type":"region",
+                 "visible":true,
                  "width":160,
                  "x":1024,
                  "y":480
@@ -185,6 +191,7 @@
 
                     },
                  "type":"region",
+                 "visible":true,
                  "width":288,
                  "x":992,
                  "y":320
@@ -214,6 +221,7 @@
                      "y3":"112"
                     },
                  "type":"path",
+                 "visible":true,
                  "width":640,
                  "x":-160,
                  "y":96
@@ -231,6 +239,7 @@
      "beers_to_win":"24",
      "name":"level5",
      "seconds":"180",
+     "start_beers":"1",
      "start_x":"1152",
      "start_y":"192",
      "store_x":"0",

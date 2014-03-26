@@ -19,6 +19,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   int _storeY;
   int _startX;
   int _startY;
+  int _startBeers;
   int _beersToWin;
   Duration _duration; // how long you have to beat this level
 
@@ -58,6 +59,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   int get storeY => this._storeY;
   int get startX => this._startX;
   int get startY => this._startY;
+  int get startBeers => this._startBeers;
   int get beersToWin => this._beersToWin;
   Duration get duration => this._duration;
 
@@ -208,6 +210,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
 
   GameObject collidesWithPlayer(GameObject obj) {
 
+    // TODO: can't all this logic be placed in the GameObject class?  Better yet, refactor the GameObject class system completely.
     GameObject o = this._player;
     if (o != obj &&
       (
@@ -253,6 +256,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
     if ( ! this._paused) {
 
       // Check if the player is standing on a trigger
+      // TODO: Use collidesWithPlayer
       for (Trigger t in this._triggers) {
         int x = t.col * this._tileWidth;
         int y = t.row * this._tileHeight;
@@ -379,9 +383,18 @@ abstract class Level extends Broadcaster implements GameEventListener {
 
     for (String prop in propNames) {
       if (!properties.containsKey(prop)) {
-        throw new Exception("Required property '$prop' not set");
+        throw new Exception("Required property '$prop' not set - properties: $properties");
       }
     }
+  }
+
+  static _requireAttribute(Map level, String attribute) {
+
+    if (level[attribute] == null) {
+      throw new Exception("Attribute $attribute not present");
+    }
+
+    return level[attribute];
   }
 
 
@@ -392,14 +405,14 @@ abstract class Level extends Broadcaster implements GameEventListener {
    * */
   factory Level.fromJson(Map level, CanvasDrawer drawer, CanvasManager manager, Player player)
   {
-    int height = level["height"].toInt();
-    int width = level["width"].toInt();
-    int tileHeight = level["tileheight"].toInt();
-    int tileWidth = level["tilewidth"].toInt();
+    int height = Level._requireAttribute(level, 'height').toInt();
+    int width = Level._requireAttribute(level, 'width').toInt();
+    int tileHeight = Level._requireAttribute(level, 'tileheight').toInt();
+    int tileWidth = Level._requireAttribute(level, 'tilewidth').toInt();
 
-    List<Map> _tilesets = level["tilesets"];
-    List<Map> _layers = level["layers"];
-    Map _properties = level["properties"];
+    List<Map> _tilesets = Level._requireAttribute(level, 'tilesets');
+    List<Map> _layers = Level._requireAttribute(level, 'layers');
+    Map _properties = Level._requireAttribute(level, 'properties');
 
     Level._validateProperties(_properties);
 
@@ -419,39 +432,42 @@ abstract class Level extends Broadcaster implements GameEventListener {
     Level l = new _LoadableLevel(drawer, manager, player,
         height, width, tileWidth, tileHeight);
 
-    l._name = _properties["name"];
-    l._storeX = int.parse(_properties["store_x"]);
-    l._storeY = int.parse(_properties["store_y"]);
-    l._startX = int.parse(_properties["start_x"]);
-    l._startY = int.parse(_properties["start_y"]);
-    l._beersToWin = int.parse(_properties["beers_to_win"]);
-    l._duration = new Duration(seconds: int.parse(_properties["seconds"]));
+    l._name = Level._requireAttribute(_properties, 'name');
+    l._storeX = int.parse(Level._requireAttribute(_properties, 'store_x'));
+    l._storeY = int.parse(Level._requireAttribute(_properties, 'store_y'));
+    l._startX = int.parse(Level._requireAttribute(_properties, 'start_x'));
+    l._startY = int.parse(Level._requireAttribute(_properties, 'start_y'));
+    l._startBeers = int.parse(Level._requireAttribute(_properties, 'start_beers'));
+    l._beersToWin = int.parse(Level._requireAttribute(_properties, 'beers_to_win'));
+    l._duration = new Duration(seconds: int.parse(Level._requireAttribute(_properties, 'seconds')));
 
     window.console.log("set level properties: storeX=${l._storeX}, storeY=${l._storeY}, startX=${l._startX}, startY=${l._startY}, beersToWin=${l._beersToWin}, duration=${l._duration}");
 
     for (Map ll in _layers) {
-      if (ll["type"] == "tilelayer") {
+      if (Level._requireAttribute(ll, 'type') == "tilelayer") {
         layers.add(new _LevelLayer.fromJson(ll));
       } else {
         // objects
         // TODO: this could be a lot better managed
-        for (Map object in ll["objects"]) {
-          int x = object["x"];
-          int y = object["y"];
+        for (Map object in Level._requireAttribute(ll, 'objects')) {
+          int x = Level._requireAttribute(object, 'x');
+          int y = Level._requireAttribute(object, 'y');
           int row = y ~/ tileHeight;
           int col = x ~/ tileWidth;
-          int width = object["width"];
-          int height = object["height"];
-          String type = object["type"];
+          int width = Level._requireAttribute(object, 'width');
+          int height = Level._requireAttribute(object, 'height');
+          String type = Level._requireAttribute(object, 'type');
           if (type == "trigger") {
-            if (object["properties"]["type"] == "beer_store") {
+            Map _objProps = Level._requireAttribute(object, 'properties');
+            String _objType = Level._requireAttribute(_objProps, 'type');
+            if (_objType == "beer_store") {
 
               GameEvent beerStoreEvent = new GameEvent();
               beerStoreEvent.type = GameEvent.BEER_STORE_EVENT;
               beerStoreEvent.value = 24;
               l.addTrigger(new Trigger(beerStoreEvent, row, col));
 
-            } else if (object["properties"]["type"] == "party_arrival") {
+            } else if (_objType == "party_arrival") {
 
               GameEvent partyArrivalEvent = new GameEvent();
               partyArrivalEvent.type = GameEvent.PARTY_ARRIVAL_EVENT;

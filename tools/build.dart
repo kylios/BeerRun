@@ -67,7 +67,7 @@ void main(List<String> arguments) {
 		throw new Exception("Not enough arguments supplied!");
 	}
 
-	argResults results = parser.parse(arguments);
+	ArgResults results = parser.parse(arguments);
 
 	bool skipCompile = results[SKIP_COMPILE];
 
@@ -85,7 +85,7 @@ void main(List<String> arguments) {
 		})
 		;
 
-	
+
 }
 
 Future<Map> prepBuildTarget(Map config) {
@@ -167,7 +167,7 @@ Future copyWebFiles(Map config) {
 	String envName = config['env']['name'];
 	String targetDir = "$buildDir/$envName";
 
-	return 
+	return
 
 		// Copy the files
 		Process.run('rsync', [ '-arv', '../web', targetDir ])
@@ -185,7 +185,7 @@ Future copyWebFiles(Map config) {
 }
 
 // Find and delete all symbolic links in the target directory
-Future killSymlinks(String dir) => 
+Future killSymlinks(String dir) =>
 	Process.start('find', [ '-P', dir, '-type', 'l', '-print0' ])
 		.then((Process find) => Process.start('xargs', [ '-0', 'rm' ])
 			.then((Process xargs) {
@@ -210,7 +210,7 @@ Future _copyDir(Directory src, Directory dest, AsyncCounter counter) {
 					} else if (type == FileSystemEntityType.DIRECTORY) {
 						Directory d = new Directory("${dest.path}/${fileName}");
 						counter.up();
-						d.create(recursive: true).then((Directory d) { 
+						d.create(recursive: true).then((Directory d) {
 							_copyDir(obj, d, counter);
 							counter.down();
 						});
@@ -221,7 +221,7 @@ Future _copyDir(Directory src, Directory dest, AsyncCounter counter) {
 			onDone: counter.down
 		);
 }
-		
+
 
 // Copies a dart package to the target directory.  No symbolic links will be created.
 Future copyPackage(String packageName, String packagesDir, String targetDir) {
