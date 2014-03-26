@@ -34,6 +34,12 @@
  <tileset firstgid="1580" name="trees" tilewidth="32" tileheight="32">
   <image source="../../web/img/trees.png" width="192" height="320"/>
  </tileset>
+ <tileset firstgid="1640" name="cars_moving_horiz_32" tilewidth="32" tileheight="32">
+  <image source="../../web/img/cars_moving_horiz.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="1712" name="cars_moving_vert_32" tilewidth="32" tileheight="32">
+  <image source="../../web/img/cars_moving_vert.png" width="384" height="161"/>
+ </tileset>
  <layer name="grass" width="50" height="20">
   <data encoding="base64" compression="zlib">
    eJytllEOwyAMQzkCcP/Dbh+bhNxnByo+kLoUQhzbWWdrbXzX/K2x/N6JT4nrnr6sUeSZyxmK63vKu7tSfsJG8W72Ud9689g1NuCcxk+xulqVt1uLMPz5cppxZwk77X3LcaUz5U3r0r3uvNM/7UuYd2p2OAhTwuV4TbGk5xu8JF2Q7tWrazx5o9LZLX/oSvNS7+0QqzjZwbF6de2R9tHV53DRXsKqdzif6FytvJB8o/m1XodROXBYdmYX6fQUg+q54oW872o98cbbmZV86e4Zjfvg/LH73eB8R/W6uOtVl+fKn4pH/XmCyWkn+cjpSPvpvJqwrP05/aZzvBIfoz17pZpL88V5g/pTfbtVfFc40jmaZclL1UwiP6VzbnY6D6gXyBezPTVDHBHXU56dfkjXxK3GVFPp/5t0Qh6o+KRepV643ISjyqW9pTmo75N2qQ7HDd2n+Nw3L8028kh1v9Nyml0pl9P6B+TeQ54=
@@ -88,7 +94,7 @@
    <property name="blocking" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt1DkBADAIwEAmnFD/EmuCZ7lTkCkRADCj8roAoMfzM2DBB19WAFg=
+   eJzt0zkSglAQRdEfsVwUzGQwc0SGjMkMBHbJ3QIRtvVu1clfB+2cUkr9T77n3AFHBAhx8vZetb0zmyPESJDiYvCOK5tvuOOBJ14G71BqjzJ+5Y0cBUpUBv+nZnODFh16fAzeMbB5xBcTZiwG71BK/XYrBssUdw==
   </data>
  </layer>
  <layer name="objects1" width="50" height="20">

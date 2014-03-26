@@ -17,7 +17,7 @@ class Song {
     if (this._track.state == on) {
       this._source.loop = false;
       this._source.start(n);
-      //this._started = true;
+      this._started = true;
     }
   }
 
@@ -34,11 +34,12 @@ class Song {
 
   void stop([int n = 0]) {
 
-    this._source.loop = false;
-
     if (null == this._source) {
       return;
     }
+
+    this._source.loop = false;
+
     if (this._started) {
       this._source.stop(n);
       this._started = false;

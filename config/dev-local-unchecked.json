@@ -1,0 +1,52 @@
+{
+	"compile": {
+		"build_dir": "build",
+		
+		"in_file": "../web/beer_run.dart",
+		"out_file": "web/beer_run.dart.js",
+
+		"checked": false,
+		"minify": false
+	},
+
+	"deploy": {
+		"host": "",
+
+		"local_web_dir": "",
+		"local_server_dir": "",
+		"remote_web_dir": "",
+		"remote_server_dir": ""
+	},
+
+	"application": {
+		
+		"assets": {
+
+			"cdn_hosts": [
+
+			],
+			"path": "",
+			"version": 1
+		}
+
+
+	},
+
+	"data": {
+
+		"audio": {
+			"music": [
+				{
+					"name": "theme",
+					"path": "audio/theme.wav"
+				}
+			],
+			"sfx": [
+				{
+					"name": "drink_beer",
+					"path": "audio/drink_beer.wav"
+				}
+			]
+		}
+	}
+}

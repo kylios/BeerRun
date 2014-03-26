@@ -315,8 +315,10 @@ abstract class Level extends Broadcaster implements GameEventListener {
       for (Sprite s in layer) {
         //window.console.log("sprite: $s");
         if (s != null) {
-          d.drawSprite(s, col * this._tileWidth, row * this._tileHeight,
-              this._tileWidth, this._tileHeight);
+          int heightDiff = (this._tileHeight - s.height).abs();
+          d.drawSprite(s, col * this._tileWidth, row * this._tileHeight - heightDiff,
+                s.width, s.height);
+              //this._tileWidth, this._tileHeight);
         }
         //if (this.isBlocking(row, col)) {
           //d.backgroundColor = "red";
