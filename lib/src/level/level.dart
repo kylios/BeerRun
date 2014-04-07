@@ -20,6 +20,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   int _startX;
   int _startY;
   int _startBeers;
+  int _startHealth;
   int _beersToWin;
   Duration _duration; // how long you have to beat this level
 
@@ -60,6 +61,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   int get startX => this._startX;
   int get startY => this._startY;
   int get startBeers => this._startBeers;
+  int get startHealth => this._startHealth;
   int get beersToWin => this._beersToWin;
   Duration get duration => this._duration;
 
@@ -343,16 +345,21 @@ abstract class Level extends Broadcaster implements GameEventListener {
     Tutorial t = new Tutorial(level);
 
     t
-      .onStart(level.startY, level.startX)
+      .onStart(level.startY, level.startX - 8)
       .addDialog("What.. who's that drunk idiot who wants to come to OUR party? "
       "I suppose you can come in.. BUT, we're running low on beer! "
       "Why don't you stumble on down to the store over there and grab us "
       "some beers!")
+      /*
       .addPan(level.storeY, level.storeX, 5)
+      */
+      // Added for level 1
+      .addPan(level.startY, 8, 5)
+      .addPan(10, 8, 5)
       .addDialog("Grab us a ${level.beersToWin} pack and bring it back.  Better "
       "avoid the bums... they like to steal your beer, and then you'll "
       "have to go BACK and get MORE!")
-      .addPan(level.startY, level.startX, 10)
+      .addPan(level.startY, level.startX - 9, 10)
       .addDialog("Well, what are you waiting for!?  Get moving, and don't sober "
                 "up too much!")
       .addDialog("Controls: <br />"
@@ -440,6 +447,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
     l._startX = int.parse(Level._requireAttribute(_properties, 'start_x'));
     l._startY = int.parse(Level._requireAttribute(_properties, 'start_y'));
     l._startBeers = int.parse(Level._requireAttribute(_properties, 'start_beers'));
+    l._startHealth = int.parse(Level._requireAttribute(_properties, 'start_health'));
     l._beersToWin = int.parse(Level._requireAttribute(_properties, 'beers_to_win'));
     l._duration = new Duration(seconds: int.parse(Level._requireAttribute(_properties, 'seconds')));
 
@@ -464,9 +472,11 @@ abstract class Level extends Broadcaster implements GameEventListener {
             String _objType = Level._requireAttribute(_objProps, 'type');
             if (_objType == "beer_store") {
 
+              int _numBeers = int.parse(Level._requireAttribute(_objProps, 'beers'));
+
               GameEvent beerStoreEvent = new GameEvent();
               beerStoreEvent.type = GameEvent.BEER_STORE_EVENT;
-              beerStoreEvent.value = 24;
+              beerStoreEvent.value = _numBeers;
               l.addTrigger(new Trigger(beerStoreEvent, row, col));
 
             } else if (_objType == "party_arrival") {
@@ -546,7 +556,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
       }
     }
 
-    if (l.name == "test_level") {
+    if (l.name == "test_level" || l.name == "level1") {
       Level.setupTutorial(l);
     }
 

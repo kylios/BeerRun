@@ -5,7 +5,7 @@
 		"in_file": "../web/beer_run.dart",
 		"out_file": "web/beer_run.dart.js",
 
-		"checked": true,
+		"checked": false,
 		"minify": false
 	},
 

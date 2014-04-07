@@ -72,8 +72,8 @@ class Player extends GameObject implements GameEventListener {
     this.dir = DIR_UP;
     this.resetBeersDelivered();
 
-    this.setHealth(3);
-    this.setBeers(300);
+    this.setHealth(l.startHealth);
+    this.setBeers(l.startBeers);
 
     this._buzz = 3;
   }
@@ -199,12 +199,12 @@ class Player extends GameObject implements GameEventListener {
         }
       }
     } else if (e.type == GameEvent.BEER_STORE_EVENT) {
-        if (this._beers < 24) {
-            int diff = 24 - this._beers;
+        if (this._beers < e.value) {
+            int diff = e.value - this._beers;
             this.level.addAnimation(
                 new TextAnimation("+${diff} BEERS!", this.x, this.y, 2));
         }
-        this._beers = 24;
+        this._beers = e.value;
         this._beenToStore = true;
 
         this._stats.beers = this._beers;

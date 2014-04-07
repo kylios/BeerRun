@@ -5,6 +5,7 @@
   <property name="name" value="test_level"/>
   <property name="seconds" value="90"/>
   <property name="start_beers" value="3"/>
+  <property name="start_health" value="3"/>
   <property name="start_x" value="12"/>
   <property name="start_y" value="20"/>
   <property name="store_x" value="43"/>
@@ -217,7 +218,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="triggers" width="58" height="57" visible="0">
+ <objectgroup name="triggers" width="58" height="57">
   <object name="party1" type="trigger" x="384" y="608" width="64" height="32">
    <properties>
     <property name="type" value="party_arrival"/>
@@ -225,6 +226,7 @@
   </object>
   <object name="store1" type="trigger" x="1376" y="1504" width="32" height="64">
    <properties>
+    <property name="beers" value="24"/>
     <property name="type" value="beer_store"/>
    </properties>
   </object>

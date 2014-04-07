@@ -266,7 +266,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":58,
          "x":0,
          "y":0
@@ -336,7 +336,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":58,
          "x":0,
          "y":0
@@ -497,7 +497,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":58,
          "x":0,
          "y":0
@@ -524,6 +524,7 @@
                  "name":"store1",
                  "properties":
                     {
+                     "beers":"24",
                      "type":"beer_store"
                     },
                  "type":"trigger",
@@ -546,6 +547,7 @@
      "name":"test_level",
      "seconds":"90",
      "start_beers":"3",
+     "start_health":"3",
      "start_x":"12",
      "start_y":"20",
      "store_x":"43",

@@ -5,6 +5,12 @@ class Direction {
   Direction(this.direction);
   int get idx => (this.direction ~/ 2);
   int get mult => (this.direction == 0 || this.direction == 2) ? -1 : 1;
+  String toString() =>  (this == DIR_UP ? "up" :
+                            (this == DIR_DOWN ? "down" :
+                            (this == DIR_LEFT ? "left" :
+                             "right")));
+  bool isVertical() => (this == DIR_UP || this == DIR_DOWN);
+  bool isHorizontal() => (this == DIR_LEFT || this == DIR_RIGHT);
 }
 
 final Direction DIR_UP = new Direction(0);

@@ -1,8 +1,9 @@
 part of car;
 
-class Car extends GameObject {
+class Car extends PathFollower {
 
   int _type;
+
 
   final SpriteSheet _horiz;
   final SpriteSheet _vert;
