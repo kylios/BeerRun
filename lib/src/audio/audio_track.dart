@@ -31,6 +31,9 @@ class AudioTrack {
 	}
 
 	void setVolume(double percent) {
+		if (null == this.gain.gain.maxValue) {
+			return;
+		}
 		double newVal = this.gain.gain.maxValue * percent;
 		window.console.log("new vol: $newVal");
 		this.gain.gain.value = newVal;
