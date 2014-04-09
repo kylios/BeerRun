@@ -1,0 +1,14 @@
+{
+	"music": [
+		{
+			"name": "theme",
+			"path": "audio/theme.wav"
+		}
+	],
+	"sfx": [
+		{
+			"name": "drink_beer",
+			"path": "audio/drink_beer.wav"
+		}
+	]
+}

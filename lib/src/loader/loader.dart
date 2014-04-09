@@ -2,28 +2,49 @@ part of loader;
 
 class Loader {
 
-  String _prefix;
+	String _host;
 
-  Loader([this._prefix = null]);
+	Loader(this._host);
+	
+	Future<Resource> load(String uri, 
+			loaderCallback callback, [loaderCallback errorCallback = null]) {
 
-  Future<Map> load(String url) {
+		Resource resource = new Resource(uri);
 
-    Completer<Map> c = new Completer<Map>();
+		Completer<Resource> c = new Completer<Resource>();
 
-    if (null != this._prefix) {
-        url = "${this._prefix}$url";
-    }
-    window.console.log("Loading $url");
-    HttpRequest.requestCrossOrigin(url,
-            method: 'GET'/*,
-            withCredentials: false,
-            responseType: 'application/json'*/)
-      .then((String res /*HttpRequest r*/) {
-        //String res = r.responseText;
-        Map json = JSON.decode(res);
-        c.complete(json);
-      });
+		window.console.log("started request: $uri");
+		HttpRequest.request(
+			this._getUrlString(resource.uri),
+			method: resource.method,
+			responseType: resource.responseType,
+			requestHeaders: resource.requestHeaders
+		)
+		.then((HttpRequest request) {
 
-    return c.future;
-  }
+			window.console.log("finished request: ${uri}");
+			resource._receiveServerResponse(request);
+			callback(resource);
+
+			c.complete(resource);
+		})
+		.catchError((HttpRequest request) {
+			window.console.log("caught error in request: ${uri}");
+			if (null != resource._receiveServerError) {
+				resource._receiveServerError(request);
+			}
+			callback(resource);
+
+			c.complete(resource);
+		})
+		;
+
+		return c.future;
+	}
+
+	String _getUrlString(String uri) {
+		return "http://${this._host}${uri}";
+	}
+
+
 }
