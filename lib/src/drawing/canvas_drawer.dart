@@ -12,7 +12,6 @@ part of drawing;
 class CanvasDrawer implements DrawingInterface {
 
   CanvasManager _canvasManager;
-  PageStats _pageStats;
 
   // These variables help do the canvas scrolling thing as the player moves
   int _offsetX = 0;
@@ -26,7 +25,7 @@ class CanvasDrawer implements DrawingInterface {
   /**
    * Give us a manager so we can access the canvas' properties.
    */
-  CanvasDrawer(this._canvasManager, this._pageStats) {
+  CanvasDrawer(this._canvasManager) {
 
     if (_globalContext == null) {
       _globalContext = this._canvasManager.canvas.getContext("2d");

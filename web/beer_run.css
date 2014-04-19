@@ -17,6 +17,10 @@ p {
   margin-top: 140px;
 }
 
+#config {
+  display: none;
+}
+
 div.padded {
   padding: 8px;
 }

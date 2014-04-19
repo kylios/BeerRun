@@ -53,7 +53,7 @@ class Resource {
 		this._decode(request);
 	}
 
-	_decode(HttpRequest request) {
+	void _decode(HttpRequest request) {
 
 		this.response = request.response;
 	}

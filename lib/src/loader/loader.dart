@@ -6,10 +6,9 @@ class Loader {
 
 	Loader(this._host);
 	
-	Future<Resource> load(String uri, 
-			loaderCallback callback, [loaderCallback errorCallback = null]) {
+	Future<Resource> load(Resource resource) {
 
-		Resource resource = new Resource(uri);
+		String uri = resource.uri;
 
 		Completer<Resource> c = new Completer<Resource>();
 
@@ -24,8 +23,6 @@ class Loader {
 
 			window.console.log("finished request: ${uri}");
 			resource._receiveServerResponse(request);
-			callback(resource);
-
 			c.complete(resource);
 		})
 		.catchError((HttpRequest request) {
@@ -33,8 +30,6 @@ class Loader {
 			if (null != resource._receiveServerError) {
 				resource._receiveServerError(request);
 			}
-			callback(resource);
-
 			c.complete(resource);
 		})
 		;

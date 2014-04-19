@@ -17,6 +17,7 @@ void main() {
       DialogElement: querySelector('div#dialog'),
       statsElement: querySelector('div#stats'),
       debugStatsElement: querySelector('div#debug_stats'),
+      configElement: querySelector('div#config'),
       musicOnElement: querySelector('input#music_toggle_on'),
       musicOffElement: querySelector('input#music_toggle_off'),
       sfxOnElement: querySelector('input#sfx_toggle_on'),

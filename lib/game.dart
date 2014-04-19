@@ -3,6 +3,7 @@ library game;
 import 'dart:html';
 import 'dart:async';
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:beer_run/canvas_manager.dart';
 import 'package:beer_run/drawing.dart';

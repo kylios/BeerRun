@@ -9,7 +9,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     CanvasManager _canvasManager;
     CanvasDrawer _canvasDrawer;
     AudioManager _audio;
-    Loader _loader;
+    CdnLoader _cdnLoader;
     GameConfig _config;
     PageStats _pageStats;
     LoadingScreen _loadingScreen;
@@ -78,6 +78,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         DivElement DialogElement,
         DivElement statsElement,
         DivElement debugStatsElement,
+        DivElement configElement,
         InputElement musicOnElement,
         InputElement musicOffElement,
         InputElement sfxOnElement,
@@ -89,6 +90,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
                 canvasElement,
                 UIRootElement, NotificationsRootElement,
                 DialogElement, statsElement, debugStatsElement,
+                configElement,
                 musicOnElement, musicOffElement, 
                 sfxOnElement, sfxOffElement);
         }
@@ -103,6 +105,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             DivElement DialogElement,
             DivElement statsElement,
             DivElement debugStatsElement,
+            DivElement configElement,
             this._musicOnElement,
             this._musicOffElement,
             this._sfxOnElement,
@@ -112,10 +115,13 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
         this._pageStats = new PageStats(debugStatsElement);
 
+        Map configData = JSON.decode(configElement.innerHtml);
+        this._config = new GameConfig(configData);
+
         this._canvasManager = new CanvasManager(canvasElement);
         this._canvasManager.resize(this._canvasWidth, this._canvasHeight);
 
-        this._canvasDrawer = new CanvasDrawer(this._canvasManager, this._pageStats);
+        this._canvasDrawer = new CanvasDrawer(this._canvasManager);
         this._canvasDrawer.setOffset(0, 0);
         this._canvasDrawer.backgroundColor = 'black';
 
@@ -143,12 +149,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     UIInterface get ui => this._ui;
 
     Future init() {
+
+        this._parseConfig();
+
         this._startPageStats();
 
         this._ui.showView(this._loadingScreen);
 
         GameLoader gl = new GameLoader();
-        gl.addStep(new GameLoaderStep.fromFunction("_setupConfig", this, this._setupConfig, null));
         gl.addStep(new GameLoaderStep.fromFunction("_loadLevels", this, this._loadLevels, "/data/level_config.json"));
         gl.addStep(new GameLoaderStep.fromFunction("_setupAudio", this, this._setupAudio, null));
         return gl
@@ -183,33 +191,20 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         return c.future;
     }
 
-    void _parseConfig(GameConfig config) {
+    void _parseConfig() {
+
+        GameConfig config = this._config;
 
         Map<String, dynamic> cfg = config.get();
         List<String> cdnHosts = cfg['application']['assets']['cdn_hosts'];
-        Random r = new Random();
-        String cdnHost = '';
-        if (cdnHosts.length > 0) {
-            cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
-        }
-        String assetsPath = cfg['application']['assets']['path'];
-        int version = cfg['application']['assets']['version'];
-        bool useCdn = (cdnHosts.length > 0);
 
-        String url = '';
-        if (useCdn) {
-          url = "https://${cdnHost}${assetsPath}${version}/";
-        } else {
-            url = assetsPath;
-        }
+        this._cdnLoader = new CdnLoader(cdnHosts, assetsPath, version);
 
-        this._loader = new Loader(url);
-
-        this._audio = new AudioManager.fromConfig(this._loader, cfg['data']['audio']);
+        this._audio = new AudioManager.fromConfig(this._cdnLoader, cfg['data']['audio']);
     }
 
     Future _loadLevels(GameLoaderStep step, String levelConfigPath) {
-        return this._loader.load(levelConfigPath).then((Map config) {
+        return this._cdnLoader.load(levelConfigPath).then((Map config) {
             config['levels'].forEach((Map levelConfig) {
                 this._levelIdxs.add(levelConfig['name']);
                 GameLoaderJob loadLevel = new GameLoaderJob("Loading level ${levelConfig['name']}", this._loadLevel, levelConfig);
@@ -220,7 +215,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     Future _loadLevel(GameLoaderStep step, Map levelConfig) {
 
-        return this._loader.load(levelConfig['path']).then((Map levelData) {
+        return this._cdnLoader.load(levelConfig['path']).then((Map levelData) {
             step.addJob(new GameLoaderJob("Parsing level ${levelConfig['name']}", this._parseLevel, [levelConfig, levelData]));
         });
     }

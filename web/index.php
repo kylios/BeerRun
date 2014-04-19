@@ -149,6 +149,8 @@ $config->exportVars();
 
   <script type="application/dart" src="<?=assetPath();?>beer_run.dart"></script>
   <script src="<?=assetPath();?>packages/browser/dart.js"></script>
+
+  <div id="config"><?=$config->asJsonString();?></div>
 </body>
 </html>
 

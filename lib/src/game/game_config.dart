@@ -4,17 +4,7 @@ class GameConfig {
 
 	Map _config;
 
-	Future<GameConfig> load() {
-
-		Completer<GameConfig> c = new Completer<GameConfig>();
-		Loader loader = new Loader("");
-		loader.load('/get_config.php').then((Map data) {
-			this._config = data;
-			c.complete(this);
-		});
-
-		return c.future;
-	}
+	GameConfig(this._config);
 
 	get([String key = null]) {
 

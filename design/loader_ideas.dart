@@ -35,7 +35,7 @@ start game
 
 */
 
-
+/*
 abstract class Resource {
 
 	final String uri;
@@ -47,6 +47,7 @@ abstract class Resource {
 
 
 }
+*/
 
 /**
  * Represents a job that should be run asynchronously inside of
@@ -55,10 +56,12 @@ abstract class Resource {
  * instances, but which lets the pool add additional LoaderJob
  * instances to run within the collection.
  *
- *		
+ *
  *
  *
  */
+
+/*
 typedef Future LoaderJobFunc(JobCollection collection, var data);
 
 class LoaderJob {
@@ -192,7 +195,7 @@ processManifest(Loader loader, Resource resource) {
 	Response response = resource.response;
 
 	ASSERT(response.isComplete);
-	
+
 	Map manifestResources = requireKey(response, 'resources');
 	manifestResources.foreach(String key, Map manifestResource) {
 
@@ -207,11 +210,11 @@ processManifest(Loader loader, Resource resource) {
 }
 
 addManifestResource(int tries, String md5sum, String name, Resource resource) {
-	
+
 	// Make sure it downloaded ok
 	if (md5sum != resource.md5sum) {
 		if (tries >= MAX_DOWNLOAD_TRIES && ) {
-			throw new Exception();	
+			throw new Exception();
 		} else {
 			// retry
 		}
@@ -222,3 +225,5 @@ addManifestResource(int tries, String md5sum, String name, Resource resource) {
 	// Add to our global resource manager
 	addResourceData(name, resource.data);
 }
+
+*/
