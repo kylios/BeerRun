@@ -17,6 +17,7 @@ class Resource {
 	int statusCode = 0;
 	Map<String, String> responseHeaders = null;
 	var response = null;
+	var data = null;
 
 	Resource(this._uri, {String method: null, String responseType: null}) {
 
@@ -41,7 +42,7 @@ class Resource {
 		this.responseHeaders = request.responseHeaders;
 		this.response = request.response;
 
-		this._decode(request);
+		this.data = this._decode(request);
 	}
 
 	void _receiveServerError(HttpRequest request) {
@@ -50,11 +51,11 @@ class Resource {
 		this.responseHeaders = request.responseHeaders;
 		this.response = request.response;
 
-		this._decode(request);
+		this.data = this._decode(request);
 	}
 
-	void _decode(HttpRequest request) {
+	_decode(HttpRequest request) {
 
-		this.response = request.response;
+		return request.response;
 	}
 }

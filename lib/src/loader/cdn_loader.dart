@@ -1,30 +1,59 @@
 part of loader;
 
-class CdnLoader extends Loader {
-	
+class CdnLoader {
+
 	List<String> _cdnHosts;
 	String _assetsPath = '/';
 	int _version;
 
-	CdnLoader(this._cdnHosts, this._assetsPath, this._version);
+	List<Loader> _cdnLoaders;
+	Map<String, dynamic> _assets;
 
-	Future<Resource> load(String uri,
-			loaderCallback callback, [loaderCallback errorCallback = null]) {
+	String _manifestFileName = 'manifest.json';
 
-		String url = this._getAssetUrl(this._cdnHosts);
+	CdnLoader(this._cdnHosts, this._version) {
 
-		return super.load(url, callback, errorCallback);
+	    this._assets = new Map<String, dynamic>();
+
+		this._initCdnLoaders();
 	}
 
-	String _getAssetUrl(List<String> cdnHosts) {
+	void _initCdnLoaders() {
 
-		String url = '';
-		if (cdnHosts.length > 0) {
-			Random r = new Random();
-			String cdnHost = cdnHosts[r.nextInt(cdnHosts.length)];
-			url = "http://${cdnHost}${assetsPath}${version}/";
+		this._cdnLoaders = new List<Loader>();
+
+		for (String host in this._cdnHosts) {
+			this._cdnLoaders.add(new Loader(host));
+		}
+	}
+
+	Loader _getCdnLoader() {
+
+		Random r = new Random();
+		return this._cdnLoaders[r.nextInt(this._cdnLoaders.length)];
+	}
+
+	Future loadManifest() {
+
+		Loader l = this._getCdnLoader();
+
+		JsonResource manifestResource = new JsonResource("/assets/${this._manifestFileName}");
+		return l.load(manifestResource)
+			.then(this._loadManifestAssets);
+	}
+
+	Future _loadManifestAssets(JsonResource manifestResource) {
+
+		for (Map resData in manifestResource.data['assets']) {
+			Loader l = this._getCdnLoader();
+			l.load(new Resource(resData['uri']))
+				.then((Resource res) => this._saveResourceData(res, resData));
 		}
 
-		return url;
+		return Future.wait(this._cdnLoaders.map((Loader l) => l.wait()));
+	}
+
+	void _saveResourceData(Resource res, Map resData) {
+		this._assets[resData['id']] = res.data;
 	}
 }

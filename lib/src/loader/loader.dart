@@ -3,14 +3,19 @@ part of loader;
 class Loader {
 
 	String _host;
+	List<Future<Resource>> _futures;
 
-	Loader(this._host);
+	Loader(this._host) : 
+		this._futures = new List<Future<Resource>>()
+		;
 	
 	Future<Resource> load(Resource resource) {
 
 		String uri = resource.uri;
 
 		Completer<Resource> c = new Completer<Resource>();
+
+		this._futures.add(c.future);
 
 		window.console.log("started request: $uri");
 		HttpRequest.request(
@@ -35,6 +40,10 @@ class Loader {
 		;
 
 		return c.future;
+	}
+
+	Future<List<Resource>> wait() {
+		return Future.wait(this._futures);
 	}
 
 	String _getUrlString(String uri) {
