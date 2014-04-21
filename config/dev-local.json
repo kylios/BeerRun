@@ -5,7 +5,7 @@
 		"in_file": "../web/test_loader.dart",
 		"out_file": "web/test_loader.dart.js",
 
-		"checked": true,
+		"checked": true	,
 		"minify": false
 	},
 
@@ -23,7 +23,10 @@
 		"assets": {
 
 			"cdn_hosts": [
-
+				"static1.dev-local.beer_run",
+				"static2.dev-local.beer_run",
+				"static3.dev-local.beer_run",
+				"static4.dev-local.beer_run"
 			],
 			"path": "",
 			"version": 1

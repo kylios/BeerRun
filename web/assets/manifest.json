@@ -7,6 +7,14 @@
 		{
 			"id": "level_level1",
 			"uri": "/assets/levels/level1.json"
+		},
+		{
+			"id": "sfx_drink_beer.wav",
+			"uri": "/assets/sfx/drink_beer.wav"
+		},
+		{
+			"id": "sfx_theme.wav",
+			"uri": "/assets/sfx/theme.wav"
 		}
 	]
 }
