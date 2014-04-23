@@ -2,19 +2,28 @@
 	"assets": [
 		{
 			"id": "level_config",
-			"uri": "/assets/levels/config.json"
+			"uri": "/assets/levels/config.json",
+			"type": "json"
 		},
 		{
 			"id": "level_level1",
-			"uri": "/assets/levels/level1.json"
+			"uri": "/assets/levels/level1.json",
+			"type": "json"
 		},
 		{
-			"id": "sfx_drink_beer.wav",
-			"uri": "/assets/sfx/drink_beer.wav"
+			"id": "sfx_config",
+			"uri": "/assets/sfx/config.json",
+			"type": "json"
 		},
 		{
-			"id": "sfx_theme.wav",
-			"uri": "/assets/sfx/theme.wav"
+			"id": "sfx_drink_beer",
+			"uri": "/assets/sfx/drink_beer.wav",
+			"type": "binary"
+		},
+		{
+			"id": "sfx_theme",
+			"uri": "/assets/sfx/theme.wav",
+			"type": "binary"
 		}
 	]
 }

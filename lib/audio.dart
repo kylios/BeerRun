@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 
-import 'package:beer_run/old_loader.dart';
+import 'package:beer_run/loader.dart';
 
 part 'src/audio/song.dart';
 part 'src/audio/audio_manager.dart';

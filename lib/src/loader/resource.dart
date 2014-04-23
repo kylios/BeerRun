@@ -2,7 +2,7 @@ part of loader;
 
 class Resource {
 
-	// These members should get set before a request is made	
+	// These members should get set before a request is made
 	String _uri;
 	String _method = 'GET';
 	String _responseType = 'application/json';
@@ -18,6 +18,16 @@ class Resource {
 	Map<String, String> responseHeaders = null;
 	var response = null;
 	var data = null;
+
+	factory Resource.fromType(String type, String uri) {
+
+		if (type == "json") {
+			return new JsonResource(uri);
+		} else if (type == "binary") {
+			return new Resource(uri, method: null, responseType: 'application/octet-stream');
+		}
+		throw new Exception("Resource: Type '$type' is not supported.");
+	}
 
 	Resource(this._uri, {String method: null, String responseType: null}) {
 

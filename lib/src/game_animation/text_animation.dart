@@ -1,4 +1,4 @@
-part of animation;
+part of game_animation;
 
 class _TextAnimationFrame {
 
@@ -13,7 +13,7 @@ class _TextAnimationFrame {
   String get text => this._text;
 }
 
-class TextAnimation extends Animation {
+class TextAnimation extends GameAnimation {
 
   String _text;
   int _cur = 0;

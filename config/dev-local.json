@@ -2,10 +2,11 @@
 	"compile": {
 		"build_dir": "build",
 		
-		"in_file": "../web/test_loader.dart",
-		"out_file": "web/test_loader.dart.js",
+		"in_file": "../web/beer_run.dart",
+		"out_file": "web/beer_run.dart.js",
 
-		"checked": true	,
+		"checked": true,
+		"warnings": false,
 		"minify": false
 	},
 

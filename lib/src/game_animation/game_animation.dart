@@ -1,11 +1,11 @@
-part of animation;
+part of game_animation;
 
-abstract class Animation {
+abstract class GameAnimation {
 
   int _x;
   int _y;
 
-  Animation(this._x, this._y);
+  GameAnimation(this._x, this._y);
 
   int get x => this._x;
   int get y => this._y;

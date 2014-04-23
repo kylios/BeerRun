@@ -5,10 +5,10 @@ class Loader {
 	String _host;
 	List<Future<Resource>> _futures;
 
-	Loader(this._host) : 
+	Loader(this._host) :
 		this._futures = new List<Future<Resource>>()
 		;
-	
+
 	Future<Resource> load(Resource resource) {
 
 		String uri = resource.uri;
@@ -30,13 +30,17 @@ class Loader {
 			resource._receiveServerResponse(request);
 			c.complete(resource);
 		})
-		.catchError((HttpRequest request) {
+		.catchError((var ex) {
+            window.console.log("caught an error and e is FormatException");
+            window.console.log(ex);
+		}, test: (e) => e is FormatException)
+		.catchError((var request) {
 			window.console.log("caught error in request: ${uri}");
 			if (null != resource._receiveServerError) {
 				resource._receiveServerError(request);
 			}
 			c.complete(resource);
-		})
+		}, test: (e) => e is HttpRequest)
 		;
 
 		return c.future;

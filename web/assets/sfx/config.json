@@ -1,0 +1,15 @@
+{
+	
+	"sfx": [
+		{
+			"id": "sfx_theme",
+			"name": "theme",
+			"track": "music"
+		},
+		{
+			"id": "sfx_drink_beer",
+			"name": "drink_beer",
+			"track": "sfx"
+		}
+	]
+}

@@ -5,10 +5,7 @@ import 'dart:math';
 
 import 'package:beer_run/canvas_manager.dart';
 import 'package:beer_run/component.dart';
-import 'package:beer_run/input.dart';
 import 'package:beer_run/game.dart';
-import 'package:beer_run/animation.dart';
-import 'package:beer_run/page.dart';
 
 part 'src/drawing/drawing_interface.dart';
 part 'src/drawing/sprite.dart';

@@ -91,7 +91,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
                 UIRootElement, NotificationsRootElement,
                 DialogElement, statsElement, debugStatsElement,
                 configElement,
-                musicOnElement, musicOffElement, 
+                musicOnElement, musicOffElement,
                 sfxOnElement, sfxOffElement);
         }
 
@@ -144,27 +144,33 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         this._HPMeter = new Meter(3, 52, 36, 116, 22);
 
         this._loadingScreen = new LoadingScreen(this._ui);
+
+        this._parseConfig();
     }
 
     UIInterface get ui => this._ui;
 
-    Future init() {
 
-        this._parseConfig();
+    void _parseConfig() {
+
+        GameConfig config = this._config;
+
+        Map<String, dynamic> cfg = config.get();
+        List<String> cdnHosts = cfg['application']['assets']['cdn_hosts'];
+        int version = cfg['application']['assets']['version'];
+
+        this._cdnLoader = new CdnLoader(cdnHosts, version);
+    }
+
+    Future init() {
 
         this._startPageStats();
 
         this._ui.showView(this._loadingScreen);
 
-        GameLoader gl = new GameLoader();
-        gl.addStep(new GameLoaderStep.fromFunction("_loadLevels", this, this._loadLevels, "/data/level_config.json"));
-        gl.addStep(new GameLoaderStep.fromFunction("_setupAudio", this, this._setupAudio, null));
-        return gl
-                .run()
-                .then((var _) {
-            this._stopPageStats();
-            this._ui.closeWindow(null);
-        });
+        return this._cdnLoader.loadManifest()
+            .then(this._loadLevels)
+            .then(this._loadAudio);
     }
 
     void _startPageStats() {
@@ -177,32 +183,29 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         this._pageStats.stopTimer("game_manager_init");
     }
 
-    Future _setupConfig(GameLoaderStep step, var __) {
+    Future _loadLevels(var _) {
 
-        Completer c = new Completer();
+        Map levelConfig = this._cdnLoader.getAsset('level_config');
+        List<Future> futures = new List<Future>();
 
-        GameConfig config = new GameConfig();
-        config.load().then((loadedConfig) {
-            this._config = loadedConfig;
-            this._parseConfig(loadedConfig);
-            c.complete(loadedConfig);
-        });
+        return Future.forEach(levelConfig['levels'], (Map levelConfigData) => new Future(() {
 
-        return c.future;
+                String id = levelConfigData['id'];
+                String name = levelConfigData['name'];
+                Map levelData = this._cdnLoader.getAsset(id);
+                this._levelIdxs.add(name);
+                Level l = new Level.fromJson(levelData,
+                    this._canvasDrawer, this._canvasManager,
+                    this._player);
+                this._levels[name] = l;
+
+            }));
     }
 
-    void _parseConfig() {
-
-        GameConfig config = this._config;
-
-        Map<String, dynamic> cfg = config.get();
-        List<String> cdnHosts = cfg['application']['assets']['cdn_hosts'];
-
-        this._cdnLoader = new CdnLoader(cdnHosts, assetsPath, version);
-
-        this._audio = new AudioManager.fromConfig(this._cdnLoader, cfg['data']['audio']);
+    void _loadAudio(var _) {
+        this._audio = new AudioManager.fromConfig(this._cdnLoader, this._cdnLoader.getAsset('sfx_config'));
     }
-
+/*
     Future _loadLevels(GameLoaderStep step, String levelConfigPath) {
         return this._cdnLoader.load(levelConfigPath).then((Map config) {
             config['levels'].forEach((Map levelConfig) {
@@ -243,6 +246,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
         return c.future;
     }
+*/
 
   Future _setupAudio(GameLoaderStep step, var _) {
 

@@ -35,7 +35,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   CanvasManager _manager;
   DrawingInterface _drawer;
 
-  List<Animation> _animations;
+  List<GameAnimation> _animations;
   List<List<Sprite>> _sprites;
   List<GameObject> _objects;
   List<CarFactory> _carFactories;
@@ -48,7 +48,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   {
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
-    this._animations = new List<Animation>();
+    this._animations = new List<GameAnimation>();
     this._carFactories = new List<CarFactory>();
     this._triggers = new List<Trigger>(); // TODO: someday optimize this to be more location aware
     this._blocked = new List<bool>
@@ -131,7 +131,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   }
   */
 
-  void addAnimation(Animation a) {
+  void addAnimation(GameAnimation a) {
     this._animations.add(a);
   }
 
@@ -297,8 +297,8 @@ abstract class Level extends Broadcaster implements GameEventListener {
       }
 
       // Process any animations going on
-      this._animations = new List<Animation>.from(
-          this._animations.where((Animation a) {
+      this._animations = new List<GameAnimation>.from(
+          this._animations.where((GameAnimation a) {
             a.drawNext(this._drawer);
             return ! a.isDone;
           })

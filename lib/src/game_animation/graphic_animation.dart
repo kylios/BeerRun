@@ -1,6 +1,6 @@
-part of animation;
+part of game_animation;
 
-class GraphicAnimation extends Animation {
+class GraphicAnimation extends GameAnimation {
 
   SpriteAnimation _sprites;
   int _tileWidth;

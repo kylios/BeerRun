@@ -1,7 +1,7 @@
 library explosion;
 
 import 'package:beer_run/drawing.dart';
-import 'package:beer_run/animation.dart';
+import 'package:beer_run/game_animation.dart';
 
 class Explosion extends GraphicAnimation {
 

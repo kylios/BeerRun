@@ -5,6 +5,7 @@ description: A top down arcade game
 dependencies:
   browser: any
   intl: any
+  logging: ">=0.9.1+1 <0.10.0"
 
 #  js: any
 #  unittest: any

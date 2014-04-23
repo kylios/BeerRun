@@ -132,6 +132,9 @@ Future<Map> build(Map config) {
 	if (config['compile']['checked']) {
 		processArgs.add('--checked');
 	}
+	if (config['compile']['warnings']) {
+		processArgs.add('--show-package-warnings');
+	}
 	if (config['compile']['minify']) {
 		processArgs.add('--minify');
 	}
@@ -193,33 +196,41 @@ Future killSymlinks(String dir) =>
 				return xargs.exitCode.then((var _) => new Future.value());
 			}));
 
-Future _copyDir(Directory src, Directory dest, AsyncCounter counter) {
+Future<StreamSubscription<FileSystemEntity>> _copyDir(Directory src, Directory dest, AsyncCounter counter) {
 	counter.up();
-	return src.list()
-		.listen((FileSystemEntity obj) {
-			counter.up();
-			FileSystemEntity.type(obj.path)
-				.then((FileSystemEntityType type) {
-					String fileName = basename(obj.path);
-					if (type == FileSystemEntityType.FILE) {
-						counter.up();
-						obj.copy("${dest.path}/${fileName}")
-							.then((var _) {
-								counter.down();
-							});
-					} else if (type == FileSystemEntityType.DIRECTORY) {
-						Directory d = new Directory("${dest.path}/${fileName}");
-						counter.up();
-						d.create(recursive: true).then((Directory d) {
-							_copyDir(obj, d, counter);
-							counter.down();
-						});
-					}
-					counter.down();
-				});
-			},
-			onDone: counter.down
-		);
+
+	Completer<StreamSubscription<FileSystemEntity>> c = new Completer<StreamSubscription<FileSystemEntity>>();
+
+	src.list()
+        .listen((FileSystemEntity obj) {
+            counter.up();
+            FileSystemEntity.type(obj.path)
+                .then((FileSystemEntityType type) {
+                    String fileName = basename(obj.path);
+                    if (type == FileSystemEntityType.FILE) {
+                        counter.up();
+                        obj.copy("${dest.path}/${fileName}")
+                            .then((var _) {
+                                counter.down();
+                            });
+                    } else if (type == FileSystemEntityType.DIRECTORY) {
+                        Directory d = new Directory("${dest.path}/${fileName}");
+                        counter.up();
+                        d.create(recursive: true).then((Directory d) {
+                            _copyDir(obj, d, counter);
+                            counter.down();
+                        });
+                    }
+                    counter.down();
+                });
+        },
+        onDone: counter.down
+    );
+
+
+	return c.future;
+
+
 }
 
 
