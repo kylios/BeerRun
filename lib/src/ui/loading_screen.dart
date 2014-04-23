@@ -79,6 +79,16 @@ class LoadingScreen extends Dialog implements UIListener {
    		this._updateProgress();
    	}
 
+   	void onLoadQueueResize(int size) {
+   		this._numTasks += size;
+   		this._updateProgress();
+   	}
+
+   	void onLoadQueueProgress(int completed) {
+   		this._completedTasks += completed;
+   		this._updateProgress();
+   	}
+
 	void onWindowOpen(uiFunction) {
 	}
 

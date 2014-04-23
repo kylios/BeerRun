@@ -160,6 +160,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         int version = cfg['application']['assets']['version'];
 
         this._cdnLoader = new CdnLoader(cdnHosts, version);
+        this._cdnLoader.loadQueueResizeStream.listen(
+            this._loadingScreen.onLoadQueueResize);
+        this._cdnLoader.loadQueueProgressStream.listen(
+            this._loadingScreen.onLoadQueueProgress);
     }
 
     Future init() {
@@ -248,6 +252,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     }
 */
 
+/*
   Future _setupAudio(GameLoaderStep step, var _) {
 
     Completer c = new Completer();
@@ -274,6 +279,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     });
     return c.future;
   }
+*/
 
   bool get continueLoop => this._continueLoop;
 

@@ -11,14 +11,23 @@ class CdnLoader {
 	List<Loader> _cdnLoaders;
 	Map<String, dynamic> _assets;
 
+	StreamController<int> _loadQueueProgressStream;
+	StreamController<int> _loadQueueResizeStream;
+
 	String _manifestFileName = 'manifest.json';
 
 	CdnLoader(this._cdnHosts, this._version) {
 
 	    this._assets = new Map<String, dynamic>();
 
+	    this._loadQueueResizeStream = new StreamController<int>();
+	    this._loadQueueProgressStream = new StreamController<int>();
+
 		this._initCdnLoaders();
 	}
+
+	Stream get loadQueueResizeStream => this._loadQueueResizeStream.stream;
+	Stream get loadQueueProgressStream => this._loadQueueProgressStream.stream;
 
 	void _initCdnLoaders() {
 
@@ -39,6 +48,8 @@ class CdnLoader {
 
 		Loader l = this._getCdnLoader();
 
+		this._loadQueueResizeStream.add(1);
+
 		JsonResource manifestResource = new JsonResource("/assets/${this._manifestFileName}");
 		return l.load(manifestResource)
 			.then(this._loadManifestAssets)
@@ -50,13 +61,23 @@ class CdnLoader {
 
 	Future _loadManifestAssets(JsonResource manifestResource) {
 
-		return Future.forEach(manifestResource.data['assets'], (Map resData) {
+		Future f = Future.forEach(manifestResource.data['assets'], (Map resData) {
+            
+			this._loadQueueResizeStream.add(1);
+
             Loader l = this._getCdnLoader();
             Resource res = new Resource.fromType(resData['type'], resData['uri']);
             Future f = l.load(res)
-                    .then((Resource r) => this._saveResourceData(r, resData));
+                    .then((Resource r) {
+                    	this._saveResourceData(r, resData);
+                    	this._loadQueueProgressStream.add(1);
+                    });
             return f;
 		});
+
+		this._loadQueueProgressStream.add(1);
+
+		return f;
 	}
 
 	void _saveResourceData(Resource res, Map resData) {
