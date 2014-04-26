@@ -84,8 +84,7 @@ class CdnLoader {
 		this._assets[resData['id']] = res.data;
 	}
 
-	dynamic getAsset(String id) {
-
+	getAsset(String id) {
 
 		return this._assets[id];
 	}

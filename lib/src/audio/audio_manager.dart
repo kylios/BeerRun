@@ -48,58 +48,6 @@ class AudioManager {
                     return new Future.delayed(new Duration());
                 });
     });
-
-    /*
-    Completer completer = new Completer();
-
-    int count = 0;
-    this._audioConfig.forEach((String trackName, List<Map<String, Map>> trackConfig) {
-
-      if (this._tracks[trackName] == null) {
-        GainNode gain = this._ctx.createGain();
-        AudioTrack track = new AudioTrack(trackName, this._ctx, gain, on);
-        track.setVolume(1.0);
-        this._tracks[trackName] = track;
-
-
-        trackConfig.forEach((Map<String, dynamic> songConfig) {
-          String songName = songConfig['name'];
-          String songPath = songConfig['path'];
-
-          count++;
-
-          // TODO: Use the loader.  It currently only supports json files.
-          HttpRequest.request(songPath, method: 'GET', responseType: 'arraybuffer').then((request) {
-
-            window.console.log("loaded audio: $songName");
-            ByteBuffer data = request.response;
-
-            AudioBufferSourceNode source;
-            this._ctx.decodeAudioData(data)
-              .then((AudioBuffer buffer) {
-
-                window.console.log("decoded $songName");
-                Song s = new Song.fromSource(buffer, track);
-                track.addSong(s);
-                window.console.log("created song $songName");
-
-                this._sfx[songName] = s;
-
-                if (--count == 0) {
-                  completer.complete();
-                }
-              });
-          });
-        });
-      }
-    });
-
-    if (count == 0) {
-      Timer.run(() => completer.complete());
-    }
-    return completer.future;
-
-    */
   }
 
   AudioTrack getTrack(String trackName) {

@@ -1,6 +1,6 @@
 library beer_run;
 
-import 'dart:html';
+import 'dart:html' hide Player;
 import 'dart:math';
 
 import 'package:intl/intl.dart';

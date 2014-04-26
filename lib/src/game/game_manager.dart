@@ -208,147 +208,96 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     void _loadAudio(var _) {
         this._audio = new AudioManager.fromConfig(this._cdnLoader, this._cdnLoader.getAsset('sfx_config'));
-    }
-/*
-    Future _loadLevels(GameLoaderStep step, String levelConfigPath) {
-        return this._cdnLoader.load(levelConfigPath).then((Map config) {
-            config['levels'].forEach((Map levelConfig) {
-                this._levelIdxs.add(levelConfig['name']);
-                GameLoaderJob loadLevel = new GameLoaderJob("Loading level ${levelConfig['name']}", this._loadLevel, levelConfig);
-                step.addJob(loadLevel);
+        
+        this._audio.loadAndDecode()
+            .then((var _) {
+                this._theme = this._audio.getSong('theme');
+
+                Song drinkBeer = this._audio.getSong('drink_beer');
+                this._player.drinkBeerSfx = drinkBeer;
+
+                this._musicOnElement.onClick.listen((Event e) {
+                    this._audio.getTrack('music').state = on;
+                    this._theme.loop();
+                });
+                this._musicOffElement.onClick.listen((Event e) => this._audio.getTrack('music').state = off);
+
+                this._sfxOnElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = on);
+                this._sfxOffElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = off);
+
+                this._musicOffElement.click();
+                this._sfxOnElement.click();
             });
-        });
     }
 
-    Future _loadLevel(GameLoaderStep step, Map levelConfig) {
+    bool get continueLoop => this._continueLoop;
 
-        return this._cdnLoader.load(levelConfig['path']).then((Map levelData) {
-            step.addJob(new GameLoaderJob("Parsing level ${levelConfig['name']}", this._parseLevel, [levelConfig, levelData]));
-        });
+    void _runInternal(var _) {
+        if (this._continueLoop) {
+            this.update();
+        }
+        window.requestAnimationFrame(this._runInternal);
     }
 
-    Future _parseLevel(GameLoaderStep step, List<Map> levelInfo) {
+    void run() {
+        this.start();
 
-        Map levelConfig = levelInfo[0];
-        Map levelData = levelInfo[1];
-
-        Completer c = new Completer();
-
-        Timer.run(() {
-            window.console.log("_parseLevel(${levelConfig['name']})");
-            this._pageStats.startTimer("new_level_from_json");
-            Level l = new Level.fromJson(
-              levelData, this._canvasDrawer,
-              this._canvasManager, this._player);
-            this._levels[levelConfig['name']] = l;
-
-            this._pageStats.stopTimer("new_level_from_json");
-            this._pageStats.writeStat("new_level_from_json");
-
-            c.complete();
-        });
-
-        return c.future;
+        this._runInternal(Null);
     }
-*/
 
-/*
-  Future _setupAudio(GameLoaderStep step, var _) {
+    void start() {
 
-    Completer c = new Completer();
+        this._currentLevelIdx = 0;
+        this._currentLevel = null;
 
-    this._audio.loadAndDecode().then((var _) {
-      this._theme = this._audio.getSong('theme');
-
-      Song drinkBeer = this._audio.getSong('drink_beer');
-      this._player.drinkBeerSfx = drinkBeer;
-
-      this._musicOnElement.onClick.listen((Event e) {
-        this._audio.getTrack('music').state = on;
-        this._theme.loop();
-      });
-      this._musicOffElement.onClick.listen((Event e) => this._audio.getTrack('music').state = off);
-
-      this._sfxOnElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = on);
-      this._sfxOffElement.onClick.listen((Event e) => this._audio.getTrack('sfx').state = off);
-
-      this._musicOffElement.click();
-      this._sfxOnElement.click();
-
-      c.complete();
-    });
-    return c.future;
-  }
-*/
-
-  bool get continueLoop => this._continueLoop;
-
-  void _runInternal(var _) {
-    if (this._continueLoop) {
-      this.update();
+        this._continueLoop = true;
+        this.startNextLevel();
     }
-    window.requestAnimationFrame(this._runInternal);
-  }
 
-  void run() {
-    this.start();
+    void startNextLevel() {
 
-    this._runInternal(Null);
-  }
+        this._showHUD = false;
+        this._beersDelivered = 0;
+        this._wonLevel = false;
 
-  void start() {
+        this._currentLevel = this._getNextLevel();
+        this._canvasDrawer.setBounds(
+            this._currentLevel.cols * this._currentLevel.tileWidth,
+            this._currentLevel.rows * this._currentLevel.tileHeight);
 
-    this._currentLevelIdx = 0;
-    this._currentLevel = null;
+        this._player.startInLevel(this._currentLevel);
+        this._player.setDrawingComponent(new PlayerDrawingComponent(
+            this._canvasManager, this._canvasDrawer, true));
+        this._timer = new GameTimer(this._currentLevel.duration);
+        this._timer.addListener(this);
 
-    this._continueLoop = true;
-    this.startNextLevel();
-  }
+        this._canvasDrawer.clear();
+        this._currentLevel.draw(this._canvasDrawer);
 
-  void startNextLevel() {
+        View screen = new LevelRequirementsScreen(
+            this.ui,
+            "Level ${this._currentLevelIdx}",
+            this._currentLevel.beersToWin,
+            this._currentLevel.duration);
 
-    this._showHUD = false;
-    this._beersDelivered = 0;
-    this._wonLevel = false;
+        // Run this level's tutorial, show level requirements,
+        // and then start the game
+        this._currentLevel.runTutorial()
+            .then((var _) =>
+                this._ui.showView(screen,
+                    callback: (var _) => this._endTutorial()));
+        }
 
-    this._currentLevel = this._getNextLevel();
-    this._canvasDrawer.setBounds(
-        this._currentLevel.cols * this._currentLevel.tileWidth,
-        this._currentLevel.rows * this._currentLevel.tileHeight);
+        void stopLevel(int score) {
 
-    this._player.startInLevel(this._currentLevel);
-    this._player.setDrawingComponent(new PlayerDrawingComponent(
-        this._canvasManager, this._canvasDrawer, true));
-    this._timer = new GameTimer(this._currentLevel.duration);
-    this._timer.addListener(this);
+        this._timer.stop(false);
+        this._gameOver = true;
 
-    this._canvasDrawer.clear();
-    this._currentLevel.draw(this._canvasDrawer);
+        this._totalScore += score;
 
-    View screen = new LevelRequirementsScreen(
-        this.ui,
-        "Level ${this._currentLevelIdx}",
-        this._currentLevel.beersToWin,
-        this._currentLevel.duration);
+        // TODO: set score in stats manager
 
-    // Run this level's tutorial, show level requirements,
-    // and then start the game
-    this._currentLevel.runTutorial()
-      .then((var _) =>
-          this._ui.showView(screen,
-                  callback: (var _) => this._endTutorial()));
-  }
-
-  void stopLevel(int score) {
-
-    this._timer.stop(false);
-    this._gameOver = true;
-
-    this._totalScore += score;
-
-    // TODO: set score in stats manager
-
-  }
+    }
 
   void _endTutorial() {
 

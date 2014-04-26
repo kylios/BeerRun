@@ -24,7 +24,7 @@ class Resource {
 		if (type == "json") {
 			return new JsonResource(uri);
 		} else if (type == "binary") {
-			return new Resource(uri, method: null, responseType: 'application/octet-stream');
+			return new Resource(uri, method: 'GET', responseType: 'arraybuffer');
 		}
 		throw new Exception("Resource: Type '$type' is not supported.");
 	}
@@ -35,7 +35,7 @@ class Resource {
 			this._method = method.toUpperCase();
 		}
 		if (responseType != null) {
-			this._responseType = responseType.toUpperCase();
+			this._responseType = responseType;
 		}
 	}
 
@@ -53,6 +53,18 @@ class Resource {
 		this.response = request.response;
 
 		this.data = this._decode(request);
+
+		if (this.data is String) {
+		    window.console.log("${this._uri} returned a String");
+		} else if (this.data is ByteBuffer) {
+		    window.console.log("${this._uri} returned a ByteBuffer");
+		} else if (this.data is Document) {
+		    window.console.log("${this._uri} returned a Document");
+		} else if (this.data is Blob) {
+		    window.console.log("${this._uri} returned a Blob");
+		} else {
+		    window.console.log("${this._uri} returned an unknown type");
+		}
 	}
 
 	void _receiveServerError(HttpRequest request) {
@@ -66,6 +78,6 @@ class Resource {
 
 	_decode(HttpRequest request) {
 
-		return request.response;
+		return request.response as ByteBuffer;
 	}
 }
