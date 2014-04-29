@@ -198,9 +198,11 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
                 Timer.run(() {
                     String id = levelConfigData['id'];
                     String name = levelConfigData['name'];
+                    String tutorialName = levelConfigData['tutorial'];
                     Map levelData = this._cdnLoader.getAsset(id);
+                    Map tutorialData = this._cdnLoader.getAsset(tutorialName);
                     this._levelIdxs.add(name);
-                    Level l = new Level.fromJson(levelData,
+                    Level l = new Level.fromJson(levelData, tutorialData,
                         this._canvasDrawer, this._canvasManager,
                         this._player);
                     this._levels[name] = l;

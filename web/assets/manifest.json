@@ -16,6 +16,16 @@
 			"type": "json"
 		},
 		{
+			"id": "tutorial_level1",
+			"uri": "/assets/levels/tutorials/level1.json",
+			"type": "json"
+		},
+		{
+			"id": "tutorial_level2",
+			"uri": "/assets/levels/tutorials/level1.json",
+			"type": "json"
+		},
+		{
 			"id": "sfx_config",
 			"uri": "/assets/sfx/config.json",
 			"type": "json"

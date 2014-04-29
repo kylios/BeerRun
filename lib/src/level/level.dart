@@ -339,39 +339,6 @@ abstract class Level extends Broadcaster implements GameEventListener {
   Sprite getStaticSprite() {}
   Sprite getMoveSprite() {}
 
-  // TODO: temporary until I figure out how to script tutorials
-  static void setupTutorial(Level level) {
-
-    Tutorial t = new Tutorial(level);
-
-    t
-      .onStart(level.startY, level.startX - 8)
-      .addDialog("What.. who's that drunk idiot who wants to come to OUR party? "
-      "I suppose you can come in.. BUT, we're running low on beer! "
-      "Why don't you stumble on down to the store over there and grab us "
-      "some beers!")
-      /*
-      .addPan(level.storeY, level.storeX, 5)
-      */
-      // Added for level 1
-      .addPan(level.startY, 8, 5)
-      .addPan(10, 8, 5)
-      .addDialog("Grab us a ${level.beersToWin} pack and bring it back.  Better "
-      "avoid the bums... they like to steal your beer, and then you'll "
-      "have to go BACK and get MORE!")
-      .addPan(level.startY, level.startX - 9, 10)
-      .addDialog("Well, what are you waiting for!?  Get moving, and don't sober "
-                "up too much!")
-      .addDialog("Controls: <br />"
-                "WASD, arrow keys: movement <br />"
-                "SPACEBAR: drink a beer")
-      .onStop(level.startY, level.startX);
-
-
-    level._tutorial = t;
-    return;
-  }
-
   Future runTutorial() {
       this.draw(this._drawer);
       if (this._tutorial != null) {
@@ -412,7 +379,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
    * out into driver classes or something like that, I think, but for now,
    * this'll do to get the logic straight.
    * */
-  factory Level.fromJson(Map level, CanvasDrawer drawer, CanvasManager manager, Player player)
+  factory Level.fromJson(Map level, Map tutorialData, CanvasDrawer drawer, CanvasManager manager, Player player)
   {
     int height = Level._requireAttribute(level, 'height').toInt();
     int width = Level._requireAttribute(level, 'width').toInt();
@@ -556,9 +523,10 @@ abstract class Level extends Broadcaster implements GameEventListener {
       }
     }
 
-    if (l.name == "test_level" || l.name == "level1") {
-      Level.setupTutorial(l);
-    }
+    // Setup the tutorial
+    // TODO: maybe someday I can figure out how to better link the 
+    // level and the tutorial, but this will work for now.
+    l._tutorial = new Tutorial.fromJson(tutorialData, l);
 
     return l;
   }

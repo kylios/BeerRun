@@ -11,15 +11,28 @@ class Tutorial {
   bool _isComplete = false;
   Future _cur = null;
 
+  bool get isComplete => this._isComplete;
+
   Tutorial(this._level);
 
-  bool get isComplete => this._isComplete;
+  Tutorial.fromJson(Map tutorialData, this._level) {
+
+    this._decodeTutorialData(tutorialData);
+  }
 
   void addStep(tutorialStep t) {
     this._steps.add(t);
   }
 
-  Tutorial onStart(int row, int col) {
+  Tutorial onStart(tutorialStep fn) {
+    this._onStart = fn;
+  }
+
+  Tutorial onStop(tutorialStep fn) {
+    this._onStop = fn;
+  }
+
+  tutorialStep start(int row, int col) {
 
     tutorialStep fn = (var _) {
       Completer c = new Completer();
@@ -45,10 +58,9 @@ class Tutorial {
       return c.future;
     };
 
-    this._onStart = fn;
-    return this;
+    return fn;
   }
-  Tutorial onStop(int row, int col) {
+  tutorialStep stop(int row, int col) {
 
     tutorialStep fn = (var _) {
 
@@ -61,8 +73,7 @@ class Tutorial {
       );
     };
 
-    this._onStop = fn;
-    return this;
+    return fn;
   }
 
   void _onStartInternal() {
@@ -178,7 +189,7 @@ class Tutorial {
   }
 
   // Some useful scripting functions maybe?
-  Tutorial addPan(int targetRow, int targetCol, int speed) {
+  tutorialStep pan(int targetRow, int targetCol, int speed) {
     tutorialStep fn = (var _) {
       Completer<bool> c = new Completer<bool>();
       int halfWidth = this._level.canvasManager.width ~/ 2;
@@ -220,12 +231,10 @@ class Tutorial {
       return c.future;
     };
 
-    this.addStep(fn);
-
-    return this;
+    return fn;
   }
 
-  Tutorial addDialog(String message) {
+  tutorialStep dialog(String message) {
     tutorialStep fn = (var _) {
       Completer<bool> c = new Completer<bool>();
 
@@ -238,7 +247,37 @@ class Tutorial {
       return c.future;
     };
 
-    this.addStep(fn);
-    return this;
+    return fn;
   }
+
+
+
+    void _decodeTutorialData(Map tutorialData) {
+
+        Map startData = tutorialData['begin'];
+        Map endData = tutorialData['end'];
+        List<Map> bodyData = tutorialData['body'];
+
+        if (startData != null) {
+            this.onStart(this._decodeTutorialFuncData(startData));
+        }
+        for (Map tutorialStepData in bodyData) {
+            this.addStep(this._decodeTutorialFuncData(tutorialStepData));
+        }
+        if (endData != null) {
+            this.onStop(this._decodeTutorialFuncData(endData));
+        }
+    }
+
+    tutorialStep _decodeTutorialFuncData(Map data) {
+        if (data['type'] == 'begin') {
+            return this.start(data['row'], data['col']);
+        } else if (data['type'] == 'end') {
+            return this.stop(data['row'], data['col']);
+        } else if (data['type'] == 'camera_pan') {
+            return this.pan(data['row'], data['col'], data['speed']);
+        } else if (data['type'] == 'dialog') {
+            return this.dialog(data['body']);
+        }
+    }
 }
