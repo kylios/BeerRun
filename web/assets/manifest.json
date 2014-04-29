@@ -11,6 +11,11 @@
 			"type": "json"
 		},
 		{
+			"id": "level_level2",
+			"uri": "/assets/levels/level1.json",
+			"type": "json"
+		},
+		{
 			"id": "sfx_config",
 			"uri": "/assets/sfx/config.json",
 			"type": "json"

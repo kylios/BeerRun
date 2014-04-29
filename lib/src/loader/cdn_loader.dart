@@ -11,23 +11,14 @@ class CdnLoader {
 	List<Loader> _cdnLoaders;
 	Map<String, dynamic> _assets;
 
-	StreamController<int> _loadQueueProgressStream;
-	StreamController<int> _loadQueueResizeStream;
-
 	String _manifestFileName = 'manifest.json';
 
 	CdnLoader(this._cdnHosts, this._version) {
 
 	    this._assets = new Map<String, dynamic>();
 
-	    this._loadQueueResizeStream = new StreamController<int>();
-	    this._loadQueueProgressStream = new StreamController<int>();
-
 		this._initCdnLoaders();
 	}
-
-	Stream get loadQueueResizeStream => this._loadQueueResizeStream.stream;
-	Stream get loadQueueProgressStream => this._loadQueueProgressStream.stream;
 
 	void _initCdnLoaders() {
 
@@ -44,38 +35,36 @@ class CdnLoader {
 		return this._cdnLoaders[r.nextInt(this._cdnLoaders.length)];
 	}
 
-	Future loadManifest() {
+	Future loadManifest(GameLoader gameLoader) {
 
 		Loader l = this._getCdnLoader();
 
-		this._loadQueueResizeStream.add(1);
+		return gameLoader.runJob(() {
+			JsonResource manifestResource = new JsonResource("/assets/${this._manifestFileName}");
+			return l.load(manifestResource)
+				.then((JsonResource manifestResource) => this._loadManifestAssets(manifestResource, gameLoader))
+				.then((var _) {
+					this._loaded = true;
+					return new Future.delayed(new Duration());
+				});
 
-		JsonResource manifestResource = new JsonResource("/assets/${this._manifestFileName}");
-		return l.load(manifestResource)
-			.then(this._loadManifestAssets)
-			.then((var _) {
-                this._loaded = true;
-                return new Future.delayed(new Duration());
-            });
+		});
 	}
 
-	Future _loadManifestAssets(JsonResource manifestResource) {
+	Future _loadManifestAssets(JsonResource manifestResource, GameLoader gameLoader) {
 
 		Future f = Future.forEach(manifestResource.data['assets'], (Map resData) {
-            
-			this._loadQueueResizeStream.add(1);
 
-            Loader l = this._getCdnLoader();
-            Resource res = new Resource.fromType(resData['type'], resData['uri']);
-            Future f = l.load(res)
-                    .then((Resource r) {
-                    	this._saveResourceData(r, resData);
-                    	this._loadQueueProgressStream.add(1);
-                    });
-            return f;
+		    return gameLoader.runJob(() {
+                Loader l = this._getCdnLoader();
+                Resource res = new Resource.fromType(resData['type'], resData['uri']);
+                Future f = l.load(res)
+                        .then((Resource r) {
+                        	this._saveResourceData(r, resData);
+                        });
+                return f;
+		    });
 		});
-
-		this._loadQueueProgressStream.add(1);
 
 		return f;
 	}

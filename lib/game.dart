@@ -2,7 +2,6 @@ library game;
 
 import 'dart:html' hide Player;
 import 'dart:async';
-import 'dart:math';
 import 'dart:convert';
 
 import 'package:beer_run/canvas_manager.dart';
@@ -12,7 +11,6 @@ import 'package:beer_run/level.dart';
 import 'package:beer_run/player.dart';
 import 'package:beer_run/ui.dart';
 import 'package:beer_run/beer_run.dart';
-import 'package:beer_run/tutorial.dart';
 import 'package:beer_run/loader.dart';
 import 'package:beer_run/component.dart';
 import 'package:beer_run/audio.dart';
@@ -31,10 +29,8 @@ part 'src/game/game_notification.dart';
 part 'src/game/game_event_listener.dart';
 part 'src/game/game_config.dart';
 part 'src/game/game_loader.dart';
-part 'src/game/game_loader_step.dart';
-part 'src/game/game_loader_job.dart';
-part 'src/game/game_loadable.dart';
+part 'src/game/load_progress_emitter.dart';
 
 
-typedef Future gameLoaderJobFunc(GameLoaderStep step, var data);
+typedef Future gameLoaderJob();
 

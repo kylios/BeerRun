@@ -30,7 +30,7 @@ class PathFollowerInputComponent extends Component {
     int nextY = nextPoint.y;
 
     String action = (obj._turning ? "turning" : "moving");
-    window.console.log("Car $action ${obj.dir.toString()}: X = ${obj.x} -> $nextX, Y = ${obj.y} -> $nextY");
+    //window.console.log("Car $action ${obj.dir.toString()}: X = ${obj.x} -> $nextX, Y = ${obj.y} -> $nextY");
 
     if (obj.dir.isVertical()) {
 

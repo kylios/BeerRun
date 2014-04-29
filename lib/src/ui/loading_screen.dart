@@ -1,92 +1,86 @@
 part of ui;
 
 class LoadingScreen extends Dialog implements UIListener {
-	
-	int _numTasks = 0;
-	int _completedTasks = 0;
-	int _oldCompletedTasks = 0;
 
-	int _currentProgress = 0;
-	int _targetProgress = 0;
+  	int _numTasks = 0;
+  	int _completedTasks = 0;
+  	int _oldCompletedTasks = 0;
 
-	View _progressView;
-	Timer _updateTimer;
+  	int _currentProgress = 0;
+  	int _targetProgress = 0;
 
-	DivElement get rootElement => null;
-	
-	factory LoadingScreen(UIInterface ui) {
+  	View _progressView;
+  	Timer _updateTimer;
 
-	    // the main body view
-	    View contents = new View(ui);
+  	DivElement get rootElement => null;
 
-	    TextView loading = new TextView(ui, "Pouring beer...");
-	    contents.addView(loading);
+  	factory LoadingScreen(UIInterface ui, LoadProgressEmitter emitter) {
 
-	    View progress = LoadingScreen._createProgressView(ui, contents);
+  	    // the main body view
+  	    View contents = new View(ui);
 
-	    return new LoadingScreen._internal(ui, contents, progress);
-	}
+  	    TextView loading = new TextView(ui, "Pouring beer...");
+  	    contents.addView(loading);
 
-	/**
-	 * Internal constructor just identical to Dialog's constructor.
+  	    View progress = LoadingScreen._createProgressView(ui, contents);
+
+  	    return new LoadingScreen._internal(ui, contents, progress, emitter);
+  	}
+
+  	/**
+  	 * Internal constructor just identical to Dialog's constructor.
      */
- 	LoadingScreen._internal(UIInterface ui, View contents, this._progressView) :
+ 	  LoadingScreen._internal(UIInterface ui, View contents, this._progressView, LoadProgressEmitter emitter) :
     		super(ui, contents) {
 
-		ui.addListener(this);
-	}
+		    ui.addListener(this);
 
-    static View _createProgressView(UIInterface ui, View container) {
-    	View v = new View(ui);
-    	v.style.width = "90%";
-    	v.style.height = "64px";
-    	v.style.background = "white";
-
-    	container.addView(v);
-
-    	View progress = new View(ui);
-    	progress.style.background = "blue";
-    	progress.style.height = "64px";
-    	progress.style.width = "0%";
-
-    	v.addView(progress);
-
-    	return progress;
+            emitter.onLoadQueueResize.listen(this.addTask);
+            emitter.onLoadQueueProgress.listen(this.completeTask);
     }
 
-    void _updateProgress() {
+    static View _createProgressView(UIInterface ui, View container) {
+      	View v = new View(ui);
+      	v.style.width = "90%";
+      	v.style.height = "64px";
+      	v.style.background = "white";
 
-    	int widthPercent = (100 * (this._completedTasks / this._numTasks)).toInt();
-    	window.console.log("Progress: ${this._completedTasks} / ${this._numTasks} = $widthPercent %");
+      	container.addView(v);
 
-    	this._targetProgress = widthPercent;
+      	View progress = new View(ui);
+      	progress.style.background = "blue";
+      	progress.style.height = "64px";
+      	progress.style.width = "0%";
 
-       	if (this._oldCompletedTasks != this._completedTasks) {
-    		this._currentProgress = this._targetProgress;
-    	}
+      	v.addView(progress);
+
+      	return progress;
+    }
+
+    void _updateProgress([String name = null]) {
+
+      	int widthPercent = (100 * (this._completedTasks / this._numTasks)).toInt();
+      	window.console.log("Progress ${name != null ? " [${name}]" : ' '}: ${this._completedTasks} / ${this._numTasks} = $widthPercent %");
+
+      	this._targetProgress = widthPercent;
+
+         	if (this._oldCompletedTasks != this._completedTasks) {
+      		this._currentProgress = this._targetProgress;
+      	}
 
 
 		this._progressView.style.width = "${this._currentProgress}%";
 
-    	this._oldCompletedTasks = this._completedTasks;  
-	}
+        this._oldCompletedTasks = this._completedTasks;
+    }
 
-   	void addTask() {
-   		this._numTasks++;
+   	void addTask([String name = null]) {
+   		this._numTasks += 1;
+        this._updateProgress(name);
    	}
-   	void completeTask() {
-   		this._completedTasks++;
-   		this._updateProgress();
-   	}
-
-   	void onLoadQueueResize(int size) {
-   		this._numTasks += size;
-   		this._updateProgress();
-   	}
-
-   	void onLoadQueueProgress(int completed) {
-   		this._completedTasks += completed;
-   		this._updateProgress();
+   	void completeTask([String name = null]) {
+     	this._completedTasks += 1;
+     	this._updateProgress(name);
    	}
 
 	void onWindowOpen(uiFunction) {

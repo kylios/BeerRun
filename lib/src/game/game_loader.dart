@@ -1,39 +1,40 @@
 part of game;
 
-/*
-
-Loading steps
-Step must be synchronous
-Steps contain a collection of asynchronous jobs, or a single job
+class GameLoader implements LoadProgressEmitter {
 
 
-*/
 
-class GameLoader {
-
-	// Current job
-
-	// Add subjob
-
-	// Next job
-
-	List<GameLoaderStep> _steps;
+	StreamController<String> _loadQueueProgressStream;
+	StreamController<String> _loadQueueResizeStream;
 
 	GameLoader() :
-		this._steps = new List<GameLoaderStep>();
+		this._loadQueueProgressStream = new StreamController<String>(),
+		this._loadQueueResizeStream = new StreamController<String>()
+		;
 
-	void addStep(GameLoaderStep step) {
-		this._steps.add(step);
+	Stream<String> get onLoadQueueResize => this._loadQueueResizeStream.stream;
+	Stream<String> get onLoadQueueProgress => this._loadQueueProgressStream.stream;
+
+	Future runJob(gameLoaderJob job, [String name = null]) {
+
+		Completer c = new Completer();
+		this._loadQueueResizeStream.add(name);
+		if (null != name) {
+		    window.console.log("GameLoader: $name started");
+		}
+		Future f = job();
+		f.then((var data) {
+			this._loadQueueProgressStream.add(name);
+
+			if (null != name) {
+			    window.console.log("GameLoader: $name completed");
+			}
+
+			c.complete(data);
+		});
+
+		return c.future;
 	}
 
-	// TODO: we'll want to run an intermediary job between each step to update load progress and stuff
-	Future run() {
 
-	    Future f = new Future(() => null);
-	    for (GameLoaderStep step in this._steps){
-	        f = f.then((var _) => step.run());
-	    }
-
-	    return f;
-	}
 }

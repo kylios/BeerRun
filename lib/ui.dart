@@ -4,7 +4,7 @@ import 'dart:html';
 import 'dart:async';
 
 import 'package:beer_run/component.dart';
-
+import 'package:beer_run/game.dart';
 
 part 'src/ui/ui.dart';
 part 'src/ui/view.dart';

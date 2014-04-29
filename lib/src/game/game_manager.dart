@@ -10,6 +10,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     CanvasDrawer _canvasDrawer;
     AudioManager _audio;
     CdnLoader _cdnLoader;
+    GameLoader _gameLoader;
     GameConfig _config;
     PageStats _pageStats;
     LoadingScreen _loadingScreen;
@@ -143,7 +144,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         this._BACMeter = new Meter(10, 52, 10, 116, 22);
         this._HPMeter = new Meter(3, 52, 36, 116, 22);
 
-        this._loadingScreen = new LoadingScreen(this._ui);
+        this._gameLoader = new GameLoader();
+        this._loadingScreen = new LoadingScreen(this._ui, this._gameLoader);
 
         this._parseConfig();
     }
@@ -160,10 +162,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         int version = cfg['application']['assets']['version'];
 
         this._cdnLoader = new CdnLoader(cdnHosts, version);
-        this._cdnLoader.loadQueueResizeStream.listen(
-            this._loadingScreen.onLoadQueueResize);
-        this._cdnLoader.loadQueueProgressStream.listen(
-            this._loadingScreen.onLoadQueueProgress);
     }
 
     Future init() {
@@ -172,9 +170,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
         this._ui.showView(this._loadingScreen);
 
-        return this._cdnLoader.loadManifest()
-            .then(this._loadLevels)
-            .then(this._loadAudio);
+        return this._gameLoader.runJob(() =>
+            this._cdnLoader.loadManifest(this._gameLoader)
+                .then(this._loadLevels)
+                .then(this._loadAudio), "game init");
     }
 
     void _startPageStats() {
@@ -192,24 +191,33 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         Map levelConfig = this._cdnLoader.getAsset('level_config');
         List<Future> futures = new List<Future>();
 
-        return Future.forEach(levelConfig['levels'], (Map levelConfigData) => new Future(() {
+        for (Map levelConfigData in levelConfig['levels']) {
+            futures.add(this._gameLoader.runJob(() {
 
-                String id = levelConfigData['id'];
-                String name = levelConfigData['name'];
-                Map levelData = this._cdnLoader.getAsset(id);
-                this._levelIdxs.add(name);
-                Level l = new Level.fromJson(levelData,
-                    this._canvasDrawer, this._canvasManager,
-                    this._player);
-                this._levels[name] = l;
+                Completer c = new Completer();
+                Timer.run(() {
+                    String id = levelConfigData['id'];
+                    String name = levelConfigData['name'];
+                    Map levelData = this._cdnLoader.getAsset(id);
+                    this._levelIdxs.add(name);
+                    Level l = new Level.fromJson(levelData,
+                        this._canvasDrawer, this._canvasManager,
+                        this._player);
+                    this._levels[name] = l;
+                    c.complete();
+                });
 
-            }));
+                return c.future;
+            }, "decode_${levelConfigData['name']}"));
+        }
+
+        return Future.wait(futures);
     }
 
-    void _loadAudio(var _) {
+    Future _loadAudio(var _) {
         this._audio = new AudioManager.fromConfig(this._cdnLoader, this._cdnLoader.getAsset('sfx_config'));
-        
-        this._audio.loadAndDecode()
+
+        return this._gameLoader.runJob(this._audio.loadAndDecode, "loadAndDecode audio")
             .then((var _) {
                 this._theme = this._audio.getSong('theme');
 
