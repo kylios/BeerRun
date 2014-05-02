@@ -296,9 +296,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             .then((var _) =>
                 this._ui.showView(screen,
                     callback: (var _) => this._endTutorial()));
-        }
+    }
 
-        void stopLevel(int score) {
+    void stopLevel(int score) {
 
         this._timer.stop(false);
         this._gameOver = true;

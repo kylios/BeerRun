@@ -12,7 +12,7 @@
 		},
 		{
 			"id": "level_level2",
-			"uri": "/assets/levels/level1.json",
+			"uri": "/assets/levels/level2.json",
 			"type": "json"
 		},
 		{
@@ -22,7 +22,7 @@
 		},
 		{
 			"id": "tutorial_level2",
-			"uri": "/assets/levels/tutorials/level1.json",
+			"uri": "/assets/levels/tutorials/level2.json",
 			"type": "json"
 		},
 		{

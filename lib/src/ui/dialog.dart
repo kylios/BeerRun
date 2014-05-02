@@ -23,8 +23,15 @@ class Dialog extends View {
   Dialog._internal(UIInterface ui, View v) : super(ui) {
 
     this._buttons = new View(ui);
+    View clear = new View(ui);
+
+    this._buttons.style.float = "left";
+    v.style.float = "left";
+    clear.style.clear = "both";
+
     this.addView(v);
     this.addView(this._buttons);
+    this.addView(clear);
   }
 
   void addButton(Button b) => this._buttons.addView(b);

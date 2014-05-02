@@ -44,7 +44,7 @@
 		}
 	],
 	"end": {
-		"type": "camera_move",
+		"type": "end",
 		"row": 7,
 		"col": 47
 	}

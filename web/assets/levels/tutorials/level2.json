@@ -1,0 +1,63 @@
+{
+	"parameters": {
+
+	},
+	"begin": {
+		"type": "begin",
+		"row": 40,
+		"col": 10
+	},
+	"body": [
+		{
+			"type": "dialog",
+			"body": "Oh hey, you again!  That party was pretty fun, huh?  You want in on this one?  Well, it's BYOB, so you better run down to the store over there and grab a pack."
+		},
+		{
+			"type": "camera_pan",
+			"row": 40,
+			"col": 15,
+			"speed": 5
+		},
+		{
+			"type": "camera_pan",
+			"row": 36,
+			"col": 15,
+			"speed": 5
+		},
+		{
+			"type": "dialog",
+			"body": "Oh... that road's quite a stretch there, and bums like to hang out over there.  Take these beers and drink 'em, they'll increase your speed and... manueverability, haha!  Good luck!"
+		},
+		{
+			"type": "camera_pan",
+			"row": 10,
+			"col": 15,
+			"speed": 5
+		},
+		{
+			"type": "camera_pan",
+			"row": 10,
+			"col": 10,
+			"speed": 5
+		},
+		{
+			"type": "dialog",
+			"body": "Better pick up at least ${beersToWin}... we'll need some for flipcup too!"
+		},
+		{
+			"type": "camera_pan",
+			"row": 40, 
+			"col": 10,
+			"speed": 8
+		},
+		{
+			"type": "dialog",
+			"body": "Well go on then!"
+		}
+	],
+	"end": {
+		"type": "end",
+		"row": 40,
+		"col": 10
+	}
+}

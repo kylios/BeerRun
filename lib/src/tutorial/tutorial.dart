@@ -279,5 +279,8 @@ class Tutorial {
         } else if (data['type'] == 'dialog') {
             return this.dialog(data['body']);
         }
+
+        throw new Exception("Type ${data['type']} not supported in the tutorial");
+
     }
 }
