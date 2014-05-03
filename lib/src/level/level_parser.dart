@@ -27,7 +27,10 @@ class _LevelTileset {
       this.name, this.tilewidth, this.tileheight);
 
   SpriteSheet get sprites {
-    return new SpriteSheet(this.image.replaceAll('../../', ''),
+    return new SpriteSheet(
+      this.image
+          .replaceAll('../../', '')
+          .replaceAll('../sprites', '/assets/sprites'),
         this.tilewidth, this.tileheight);
   }
 

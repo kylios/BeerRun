@@ -42,7 +42,7 @@ class Player extends GameObject implements GameEventListener {
   Player(this._mgr, this._stats) : super(DIR_DOWN, 0, 0) {
 
     SpriteSheet sprites = new SpriteSheet(
-        "img/player/player.png",
+        "assets/sprites/player/player.png",
         64, 64);
 
     this.collisionXOffset = 16;

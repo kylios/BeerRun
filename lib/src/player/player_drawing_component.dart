@@ -12,7 +12,7 @@ class PlayerDrawingComponent extends DrawingComponent {
       super(manager, drawer, scrollBackground){
 
     SpriteSheet sprites = new SpriteSheet(
-        "img/player/player.png",
+        "assets/sprites/player/player.png",
         64, 64);
 
     List<Sprite> walkUp = new List<Sprite>();
@@ -32,7 +32,7 @@ class PlayerDrawingComponent extends DrawingComponent {
     this._walkSprites[DIR_RIGHT.direction] = new SpriteAnimation(walkRight);
 
     SpriteSheet beerSprites = new SpriteSheet(
-        "img/player/beer.png",
+        "assets/sprites/player/beer.png",
         64, 64);
 
     Sprite beerUp = beerSprites.spriteAtNew(0, 0);

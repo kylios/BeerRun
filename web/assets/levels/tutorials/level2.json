@@ -15,13 +15,13 @@
 		{
 			"type": "camera_pan",
 			"row": 40,
-			"col": 15,
+			"col": 13,
 			"speed": 5
 		},
 		{
 			"type": "camera_pan",
 			"row": 36,
-			"col": 15,
+			"col": 13,
 			"speed": 5
 		},
 		{
@@ -31,7 +31,7 @@
 		{
 			"type": "camera_pan",
 			"row": 10,
-			"col": 15,
+			"col": 13,
 			"speed": 5
 		},
 		{

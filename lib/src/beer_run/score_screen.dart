@@ -26,9 +26,9 @@ class ScoreScreen extends Dialog {
         winText.style.width = "256px";
         winText.style.color = "black";
         winText.style.background = "#CC9900";
-        winText.style.padding = "12px";
+        winText.style.padding = "8px";
         winText.style.borderRadius = "8px";
-        winText.style.height = "24px";
+        //winText.style.height = "24px";
         winText.style.fontWeight = "bold";
         winText.style.fontSize = "22px";
         winText.style.marginBottom = "8px";
@@ -41,7 +41,7 @@ class ScoreScreen extends Dialog {
         beersEl.style.marginRight = "auto";
         beersEl.style.width = "50%";
 
-        ImageView beersIcon = new ImageView.fromSrc(ui, "img/ui/icons/beer.png", 48, 48);
+        ImageView beersIcon = new ImageView.fromSrc(ui, "img/ui/icons/beer.png", 24, 24);
         beersIcon.style.float = "left";
         beersIcon.style.margin = "5px";
         beersEl.addView(beersIcon);
@@ -49,14 +49,11 @@ class ScoreScreen extends Dialog {
         TextView beersTextEl = new TextView(ui, "${score} beers delivered");
         beersTextEl.style.fontWeight = "bold";
         beersTextEl.style.fontSize = "22px";
-        beersTextEl.style.height = "58px";
         beersEl.addView(beersTextEl);
 
-        /*
-        DivElement beersClearEl = new DivElement();
+        View beersClearEl = new View(ui);
         beersClearEl.style.clear = "both";
-        beersEl.append(beersClearEl);
-        */
+        beersEl.addView(beersClearEl);
 
         contents.addView(beersEl);
 
@@ -66,7 +63,7 @@ class ScoreScreen extends Dialog {
         timeEl.style.marginRight = "auto";
         timeEl.style.width = "50%";
 
-        ImageView clockIcon = new ImageView.fromSrc(ui, "img/ui/icons/clock.png", 48, 48);
+        ImageView clockIcon = new ImageView.fromSrc(ui, "img/ui/icons/clock.png", 24, 24);
         clockIcon.style.float = "left";
         clockIcon.style.margin = "5px";
         timeEl.addView(clockIcon);
@@ -76,14 +73,11 @@ class ScoreScreen extends Dialog {
         TextView timeTextEl = new TextView(ui, "You took ${formattedTime}!");
         timeTextEl.style.fontWeight = "bold";
         timeTextEl.style.fontSize = "22px";
-        timeTextEl.style.height = "58px";
         timeEl.addView(timeTextEl);
 
-        /*
-         timeClearEl = new DivElement();
+        View timeClearEl = new View(ui);
         timeClearEl.style.clear = "both";
-        timeEl.append(timeClearEl);
-        */
+        timeEl.addView(timeClearEl);
 
         contents.addView(timeEl);
 

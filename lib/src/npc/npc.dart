@@ -16,7 +16,7 @@ class NPC extends GameObject implements GameEventListener {
     this.setLevel(l);
 
     SpriteSheet sprites = new SpriteSheet(
-        "img/sprites/bum.png",
+        "assets/sprites/bum.png",
         64, 64);
 
     List<Sprite> walkUp = new List<Sprite>();
