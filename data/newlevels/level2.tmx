@@ -29,6 +29,12 @@
  <tileset firstgid="1178" name="fence" tilewidth="32" tileheight="32">
   <image source="../../web/assets/sprites/fence.png" width="96" height="128"/>
  </tileset>
+ <tileset firstgid="1190" name="cars_horiz" tilewidth="192" tileheight="96">
+  <image source="../../web/assets/sprites/cars_moving_horiz.png" width="384" height="192"/>
+ </tileset>
+ <tileset firstgid="1194" name="cars_vert" tilewidth="96" tileheight="160">
+  <image source="../../web/assets/sprites/cars_moving_vert.png" width="384" height="161"/>
+ </tileset>
  <layer name="grass1" width="25" height="50">
   <data encoding="base64" compression="zlib">
    eJyllVGOAzEIQ8nk/nfe/Wgk1n02aRcpmnaSgdiA2VX1/K79ep7fu71b5v/T1nqtR54b/Ovektg93m7vdGncHqt/0+Mco3srdvLRv+vPfv6Bs8v8V97J97m35iLlYMJyzpX4LoNX4zlMlJfjr+Bc4jgtwtLx9D2K279PPH5rhMvl7T/+tS8Jx7rw0c+6vqP+7LG6uVrVGOqftKLzV/U3h9qPinsX80/37zG6aY9TX+hex0bn1Igv0rwJp9NPp++u9m+Xs/SNi+dwdyOdTbOC3lP+krl8J13/NIbWIvmnnGoOyagGiZ9pfapXifek58RVqu+Jp96Pk+46X24+UIxbTSYeEmdO78imeen00dVF0p+kJ5QTeu9w6p1oni7jl2Lc1Df5p77c8G5BfMI5aaHOA5qPjm/VT8Lq5i5x4urlpl4d98oh9Yrrt7SfdDjNz0mfFI+rL+qLSfPSWcdT0tVbjLS36x3rTb9OM9flMNXgzezTmNNcO/sFnDouVdcdpjSTvqmp6T7f1hthSDqetN3xMeXX4dIaTH2s/TD5T7Xqakxni6sBzUvKqeYu8VkfcuDu0FfV+52dNmpOUg0c38dcPVEeaGk+O76DQXve1Y/mkTA43XLnXY0nHXQ69wOlJQjb
@@ -45,31 +51,49 @@
   </data>
  </layer>
  <layer name="fence1" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt1TEKACEMBVEL738BYRf1orZbLcHwo+gMpH7aJClp61kMYGxplM+oDHW3Gc3xFqvh+S8GxkrjDTA8YWBg/Bt1cqy38ZRdh2EPAwNjrfEEGESqBjmaMAg=
   </data>
  </layer>
  <layer name="sidewalk_items1" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJztVjkOg0AM3MJFohQ5Ojr+mCo/CIHc928zBZEsBGG1a0NAHmlEgz0yM+vFuXjk5FwB7kmgWQPO6H0Br4oaT/R+gW8a50xDg3kQji20MnCnqHlA7yN4EtSoen7D8w4+BDXG6rkG6nJUCM/Ec7QmnVzxHG1IJ1c8u7mS7zy7oTmetrzPsxua48XAc28w9Im2M/oLWaW26T8q9IzW7WetO5Xv5z7u1KTUmihqpmXvue1McSQR33TpWZt24FvMHL6ImWPmWRszx+qP/AhFVz5q7quvhu0rOXwA4mU4Kw==
   </data>
  </layer>
  <layer name="buildings1" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt10lOgjEYh/F+W3HDeAhnQD2EMyAeQlQm9RDqxvEeDnAPBbkHTmueRTd+SbtoXggh7z/5bZo0T9JdjZm9NdFCG+e4wKVw4xZ3uMcDHvEk3HjGC17xhg66wo1d7Fn71oFw4xRnVt1qCDd0Ot3/HaPmcSLQuMK1x41AQzddm0PCY16gsYBFjyVtzFxjC9seOwIN3fQuHxlTiClG7vOQlbhXjqlE7nNtjLfR5F4rph25z0OWRAppZJBFDu/4QA99fGIQljB5FFDEOjawiSG+8I0f/OIvsFFCGRUcooojJHmXFNLIIIucvtXY32oZK9aqteY5D5nrfy75b3f9z/XfPrmNABrpYfM=
   </data>
  </layer>
  <layer name="windows1" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt0DsNgEAQAFFcgBNwAqb4GOHTgQlwAhqY4goEbCAk85Ipbovd5LJMf5FTEbyzpOrxXmkLvlFTE7xTkvSdljrqaUiznY7AGyNNNNOSZiddgTfe4F9JkiTp6QaVWROR
   </data>
  </layer>
  <layer name="roof1" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt07ERgDAMQ1FlPUIDbBFogK2AIXHHkcKVLwX8d6dWamzpMSRprDIlhVqtb6uyB28AeOvsx7KTPuAHi3XMThY2mm4c1nE6uQI2uKv/bbS4KwAAAODLbi/0NHU=
   </data>
  </layer>
  <layer name="roof2" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt1rsNgDAMhOFkHaCETWAT2B9TIKFwpogIMtL/dbniish5pAQA7+nzPRtEFlmXn9eIQc1aZNc5Os4EcwUA3zjv2/LdKO/hv/1XWvD2pMWbNVrnJHq9vMZsPYvo8vIaq/VsosvLAWAHokIGkw==
   </data>
@@ -80,6 +104,9 @@
   </data>
  </layer>
  <layer name="door1" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJztzbENgDAMRUFnAtgGNiFbk03CCFhU6XF5J73CjX8EAAAAAH/d2Sj+eWTncs/sKd64sr7cW4vYW/EInxe39gS+
   </data>
@@ -90,8 +117,67 @@
   </data>
  </layer>
  <layer name="sidewalk_items2" width="25" height="50">
+  <properties>
+   <property name="blocking" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJztlslSAjEURbPIwh1rdnyZoKIig+KIDDLJ8AMO+LeehV2kUnQB/fJaqMqpOtWrvum8JC9tjJy5NWaBS3zEJ3y2AYJT6JLdw77iGCOyxzgJPIZbH7duCUW7Nivb6lOya7Mirc8u89tUn33IMr9T3iljJeC6+2eiyvMSrwKO4a95nWcDmwHH0DoTLtI1PxTO+P5zvPibh8a+uiarhjeK+6pF1i3eKe6rNln3+KB4f7yQ18FXq3d/DMh7w6HVOytT8t5xlnJ/hOCDvE/8wm9c4c+Rn8eIPic57JGC0hhuD0rwe7gUtwcl+D1cituDEvweLsXtQf+J5B95VyT/yJFIJJI3sS8eH79ZCDnd
+   eJztmMlSAjEQQOeQg5zAIze+jE0WkUVRdpBFth8Q1L/1HUiRSkEJkzRoOa/q1ZzonnQ6nSmCwJ2lCoIVrvEFW9hWHgIfoU/sAQ4Fc0yIPcWZ5xxmfcy6aZJqb1h+qk9K7Q2La31OWd+h+pxDmPWl+U0Gsx733T4TBZ5FLHnMYe/5A88q1jzmkDoTJq57/lvI8f55vNutQ6KvysS6x4pgX9WJ1cBHwb56IlYTnwXvjw7xuthTcvfHiHivOFZyZ+WNeHNcHLk/fPBOvA1u8QM/8euPn8cIeW4u0CNxoRzmDNLYM9wVcwZp7BnuijmDNPYMd8WcQddEf0PeCr6Hyzfyf0VyPyIiJIldoHcTwjlc/js4lWgu+uUbngc6KA==
   </data>
  </layer>
+ <objectgroup name="regions" width="25" height="50">
+  <object name="region1" type="region" x="672" y="672" width="96" height="704"/>
+  <object name="region2" type="region" x="288" y="0" width="96" height="320"/>
+ </objectgroup>
+ <objectgroup name="npcs" width="25" height="50">
+  <object name="npc1" type="npc" x="672" y="960" width="32" height="32">
+   <properties>
+    <property name="direction" value="up"/>
+    <property name="region" value="region1"/>
+    <property name="speed" value="3"/>
+   </properties>
+  </object>
+  <object name="npc2" type="npc" x="704" y="1216" width="32" height="32">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region1"/>
+    <property name="speed" value="3"/>
+   </properties>
+  </object>
+  <object name="npc3" type="npc" x="320" y="64" width="32" height="32">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="region" value="region2"/>
+    <property name="speed" value="2"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="triggers" width="25" height="50">
+  <object name="party1" type="trigger" x="160" y="1440" width="64" height="32">
+   <properties>
+    <property name="type" value="party_arrival"/>
+   </properties>
+  </object>
+  <object name="store1" type="trigger" x="160" y="160" width="64" height="32">
+   <properties>
+    <property name="beers" value="24"/>
+    <property name="type" value="beer_store"/>
+   </properties>
+  </object>
+  <object name="path1" type="path" x="384" y="0" width="416" height="1440">
+   <properties>
+    <property name="spawn_at" value="300"/>
+    <property name="x1" value="12"/>
+    <property name="x2" value="12"/>
+    <property name="x3" value="18"/>
+    <property name="x4" value="18"/>
+    <property name="x5" value="27"/>
+    <property name="y1" value="-5"/>
+    <property name="y2" value="23"/>
+    <property name="y3" value="23"/>
+    <property name="y4" value="45"/>
+    <property name="y5" value="45"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="paths" width="25" height="50"/>
 </map>
