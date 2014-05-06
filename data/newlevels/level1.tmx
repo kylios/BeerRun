@@ -2,7 +2,7 @@
 <map version="1.0" orientation="orthogonal" width="50" height="20" tilewidth="32" tileheight="32">
  <properties>
   <property name="beers_to_win" value="6"/>
-  <property name="name" value="level1"/>
+  <property name="name" value="Kid's First Beer..."/>
   <property name="seconds" value="120"/>
   <property name="start_beers" value="3"/>
   <property name="start_health" value="3"/>
@@ -114,12 +114,12 @@
    eJztkTkOhTAQQ1PMadmXz14ABVAABXBhXKT61Yik9JNcWHpjKYoxhBBCCCGEEPKNWIxJkFR0/gRvtu4ofrsLJTZ+SKXcWuFt1l3Eb9cQwA2R6O+mQ++RQbl1wDutu4vfriGDmyOF4x/euH/sxiV+u4YaboO0ju94ASn0Lc4=
   </data>
  </layer>
- <objectgroup name="regions" width="50" height="20" visible="0">
+ <objectgroup name="regions" width="50" height="20">
   <object name="region1" type="region" x="1472" y="416" width="128" height="224"/>
   <object name="region2" type="region" x="288" y="288" width="256" height="224"/>
   <object name="region3" type="region" x="288" y="32" width="256" height="160"/>
  </objectgroup>
- <objectgroup name="npcs" width="50" height="20" visible="0">
+ <objectgroup name="npcs" width="50" height="20">
   <object name="npc1" type="npc" x="1523" y="491">
    <properties>
     <property name="direction" value="up"/>
@@ -142,7 +142,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="triggers" width="50" height="20" visible="0">
+ <objectgroup name="triggers" width="50" height="20">
   <object name="party1" type="trigger" x="1504" y="192" width="64" height="32">
    <properties>
     <property name="type" value="party_arrival"/>

@@ -19,4 +19,3 @@ import 'package:beer_run/car.dart';
 part 'src/level/level.dart';
 part 'src/level/trigger.dart';
 part 'src/level/level_parser.dart';
-part 'src/level/tutorial_dialog.dart';

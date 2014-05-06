@@ -6,6 +6,7 @@
 		"out_file": "web/beer_run.dart.js",
 
 		"checked": false,
+		"warnings": false,
 		"minify": false
 	},
 
@@ -25,20 +26,22 @@
 			"config"
 		],
 
-		"remote_dir": "/home/ubuntu/releases/latest"
+		"remote_dir": "/home/ubuntu/releases/dev-remote/latest"
 	},
 
 	"application": {
-
+		
 		"assets": {
 
 			"cdn_hosts": [
-
+				"static01.beerrungame.net",
+				"static02.beerrungame.net",
+				"static03.beerrungame.net",
+				"static04.beerrungame.net"
 			],
 			"path": "",
 			"version": 1
 		}
-
 
 	},
 

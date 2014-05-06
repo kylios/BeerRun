@@ -1,0 +1,12 @@
+{
+	"tutorials": [
+		{
+			"name": "tutorial1",
+			"id": "tutorial_level1"
+		},
+		{
+			"name": "tutorial2",
+			"id": "tutorial_level2"
+		}
+	]
+}

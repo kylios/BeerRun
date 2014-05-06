@@ -1,15 +1,14 @@
 {
 	"levels": [
-
-		{
-			"name": "level2",
-			"id": "level_level2",
-			"tutorial": "tutorial_level2"
-		},
 		{
 			"name": "level1",
 			"id": "level_level1",
 			"tutorial": "tutorial_level1"
+		},
+		{
+			"name": "level2",
+			"id": "level_level2",
+			"tutorial": "tutorial_level2"
 		}
 	]
 }

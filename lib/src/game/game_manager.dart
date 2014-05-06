@@ -28,6 +28,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     final int _canvasWidth;
     final int _canvasHeight;
 
+    int _beers = 0;
     int _beersDelivered = 0;
     int _totalScore = 0;
     bool _wonLevel = false;
@@ -133,6 +134,8 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
         this._player = new Player(this, this._statsManager);
         this._player.setControlComponent(playerInput);
+        this._player.onBeerDelta.listen(this._updateBeers);
+        this._player.onBeerDelivered.listen(this._updateBeersDelivered);
 
         this._ui = new UI(UIRootElement, this._canvasWidth, this._canvasHeight);
         this._ui.addListener(this);
@@ -151,7 +154,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     }
 
     UIInterface get ui => this._ui;
-
 
     void _parseConfig() {
 
@@ -286,7 +288,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
         View screen = new LevelRequirementsScreen(
             this.ui,
-            "Level ${this._currentLevelIdx}",
+            "Level ${this._currentLevelIdx}: ${this._currentLevel.name}",
             this._currentLevel.beersToWin,
             this._currentLevel.duration);
 
@@ -322,40 +324,79 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     return req + (score - req) * seconds;
   }
 
+  /**
+   * Handler for Player::onBeerDelta.
+   *
+   * @param int beers Number of beers the player has
+   * @return void
+   */
+  void _updateBeers(int beers) {
+    this._beers = beers;
+    this._statsManager.beers = beers;
+  }
+
+  /**
+   * Handler for Player::onBeersDelivered
+   *
+   * @param int beersDelivered Total number of beers the player has delivered.
+   * @return void
+   */
+  void _updateBeersDelivered(int beersDelivered) {
+    this._beersDelivered = beersDelivered;
+
+    if (this._beersDelivered >= this._currentLevel.beersToWin
+        && this._currentLevel.tutorial.isComplete
+        && ! this._wonLevel)
+    {
+            this._wonLevel = true;
+            this._gameOver = true;
+
+            int score = this._getConvertedScore(
+                this._beersDelivered,
+                this._currentLevel.beersToWin,
+                this._timer.getRemainingTime());
+
+            this.stopLevel(score);
+            this._ui.showView(
+                new ScoreScreen(
+                    this._ui,
+                    this._wonLevel,
+                    this._beersDelivered,
+                    score,
+                    this._totalScore,
+                    this._timer.duration,
+                    this._timer.getRemainingTime()),
+                callback: (var _) => this.startNextLevel());
+
+    } else {
+        this._showNotification("Sick dude, beers! We'll need you to bring us more though.  "
+                      "Go back and bring us more beer!");
+    }
+  }
+
+  void _showNotification(String message, [String imgUrl = null, seconds = 5]) {
+      TextView v = new TextView(this._notifications, message);
+      if (imgUrl != null) {
+          ImageView img = new ImageView.fromSrc(this._notifications, imgUrl, 24, 24);
+          v.addView(img);
+      }
+      this._notifications.showView(v, seconds: seconds);
+
+  }
+
   void listen(GameEvent e) {
 
-    if (e.type == GameEvent.GAME_WON_EVENT &&
-        this._currentLevel.tutorial.isComplete && ! this._wonLevel) {
-      this._wonLevel = true;
-      this._gameOver = true;
-
-      int score = this._getConvertedScore(
-              this._beersDelivered,
-              this._currentLevel.beersToWin,
-              this._timer.getRemainingTime());
-
-      this.stopLevel(score);
-      this._ui.showView(
-              new ScoreScreen(
-                      this.ui,
-                      this._wonLevel,
-                      this._beersDelivered,
-                      score,
-                      this._totalScore,
-                      this._timer.duration,
-                      this._timer.getRemainingTime()),
-                      callback: (var _) => this.startNextLevel());
-
-    } else if (e.type == GameEvent.GAME_LOST_EVENT) {
-
-    } else if (e.type == GameEvent.ADD_BEERS_DELIVERED_EVENT) {
-      int scoreDelta = e.value;
-      this._beersDelivered += scoreDelta;
+    if (e.type == GameEvent.GAME_LOST_EVENT) {
     } else if (e.type == GameEvent.NOTIFICATION_EVENT) {
         String message = e.data['message'];
         int seconds = e.data['seconds'];
+        String imgUrl = e.data['img_url'];
 
         TextView v = new TextView(this._notifications, message);
+        if (imgUrl != null) {
+            ImageView img = new ImageView.fromSrc(this._notifications, imgUrl, 24, 24);
+            v.addView(img);
+        }
         this._notifications.showView(v, seconds: seconds);
     }
 

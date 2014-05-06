@@ -9,6 +9,9 @@
 	},
 	"body": [
 		{
+			"type": "controls"
+		},
+		{
 			"type": "dialog",
 			"body": "What.. who's that drunk idiot who wants to come to OUR party? I suppose you can come in.. BUT, we're running low on beer! Why don't you stumble on down to the store over there and grab us some beers!"
 		},
@@ -39,8 +42,7 @@
 			"body": "Well, what are you waiting for!?  Get moving, and don't sober up too much!"
 		},
 		{
-			"type": "dialog",
-			"body": "Controls: <br />WASD, arrow keys: movement <br />SPACEBAR: drink a beer"
+			"type": "controls"
 		}
 	],
 	"end": {

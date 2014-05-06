@@ -2,6 +2,7 @@ library player;
 
 import 'dart:html';
 import 'dart:math';
+import 'dart:async';
 
 import 'package:beer_run/game.dart';
 import 'package:beer_run/component.dart';

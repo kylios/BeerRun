@@ -37,6 +37,9 @@ class Player extends GameObject implements GameEventListener {
   int get beers => this._beers;
   int get health => this._health;
 
+  StreamController<int> _beersStream;
+  StreamController<int> _beersDeliveredStream;
+
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
   Player(this._mgr, this._stats) : super(DIR_DOWN, 0, 0) {
@@ -64,7 +67,13 @@ class Player extends GameObject implements GameEventListener {
     this._walkSprites[DIR_DOWN.direction] = new SpriteAnimation(walkDown);
     this._walkSprites[DIR_LEFT.direction] = new SpriteAnimation(walkLeft);
     this._walkSprites[DIR_RIGHT.direction] = new SpriteAnimation(walkRight);
+
+    this._beersStream = new StreamController<int>();
+    this._beersDeliveredStream = new StreamController<int>();
   }
+
+  Stream<int> get onBeerDelta => this._beersStream.stream;
+  Stream<int> get onBeerDelivered => this._beersDeliveredStream.stream;
 
   void startInLevel(Level l) {
     this.setLevel(l);
@@ -85,16 +94,28 @@ class Player extends GameObject implements GameEventListener {
 
   void setBeers(int beers) {
       this._beers = beers;
-      this._stats.beers = beers;
+      this._beersStream.add(this._beers);
+  }
+
+  void resetBeers() {
+      this.setBeers(0);
   }
 
   void addBeers(int beers) {
     this._beers += beers;
-    this._stats.beers = beers;
+    this._beersStream.add(this._beers);
   }
+
   void resetBeersDelivered() {
     this._beersDelivered = 0;
+    this._beersDeliveredStream.add(this._beersDelivered);
   }
+
+  void addBeersDelivered(int beers) {
+    this._beersDelivered += beers;
+    this._beersDeliveredStream.add(this._beersDelivered);
+  }
+
   void updateBuzzTime() {
     this._buzzDecreaseTime = new DateTime.now().millisecondsSinceEpoch +
         Player.BUZZ_TIME;
@@ -148,7 +169,7 @@ class Player extends GameObject implements GameEventListener {
                  this.x, this.y, 3
               ));
 
-              GameNotification n = new GameNotification("Your buzz is wearing off!  Drink a beer before things get too boring.");
+              GameNotification n = new GameNotification("Your buzz is wearing off!  Drink a beer before things get too boring.<br />Use [space] to crack one open.", imgUrl: "assets/ui/keyboard/Keyboard_White_Space.png");
               this.broadcast(n, [ this._mgr ]);
             }
           }
@@ -214,31 +235,13 @@ class Player extends GameObject implements GameEventListener {
             // Only trigger if you've gone to the store at least once
 
             // Gain score
-            this._beersDelivered += this._beers;
+            this.addBeersDelivered(this._beers);
+            this.resetBeers();
 
-            this._beers = 0;
             this.level.addAnimation(
                     new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
 
-            GameEvent addScoreEvent = new GameEvent();
-            addScoreEvent.type = GameEvent.ADD_BEERS_DELIVERED_EVENT;
-            addScoreEvent.value = this._beers;
-            this.broadcast(addScoreEvent, [ this._mgr ]);
-
-            if (this._beersDelivered >= this.level.beersToWin) {
-                // send event to the game
-
-                GameEvent e = new GameEvent();
-                e.type = GameEvent.GAME_WON_EVENT;
-                e.creator = this;
-                e.value = 0;
-                this.broadcast(e, [ this._mgr ]);
-            } else {
-                this.broadcast(
-                        new GameNotification("Sick dude, beers! We'll need you to bring us more though.  "
-                        "Go back and bring us more beer!"),
-                        [ this._mgr ]);
-            }
+            
         }
     }
   }

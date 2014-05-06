@@ -250,6 +250,24 @@ class Tutorial {
     return fn;
   }
 
+  tutorialStep controls() {
+    tutorialStep fn = (var _) {
+      Completer<bool> c = new Completer<bool>();
+
+      GameManager mgr = new GameManager();
+
+      mgr.ui.showView(
+        new ControlsScreen(mgr.ui, this),
+        callback: (var skipped) {
+          c.complete(skipped);
+        });
+
+      return c.future;
+    };
+
+    return fn;
+  }
+
 
 
     void _decodeTutorialData(Map tutorialData) {
@@ -278,6 +296,8 @@ class Tutorial {
             return this.pan(data['row'], data['col'], data['speed']);
         } else if (data['type'] == 'dialog') {
             return this.dialog(data['body']);
+        } else if (data['type'] == 'controls') {
+            return this.controls();
         }
 
         throw new Exception("Type ${data['type']} not supported in the tutorial");
