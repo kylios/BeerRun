@@ -39,6 +39,7 @@ class Player extends GameObject implements GameEventListener {
 
   StreamController<int> _beersStream;
   StreamController<int> _beersDeliveredStream;
+  StreamController<int> _healthChangedStream;
 
   List<SpriteAnimation> _walkSprites = new List<SpriteAnimation>(4);
 
