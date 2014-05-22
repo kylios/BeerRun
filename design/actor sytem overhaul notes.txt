@@ -1,0 +1,113 @@
+Scene
+	- update
+	- draw
+	- load
+	- unload
+	- handle input
+
+	- members
+		- level
+		- actors
+			- player
+			- NPCs
+			- Cars
+
+
+
+
+Level
+	- tile information
+	- moving game objects (NPSs, Cars, Players)
+		- update 
+		- determine collisions
+		- trigger actions on game objects
+	- spawn NPCs
+	- initialize Player
+	- Animations
+		- update animations
+		- add/remove animations
+	- manage a tutorial
+		- load and decode
+		- run
+	- broadcast events
+	- listen for events
+
+Triggers
+	
+Static Objects (trees, buildings, etc)
+	- 
+
+Player
+	- know how to move itself
+	- know how to handle collisions with certain object types
+	- state
+		- position
+		- beers
+		- health
+		- beersDelivered
+		- buzz
+
+NPCs
+	- know how to move themselves
+	- know how to handle collisions with certain object types
+	- state
+		- position
+
+Cars
+	- know how to move themselves
+		- knows about a CarPath which tells it where to go next
+	- know how to handle collisions with certain object types
+	- state
+		- position
+
+CarPath
+	- hold a series of nodes
+
+CarFactory
+	- creates Car objects and puts them in the level
+
+Actor {
+
+	StreamController<GameEvent> _notificationsStream;
+	
+	Future<GameMessageResponse> sendMessage(GameMessage) {
+
+		// Send message to Actor to process, Actor processes 
+		// asynchronously and returns a result via Future
+	}
+
+	Stream<GameEvent> notifications get => this._notificationsStream.stream;
+}
+
+Scene {
+	
+
+	Level _level;
+	
+}
+
+
+
+Level {
+	
+	void checkCollisions() {
+		for (MovableActor actor in this._movingActors) {
+			if (null != (Actor a = this._collision(actor))) {
+				a.sendMessage(new GameMessage(
+					GAME_MESSAGE_COLLISION,
+					actor
+				));
+			}
+		}
+	}
+}
+
+
+MovableActor
+
+	MovableActor(Level l) {
+
+
+	}
+
+	abstract void onCollision(Actor a);

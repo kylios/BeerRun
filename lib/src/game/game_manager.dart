@@ -70,6 +70,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
     int get tickNo => this._tickNo;
 
+    PlayerInputComponent _playerInput = null;
     PlayerInputComponent _tmpInputComponent = null;
 
     static GameManager _instance = null;
@@ -127,15 +128,15 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         this._canvasDrawer.setOffset(0, 0);
         this._canvasDrawer.backgroundColor = 'black';
 
-        PlayerInputComponent playerInput =
-            new PlayerInputComponent();
-        this._canvasManager.addKeyboardListener(playerInput);
-        this._canvasManager.addKeyboardListener(this);
+        this._playerInput = new PlayerInputComponent();
 
         this._player = new Player(this, this._statsManager);
-        this._player.setControlComponent(playerInput);
         this._player.onBeerDelta.listen(this._updateBeers);
         this._player.onBeerDelivered.listen(this._updateBeersDelivered);
+
+
+        this._canvasManager.addKeyboardListener(this._playerInput);
+        this._canvasManager.addKeyboardListener(this);
 
         this._ui = new UI(UIRootElement, this._canvasWidth, this._canvasHeight);
         this._ui.addListener(this);
@@ -277,9 +278,14 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             this._currentLevel.cols * this._currentLevel.tileWidth,
             this._currentLevel.rows * this._currentLevel.tileHeight);
 
+        TutorialControlComponent playerController =
+                new TutorialControlComponent(this._currentLevel.tutorial);
         this._player.startInLevel(this._currentLevel);
+        this._player.setControlComponent(new TutorialControlComponent(this._currentLevel.tutorial));
+
+        // This drawing component does not scroll
         this._player.setDrawingComponent(new PlayerDrawingComponent(
-            this._canvasManager, this._canvasDrawer, true));
+            this._canvasManager, this._canvasDrawer, false));
         this._timer = new GameTimer(this._currentLevel.duration);
         this._timer.addListener(this);
 
@@ -312,6 +318,13 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     }
 
   void _endTutorial() {
+
+    // Give the player control of the character again.
+    this._player.setControlComponent(this._playerInput);
+
+    // Give it a scrolling drawer
+    this._player.setDrawingComponent(new PlayerDrawingComponent(
+            this._canvasManager, this._canvasDrawer, true));
 
     this._player.updateBuzzTime();
     this._timer.startCountdown();
@@ -418,6 +431,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         this._currentLevel.update();
         this._statsManager.update();
 
+
+        this._player.update();
+        this._player.draw();
+
         // this._pageStats.setStat('fps', this._fps);
 
         // By exiting here on game over, we let the level objects continue updating
@@ -426,8 +443,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             return;
         }
 
-        this._player.update();
-        this._player.draw();
 
         if (this._player.drunkenness <= 0) {
             this._setGameOver("You're too sober.  You got bored and go home.");
