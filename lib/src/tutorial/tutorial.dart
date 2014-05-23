@@ -234,14 +234,20 @@ class Tutorial {
     return fn;
   }
 
-  tutorialStep dialog(String message) {
+  tutorialStep dialog(String message, Map<String, String> stepVars) {
+
+    Map<String, dynamic> vars = new Map<String, dynamic>();
+    if (stepVars != null) {
+        stepVars.keys.forEach((String k) => vars[k] = this._level.vars[stepVars[k]]);
+    }
+
     tutorialStep fn = (var _) {
       Completer<bool> c = new Completer<bool>();
 
       GameManager mgr = new GameManager();
 
       mgr.ui.showView(
-          new TutorialDialog(mgr.ui, this, message),
+          new TutorialDialog(mgr.ui, this, message, vars),
           callback: (var skipped) { c.complete(skipped); }
       );
       return c.future;
@@ -295,7 +301,7 @@ class Tutorial {
         } else if (data['type'] == 'camera_pan') {
             return this.pan(data['row'], data['col'], data['speed']);
         } else if (data['type'] == 'dialog') {
-            return this.dialog(data['body']);
+            return this.dialog(data['body'], data['vars']);
         } else if (data['type'] == 'controls') {
             return this.controls();
         }

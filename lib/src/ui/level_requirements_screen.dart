@@ -22,6 +22,7 @@ class LevelRequirementsScreen extends Dialog {
     levelName.style.display = "inline-block";
 
     TextView levelNameText = new TextView(ui, name);
+    levelNameText.evaluateVars();
     levelName.style.fontWeight = "bold";
     levelName.style.fontSize = "22px";
 
@@ -34,7 +35,10 @@ class LevelRequirementsScreen extends Dialog {
     ImageView beersIcon = new ImageView.fromSrc(ui,
         "img/ui/icons/beer.png", 32, 32);
 
-    TextView beersText = new TextView(ui, "Bring ${beers} beers to the party");
+    TextView beersText = new TextView(ui, "Bring _beers beers to the party");
+    beersText.evaluateVars();
+    beersText.vars['beers'] = beers;
+    beersText.evaluateVars();
     beersText.style.fontWeight = "bold";
 
     beersEl.addView(beersIcon);
@@ -63,6 +67,7 @@ class LevelRequirementsScreen extends Dialog {
       formattedTime = "${formattedTime}${seconds}";
     }
     TextView timeText = new TextView(ui, "You have ${formattedTime}!");
+    timeText.evaluateVars();
     timeText.style.fontWeight = "bold";
 
     timeEl.addView(clockIcon);

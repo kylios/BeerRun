@@ -42,11 +42,14 @@
 		},
 		{
 			"type": "dialog",
-			"body": "Better pick up at least ${beersToWin}... we'll need some for flipcup too!"
+			"body": "Better pick up at least _beersToWin... we'll need some for flipcup too!",
+			"vars": {
+			   "beersToWin": "beers_to_win"
+			}
 		},
 		{
 			"type": "camera_pan",
-			"row": 40, 
+			"row": 40,
 			"col": 10,
 			"speed": 8
 		},

@@ -29,11 +29,14 @@
 		},
 		{
 			"type": "dialog",
-			"body": "Grab us a $beersToWin pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!"
+			"body": "Grab us a _beersToWin pack and bring it back.  Better avoid the bums... they like to steal your beer, and then you'll have to go BACK and get MORE!",
+		  "vars": {
+        "beersToWin": "beers_to_win"
+		  }
 		},
 		{
 			"type": "camera_pan",
-			"row": 7, 
+			"row": 7,
 			"col": 38,
 			"speed": 5
 		},

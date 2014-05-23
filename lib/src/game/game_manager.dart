@@ -389,6 +389,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
   void _showNotification(String message, [String imgUrl = null, seconds = 5]) {
       TextView v = new TextView(this._notifications, message);
+      v.evaluateVars();
       if (imgUrl != null) {
           ImageView img = new ImageView.fromSrc(this._notifications, imgUrl, 24, 24);
           v.addView(img);
@@ -406,6 +407,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
         String imgUrl = e.data['img_url'];
 
         TextView v = new TextView(this._notifications, message);
+        v.evaluateVars();
         if (imgUrl != null) {
             ImageView img = new ImageView.fromSrc(this._notifications, imgUrl, 24, 24);
             v.addView(img);

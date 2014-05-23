@@ -1,7 +1,6 @@
 In priority order, unless solution investigation determines otherwise.
 
 - fix some polish bugs
-    - Player should appear before tutorial starts
     - Fix the ${beersToWin} variable injection
     - In Level 2 you can't drink beer even though it says you have 5
     - add scripting to allow the player to move

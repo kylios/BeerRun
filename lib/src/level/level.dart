@@ -7,6 +7,7 @@ part of level;
 abstract class Level extends Broadcaster implements GameEventListener {
 
   String _name;
+  Map<String, dynamic> _variables;
 
   // Level design parameters
   int _rows;
@@ -46,6 +47,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   Level(this._drawer, this._manager, this._player,
       this._rows, this._cols, this._tileWidth, this._tileHeight)
   {
+    this._variables = new Map<String, dynamic>();
     this._sprites = new List<List<Sprite>>();
     this._objects = new List<GameObject>();
     this._animations = new List<GameAnimation>();
@@ -75,6 +77,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
   List<GameObject> get objects => this._objects;
   Tutorial get tutorial => this._tutorial;
   Player get player => this._player;
+  Map<String, dynamic> get vars => this._variables;
 
   int _posToIdx(int row, int col) {
     return this._cols * row + col;
@@ -418,6 +421,8 @@ abstract class Level extends Broadcaster implements GameEventListener {
     l._beersToWin = int.parse(Level._requireAttribute(_properties, 'beers_to_win'));
     l._duration = new Duration(seconds: int.parse(Level._requireAttribute(_properties, 'seconds')));
 
+    l._variables = _properties;
+
     window.console.log("set level properties: storeX=${l._storeX}, storeY=${l._storeY}, startX=${l._startX}, startY=${l._startY}, beersToWin=${l._beersToWin}, duration=${l._duration}");
 
     for (Map ll in _layers) {
@@ -524,7 +529,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
     }
 
     // Setup the tutorial
-    // TODO: maybe someday I can figure out how to better link the 
+    // TODO: maybe someday I can figure out how to better link the
     // level and the tutorial, but this will work for now.
     l._tutorial = new Tutorial.fromJson(tutorialData, l);
 
