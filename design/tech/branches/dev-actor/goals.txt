@@ -1,7 +1,6 @@
 In priority order, unless solution investigation determines otherwise.
 
 - fix some polish bugs
-    - Fix the ${beersToWin} variable injection
     - In Level 2 you can't drink beer even though it says you have 5
     - add scripting to allow the player to move
         - might involve some work with the actor/component system to add a new actor to the Player instance.  This could tie in with the Actor, or Game Object, system overhaul.
@@ -10,3 +9,6 @@ In priority order, unless solution investigation determines otherwise.
 - separate drawing and update loop
 - make GameObject a real generic game object, or actor, which really only implements a message passing framework
 - add a Scene class and move most setup/update/teardown logic into an implementation of that
+- add a new character type and use it in level 2
+    - Thug
+    - Cop

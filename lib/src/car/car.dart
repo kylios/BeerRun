@@ -19,9 +19,7 @@ class Car extends PathFollower {
 
     GameObject obj = this.level.collidesWithPlayer(this);
     if (obj != null) {
-      GameEvent e = new GameEvent();
-      e.type = GameEvent.TAKE_HIT_EVENT;
-      e.value = 1;
+      GameEvent e = new GameEvent(GameEvent.TAKE_HIT_EVENT, 1);
       Timer.run(() => obj.listen(e));
     }
   }

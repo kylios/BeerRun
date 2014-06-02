@@ -28,7 +28,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
     final int _canvasWidth;
     final int _canvasHeight;
 
-    int _beers = 0;
     int _beersDelivered = 0;
     int _totalScore = 0;
     bool _wonLevel = false;
@@ -320,6 +319,7 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
   void _endTutorial() {
 
     // Give the player control of the character again.
+    this._playerInput.reset();
     this._player.setControlComponent(this._playerInput);
 
     // Give it a scrolling drawer
@@ -344,7 +344,6 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
    * @return void
    */
   void _updateBeers(int beers) {
-    this._beers = beers;
     this._statsManager.beers = beers;
   }
 

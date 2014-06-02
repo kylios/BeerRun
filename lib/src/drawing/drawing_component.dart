@@ -49,8 +49,7 @@ class DrawingComponent extends Component
 
   static GameEvent directionChangeEvent(Direction d) {
 
-    GameEvent e = new GameEvent();
-    e.type = DrawingComponent.DIRECTION_CHANGE_EVENT;
+    GameEvent e = new GameEvent(DrawingComponent.DIRECTION_CHANGE_EVENT);
     e.data["dir"] = d;
     return e;
   }

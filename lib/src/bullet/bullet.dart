@@ -46,9 +46,7 @@ class Bullet extends GameObject {
           o = objs.removeLast();
         }
         if (o != this._creator) {
-          GameEvent e = new GameEvent();
-          e.type = GameEvent.TAKE_HIT_EVENT;
-          e.value = 1;
+          GameEvent e = new GameEvent(GameEvent.TAKE_HIT_EVENT, 1);
           Timer.run(() => o.listen(e));
           this.remove();
         }

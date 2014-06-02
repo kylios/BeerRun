@@ -10,7 +10,7 @@ import 'package:beer_run/player.dart';
 import 'package:beer_run/bullet.dart';
 import 'package:beer_run/game_animation.dart';
 import 'package:beer_run/tutorial.dart';
-import 'package:beer_run/ui.dart';
+import 'package:beer_run/beer_run.dart';
 import 'package:beer_run/npc.dart';
 import 'package:beer_run/region.dart';
 import 'package:beer_run/path.dart';

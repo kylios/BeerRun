@@ -51,9 +51,7 @@ class NPC extends GameObject implements GameEventListener {
         // Only if you're not damaged can you steel beer
         GameObject obj = this.level.collidesWithPlayer(this);
         if (obj != null) {
-          GameEvent e = new GameEvent();
-          e.type = GameEvent.BEER_STOLEN_EVENT;
-          e.value = 1;
+          GameEvent e = new GameEvent(GameEvent.BEER_STOLEN_EVENT, 1);
           Timer.run(() => obj.listen(e));
         }
       }

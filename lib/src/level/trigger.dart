@@ -1,6 +1,6 @@
 part of level;
 
-class Trigger {
+abstract class Trigger {
 
   GameEvent _event;
 
@@ -11,5 +11,8 @@ class Trigger {
 
   int get row => this._row;
   int get col => this._col;
+
   GameEvent get event => this._event;
+  GameEvent trigger(GameObject o);
+  bool get isTriggered;
 }

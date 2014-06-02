@@ -86,6 +86,10 @@ class Player extends GameObject implements GameEventListener {
     this.setBeers(l.startBeers);
 
     this._buzz = 3;
+    this._beenToStore = false;
+
+    //this.onBeerDelta.takeWhile((var _) => true);
+    //this.onBeerDelivered.takeWhile((var _) => true);
   }
 
   void setHealth(int health) {
@@ -242,7 +246,7 @@ class Player extends GameObject implements GameEventListener {
             this.level.addAnimation(
                     new TextAnimation("FUCK YEAH!", this.x, this.y, 2));
 
-            
+
         }
     }
   }

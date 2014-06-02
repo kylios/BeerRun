@@ -16,5 +16,7 @@ class GameEvent {
   int value;
   Map<String, dynamic> data = {};
   GameObject creator;
+
+  GameEvent(this.type, [this.value, this.creator]);
 }
 

@@ -277,8 +277,10 @@ abstract class Level extends Broadcaster implements GameEventListener {
                 o.y + o.collisionYOffset <= y + this.tileHeight
             )
           ) {
-            GameEvent e = t.event;
-            this.broadcast(e, [ o ]);
+            if ( ! t.isTriggered) {
+              GameEvent e = t.trigger(o);
+              this.broadcast(e, [ o ]);
+            }
         }
       }
 
@@ -446,16 +448,12 @@ abstract class Level extends Broadcaster implements GameEventListener {
 
               int _numBeers = int.parse(Level._requireAttribute(_objProps, 'beers'));
 
-              GameEvent beerStoreEvent = new GameEvent();
-              beerStoreEvent.type = GameEvent.BEER_STORE_EVENT;
-              beerStoreEvent.value = _numBeers;
-              l.addTrigger(new Trigger(beerStoreEvent, row, col));
+              l.addTrigger(new BeerStoreTrigger(_numBeers, row, col));
 
             } else if (_objType == "party_arrival") {
 
-              GameEvent partyArrivalEvent = new GameEvent();
-              partyArrivalEvent.type = GameEvent.PARTY_ARRIVAL_EVENT;
-              l.addTrigger(new Trigger(partyArrivalEvent, row, col));
+              GameEvent partyArrivalEvent = new GameEvent(GameEvent.PARTY_ARRIVAL_EVENT);
+              l.addTrigger(new PartyArrivalTrigger(partyArrivalEvent, row, col));
             }
           } else if (type == "region") {
 

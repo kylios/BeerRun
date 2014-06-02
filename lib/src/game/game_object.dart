@@ -72,7 +72,8 @@ abstract class GameObject extends Broadcaster implements GameEventListener {
     this._oldX = this.x;
     this._oldY = this.y;
     if (this._control != null) {
-      this._control.update(this);
+      var self = this;
+      this._control.update(self);
     }
   }
 

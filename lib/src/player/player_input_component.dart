@@ -44,6 +44,20 @@ class PlayerInputComponent extends Component
 
   PlayerInputComponent() {
     this._rng = new Random();
+
+    this.reset();
+  }
+
+  void reset() {
+    this._horizAccel = 0.0;
+    this._vertAccel = 0.0;
+    this._horizDir = null;
+    this._vertDir = null;
+
+    this._vertDrift = 0;
+    this._horizDrift = 0;
+    this._vertDriftCooldown = 0;
+    this._horizDriftCooldown = 0;
   }
 
   void update(Player obj) {
