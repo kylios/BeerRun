@@ -20,6 +20,7 @@ class ScoreScreen extends Dialog {
         View contents = new View(ui);
 
         TextView winText = new TextView(ui, "YOU WON!");
+        winText.evaluateVars();
         winText.style.textAlign = "center";
         winText.style.marginLeft = "auto";
         winText.style.marginRight = "auto";
@@ -47,6 +48,7 @@ class ScoreScreen extends Dialog {
         beersEl.addView(beersIcon);
 
         TextView beersTextEl = new TextView(ui, "${score} beers delivered");
+        beersTextEl.evaluateVars();
         beersTextEl.style.fontWeight = "bold";
         beersTextEl.style.fontSize = "22px";
         beersEl.addView(beersTextEl);
@@ -71,6 +73,7 @@ class ScoreScreen extends Dialog {
         String formattedTime = ScoreScreen._getFormattedTime(timeAllowed, timeRemaining);
 
         TextView timeTextEl = new TextView(ui, "You took ${formattedTime}!");
+        timeTextEl.evaluateVars();
         timeTextEl.style.fontWeight = "bold";
         timeTextEl.style.fontSize = "22px";
         timeEl.addView(timeTextEl);
@@ -92,6 +95,7 @@ class ScoreScreen extends Dialog {
         scoreEl.style.height = "24px";
 
         TextView scoreTextEl = new TextView(ui, "Your Score: ${totalScore}");
+        scoreTextEl.evaluateVars();
         scoreTextEl.style.fontWeight = "bold";
         scoreTextEl.style.fontSize = "22px";
         scoreTextEl.style.height = "58px";
@@ -111,6 +115,7 @@ class ScoreScreen extends Dialog {
         totalBottomEl.style.margin = "4px 8px";
 
         TextView totalTextEl = new TextView(ui, "${totalScore - convertedScore}");
+        totalTextEl.evaluateVars();
         totalTextEl.style.color = "blue";
         totalTextEl.style.fontSize = "22px";
         totalTextEl.style.float = "right";
@@ -118,6 +123,7 @@ class ScoreScreen extends Dialog {
         totalBottomEl.addView(totalTextEl);
 
         TextView tScoreTextEl = new TextView(ui, "+ ${convertedScore}");
+        tScoreTextEl.evaluateVars();
         tScoreTextEl.style.fontSize = "20px";
         tScoreTextEl.style.height = "58px";
         tScoreTextEl.style.float = "right";

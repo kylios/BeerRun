@@ -1,7 +1,6 @@
 In priority order, unless solution investigation determines otherwise.
 
 - fix some polish bugs
-    - In Level 2 you can't drink beer even though it says you have 5
     - add scripting to allow the player to move
         - might involve some work with the actor/component system to add a new actor to the Player instance.  This could tie in with the Actor, or Game Object, system overhaul.
 - remove Player from Level as a separate member, and add it to Actors array
