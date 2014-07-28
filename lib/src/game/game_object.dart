@@ -63,9 +63,13 @@ abstract class GameObject extends Broadcaster implements GameEventListener {
     this._level = l;
   }
 
-  void setPos(int x, int y) {
+  void setPos(int x, int y, [bool updateOldPos = false]) {
     this._x = x;
     this._y = y;
+    if (updateOldPos) {
+        this._oldX = this._x;
+        this._oldY = this._y;
+    }
   }
 
   void update() {

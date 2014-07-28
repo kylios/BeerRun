@@ -5,12 +5,13 @@ class PlayerDrawingComponent extends DrawingComponent {
   static final DIRECTION_CHANGE_EVENT = 1;
   static final UPDATE_STEP_EVENT = 2;
 
-  List<SpriteAnimation> _walkSprites;
+  //List<SpriteAnimation> _walkSprites;
   List<Sprite> _beerSprites;
 
   PlayerDrawingComponent(CanvasManager manager, CanvasDrawer drawer, bool scrollBackground) :
       super(manager, drawer, scrollBackground){
 
+      /*
     SpriteSheet sprites = new SpriteSheet(
         "assets/sprites/player/player.png",
         64, 64);
@@ -30,7 +31,7 @@ class PlayerDrawingComponent extends DrawingComponent {
     this._walkSprites[DIR_DOWN.direction] = new SpriteAnimation(walkDown);
     this._walkSprites[DIR_LEFT.direction] = new SpriteAnimation(walkLeft);
     this._walkSprites[DIR_RIGHT.direction] = new SpriteAnimation(walkRight);
-
+*/
     SpriteSheet beerSprites = new SpriteSheet(
         "assets/sprites/player/beer.png",
         64, 64);
