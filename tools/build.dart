@@ -23,13 +23,15 @@ class AsyncCounter<T> {
 	int down([T value = null]) {
 
 		if (this._value <= 0) {
-			throw new Error("value is negative!");
+			throw new Exception("value is negative!");
 		}
 
 		--this._value;
 		if (this._value == 0) {
 			this._completer.complete(value);
 		}
+		
+		return this._value;
 	}
 }
 
