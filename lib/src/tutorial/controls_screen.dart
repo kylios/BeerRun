@@ -53,8 +53,8 @@ class ControlsScreen extends TutorialDialog {
 			..addView(movementOrView)
 			..addView(aView)
 			..addView(sView)
-			..addView(dView)
 			..addView(wView)
+			..addView(dView)
 			..addView(cView);
 
         pauseView
