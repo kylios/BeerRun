@@ -20,8 +20,8 @@ class ControlsScreen extends TutorialDialog {
 		movementOrView.evaluateVars();
 		ImageView aView = new ImageView.fromSrc(ui, "assets/ui/keyboard/Keyboard_White_A.png", 24, 24);
         ImageView sView = new ImageView.fromSrc(ui, "assets/ui/keyboard/Keyboard_White_S.png", 24, 24);
-        ImageView dView = new ImageView.fromSrc(ui, "assets/ui/keyboard/Keyboard_White_D.png", 24, 24);
         ImageView wView = new ImageView.fromSrc(ui, "assets/ui/keyboard/Keyboard_White_W.png", 24, 24);
+        ImageView dView = new ImageView.fromSrc(ui, "assets/ui/keyboard/Keyboard_White_D.png", 24, 24);
         ClearView cView = new ClearView(ui);
 
         movementTextView.style.fontWeight = "bold";
