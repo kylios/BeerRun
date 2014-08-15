@@ -24,10 +24,10 @@
 		"assets": {
 
 			"cdn_hosts": [
-				"static1.dev-local.beer_run",
-				"static2.dev-local.beer_run",
-				"static3.dev-local.beer_run",
-				"static4.dev-local.beer_run"
+				"static01.dev-local.beer_run",
+				"static02.dev-local.beer_run",
+				"static03.dev-local.beer_run",
+				"static04.dev-local.beer_run"
 			],
 			"path": "",
 			"version": 1

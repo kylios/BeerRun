@@ -96,7 +96,7 @@ Future<Map> prepBuildTarget(Map config) {
 
 	String buildDir = config['compile']['build_dir'];
 	String envName = config['env']['name'];
-	String targetDir = "$buildDir/$envName";
+	String targetDir = "../$buildDir/$envName";
 
 	Completer<Map> completer = new Completer<Map>();
 
@@ -126,7 +126,7 @@ Future<Map> build(Map config) {
 
 	String buildDir = config['compile']['build_dir'];
 	String envName = config['env']['name'];
-	String targetDir = "$buildDir/$envName";
+	String targetDir = "../$buildDir/$envName";
 	String outFile = config['compile']['out_file'];
 	String inFile = config['compile']['in_file'];
 	processArgs.add("--out=$targetDir/$outFile");
@@ -170,7 +170,7 @@ Future copyWebFiles(Map config) {
 
 	String buildDir = config['compile']['build_dir'];
 	String envName = config['env']['name'];
-	String targetDir = "$buildDir/$envName";
+	String targetDir = "../$buildDir/$envName";
 
 	return
 
@@ -253,7 +253,7 @@ Future copyServerFiles(Map config) {
 
 	String buildDir = config['compile']['build_dir'];
 	String envName = config['env']['name'];
-	String targetDir = "$buildDir/$envName";
+	String targetDir = "../$buildDir/$envName";
 
 	return Process.run('rsync', [ '-arv', '../server', targetDir ])
 		.then((var _) => new Future.value(config));
@@ -265,7 +265,7 @@ Future copyConfigFiles(Map config) {
 
 	String buildDir = config['compile']['build_dir'];
 	String envName = config['env']['name'];
-	String targetDir = "$buildDir/$envName";
+	String targetDir = "../$buildDir/$envName";
 
 	return Process.run('rsync', [ '-arv', '../config', targetDir ])
 		.then((var _) => new Future.value(config));
