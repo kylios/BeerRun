@@ -18,6 +18,7 @@ class nginx::config {
 		group => "www-data",
 		mode => 0755,
 		require => Package['nginx'],
+		notify => Service["nginx"],
 	}
 
 }
@@ -30,5 +31,5 @@ class nginx::service {
 	}
 }
 
-Class["nginx::install"] -> Class["nginx::config"] -> Class["nginx::service"]
+Class["nginx::config"] -> Class["nginx::install"] -> Class["nginx::service"]
 

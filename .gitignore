@@ -8,3 +8,4 @@ build
 sftp-config.json
 web/beer_run.dart.precompiled.js
 .buildlog
+*/.vagrant/*

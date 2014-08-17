@@ -30,14 +30,16 @@ class php5::config {
 		owner => "root",
 		group => "root",
 		mode => 0644,
+		notify => Service["php5-fpm"],
 	}
 }
 
 class php5::service {
 	service {'php5-fpm':
+		require => Package["php5-fpm"],
 		ensure => running,
 		enable => true,
 	}
 }
 
-Class["php5::install"] -> Class["php5::config"] -> Class["php5::service"]
+Class["php5::config"] -> Class["php5::install"] -> Class["php5::service"]
