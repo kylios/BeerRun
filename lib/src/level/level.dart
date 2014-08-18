@@ -256,7 +256,7 @@ abstract class Level extends Broadcaster implements GameEventListener {
 
   void update() {
 
-    this.draw(this._drawer);
+    //this.draw(this._drawer);
 
     if ( ! this._paused) {
 

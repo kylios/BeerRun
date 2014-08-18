@@ -1,9 +1,0 @@
-name: beer_run_build_system
-version: 0.0.0
-author: Kyle Racette <kracette@gmail.com>
-description: A sample application
-dependencies:
-  args: any
-  path: any
-#  js: any
-#  unittest: any

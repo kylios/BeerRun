@@ -429,11 +429,9 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
 
         // this._statsManager.duration = this._timer.duration;
 
-        this._currentLevel.update();
         this._statsManager.update();
 
-
-        this._player.update();
+        this._currentLevel.draw(this._canvasDrawer);
         this._player.draw();
 
         // this._pageStats.setStat('fps', this._fps);
@@ -444,6 +442,10 @@ class GameManager implements GameTimerListener, KeyboardListener, UIListener,
             return;
         }
 
+
+        this._player.update();
+
+        this._currentLevel.update();
 
         if (this._player.drunkenness <= 0) {
             this._setGameOver("You're too sober.  You got bored and go home.");

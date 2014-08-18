@@ -1,0 +1,26 @@
+Ideas for better NPC AI?
+
+NPC class
+- BumDrawingComponent
+- BumControlComponent
+
+BumDrawingComponent
+- draw bum images
+- respond to different bum behaviors
+
+BumControlComponent
+- determine moves for bum
+- determine behavior states for bum
+
+NPCBehavior
+- move
+- idle
+- steal beer
+
+BumControlComponent
+- subscriber
+
+CarControlComponent, PlayerControlComponent
+- broadcaster
+	- broacast position and motion
+	
