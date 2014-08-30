@@ -2,16 +2,16 @@ server {
 	
 	listen 80;
 
-	server_name dev-local.beer_run static01.dev-local.beer_run static02.dev-local.beer_run static03.dev-local.beer_run static04.dev-local.beer_run;
+	server_name <%= @app_hostname %> static01.<%= @app_hostname %> static02.<%= @app_hostname %> static03.<%= @app_hostname %> static04.<%= @app_hostname %>;
 
-	add_header "Access-Control-Allow-Origin" "http://dev-local.beer_run:8080";
+	add_header "Access-Control-Allow-Origin" "http://<%= @app_hostname %>:8080";
 	add_header "Access-Control-Allow-Headers" "Authorization,Content-Type,Accept,Origin,User-Agent,DNT,Cache-Control,X-Mx-ReqToken";
 	add_header "Access-Control-Allow-Methods" "GET";
 
-	error_log /var/log/nginx/dev-local.beer_run.error.log;
-	access_log /var/log/nginx/dev-local.beer_run.access.log;
+	error_log /var/log/nginx/<%= @app_hostname %>.error.log;
+	access_log /var/log/nginx/<%= @app_hostname %>.access.log;
 
-	root /opt/www/dev-local.beer_run/app/web;
+	root /opt/www/<%= @app_hostname %>/app/web;
 
 	location /nginx_status {
 		stub_status on;
@@ -36,7 +36,7 @@ server {
 		if (!-e $document_root$fastcgi_script_name) {
 			return 404;
 		}
-		fastcgi_param APP_ENV dev-local;
+		fastcgi_param APP_ENV <%= @app_env %>;
 		include /etc/nginx/fastcgi_params;
 		fastcgi_pass unix:/var/run/php5-fpm.sock;
 	}
