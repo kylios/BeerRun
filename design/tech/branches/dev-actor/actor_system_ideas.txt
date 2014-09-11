@@ -1,0 +1,165 @@
+ACTOR SYSTEM IDEAS
+
+- actor class
+
+    - actor heirarchy - actors can spawn new child actors.  They manage those
+        actors directly.  When a parent actor terminates, it terminates all its
+        child actors.  Their shutDown() methods are invoked.
+
+
+    - startUp(), shutDown(), and update() methods
+
+        Lifecycle of actors.  When spawned, their startUp() method is invoked.
+        When terminated, their shutDown() method is invoked.  Their update()
+        methods are invoked asynchronously each frame.
+
+        Future _onStartUp(GameContext ctx);
+
+        Future _onUpdate(GameContext ctx);
+
+        Future _onShutDown(GameContext ctx);
+
+        These methods are to be implemented by child classes.  They return
+        futures.  It's TBD whether the futures will complete with a specific
+        type or not.
+        TODO: figure that out
+
+        GameContext:
+            - This class should probably have a refenece to the parent GameActor.
+            - This class should also have an instance of the current time at the
+            start of the frame or invocation.  Especially the update() method
+            will need this.
+            - Any global configuration values should be available in GameContext.
+            We should always evaluate when it's appropriate to instantiate
+            actor classes with their config data, or allow them to access
+            certain values dynamically.  These are probably values which could
+            change throughout the course of the game.
+
+
+    - easy lifecycle control over your actors:
+
+        - in Actor
+
+            ActorSystem _actorSystem;
+
+            Actor(this._actorSystem);
+
+            Future<Actor> spawnChild(Actor child) {
+                return child._onStartUp()
+                    .then(this._children.add);
+            }
+
+            Future shutDown() {
+                return Future.forEach(this._children, (c) => c.shutDown())
+                    .then(this._onShutDown);
+            }
+
+            Future removeChild(Actor child) {
+                return this._children.remove(child)
+                    .then(child.shutDown());
+            }
+
+            Future<Actor> getChild(ActorAddr address) {
+                return this._children.get(address);
+            }
+
+
+
+    - easy async message passing:
+
+        - in MapActor.update()
+
+            // send a message to a child actor if they collide with the current tile
+
+            // We would probably genericize this and run it through a loop of
+            // all the actors on the map, the player included.
+            if (world.collides(this._playerActor, currTile.actor)) {
+                MapTriggerActor actor = currTile.actor;
+                MapTriggerMessage message = currTile.message;
+
+                // should message be a member of currTile, or currTile.actor?
+                // or should currTile.actor have an overloaded version of sendMessage:
+                //  sendMessage(Actor actor) => super.sendMessage(actor, this._message);
+                actor.sendMessage(this._playerActor, message);
+            }
+
+        - in PlayerActor.startUp()
+
+            // add a handler to receive the message from the MapActor for triggering
+            // a map event.
+
+            // Send a message to the appropriate entity
+
+            this.addMessageHandler(MapTriggerMessage, (GameMessage msg, Actor sender) {
+
+                MapTriggerMessage mMsg = (MapTriggerMessage) msg;
+                MapActor mapActor = (MapActor) sender;
+
+                if (mMsg.type == "beer_store") {
+                    ...
+                } else if (mMsg.type == "party_arrival") {
+                    this.sendMessage(partyActor, new PartyArrivalMessage(this.numBeers));
+                    this.resetBeers();
+                }
+            });
+
+
+        - happens in StoreActor.startUp()
+
+            // set up the store to track beers delivered and end the game.
+
+            // add a message handler function to a map of handlers.  could be a
+            // static map to help performance
+            this.addMessageHandler(StoreArrivalMessage, (GameMessage msg, Actor sender) {
+
+                // casting could probably be done in the function declaration, I just want
+                // to be explicit about the abstract types
+                StoreArrivalMessage sMsg = (StoreArrivalMessage) msg;
+                PlayerActor playerActor = (PlayerActor) sender;
+
+                // as a separate actor entity, the party keeps track of its own beers on hand.
+                // this could be a good asset for more advanced scripting later on.
+                this._beersDelivered += sMsg.numBeers;
+
+                if (this._beers >= this._config.requiredBeers) {
+
+                    // the scene would receive the victory message and post the score to the main GameActor
+                    this.sendMessage(this._sceneActor, new VictoryMessage(int beersDelivered));
+                }
+            });
+
+    - Message queues and mailboxes:
+
+        The Dart runtime (or javascript runtime) should handle queuing of new
+        functions added to the call stack.  To implement a simple message queue,
+        we simply need to create a stream the actor listens on.
+
+        Stream<GameMessageEnvelope> _mailbox;
+
+        Actor() {
+
+            // mailbox initialization
+            // ...
+
+            // the message listener is Dart's built-in message queue
+            this._mailbox.listen((GameMessageEnvelope e) {
+                try {
+                    this._invokeGameMessageHandler(e.message, e.sender);
+                } catch () {
+                    // can't handle this message.  throw an error?
+                }
+            });
+        }
+
+        addMessageHandler(String messageType, ((GameMessage, Actor) => void) handler) {
+            ...
+        }
+
+
+
+
+
+
+
+
+

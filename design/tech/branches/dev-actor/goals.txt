@@ -11,3 +11,4 @@ In priority order, unless solution investigation determines otherwise.
 - add a new character type and use it in level 2
     - Thug
     - Cop
+
