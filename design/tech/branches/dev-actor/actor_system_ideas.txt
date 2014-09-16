@@ -157,6 +157,119 @@ ACTOR SYSTEM IDEAS
 
 
 
+Entities And Components
+
+Entity is a subclass of ParentActor.  Entity is a pluggable actor, to which
+various components can be attached.  Components act as functions of an entity,
+thus the entity maintains all state, the component simply manipulates it via
+a defined interface.  Components may implement an onUpdate() function which
+executes in a controlled asynchronous update loop.  Components may invoke actors
+to send messages.
+
+abstract class Entity extends Actor {
+
+    final List<Component> _components = new List<Component>();
+
+    void addComponent(Component c) {
+
+        // initializes the Entity object with listeners for various message types
+        c.init(this);
+        this._components.add(c);
+    }
+
+    void removeComponent(Component c) {
+        this._components.remove(c);
+
+        // unload any resources on this object from the component
+        c.unload(this);
+    }
+
+
+}
+
+can we use traits in Dart?  Probably not unfortunately :-/
+class UpdateComponent extends Component {
+
+    // updateFunc could also take some context information probably
+    // typdef Future<T extends Entity with Updatable> updateFunc(T entity);
+    final Function _updateFunc;
+
+    Timer _timer = null;
+
+    UpdateComponent(this._updateFunc) : super();
+
+    void init<T extends Entity with Updatable>(T entity) {
+
+        // UpdateEntity must listen for a message to tell it to update
+        // NOTE: UpdateMessage object should contain before and current timestamps
+        entity.registerHandler("UPDATE", (message) => this._updateEntity(entity, message));
+
+        // other handlers can be configured for the entity
+        entity.registerHandler("CAR_HIT", (message) => this._takeCarHit(entity, message));
+    }
+
+    void unload<T extends Entity with Updatable>(T entity) {
+
+        // the component should be the only thing that manages the state of entitys'
+        // handlers, therefore it is responsible for their removal.
+        entity.removeHandler("CAR_HIT");
+    }
+
+    Future _updateEntity<T extends Entity with Updatable>(T entity, UpdateMessage message) {
+        // update the entity with the game context provided by the message.  the game context
+        // should hold information like the timestamp of the last update, the current timestamp,
+        // and other stuff.
+        // returns Future
+        return this._updateFunc(entity, message.context);
+    }
+
+    Future _takeCarHit(T entity, TakeCarHitMessage message) {
+
+        --entity.hp;
+        if (entity.hp <= 0) {
+            entity.dead = true;
+
+            // have the entity send a message to its game actor manager announcing its death
+            entity.sendMessage(entity._gameActor, new DeadMessage(entity));
+
+            return entity.shutdown();
+        }
+    }
+
+}
+
+
+
+
+
+class GameManager extends ParentActor {
+
+
+    Future _onStartUp() {
+        // spawn child actors for everything in the game
+
+        // start the update loop using window.requestAnimationFrame()
+    }
+
+    Future _onShutDown() {
+        // stop the update loop
+        // once everything's finished, kill all the actors
+    }
+
+    // Not inherited
+    Future _onUpdate() {
+        // chain together the update functions of all the game manager's
+        // UpdateComponents
+        // Run each UpdateEntity's update function who is in the list of actors
+        // and wait for them all to complete
+        return new Future.forEach(
+            this._actors.filter((a) => a is UpdateEntity),
+            (a) => u.update());
+    }
+}
+
+
+
 
 
 

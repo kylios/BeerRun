@@ -17,12 +17,18 @@ abstract class ActorManager {
     Future<Actor> getActor(ActorId actorId);
 }
 
-class ActorSystem implements ActorManager {
+abstract class MessageReceiver {
+    void sendMessage(MessageReceiver receiver, GameMessage message);
+    StreamController<GameMessageContext> get _mailboxController;
+}
 
+class ActorSystem extends Actor implements ActorManager {
+
+    static int _CURRENT_ID = 1;
 
     final Map<ActorId, Actor> _actors = new Map<ActorId, Actor>();
 
-    ActorSystem();
+    ActorSystem() : super(new ActorId("engine/${_CURRENT_ID++}"));
 
     Future<Actor> spawnActor(Actor actor) {
 
@@ -30,12 +36,10 @@ class ActorSystem implements ActorManager {
             throw new ActorIdInUseError(actor.actorId);
         }
 
-        return
-            actor.startUp()
-            .then((Actor actor) {
-                this._actors[actor.actorId] = actor;
-                return new Future.value(actor);
-            });
+        return actor.startUp().then((Actor actor) {
+            this._actors[actor.actorId] = actor;
+            return new Future.value(actor);
+        });
     }
 
     Future killActor(ActorId actorId) {
@@ -46,4 +50,10 @@ class ActorSystem implements ActorManager {
     Future<Actor> getActor(ActorId actorId) {
         return new Future.value(this._actors[actorId]);
     }
+
+
+    Future onStartUp() => null;
+    Future onShutDown() => null;
+
+
 }

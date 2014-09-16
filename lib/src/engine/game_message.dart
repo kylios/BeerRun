@@ -1,18 +1,21 @@
 part of engine;
 
+const NULL_MESSAGE_TYPE = "NULL";
+const ERROR_MESSAGE_TYPE = "ERROR";
+const EXCEPTION_MESSAGE_TYPE = "EXCEPTION";
+const UNHANDLED_MESSAGE_ERROR_TYPE = "UNHANDLED";
+
 class NullMessage extends GameMessage {
-    final String type = GameMessage.NULL_MESSAGE_TYPE;
+    final String type = NULL_MESSAGE_TYPE;
 }
 
 abstract class ErrorMessage extends GameMessage {
-    final String type = GameMessage.ERROR_MESSAGE_TYPE;
-
     _MessageError get error;
 }
 
 class ExceptionMessage extends GameMessage {
-    final String type = GameMessage.EXCEPTION_MESSAGE_TYPE;
 
+    final String type = EXCEPTION_MESSAGE_TYPE;
     final Exception exception;
 
     ExceptionMessage(this.exception);
@@ -24,10 +27,12 @@ class _MessageError extends Error {
 }
 class UnhandledMessageError extends ErrorMessage {
 
+    final String type = UNHANDLED_MESSAGE_ERROR_TYPE;
+
     final _MessageError error;
 
-    UnhandledMessageError(String message) :
-        this.error = new _MessageError(message);
+    UnhandledMessageError(String message) : this.error = new _MessageError(
+            message);
     UnhandledMessageError.withError(this.error);
 }
 
@@ -36,8 +41,4 @@ abstract class GameMessage {
     GameMessage();
 
     String get type;
-
-    static final String NULL_MESSAGE_TYPE = "NULL";
-    static final String ERROR_MESSAGE_TYPE = "ERROR";
-    static final String EXCEPTION_MESSAGE_TYPE = "EXCEPTION";
 }
