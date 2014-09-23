@@ -3,9 +3,9 @@ library engine;
 import 'dart:async';
 
 import 'package:unittest/unittest.dart';
+import 'package:beer_run/test_utils.dart';
 
 part 'src/engine/test_actor.dart';
-part 'src/engine/test_configuration.dart';
 
 
 // include the package source to test

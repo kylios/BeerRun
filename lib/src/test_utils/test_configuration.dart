@@ -1,4 +1,4 @@
-part of engine;
+part of test_utils;
 
 class TestConfiguration extends SimpleConfiguration {
 
@@ -21,7 +21,7 @@ Running test '${testCase.description}'...
     void onTestStart(TestCase testCase) {
         super.onTestStart(testCase);
         print("""====================================
-[${testCase.currentGroup}] Running test '${testCase.description}
+[${testCase.currentGroup}] Running test '${testCase.description}'
 """);
     }
 
