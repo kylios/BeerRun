@@ -36,6 +36,7 @@ class ActorSystem extends Actor implements ActorManager {
             throw new ActorIdInUseError(actor.actorId);
         }
 
+        actor._sys = this;
         return actor.startUp().then((Actor actor) {
             this._actors[actor.actorId] = actor;
             return new Future.value(actor);
@@ -43,8 +44,9 @@ class ActorSystem extends Actor implements ActorManager {
     }
 
     Future killActor(ActorId actorId) {
+        Actor a = this._actors[actorId];
         this._actors.remove(actorId);
-        return new Future.delayed(new Duration());
+        return a.shutDown();
     }
 
     Future<Actor> getActor(ActorId actorId) {
@@ -52,7 +54,12 @@ class ActorSystem extends Actor implements ActorManager {
     }
 
 
-    Future onStartUp() => null;
+    Future onStartUp() {
+        this.registerMessageHandler(KillMe.TYPE_STRING, (KillMe message, Actor sender) {
+            this.killActor(message.who.actorId);
+        });
+        return null;
+    }
     Future onShutDown() => null;
 
 

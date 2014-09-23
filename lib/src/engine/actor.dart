@@ -7,6 +7,18 @@ class HandlerNotDefinedError extends _MessageError {
             "No handlers defined for type '$type'");
 }
 
+class KillActor extends GameMessage {
+    static final String TYPE_STRING = "KILL_ACTOR";
+    String get type => TYPE_STRING;
+}
+
+class KillMe extends GameMessage {
+    static final String TYPE_STRING = "KILL_ME";
+    String get type => TYPE_STRING;
+    final Actor who;
+    KillMe(this.who);
+}
+
 class GameMessageContext {
     final GameMessage message;
     final MessageReceiver sender;
@@ -24,6 +36,12 @@ class ActorId implements Function {
 
 abstract class Actor implements MessageReceiver {
 
+    // TODO: this should be final and initialized in the constructor.  The
+    // spawnActor function in ActorSystem should actually initialize the actor,
+    // to force the use of ActorSystem.  This really also requires the use of
+    // parent actors and the ability to spawn and manage child actors.
+    ActorSystem _sys = null;
+
     Map<String, HandlerFunc> _handlers = new Map<String, HandlerFunc>();
 
     StreamController<GameMessageContext> _mailboxController =
@@ -38,6 +56,7 @@ abstract class Actor implements MessageReceiver {
 
     Future<Actor> startUp() {
         print("$this starting up...");
+
         if (this.onStartUp == null) {
             return new Future.value(this);
         }
@@ -45,6 +64,11 @@ abstract class Actor implements MessageReceiver {
         if (f == null) {
             f = new Future.delayed(new Duration());
         }
+
+        this.registerMessageHandler(KillActor.TYPE_STRING,
+                (KillActor message, Actor sender) {
+                    this.sendMessage(this._sys, new KillMe(this));
+                });
 
         this.registerMessageHandler(UNHANDLED_MESSAGE_ERROR_TYPE,
             (GameMessage message, Actor sender) =>
