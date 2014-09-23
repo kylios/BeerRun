@@ -1,0 +1,41 @@
+This is just a simple tic-tac-toe game to demonstrate the simple use of actors
+and components in games.
+
+Entity Types
+
+- Board Actor: manages the game board.  Listens for messages from multiple
+    players and updates the game board accordingly.  The game board will send
+    a message to all player actors when the game is over.
+
+- Player Actor: sends messages to the board actor when players make their moves.
+    A player actor must know things like its name and symbol, but other behavior
+    is controlled by components.  The player will use a LogicComponent to
+    determine its next move.  This is an abstract class that can be extended to
+    use an AI or listen for human input, or input from another source.
+
+Component Types and Entity Interfaces
+
+- BoardComponent and BoardActor type: The BoardActor defines interfaces to add
+    and remove marks from the game board.  The BoardActor maintains the state,
+    while the BoardComponent is assigned to manipulate it.
+
+    The BoardComponent adds a couple message listeners to the BoardActor:
+
+    - MarkPlaced(player, x, y): tells the board to place a mark at this position
+        on the map, and then advance to the next player's turn.  If the current
+        turn does not belong to the player, then an OutOfTurnError is sent back
+        to the actor representing the player.  If the move causes the player to
+        win, then a GameOverEvent is sent to all the player actors.
+
+    - Concede(player): tells the board that the given player gives up and should
+        be removed from the game.
+
+- PlayerComponent and PlayerActor: a PlayerActor has a couple properties, like
+    name and symbol, but most of its behavior is controlled by a PlayerComponent
+    object.  PlayerComponent is an interface that specifies various decision-
+    making logic for the player.  It registers message handlers for startTurn
+    and GameOver events.  Classes must extend PlayerComponent to implement
+    specific behaviors.  For instance, an AIComponent could implement an
+    algorithm to determine the best move, whereas a HumanInputComponent could
+    implement an inputlistener to catch player input.
+
