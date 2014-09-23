@@ -1,47 +1,47 @@
 part of old_loader;
 
 class MultiLoader {
-	
-	Loader _loader;
-	int _count;
-	Completer<Map<String, Map>> _completer;
-	Map<String, Map> _loadedResults;
-	var _singleCallback;
 
-	MultiLoader(this._loader) {
-		this._init();
-		this._singleCallback = null;
-	}
+    Loader _loader;
+    int _count;
+    Completer<Map<String, Map>> _completer;
+    Map<String, Map> _loadedResults;
+    var _singleCallback;
 
-	void _init() {
-		this._count = 0;
-		this._completer = new Completer<Map<String, Map>>();
-		this._loadedResults = new Map<String, Map>();
-	}
+    MultiLoader(this._loader) {
+        this._init();
+        this._singleCallback = null;
+    }
 
-	void onSingleLoad(var singleCallback) {
-		this._singleCallback = singleCallback;
-	}
+    void _init() {
+        this._count = 0;
+        this._completer = new Completer<Map<String, Map>>();
+        this._loadedResults = new Map<String, Map>();
+    }
 
-	Future<Map<String, Map>> load(String resourceUrl) {
+    void onSingleLoad(var singleCallback) {
+        this._singleCallback = singleCallback;
+    }
 
-		this._count++;
-		this._loader.load(resourceUrl).then((Map m) {
+    Future<Map<String, Map>> load(String resourceUrl) {
 
-			this._count--;
-			this._loadedResults[resourceUrl] = m;
-			if (null != this._singleCallback) {
-				this._singleCallback(m);
-			}
+        this._count++;
+        this._loader.load(resourceUrl).then((Map m) {
 
-			if (this._count == 0) {
-				this._completer.complete(this._loadedResults);
-				this._init();
-			}
-		});
+            this._count--;
+            this._loadedResults[resourceUrl] = m;
+            if (null != this._singleCallback) {
+                this._singleCallback(m);
+            }
 
-		return this._completer.future;
-	}
+            if (this._count == 0) {
+                this._completer.complete(this._loadedResults);
+                this._init();
+            }
+        });
 
-	Future<Map<String, Map>> wait() => this._completer.future;
+        return this._completer.future;
+    }
+
+    Future<Map<String, Map>> wait() => this._completer.future;
 }

@@ -29,63 +29,60 @@ part of ui;
 
 class UI implements UIInterface {
 
-  WindowView _rootView;
-  bool _opened = false;
-  uiCallback _callback = null;
-  List<UIListener> _listeners = new List<UIListener>();
+    WindowView _rootView;
+    bool _opened = false;
+    uiCallback _callback = null;
+    List<UIListener> _listeners = new List<UIListener>();
 
-  // This is to hold onto the player's input component while UI is showing
-  Component _tmpInputComponent = null;
+    // This is to hold onto the player's input component while UI is showing
+    Component _tmpInputComponent = null;
 
-  UI(DivElement rootEl, int width, int height) {
+    UI(DivElement rootEl, int width, int height) {
 
-    this._rootView = new WindowView(this, rootEl);
-  }
-
-  void addListener(UIListener listener) {
-    this._listeners.add(listener);
-  }
-
-  void closeWindow(var data) {
-
-    window.console.log("close window called");
-    if (this._listeners.length > 0) {
-        this._listeners.forEach((UIListener l) => l.onWindowClose(this));
-    }
-    this._rootView.hide();
-    this._rootView.clear();
-    this._opened = false;
-
-    if (this._callback != null) {
-      this._callback(data);
-    }
-  }
-
-  void showView(View v, {
-                int seconds: null,
-                uiCallback callback: null}) {
-
-    if (this._opened) {
-      this.closeWindow(null);
+        this._rootView = new WindowView(this, rootEl);
     }
 
-    if (seconds == null) {
-      seconds = 0;
+    void addListener(UIListener listener) {
+        this._listeners.add(listener);
     }
 
-    this._callback = callback;
-    this._rootView.addView(v);
-    this._rootView.show();
+    void closeWindow(var data) {
 
-    if (seconds != 0) {
-      new Future.delayed(new Duration(seconds: seconds), () {
-        this.closeWindow(null);
-      });
-    } else {
-      // Pause gameplay too
+        window.console.log("close window called");
+        if (this._listeners.length > 0) {
+            this._listeners.forEach((UIListener l) => l.onWindowClose(this));
+        }
+        this._rootView.hide();
+        this._rootView.clear();
+        this._opened = false;
+
+        if (this._callback != null) {
+            this._callback(data);
+        }
     }
 
-    this._opened = true;
-  }
+    void showView(View v, {int seconds: null, uiCallback callback: null}) {
+
+        if (this._opened) {
+            this.closeWindow(null);
+        }
+
+        if (seconds == null) {
+            seconds = 0;
+        }
+
+        this._callback = callback;
+        this._rootView.addView(v);
+        this._rootView.show();
+
+        if (seconds != 0) {
+            new Future.delayed(new Duration(seconds: seconds), () {
+                this.closeWindow(null);
+            });
+        } else {
+            // Pause gameplay too
+        }
+
+        this._opened = true;
+    }
 }
-

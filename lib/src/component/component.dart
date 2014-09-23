@@ -2,9 +2,8 @@ part of component;
 
 abstract class Component extends Broadcaster {
 
-  Component();
+    Component();
 
-  void update(GameObject obj);
+    void update(GameObject obj);
 }
-
 

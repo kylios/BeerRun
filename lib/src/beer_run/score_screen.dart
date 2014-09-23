@@ -2,19 +2,18 @@ part of beer_run;
 
 class ScoreScreen extends Dialog {
 
-  bool _win;
-  int _score;
-  int _convertedScore;
-  int _totalScore;
-  Duration _timeAllowed;
-  Duration _timeRemaining;
-  Button _nextButton;
+    bool _win;
+    int _score;
+    int _convertedScore;
+    int _totalScore;
+    Duration _timeAllowed;
+    Duration _timeRemaining;
+    Button _nextButton;
 
-  DivElement get rootElement => null;
+    DivElement get rootElement => null;
 
-    factory ScoreScreen(UIInterface ui, bool win,
-            int score, int convertedScore, int totalScore,
-            Duration timeAllowed, Duration timeRemaining) {
+    factory ScoreScreen(UIInterface ui, bool win, int score, int
+            convertedScore, int totalScore, Duration timeAllowed, Duration timeRemaining) {
 
         // the main body view
         View contents = new View(ui);
@@ -42,7 +41,8 @@ class ScoreScreen extends Dialog {
         beersEl.style.marginRight = "auto";
         beersEl.style.width = "50%";
 
-        ImageView beersIcon = new ImageView.fromSrc(ui, "img/ui/icons/beer.png", 24, 24);
+        ImageView beersIcon = new ImageView.fromSrc(ui, "img/ui/icons/beer.png",
+                24, 24);
         beersIcon.style.float = "left";
         beersIcon.style.margin = "5px";
         beersEl.addView(beersIcon);
@@ -65,12 +65,14 @@ class ScoreScreen extends Dialog {
         timeEl.style.marginRight = "auto";
         timeEl.style.width = "50%";
 
-        ImageView clockIcon = new ImageView.fromSrc(ui, "img/ui/icons/clock.png", 24, 24);
+        ImageView clockIcon = new ImageView.fromSrc(ui,
+                "img/ui/icons/clock.png", 24, 24);
         clockIcon.style.float = "left";
         clockIcon.style.margin = "5px";
         timeEl.addView(clockIcon);
 
-        String formattedTime = ScoreScreen._getFormattedTime(timeAllowed, timeRemaining);
+        String formattedTime = ScoreScreen._getFormattedTime(timeAllowed,
+                timeRemaining);
 
         TextView timeTextEl = new TextView(ui, "You took ${formattedTime}!");
         timeTextEl.evaluateVars();
@@ -114,7 +116,8 @@ class ScoreScreen extends Dialog {
         totalBottomEl.style.borderTop = "1px solid blue";
         totalBottomEl.style.margin = "4px 8px";
 
-        TextView totalTextEl = new TextView(ui, "${totalScore - convertedScore}");
+        TextView totalTextEl = new TextView(ui, "${totalScore - convertedScore}"
+                );
         totalTextEl.evaluateVars();
         totalTextEl.style.color = "blue";
         totalTextEl.style.fontSize = "22px";
@@ -150,10 +153,10 @@ class ScoreScreen extends Dialog {
         return screen;
     }
 
-    ScoreScreen._internal(UIInterface ui, View contents) :
-        super(ui, contents);
+    ScoreScreen._internal(UIInterface ui, View contents) : super(ui, contents);
 
-    static String _getFormattedTime(Duration timeAllowed, Duration timeRemaining) {
+    static String _getFormattedTime(Duration timeAllowed, Duration
+            timeRemaining) {
 
         int s1 = timeAllowed.inSeconds;
         int s2 = timeRemaining.inSeconds;
@@ -189,4 +192,3 @@ class ScoreScreen extends Dialog {
   }
   */
 }
-

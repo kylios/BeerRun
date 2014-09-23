@@ -15,4 +15,3 @@ import 'package:beer_run/beer_run.dart';
 part 'src/car/car.dart';
 part 'src/car/car_factory.dart';
 part 'src/car/car_generator_component.dart';
-

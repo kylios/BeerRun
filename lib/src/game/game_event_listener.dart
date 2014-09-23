@@ -2,6 +2,5 @@ part of game;
 
 abstract class GameEventListener {
 
-  void listen(GameEvent e);
+    void listen(GameEvent e);
 }
-

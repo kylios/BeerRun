@@ -4,7 +4,7 @@ typedef void uiFunction(UI ui);
 
 abstract class UIListener {
 
-  void onWindowOpen(uiFunction);
+    void onWindowOpen(uiFunction);
 
-  void onWindowClose(uiFunction);
+    void onWindowClose(uiFunction);
 }

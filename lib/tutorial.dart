@@ -15,4 +15,3 @@ part 'src/tutorial/controls_screen.dart';
 part 'src/tutorial/tutorial_control_component.dart';
 
 typedef Future tutorialStep(var _);
-

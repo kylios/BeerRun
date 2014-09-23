@@ -34,4 +34,3 @@ part 'src/game/load_progress_emitter.dart';
 
 
 typedef Future gameLoaderJob();
-

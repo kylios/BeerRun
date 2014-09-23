@@ -2,85 +2,87 @@ part of tutorial;
 
 class Tutorial {
 
-  Level _level = null;
+    Level _level = null;
 
-  List<tutorialStep> _steps = new List<tutorialStep>();
-  tutorialStep _onStart = null;
-  tutorialStep _onStop = null;
-  bool _isStarted = false;
-  bool _isComplete = false;
-  Future _cur = null;
+    List<tutorialStep> _steps = new List<tutorialStep>();
+    tutorialStep _onStart = null;
+    tutorialStep _onStop = null;
+    bool _isStarted = false;
+    bool _isComplete = false;
+    Future _cur = null;
 
-  bool get isComplete => this._isComplete;
+    bool get isComplete => this._isComplete;
 
-  Tutorial(this._level);
+    Tutorial(this._level);
 
-  Tutorial.fromJson(Map tutorialData, this._level) {
+    Tutorial.fromJson(Map tutorialData, this._level) {
 
-    this._decodeTutorialData(tutorialData);
-  }
+        this._decodeTutorialData(tutorialData);
+    }
 
-  void addStep(tutorialStep t) {
-    this._steps.add(t);
-  }
+    void addStep(tutorialStep t) {
+        this._steps.add(t);
+    }
 
-  Tutorial onStart(tutorialStep fn) {
-    this._onStart = fn;
-  }
+    Tutorial onStart(tutorialStep fn) {
+        this._onStart = fn;
+    }
 
-  Tutorial onStop(tutorialStep fn) {
-    this._onStop = fn;
-  }
+    Tutorial onStop(tutorialStep fn) {
+        this._onStop = fn;
+    }
 
-  tutorialStep start(int row, int col) {
+    tutorialStep start(int row, int col) {
 
-    tutorialStep fn = (var _) {
-      Completer c = new Completer();
-      window.console.log("starting at (${this._level.startX}, ${this._level.startY})");
+        tutorialStep fn = (var _) {
+            Completer c = new Completer();
+            window.console.log(
+                    "starting at (${this._level.startX}, ${this._level.startY})");
 
-      /*
+            /*
       this._level.player.setPos(
           col * this._level.tileWidth,
           row * this._level.tileHeight);
       */
 
-      int halfWidth = this._level.canvasManager.width ~/ 2;
-      int halfHeight = this._level.canvasManager.height ~/ 2;
+            int halfWidth = this._level.canvasManager.width ~/ 2;
+            int halfHeight = this._level.canvasManager.height ~/ 2;
 
-      window.console.log("Tutorial:start (setting offset): col=$col, row=$row, tileWidth=${this._level.tileWidth}, tileHeight=${this._level.tileHeight}, halfWidth=${halfWidth}, halfHeight=${halfHeight}, playerTileWidth=${this._level.player.tileWidth}, playerTileHeight=${this._level.player.tileHeight}");
+            window.console.log(
+                    "Tutorial:start (setting offset): col=$col, row=$row, tileWidth=${this._level.tileWidth}, tileHeight=${this._level.tileHeight}, halfWidth=${halfWidth}, halfHeight=${halfHeight}, playerTileWidth=${this._level.player.tileWidth}, playerTileHeight=${this._level.player.tileHeight}"
+                    );
 
-      this._level.canvasDrawer.setOffset(
-          col * this._level.tileWidth - halfWidth + this._level.player.tileWidth,
-          row * this._level.tileHeight - halfHeight + this._level.player.tileHeight);
+            this._level.canvasDrawer.setOffset(col * this._level.tileWidth -
+                    halfWidth + this._level.player.tileWidth, row * this._level.tileHeight -
+                    halfHeight + this._level.player.tileHeight);
 
-      Timer.run(() => c.complete(false));
+            Timer.run(() => c.complete(false));
 
-      return c.future;
-    };
+            return c.future;
+        };
 
-    return fn;
-  }
-  tutorialStep stop(int row, int col) {
+        return fn;
+    }
+    tutorialStep stop(int row, int col) {
 
-    tutorialStep fn = (var _) {
+        tutorialStep fn = (var _) {
 
-      int halfWidth = this._level.canvasManager.width ~/ 2;
-      int halfHeight = this._level.canvasManager.height ~/ 2;
+            int halfWidth = this._level.canvasManager.width ~/ 2;
+            int halfHeight = this._level.canvasManager.height ~/ 2;
 
-      this._level.canvasDrawer.setOffset(
-          col * this._level.tileWidth - halfWidth + this._level.player.tileWidth,
-          row * this._level.tileHeight - halfHeight + this._level.player.tileHeight
-      );
-    };
+            this._level.canvasDrawer.setOffset(col * this._level.tileWidth -
+                    halfWidth + this._level.player.tileWidth, row * this._level.tileHeight -
+                    halfHeight + this._level.player.tileHeight);
+        };
 
-    return fn;
-  }
+        return fn;
+    }
 
-  void _onStartInternal() {
-    this._level.draw(this._level.canvasDrawer);
-  }
+    void _onStartInternal() {
+        this._level.draw(this._level.canvasDrawer);
+    }
 
-  /**
+    /**
    * Run through every stage of the tutorial synchronously.  First, the
    * _startStep is called if it has been defined.  Then each tutorial function
    * executes in sequence, passing a future down amongst themselves.  When the
@@ -88,191 +90,198 @@ class Tutorial {
    * This function does nothing if the tutorial has already completed.  You
    * must first call reset()
    */
-  Future run() {
+    Future run() {
 
-    Completer<bool> c = new Completer<bool>();
+        Completer<bool> c = new Completer<bool>();
 
-    this._onStartInternal();
+        this._onStartInternal();
 
-    if (this._onStart == null &&
-        this._onStop == null) {
-      this._isStarted = true;
-      Timer.run(() {
-        this._isComplete = true;
-        c.complete(false);
-      });
-      return c.future;
+        if (this._onStart == null && this._onStop == null) {
+            this._isStarted = true;
+            Timer.run(() {
+                this._isComplete = true;
+                c.complete(false);
+            });
+            return c.future;
+        }
+
+        if (this._isComplete) {
+            Timer.run(() => c.complete(false));
+            return c.future;
+        }
+
+        Future f = null;
+
+        if (!this._isStarted) {
+            this._isStarted = true;
+            if (this._onStart != null) {
+                f = this._onStart(null);
+            }
+        }
+
+        for (tutorialStep fn in this._steps) {
+            if (null == f) {
+                f = fn(null);
+            } else {
+                f = f.then((bool skipped) {
+                    if (!skipped) {
+                        this._cur = fn(skipped);
+                    }
+                    return this._cur;
+                });
+            }
+        }
+
+        if (!this._isComplete) {
+            if (null == f) {
+                f = (() {
+                    this._isComplete = true;
+                    if (this._onStop != null) {
+                        return this._onStop(null);
+                    } else {
+                        return null;
+                    }
+                })();
+            } else {
+                f = f.then((var _) {
+                    this._isComplete = true;
+                    if (this._onStop != null) {
+                        return this._onStop(null);
+                    } else {
+                        return null;
+                    }
+                });
+            }
+        }
+
+        if (f != null) {
+            f.then((var _) {
+                c.complete(false);
+            });
+        } else {
+            c.complete(false);
+            f = c.future;
+        }
+
+        return f;
     }
-
-    if (this._isComplete) {
-      Timer.run(() => c.complete(false));
-      return c.future;
-    }
-
-    Future f = null;
-
-    if (! this._isStarted) {
-      this._isStarted = true;
-      if (this._onStart != null) {
-        f = this._onStart(null);
-      }
-    }
-
-    for (tutorialStep fn in this._steps){
-      if (null == f) {
-        f = fn(null);
-      } else {
-        f = f.then((bool skipped) {
-          if (! skipped) {
-            this._cur = fn(skipped);
-          }
-          return this._cur;
-        });
-      }
-    }
-
-    if (! this._isComplete) {
-      if (null == f) {
-        f = (() {
-          this._isComplete = true;
-          if (this._onStop != null) {
-            return this._onStop(null);
-          } else return null;
-        })();
-      } else {
-        f = f.then((var _) {
-          this._isComplete = true;
-          if (this._onStop != null) {
-            return this._onStop(null);
-          } else return null;
-        });
-      }
-    }
-
-    if (f != null) {
-      f.then((var _) {
-        c.complete(false);
-      });
-    } else {
-      c.complete(false);
-      f = c.future;
-    }
-
-    return f;
-  }
-  /**
+    /**
    * Call at any time to take the tutorial to its end state and mark it
    * complete.  This function does nothing if the tutorial is already complete.
    * This is useful for skipping the tutorial.
    *
    *
    */
-  Future end(var v) {
+    Future end(var v) {
 
-    Completer<bool> c = new Completer<bool>();
+        Completer<bool> c = new Completer<bool>();
 
-    if (this._isComplete) {
-      c.complete(false);
-      return c.future;
-    }
-
-    this._isComplete = true;
-
-    if (null != this._onStop) {
-      c.future.then(this._onStop);
-    }
-
-    this._isStarted = false;
-    this._isComplete = false;
-
-    return c.future;
-  }
-
-  // Some useful scripting functions maybe?
-  tutorialStep pan(int targetRow, int targetCol, int speed) {
-    tutorialStep fn = (var _) {
-      Completer<bool> c = new Completer<bool>();
-      int halfWidth = this._level.canvasManager.width ~/ 2;
-      int halfHeight = this._level.canvasManager.height ~/ 2;
-
-      int tutorialDestX = targetCol * this._level.tileWidth - halfWidth + this._level.player.tileWidth;
-      int tutorialDestY = targetRow * this._level.tileHeight - halfHeight + this._level.player.tileHeight;
-      Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer t) {
-
-        int offsetX = this._level.canvasDrawer.offsetX;
-        int offsetY = this._level.canvasDrawer.offsetY;
-
-        int moveX;
-        if (tutorialDestX < offsetX) {
-          moveX = max(-speed, tutorialDestX - offsetX);
-        } else {
-          moveX = min(speed, tutorialDestX - offsetX);
-        }
-        int moveY;
-        if (tutorialDestY < offsetY) {
-          moveY = max(-speed, tutorialDestY - offsetY);
-        } else {
-          moveY = min(speed, tutorialDestY - offsetY);
+        if (this._isComplete) {
+            c.complete(false);
+            return c.future;
         }
 
-        // Move the viewport closer to the beer store
-        this._level.canvasDrawer.moveOffset(moveX, moveY);
+        this._isComplete = true;
 
-        this._level.canvasDrawer.clear();
-        this._level.draw(this._level.canvasDrawer);
-
-        window.console.log("X: $offsetX -> $tutorialDestX, Y: $offsetY -> $tutorialDestY");
-        if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
-          t.cancel();
-          c.complete(false);
+        if (null != this._onStop) {
+            c.future.then(this._onStop);
         }
-      });
 
-      return c.future;
-    };
+        this._isStarted = false;
+        this._isComplete = false;
 
-    return fn;
-  }
-
-  tutorialStep dialog(String message, Map<String, String> stepVars) {
-
-    Map<String, dynamic> vars = new Map<String, dynamic>();
-    if (stepVars != null) {
-        stepVars.keys.forEach((String k) => vars[k] = this._level.vars[stepVars[k]]);
+        return c.future;
     }
 
-    tutorialStep fn = (var _) {
-      Completer<bool> c = new Completer<bool>();
+    // Some useful scripting functions maybe?
+    tutorialStep pan(int targetRow, int targetCol, int speed) {
+        tutorialStep fn = (var _) {
+            Completer<bool> c = new Completer<bool>();
+            int halfWidth = this._level.canvasManager.width ~/ 2;
+            int halfHeight = this._level.canvasManager.height ~/ 2;
 
-      GameManager mgr = new GameManager();
+            int tutorialDestX = targetCol * this._level.tileWidth - halfWidth +
+                    this._level.player.tileWidth;
+            int tutorialDestY = targetRow * this._level.tileHeight - halfHeight
+                    + this._level.player.tileHeight;
+            Timer _t = new Timer.periodic(new Duration(milliseconds: 20), (Timer
+                    t) {
 
-      mgr.ui.showView(
-          new TutorialDialog(mgr.ui, this, message, vars),
-          callback: (var skipped) { c.complete(skipped); }
-      );
-      return c.future;
-    };
+                int offsetX = this._level.canvasDrawer.offsetX;
+                int offsetY = this._level.canvasDrawer.offsetY;
 
-    return fn;
-  }
+                int moveX;
+                if (tutorialDestX < offsetX) {
+                    moveX = max(-speed, tutorialDestX - offsetX);
+                } else {
+                    moveX = min(speed, tutorialDestX - offsetX);
+                }
+                int moveY;
+                if (tutorialDestY < offsetY) {
+                    moveY = max(-speed, tutorialDestY - offsetY);
+                } else {
+                    moveY = min(speed, tutorialDestY - offsetY);
+                }
 
-  tutorialStep controls() {
-    tutorialStep fn = (var _) {
-      Completer<bool> c = new Completer<bool>();
+                // Move the viewport closer to the beer store
+                this._level.canvasDrawer.moveOffset(moveX, moveY);
 
-      GameManager mgr = new GameManager();
+                this._level.canvasDrawer.clear();
+                this._level.draw(this._level.canvasDrawer);
 
-      mgr.ui.showView(
-        new ControlsScreen(mgr.ui, this),
-        callback: (var skipped) {
-          c.complete(skipped);
-        });
+                window.console.log(
+                        "X: $offsetX -> $tutorialDestX, Y: $offsetY -> $tutorialDestY");
+                if (offsetX == tutorialDestX && offsetY == tutorialDestY) {
+                    t.cancel();
+                    c.complete(false);
+                }
+            });
 
-      return c.future;
-    };
+            return c.future;
+        };
 
-    return fn;
-  }
+        return fn;
+    }
+
+    tutorialStep dialog(String message, Map<String, String> stepVars) {
+
+        Map<String, dynamic> vars = new Map<String, dynamic>();
+        if (stepVars != null) {
+            stepVars.keys.forEach((String k) => vars[k] =
+                    this._level.vars[stepVars[k]]);
+        }
+
+        tutorialStep fn = (var _) {
+            Completer<bool> c = new Completer<bool>();
+
+            GameManager mgr = new GameManager();
+
+            mgr.ui.showView(new TutorialDialog(mgr.ui, this, message, vars),
+                    callback: (var skipped) {
+                c.complete(skipped);
+            });
+            return c.future;
+        };
+
+        return fn;
+    }
+
+    tutorialStep controls() {
+        tutorialStep fn = (var _) {
+            Completer<bool> c = new Completer<bool>();
+
+            GameManager mgr = new GameManager();
+
+            mgr.ui.showView(new ControlsScreen(mgr.ui, this), callback: (var
+                    skipped) {
+                c.complete(skipped);
+            });
+
+            return c.future;
+        };
+
+        return fn;
+    }
 
 
 
@@ -306,7 +315,8 @@ class Tutorial {
             return this.controls();
         }
 
-        throw new Exception("Type ${data['type']} not supported in the tutorial");
+        throw new Exception("Type ${data['type']} not supported in the tutorial"
+                );
 
     }
 }

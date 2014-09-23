@@ -7,11 +7,11 @@ part of region;
  */
 class Region {
 
-  final int left;
-  final int right;
-  final int top;
-  final int bottom;
+    final int left;
+    final int right;
+    final int top;
+    final int bottom;
 
-  Region(this.left, this.right, this.top, this.bottom);
+    Region(this.left, this.right, this.top, this.bottom);
 
 }

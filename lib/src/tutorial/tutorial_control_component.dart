@@ -2,13 +2,17 @@ part of tutorial;
 
 class _TutorialControlAction {
 
-    static const _TutorialControlAction NOACTION = const _TutorialControlAction._(0);
+    static const _TutorialControlAction NOACTION =
+            const _TutorialControlAction._(0);
     static const _TutorialControlAction UP = const _TutorialControlAction._(1);
-    static const _TutorialControlAction DOWN = const _TutorialControlAction._(2);
-    static const _TutorialControlAction LEFT = const _TutorialControlAction._(3);
-    static const _TutorialControlAction RIGHT = const _TutorialControlAction._(4);
+    static const _TutorialControlAction DOWN = const _TutorialControlAction._(2
+            );
+    static const _TutorialControlAction LEFT = const _TutorialControlAction._(3
+            );
+    static const _TutorialControlAction RIGHT = const _TutorialControlAction._(4
+            );
 
-    static get values => [ NOACTION , UP , DOWN , LEFT , RIGHT ];
+    static get values => [NOACTION, UP, DOWN, LEFT, RIGHT];
 
     final int value;
 
@@ -20,10 +24,7 @@ class TutorialControlComponent extends Component {
     _TutorialControlAction _lastAction = null;
     int _lastAmount = 0;
 
-    TutorialControlComponent(Tutorial t) {
-
-    }
-
+    TutorialControlComponent(Tutorial t);
     void moveUp([int px = 1]) {
         this._lastAction = _TutorialControlAction.UP;
         this._lastAmount = px;
