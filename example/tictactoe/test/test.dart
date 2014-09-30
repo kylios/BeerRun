@@ -67,7 +67,8 @@ testTicTacToe() {
             Position p01 = new Position(0, 1);
             points = ai._getLineFromPoints(p00, p01, 3, 3);
             expect(points,
-                   unorderedEquals([new Position(0, 0),
+                   unorderedEquals([
+                          new Position(0, 0),
                           new Position(0, 1),
                           new Position(0, 2)
                     ]));
@@ -76,7 +77,8 @@ testTicTacToe() {
             Position p21 = new Position(2, 1);
             points = ai._getLineFromPoints(p21, p01, 3, 3);
             expect(points,
-                    equals([new Position(0, 1),
+                    equals([
+                          new Position(0, 1),
                           new Position(1, 1),
                           new Position(2, 1)
                     ]));
@@ -84,15 +86,7 @@ testTicTacToe() {
 
             Position p43 = new Position(4, 3);
             points = ai._getLineFromPoints(p21, p43, 6, 5);
-            expect(points,
-                    equals([new Position(1, 0),
-                          new Position(2, 1),
-                          new Position(3, 2),
-                          new Position(4, 3),
-                          new Position(5, 4)
-                    ]));
-            expect(points.length, equals(5));
-
+            expect(points, isNull);
         });
     });
 

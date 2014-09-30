@@ -58,7 +58,10 @@ class AIComponent extends PlayerComponent {
             }
 
             if (board.numOccupied == 1) {
-
+                List<Position> available = board.positionSet
+                        .where((p) => board.getAt(p) == null)
+                        .toList(growable: false);
+                return available[rand.nextInt(available.length)];
             }
 
             // This is not the first move.  Determine how many pieces are on
@@ -73,7 +76,9 @@ class AIComponent extends PlayerComponent {
             }
 
             if (board.numOccupied == 3) {
-
+                return board.positionSet
+                        .where((p) => board.getAt(p) == null)
+                        .first;
             }
 
             throw new Exception("No available spots");
@@ -294,7 +299,7 @@ class AIComponent extends PlayerComponent {
             List<Position> line = this._getLineFromPoints(p, op,
                     board.numRows, board.numCols);
 
-            if (line.length < board.numRows || line.length < board.numCols) {
+            if (line == null) {
                 return;
             }
 
@@ -362,6 +367,12 @@ class AIComponent extends PlayerComponent {
         }
         if (p1.col == p2.col) {
             return new List.generate(numRows, (r) => new Position(r, p1.col));
+        }
+
+        // If this condition is not satisfied, there is no desirable line
+        // we can interpolate between these points
+        if (p1.row != p1.col || p2.row != p2.col) {
+            return null;
         }
 
         // do it like a linear interpolation
