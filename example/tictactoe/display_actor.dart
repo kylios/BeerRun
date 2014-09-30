@@ -9,6 +9,13 @@ class DrawBoardMessage extends GameMessage {
     DrawBoardMessage(this.board);
 }
 
+class TextMessageEvent extends GameMessage {
+    static final String TYPE_STRING = "TEXT_MESSAGE_EVENT";
+    String get type => TYPE_STRING;
+    final String message;
+    TextMessageEvent(this.message);
+}
+
 class ScreenDisplayComponent extends Component {
 
     void init(DisplayActor a) {
@@ -30,6 +37,11 @@ class ScreenDisplayComponent extends Component {
                     }
 
                     print(str);
+                });
+
+        a.registerMessageHandler(TextMessageEvent.TYPE_STRING,
+                (TextMessageEvent message, Actor sender) {
+                    print(message.message);
                 });
     }
 

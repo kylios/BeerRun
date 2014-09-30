@@ -13,7 +13,8 @@ class Board extends Entity {
 
     final DisplayActor _display;
 
-    Board(ActorId actorId, this.rows, this.cols, this._display) : super(actorId) {
+    Board(ActorId actorId, this.rows, this.cols, this._display) : super(
+            actorId) {
 
         if (this.rows < 3 || this.cols < 3) {
             throw new Exception("3 is the minimum!");
@@ -64,14 +65,123 @@ class Board extends Entity {
         });
     }
 
+    List<int> _range(int start, int length) =>
+            new List<int>.generate(length, (i) => start + i);
+
     Player checkWinner() {
 
         // check for a winner
-        // TODO
+        Board b = this;
+
+
+        // check the columns
+        for (int c = 0; c < cols; c++) {
+            Player player = null;
+            bool contains = false;
+            for (int r = 0; r < rows; r++) {
+                Position p = new Position(r, c);
+                Player pl = this.getAt(p);
+                if (player == null) {
+                    if (pl == null) {
+                        break; // not in this column
+                    } else {
+                        contains = true;
+                        player = pl;
+                    }
+                } else {
+                    if (pl == player) {
+                        continue;
+                    } else {
+                        contains = false;
+                        break; // not in this column
+                    }
+                }
+            }
+            if (contains) {
+                return player;
+            }
+        }
+
+        // check the rows
+        for (int r = 0; r < rows; r++) {
+            Player player = null;
+            bool contains = false;
+            for (int c = 0; c < cols; c++) {
+                Position p = new Position(r, c);
+                Player pl = this.getAt(p);
+                if (player == null) {
+                    if (pl == null) {
+                        break; // not in this row
+                    } else {
+                        contains = true;
+                        player = pl;
+                    }
+                } else {
+                    if (pl == player) {
+                        continue;
+                    } else {
+                        contains = false;
+                        break; // not in this row
+                    }
+                }
+            }
+            if (contains) {
+                return player;
+            }
+        }
+
+        // check diagonals
+
+        Player pl1 = null;
+        Player pl2 = null;
+        int count1 = 0;
+        int count2 = 0;
+
+        for (int i = 0; i < rows; i++) {
+            Position p1 = new Position(i, i);
+            Position p2 = new Position(numRows - i - 1, i);
+            Player pl = this.getAt(p1);
+
+            // this feels evil.  TODO
+            (() {
+                if (pl == null) {
+                    return;
+                } else {
+                    if (pl1 == null || pl1 == pl) {
+                        pl1 = pl;
+                        count1++;
+                    }
+                }
+            })();
+
+            pl = this.getAt(p2);
+            (() {
+                if (pl == null) {
+                    return;
+                } else {
+                    if (pl2 == null || pl2 == pl) {
+                        pl2 = pl;
+                        count2++;
+                    }
+                }
+            })();
+
+        }
+        if (count1 == rows) {
+            return pl1;
+        }
+        if (count2 == cols) {
+            return pl2;
+        }
 
         // null indicates no winner
         return null;
     }
+
+    List<Position> getRow(int r) =>
+            new List.generate(cols, (c) => new Position(r, c));
+    List<Position> getCol(int c) =>
+            new List.generate(rows, (r) => new Position(r, c));
 
     bool isCorner(Position p) {
         return (p.row == 0 || p.row == this.numRows - 1) &&
@@ -82,12 +192,14 @@ class Board extends Entity {
         return ((p.row == 0 || p.row == this.numRows - 1) &&
                 (p.col > 0 && p.col < this.numCols - 1) ||
                 (p.row > 0 && p.row < this.numRows - 1) &&
-                (p.col == 0 || p.col == this.numCols - 1));
+                        (p.col == 0 || p.col == this.numCols - 1));
     }
 
     bool isMiddle(Position p) {
-        return (p.row > 0 && p.row < this.numRows - 1 &&
-                p.col > 0 && p.col < this.numCols - 1);
+        return (p.row > 0 &&
+                p.row < this.numRows - 1 &&
+                p.col > 0 &&
+                p.col < this.numCols - 1);
     }
 
     /**
@@ -95,10 +207,11 @@ class Board extends Entity {
      */
     bool get isEmpty {
 
-        // don't use numOccupied for this method.  We want to terminate this loop early
+
+                // don't use numOccupied for this method.  We want to terminate this loop early
         for (int r = 0; r < this._board.length; r++) {
             for (int c = 0; c < this._board.first.length; c++) {
-                if (null != this._board[r][c]) {    // avoid creating a Position
+                if (null != this._board[r][c]) { // avoid creating a Position
                     return false;
                 }
             }
@@ -136,8 +249,9 @@ class Board extends Entity {
 
     Set<Position> get positionSet =>
             new Set<Position>.from(
-                new List<Position>.generate(numRows * numCols,
-                        (i) => new Position(i ~/ numRows, i % numCols)));
+                    new List<Position>.generate(
+                            numRows * numCols,
+                            (i) => new Position(i ~/ numRows, i % numCols)));
 
     void set(Player player, Position p) {
 
@@ -272,10 +386,13 @@ class BoardComponent extends Component<Board> {
         board.sendMessage(board._display, new DrawBoardMessage(board));
 
         // check if it was a winning move
-        if (board.checkWinner() == message.player) {
+        Player winner = board.checkWinner();
+        if (board.checkWinner() != null) {
             for (Player p in board._players) {
                 board.sendMessage(p, new GameOverEvent(message.player));
+                // send message to winner?
             }
+            board.sendMessage(board._display, new TextMessageEvent("${winner.symbol} Wins!"));
 
             return;
         }
@@ -291,6 +408,5 @@ class BoardComponent extends Component<Board> {
 
     }
 }
-
 
 
