@@ -1,7 +1,7 @@
 part of audio;
 
 class AudioTrack {
-	
+
 	final String name;
 	AudioContext _ctx;
 	final GainNode gain;
@@ -31,10 +31,10 @@ class AudioTrack {
 	}
 
 	void setVolume(double percent) {
-		if (null == this.gain.gain.maxValue) {
+		if (null == this.gain.gain.value) {
 			return;
 		}
-		double newVal = this.gain.gain.maxValue * percent;
+		double newVal = this.gain.gain.value * percent;
 		window.console.log("new vol: $newVal");
 		this.gain.gain.value = newVal;
 	}
