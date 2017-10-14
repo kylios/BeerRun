@@ -8,4 +8,17 @@ Beer Run is a browser-based game written in Dart.  It compiles to native javascr
 If you'd like to help develop Beer Run, follow the instructions to run it on your local computer:
 https://github.com/morendi/BeerRun/wiki/Development
 
+# Requirements
 
+To build this project, you need:
+
+* `dart==1.12.0`
+* `rsync`
+
+Run the following:
+
+```bash
+pub get
+cd tool
+./build.dart dev-local
+```
