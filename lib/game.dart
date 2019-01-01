@@ -1,6 +1,6 @@
 library game;
 
-import 'dart:html' hide Player;
+import 'dart:html';
 import 'dart:async';
 import 'dart:convert';
 

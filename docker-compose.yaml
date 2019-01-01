@@ -1,0 +1,45 @@
+---
+version: '3'
+
+services:
+  beerrun:
+    build:
+      context: .
+      args:
+        - BUILD_ENV=dev-remote
+    volumes:
+      - build:/app/build/dev-remote:rw
+
+  nginx:
+    image: nginx:1.15-alpine
+    depends_on:
+      - beerrun
+      - php
+    restart: always
+    volumes:
+      - build:/app:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/beerrun.conf:ro
+    networks:
+      - proxy-tier
+    ports:
+      - "8080:80"
+
+  php:
+    image: php:5.6-fpm
+    depends_on:
+      - beerrun
+    restart: always
+    environment:
+      - APP_ENV=dev-remote
+    volumes:
+      - build:/app:ro
+    networks:
+      - proxy-tier
+    expose:
+      - 9000
+
+volumes:
+  build:
+
+networks:
+  proxy-tier:

@@ -16,7 +16,7 @@
 		"ssh": {
 			"host": "beerrungame.net",
 			"user": "ubuntu",
-			"key_file": "/home/kyle/.aws/keypairs/webserver.pem"
+			"key_file": "/home/kyle/.aws/keypairs/beerrun.pem"
 		},
 
 		"local_dir": "build",
