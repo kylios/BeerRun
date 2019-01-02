@@ -6,9 +6,9 @@ services:
     build:
       context: .
       args:
-        - BUILD_ENV=dev-remote
+        BUILD_ENV: ${BUILD_ENV}
     volumes:
-      - build:/app/build/dev-remote:rw
+      - build:/app/build/${BUILD_ENV}:rw
 
   nginx:
     image: nginx:1.15-alpine
@@ -30,7 +30,7 @@ services:
       - beerrun
     restart: always
     environment:
-      - APP_ENV=dev-remote
+      - APP_ENV=${BUILD_ENV}
     volumes:
       - build:/app:ro
     networks:
