@@ -3,7 +3,7 @@ ARG BUILD_ENV
 
 RUN apt-get update && apt-get install -y --allow-unauthenticated rsync
 
-ADD dart-sdk /usr/
+ADD docker/beerrun/dart-sdk /usr/
 
 RUN mkdir /app
 WORKDIR /app

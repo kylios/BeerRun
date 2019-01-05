@@ -41,7 +41,7 @@ server {
                 include fastcgi_params;
                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
                 fastcgi_param PATH_INFO $fastcgi_path_info;
-                fastcgi_param APP_ENV dev-remote;
+                fastcgi_param APP_ENV :APP_ENV;
 
                 # if (!-e $document_root$fastcgi_script_name) {
                 #         return 404;

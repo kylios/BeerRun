@@ -24,6 +24,7 @@
 		"assets": {
 
 			"cdn_hosts": [
+				"localhost:8080"
 			],
 			"path": "",
 			"version": 1
