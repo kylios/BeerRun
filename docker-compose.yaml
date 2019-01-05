@@ -1,0 +1,47 @@
+---
+version: '3'
+
+services:
+  beerrun:
+    build:
+      context: .
+      dockerfile: docker/beerrun/Dockerfile
+      args:
+        BUILD_ENV: ${BUILD_ENV}
+    volumes:
+      - build:/app/build/${BUILD_ENV}:rw
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+      args:
+        APP_ENV: ${BUILD_ENV}
+    depends_on:
+      - beerrun
+      - php
+    restart: always
+    volumes:
+      - build:/app:ro
+    networks:
+      - proxy-tier
+    ports:
+      - "80:80"
+
+  php:
+    image: php:5.6-fpm
+    depends_on:
+      - beerrun
+    restart: always
+    volumes:
+      - build:/app:ro
+    networks:
+      - proxy-tier
+    expose:
+      - 9000
+
+volumes:
+  build:
+
+networks:
+  proxy-tier:

@@ -18,7 +18,7 @@ To build this project, you need:
 Run the following:
 
 ```bash
-pub get
+pub get --packages-dir
 cd tool
 ./build.dart dev-local
 ```

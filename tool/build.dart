@@ -251,6 +251,7 @@ Future<BuildContext> copyWebFiles(BuildContext context) {
                 .then((var _) => copyPackage('browser', '../web/packages', "$targetDir/web/packages"))
                 .then((var _) => copyPackage('beer_run', '../web/packages', "$targetDir/web/packages"))
                 .then((var _) => copyPackage('intl', '../web/packages', "$targetDir/web/packages"))
+                .then((var _) => Process.run('chmod', ['-R', 'a+rx', targetDir]))
                 .then((var _) => new Future.value(context));
     });
 }
@@ -381,10 +382,7 @@ Future<StreamSubscription<FileSystemEntity>> _copyDir(Directory src, Directory
         });
     }, onDone: counter.down);
 
-
     return c.future;
-
-
 }
 
 

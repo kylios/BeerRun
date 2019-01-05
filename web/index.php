@@ -153,4 +153,3 @@ $config->exportVars();
   <div id="config"><?=$config->asJsonString();?></div>
 </body>
 </html>
-

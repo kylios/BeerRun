@@ -1,0 +1,9 @@
+<dt id="{{htmlId}}" class="property">
+    {{#isInherited}}{{>name_summary}}{{/isInherited}}
+    {{^isInherited}}<span class="name">{{{linkedName}}}</span>{{/isInherited}}
+    <span class="signature">&#8594; {{{ linkedReturnType }}}</span>
+</dt>
+<dd>
+    {{>readable_writable}}
+    <p>{{{ oneLineDoc }}}{{^isInherited}}{{>has_more_docs}}{{/isInherited}}</p>
+</dd>

@@ -1,6 +1,6 @@
 library level;
 
-import 'dart:html' hide Player;
+import 'dart:html';
 import 'dart:async';
 
 import 'package:beer_run/drawing.dart';
