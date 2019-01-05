@@ -27,7 +27,7 @@ server {
 
         location / {
                 index index.php;
-                if (!-f request_filename) {
+                if (!-f $request_filename) {
                         rewrite ^(.*)$ /index.php;
                 }
         }
